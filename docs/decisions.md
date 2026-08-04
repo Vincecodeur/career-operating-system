@@ -395,3 +395,15 @@ JobOfferSkill relie une offre d'emploi à une compétence du catalogue central S
 Cette relation est utilisée comme fondation du futur moteur de matching.
 
 Les compétences d'une offre ne sont pas stockées sous forme de texte libre afin de permettre une comparaison fiable avec les compétences du candidat.
+
+---
+
+### DEC-029
+
+Le Matching Engine V1 compare uniquement les compétences du profil candidat et les compétences requises par une offre d'emploi.
+
+Le score est calculé à partir du pourcentage de compétences de l'offre présentes dans le profil.
+
+Les langues, certifications, expériences professionnelles et futures capacités IA sont exclues de la V1.
+
+L'objectif est de valider le flux métier complet avant l'introduction de règles plus avancées.

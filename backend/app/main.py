@@ -12,6 +12,7 @@ from app.jobs.router import router as jobs_router
 from app.jobs.job_offer_skill_router import (
     router as job_offer_skill_router
 )
+from app.matching.router import router as matching_router
 
 
 app = FastAPI(
@@ -28,6 +29,7 @@ app.include_router(languages_router)
 app.include_router(certifications_router)
 app.include_router(jobs_router)
 app.include_router(job_offer_skill_router)
+app.include_router(matching_router)
 
 
 
