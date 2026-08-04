@@ -68,6 +68,8 @@ Sous-domaines :
 - ProfileLanguage
 - Certification
 - ProfileCertification
+- JobOffer
+- JobOfferSkill
 
 ### Jobs
 

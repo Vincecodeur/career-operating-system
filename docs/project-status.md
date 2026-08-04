@@ -20,7 +20,7 @@ main
 
 Current Milestone
 
-Phase 3
+Phase 4
 
 ---
 
@@ -34,7 +34,7 @@ Candidate Profile
 
 Current Objective
 
-Compléter le profil candidat avant l'introduction des offres d'emploi.
+Construire le premier moteur de matching entre profils et offres d'emploi.
 
 ---
 
@@ -74,11 +74,19 @@ Completed
 - Pytest configuré
 - Première suite de tests automatisés créée
 
+- Domaine JobOffer créé
+- CRUD JobOffer implémenté
+
+- Domaine JobOfferSkill créé
+- CRUD JobOfferSkill implémenté
+
+- 4 tests automatisés passants
+
 ---
 
 In Progress
 
-- Préparation du domaine Job Offers
+- Préparation du Matching Engine V1
 
 ---
 
@@ -90,16 +98,16 @@ Aucun
 
 Next Step
 
-Implémenter le domaine Job Offers.
+Implémenter le Matching Engine V1.
 
 ---
 
 Last Decision
 
-DEC-025 - Le projet utilise un catalogue central de certifications avec une relation ProfileCertification.
+DEC-028 - Les compétences requises par une offre sont stockées dans une relation JobOfferSkill.
 
 ---
 
 Last Commit
 
-ed87887 - feat: implement certification CRUD endpoints
+2b5e2d4 - feat: implement job offer skill CRUD endpoints

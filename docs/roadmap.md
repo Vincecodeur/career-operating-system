@@ -56,9 +56,11 @@ Sous-phases :
 
 Manual Job Import
 
-Objectif :
-
-Importer manuellement des offres.
+✅ 3.1 JobOffer Model
+✅ 3.2 JobOffer CRUD
+✅ 3.2.5 Pytest Foundation
+✅ 3.3 JobOfferSkill Model
+✅ 3.4 JobOfferSkill CRUD
 
 ---
 
