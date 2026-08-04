@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 from sqlalchemy import text
-
+from app.core.database import create_tables
 from app.core.database import engine
 
 app = FastAPI(
     title="Career Operating System API",
     version="0.1.0"
 )
+
+create_tables()
 
 
 @app.get("/health")

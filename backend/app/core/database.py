@@ -26,3 +26,10 @@ def get_db():
         yield db
     finally:
         db.close()
+        
+
+from app.profile.models import Profile
+
+def create_tables():
+    print(Base.metadata.tables.keys())
+    Base.metadata.create_all(bind=engine)
