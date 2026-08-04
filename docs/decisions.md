@@ -229,3 +229,36 @@ via un système de migrations.
 
 Alembic sera introduit lorsque le modèle métier
 commencera à évoluer régulièrement.
+
+---
+
+## DEC-020
+
+Le projet utilise un catalogue central de compétences.
+
+Les compétences sont stockées dans une entité dédiée : Skill.
+
+Les profils candidats ne stockent pas directement les compétences sous forme de texte libre.
+
+Les profils référencent les compétences via une relation dédiée.
+
+Objectif :
+
+Permettre un futur moteur de matching fiable entre :
+
+- les compétences du profil candidat ;
+- les compétences demandées par les offres d'emploi.
+
+Cette approche évite les doublons et incohérences comme :
+
+- Python
+- python
+- PYTHON
+- Python Programming
+
+Le catalogue central permettra plus tard d'ajouter :
+
+- catégories de compétences ;
+- niveaux de maîtrise ;
+- synonymes ;
+- relations avec les offres d'emploi.
