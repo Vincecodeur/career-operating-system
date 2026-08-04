@@ -54,9 +54,18 @@ Le fonctionnement principal du produit ne doit jamais dépendre totalement d'un 
 
 ## Domaines métier
 
-### Profile
+#### Profile
 
 Gestion du profil candidat.
+
+Sous-domaines :
+
+- Profile
+- Skill
+- ProfileSkill
+- WorkExperience
+- Language
+- ProfileLanguage
 
 ### Jobs
 
@@ -87,31 +96,36 @@ Planification de carrière.
 ## Entités principales
 
 Profile
-
 Représente le candidat.
 
-JobOffer
+Skill
+Catalogue central des compétences.
 
+ProfileSkill
+Relation entre un profil et une compétence.
+
+WorkExperience
+Expérience professionnelle du candidat.
+
+Language
+Catalogue central des langues.
+
+ProfileLanguage
+Relation entre un profil et une langue.
+
+JobOffer
 Représente une offre d'emploi.
 
 Application
-
 Représente une candidature.
 
-Skill
-
-Représente une compétence.
-
 MarketInsight
-
 Représente une analyse marché.
 
 CareerGoal
-
 Représente un objectif professionnel.
 
 LearningRecommendation
-
 Représente une recommandation d'apprentissage.
 
 ---
@@ -122,6 +136,9 @@ app/
 
 core/
 profile/
+skills/
+experience/
+languages/
 jobs/
 matching/
 applications/

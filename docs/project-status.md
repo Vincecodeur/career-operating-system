@@ -20,7 +20,7 @@ main
 
 Current Milestone
 
-Phase 0
+Phase 2.7
 
 ---
 
@@ -34,7 +34,7 @@ Candidate Profile
 
 Current Objective
 
-Développer le domaine Candidate Profile.
+Compléter le profil candidat avant l'introduction des offres d'emploi.
 
 ---
 
@@ -42,24 +42,35 @@ Completed
 
 - PostgreSQL configuré
 - SQLAlchemy configuré
-- Table profiles créée
-- Premier modèle métier créé
-- Backend FastAPI initialisé
-- Endpoint /health opérationnel
-- Vision générale validée
-- Concept Career Operating System validé
-- Stack principale validée
-- Structure documentaire validée
-- Repository Git créé
-- Repository GitHub créé
-- Documentation initiale commitée
-- Projet synchronisé avec GitHub
+- FastAPI configuré
+- Swagger configuré
+
+- Domaine Profile créé
+- CRUD Profile implémenté
+
+- Domaine Skill créé
+- CRUD Skill implémenté
+
+- Domaine ProfileSkill créé
+- CRUD ProfileSkill implémenté
+
+- Domaine WorkExperience créé
+- CRUD WorkExperience implémenté
+
+- Domaine Language créé
+- CRUD Language implémenté
+
+- Domaine ProfileLanguage créé
+- CRUD ProfileLanguage implémenté
+
+- Documentation synchronisée
+- Repository synchronisé avec GitHub
 
 ---
 
 In Progress
 
-- Création des documents fondateurs
+- Préparation du domaine Certifications
 
 ---
 
@@ -71,16 +82,16 @@ Aucun
 
 Next Step
 
-Créer le backend FastAPI minimal.
+Implémenter le domaine Certifications.
 
 ---
 
 Last Decision
 
-Le projet est un Career Operating System personnel.
+DEC-024 - Le projet utilise un catalogue central de langues avec une relation ProfileLanguage.
 
 ---
 
 Last Commit
 
-Aucun
+bdd6bd5 - feat: implement language CRUD endpoints

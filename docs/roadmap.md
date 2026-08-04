@@ -37,8 +37,18 @@ Créer le socle technique FastAPI.
 Candidate Profile
 
 Objectif :
+Créer un profil candidat complet.
 
-Créer le profil professionnel.
+Sous-phases :
+
+✅ 2.1 Skills Catalog
+✅ 2.2 ProfileSkill Schema
+✅ 2.3 Skills CRUD
+✅ 2.4 ProfileSkill CRUD
+✅ 2.5 Work Experience
+✅ 2.6 Languages
+
+⏳ 2.7 Certifications
 
 ---
 
