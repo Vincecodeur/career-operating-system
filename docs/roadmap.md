@@ -48,7 +48,7 @@ Sous-phases :
 ✅ 2.5 Work Experience
 ✅ 2.6 Languages
 
-⏳ 2.7 Certifications
+✅ 2.7 Certifications
 
 ---
 

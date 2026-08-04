@@ -66,6 +66,8 @@ Sous-domaines :
 - WorkExperience
 - Language
 - ProfileLanguage
+- Certification
+- ProfileCertification
 
 ### Jobs
 
@@ -112,6 +114,12 @@ Catalogue central des langues.
 
 ProfileLanguage
 Relation entre un profil et une langue.
+
+Certification
+Catalogue central des certifications.
+
+ProfileCertification
+Relation entre un profil et une certification.
 
 JobOffer
 Représente une offre d'emploi.

@@ -20,7 +20,7 @@ main
 
 Current Milestone
 
-Phase 2.7
+Phase 3
 
 ---
 
@@ -66,11 +66,16 @@ Completed
 - Documentation synchronisée
 - Repository synchronisé avec GitHub
 
+- Domaine Certification créé
+- CRUD Certification implémenté
+- Domaine ProfileCertification créé
+- CRUD ProfileCertification implémenté
+
 ---
 
 In Progress
 
-- Préparation du domaine Certifications
+- Préparation du domaine Job Offers
 
 ---
 
@@ -82,16 +87,16 @@ Aucun
 
 Next Step
 
-Implémenter le domaine Certifications.
+Implémenter le domaine Job Offers.
 
 ---
 
 Last Decision
 
-DEC-024 - Le projet utilise un catalogue central de langues avec une relation ProfileLanguage.
+DEC-025 - Le projet utilise un catalogue central de certifications avec une relation ProfileCertification.
 
 ---
 
 Last Commit
 
-bdd6bd5 - feat: implement language CRUD endpoints
+ed87887 - feat: implement certification CRUD endpoints
