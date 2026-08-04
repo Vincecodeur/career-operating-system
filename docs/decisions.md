@@ -262,3 +262,18 @@ Le catalogue central permettra plus tard d'ajouter :
 - niveaux de maîtrise ;
 - synonymes ;
 - relations avec les offres d'emploi.
+
+## DEC-021
+
+Les compétences d'un profil sont représentées par une table d'association dédiée : ProfileSkill.
+
+ProfileSkill relie un Profile à une Skill.
+
+Cette relation contient les informations spécifiques à la maîtrise de cette compétence par ce profil :
+
+- years_of_experience ;
+- self_assessment_level.
+
+Le catalogue Skill reste générique.
+
+Les informations de maîtrise appartiennent à la relation ProfileSkill, pas à Skill.
