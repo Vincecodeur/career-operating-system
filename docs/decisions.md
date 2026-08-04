@@ -294,3 +294,20 @@ ProfileSkill permet de stocker les informations spécifiques à la maîtrise d'u
 Le catalogue Skill reste générique.
 
 Les données de maîtrise appartiennent à ProfileSkill.
+
+---
+
+## DEC-023
+
+Les expériences professionnelles sont stockées dans une entité dédiée WorkExperience.
+
+Une expérience appartient à un seul profil.
+
+Les compétences restent stockées séparément dans le catalogue central Skills.
+
+L'objectif est de séparer :
+
+- ce que le candidat sait faire ;
+- où et quand le candidat a acquis cette expérience.
+
+WorkExperience permet de reconstruire le parcours professionnel du profil candidat sans mélanger les expériences avec les compétences.

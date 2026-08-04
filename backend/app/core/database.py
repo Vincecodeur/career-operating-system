@@ -31,6 +31,7 @@ def get_db():
 from app.profile.models import Profile
 from app.skills.models import Skill
 from app.profile.profile_skill_models import ProfileSkill
+from app.experience.models import WorkExperience
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
