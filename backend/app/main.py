@@ -8,6 +8,7 @@ from app.profile.profile_skill_router import router as profile_skill_router
 from app.experience.router import router as experience_router
 from app.languages.router import router as languages_router
 from app.certifications.router import router as certifications_router
+from app.jobs.router import router as jobs_router
 
 
 app = FastAPI(
@@ -22,6 +23,8 @@ app.include_router(profile_skill_router)
 app.include_router(experience_router)
 app.include_router(languages_router)
 app.include_router(certifications_router)
+app.include_router(jobs_router)
+
 
 
 
