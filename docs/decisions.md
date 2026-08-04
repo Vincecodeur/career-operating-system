@@ -383,3 +383,15 @@ Le projet utilise Pytest comme framework de tests automatisés.
 Les tests automatisés sont introduits avant le Matching Engine afin de limiter les régressions.
 
 Chaque nouveau domaine métier important devra progressivement être couvert par des tests automatisés.
+
+---
+
+### DEC-028
+
+Les compétences requises par une offre sont stockées dans une relation dédiée JobOfferSkill.
+
+JobOfferSkill relie une offre d'emploi à une compétence du catalogue central Skill.
+
+Cette relation est utilisée comme fondation du futur moteur de matching.
+
+Les compétences d'une offre ne sont pas stockées sous forme de texte libre afin de permettre une comparaison fiable avec les compétences du candidat.
