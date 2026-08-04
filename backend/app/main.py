@@ -4,6 +4,7 @@ from app.core.database import create_tables
 from app.core.database import engine
 from app.profile.router import router as profile_router
 from app.skills.router import router as skills_router
+from app.profile.profile_skill_router import router as profile_skill_router
 
 app = FastAPI(
     title="Career Operating System API",
@@ -13,6 +14,7 @@ app = FastAPI(
 create_tables()
 app.include_router(profile_router)
 app.include_router(skills_router)
+app.include_router(profile_skill_router)
 
 @app.get("/health")
 def health():

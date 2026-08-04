@@ -277,3 +277,20 @@ Cette relation contient les informations spécifiques à la maîtrise de cette c
 Le catalogue Skill reste générique.
 
 Les informations de maîtrise appartiennent à la relation ProfileSkill, pas à Skill.
+
+---
+
+## DEC-022
+
+Le projet expose une API dédiée pour associer les compétences aux profils.
+
+L'association entre un profil et une compétence est gérée via ProfileSkill.
+
+ProfileSkill permet de stocker les informations spécifiques à la maîtrise d'une compétence par un profil :
+
+- years_of_experience ;
+- self_assessment_level.
+
+Le catalogue Skill reste générique.
+
+Les données de maîtrise appartiennent à ProfileSkill.
