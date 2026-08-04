@@ -68,16 +68,22 @@ Sous-domaines :
 - ProfileLanguage
 - Certification
 - ProfileCertification
-- JobOffer
-- JobOfferSkill
 
 ### Jobs
 
 Gestion des offres.
 
+- JobOffer
+- JobOfferSkill
+
 ### Matching
 
 Comparaison profil ↔ offres.
+V1 :
+
+- Compare les compétences du profil avec les compétences requises par une offre.
+- Calcule un score simple basé sur le pourcentage de compétences de l'offre présentes dans le profil.
+- Retourne les compétences correspondantes et les compétences manquantes.
 
 ### Applications
 

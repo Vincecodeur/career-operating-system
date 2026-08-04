@@ -80,13 +80,16 @@ Completed
 - Domaine JobOfferSkill créé
 - CRUD JobOfferSkill implémenté
 
-- 4 tests automatisés passants
+- Matching Engine V1 implémenté
+- Endpoint GET /matching/{profile_id}/{job_offer_id} créé
+- Test automatisé du Matching Engine ajouté
+- 5 tests automatisés passants
 
 ---
 
 In Progress
 
-- Préparation du Matching Engine V1
+- Préparation de la prochaine étape après Matching Engine V1
 
 ---
 
@@ -98,16 +101,16 @@ Aucun
 
 Next Step
 
-Implémenter le Matching Engine V1.
+Définir la prochaine évolution du Matching Engine après la V1.
 
 ---
 
 Last Decision
 
-DEC-028 - Les compétences requises par une offre sont stockées dans une relation JobOfferSkill.
+DEC-029 - Le Matching Engine V1 compare uniquement les compétences du profil et de l'offre.
 
 ---
 
 Last Commit
 
-2b5e2d4 - feat: implement job offer skill CRUD endpoints
+831fc13 - feat: implement matching engine v1
