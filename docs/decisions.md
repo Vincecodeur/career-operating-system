@@ -338,3 +338,24 @@ Les niveaux recommandés sont :
 - C1
 - C2
 - Native
+
+---
+
+### DEC-025
+
+Le projet utilise un catalogue central de certifications.
+
+Les certifications sont stockées dans une entité Certification.
+
+Les informations relatives à la possession d'une certification par un candidat sont stockées dans ProfileCertification.
+
+L'objectif est de séparer :
+
+- les certifications disponibles ;
+- les certifications réellement obtenues par le candidat.
+
+ProfileCertification permet de gérer :
+
+- la date d'obtention ;
+- la date d'expiration ;
+- l'identifiant de justificatif éventuel.
