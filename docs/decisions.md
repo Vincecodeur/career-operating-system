@@ -359,3 +359,17 @@ ProfileCertification permet de gérer :
 - la date d'obtention ;
 - la date d'expiration ;
 - l'identifiant de justificatif éventuel.
+
+---
+
+### DEC-026
+
+Les offres d'emploi sont stockées dans une entité JobOffer.
+
+La Phase 3 est limitée à l'import manuel des offres.
+
+Aucune récupération automatique depuis un site tiers n'est prévue à ce stade.
+
+L'objectif est de construire le premier consommateur des données du profil candidat avant l'introduction du moteur de matching.
+
+Le modèle JobOffer V1 doit rester minimal et contenir uniquement les informations nécessaires à l'analyse d'une offre.

@@ -36,6 +36,8 @@ from app.languages.models import Language
 from app.languages.models import ProfileLanguage
 from app.certifications.models import Certification
 from app.certifications.models import ProfileCertification
+from app.jobs.models import JobOffer
+
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
