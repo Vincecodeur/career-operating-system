@@ -32,6 +32,8 @@ from app.profile.models import Profile
 from app.skills.models import Skill
 from app.profile.profile_skill_models import ProfileSkill
 from app.experience.models import WorkExperience
+from app.languages.models import Language
+from app.languages.models import ProfileLanguage
 
 def create_tables():
     Base.metadata.create_all(bind=engine)

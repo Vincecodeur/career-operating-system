@@ -311,3 +311,30 @@ L'objectif est de séparer :
 - où et quand le candidat a acquis cette expérience.
 
 WorkExperience permet de reconstruire le parcours professionnel du profil candidat sans mélanger les expériences avec les compétences.
+
+---
+
+## DEC-024
+
+Le projet utilise un catalogue central de langues.
+
+Les langues sont stockées dans une entité dédiée Language.
+
+Les niveaux de maîtrise appartiennent à la relation ProfileLanguage.
+
+L'objectif est de séparer :
+
+- les langues disponibles ;
+- le niveau réel du candidat pour chaque langue.
+
+ProfileLanguage relie un Profile à une Language avec un proficiency_level.
+
+Les niveaux recommandés sont :
+
+- A1
+- A2
+- B1
+- B2
+- C1
+- C2
+- Native
