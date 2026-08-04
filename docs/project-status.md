@@ -26,24 +26,30 @@ Phase 0
 
 Current Phase
 
-Phase 0
+Phase 1
 
-Documentation et cadrage
+Backend Foundation
 
 ---
 
 Current Objective
 
-Créer le socle documentaire du projet.
+Connecter FastAPI à PostgreSQL via SQLAlchemy.
 
 ---
 
 Completed
 
+- Backend FastAPI initialisé
+- Endpoint /health opérationnel
 - Vision générale validée
 - Concept Career Operating System validé
 - Stack principale validée
 - Structure documentaire validée
+- Repository Git créé
+- Repository GitHub créé
+- Documentation initiale commitée
+- Projet synchronisé avec GitHub
 
 ---
 
@@ -61,7 +67,7 @@ Aucun
 
 Next Step
 
-Valider les documents puis préparer la structure du repository.
+Créer le backend FastAPI minimal.
 
 ---
 

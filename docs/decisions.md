@@ -118,3 +118,58 @@ Copilot doit toujours indiquer :
 - le lien avec la phase actuelle.
 
 Aucun dossier vide ne doit être créé de manière anticipée.
+
+---
+
+## DEC-013
+
+Le profil candidat est construit selon une approche hybride.
+
+Source initiale :
+
+- CV
+- Profil LinkedIn
+
+Puis enrichissement manuel.
+
+Le système doit permettre à l'utilisateur de corriger,
+compléter ou modifier les informations extraites.
+
+Le profil candidat devient la source de vérité du système.
+
+Les documents importés servent uniquement à créer ou mettre à jour ce profil.
+
+---
+
+## DEC-014
+
+Le backend est construit dès le départ avec :
+
+- FastAPI
+- PostgreSQL
+- SQLAlchemy
+
+Aucune phase intermédiaire utilisant du stockage mémoire,
+des fichiers JSON ou SQLite n'est prévue.
+
+Le projet doit être aligné dès le départ avec son architecture cible.
+
+L'objectif est de limiter les refactorings futurs tout en conservant une architecture simple.
+
+---
+
+## DEC-015
+
+Le projet utilise une base PostgreSQL dédiée.
+
+Database :
+
+career_os
+
+User :
+
+career_os_user
+
+Le projet ne doit pas utiliser la base postgres par défaut.
+
+Chaque projet possède sa propre base de données.
