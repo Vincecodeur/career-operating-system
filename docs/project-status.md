@@ -71,6 +71,9 @@ Completed
 - Domaine ProfileCertification créé
 - CRUD ProfileCertification implémenté
 
+- Pytest configuré
+- Première suite de tests automatisés créée
+
 ---
 
 In Progress
