@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from sqlalchemy import Boolean
 from sqlalchemy import DateTime
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -18,6 +19,11 @@ class Profile(Base):
         index=True
     )
 
+    profile_name: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
     full_name: Mapped[str] = mapped_column(
         String(255),
         nullable=False
@@ -33,7 +39,44 @@ class Profile(Base):
         nullable=False
     )
 
+    years_of_experience: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=0
+    )
+
+    target_role_short_term: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
+    target_role_long_term: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
+    remote_preference: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False
+    )
+
+    preferred_countries: Mapped[str] = mapped_column(
+        String(500),
+        nullable=False
+    )
+
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
     )

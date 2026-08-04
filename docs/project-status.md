@@ -26,20 +26,24 @@ Phase 0
 
 Current Phase
 
-Phase 1
+Phase 2
 
-Backend Foundation
+Candidate Profile
 
 ---
 
 Current Objective
 
-Connecter FastAPI à PostgreSQL via SQLAlchemy.
+Développer le domaine Candidate Profile.
 
 ---
 
 Completed
 
+- PostgreSQL configuré
+- SQLAlchemy configuré
+- Table profiles créée
+- Premier modèle métier créé
 - Backend FastAPI initialisé
 - Endpoint /health opérationnel
 - Vision générale validée

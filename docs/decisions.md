@@ -173,3 +173,59 @@ career_os_user
 Le projet ne doit pas utiliser la base postgres par défaut.
 
 Chaque projet possède sa propre base de données.
+
+---
+
+## DEC-016
+
+Le domaine Profile est l'agrégat racine du système.
+
+Tous les futurs domaines métier
+(Jobs, Applications, Matching, Career Planning)
+s'appuient sur le Profile.
+
+Le développement fonctionnel commence toujours
+par les besoins du Profile.
+
+---
+
+## DEC-017
+
+Le système supporte plusieurs profils candidats.
+
+Objectif :
+
+Permettre différentes stratégies de carrière.
+
+Exemples :
+
+- Profil actuel
+- Profil Product Manager
+- Profil Solution Architect
+- Profil Head of Partnerships
+
+---
+
+## DEC-018
+
+Le modèle Profile V1 contient uniquement
+les informations de pilotage de carrière.
+
+Les compétences, langues, certifications
+et expériences seront gérées dans des tables dédiées.
+
+Le modèle Profile doit rester léger
+et représenter la vue synthétique du candidat.
+
+---
+
+## DEC-019
+
+SQLAlchemy create_all() est utilisé uniquement
+pour les phases initiales du projet.
+
+Toute évolution future du schéma devra être gérée
+via un système de migrations.
+
+Alembic sera introduit lorsque le modèle métier
+commencera à évoluer régulièrement.
