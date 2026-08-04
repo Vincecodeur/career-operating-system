@@ -6,6 +6,7 @@ from app.profile.router import router as profile_router
 from app.skills.router import router as skills_router
 from app.profile.profile_skill_router import router as profile_skill_router
 from app.experience.router import router as experience_router
+from app.languages.router import router as languages_router
 
 app = FastAPI(
     title="Career Operating System API",
@@ -17,6 +18,8 @@ app.include_router(profile_router)
 app.include_router(skills_router)
 app.include_router(profile_skill_router)
 app.include_router(experience_router)
+app.include_router(languages_router)
+
 
 @app.get("/health")
 def health():
