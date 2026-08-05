@@ -84,7 +84,11 @@ Comparer profil et offres.
 
 ✅ 5.5 Opportunity Ranking
 
-⏳ 5.6 Application Tracker
+✅ 5.6.1 Definition & DEC-034
+✅ 5.6.2 Application Model
+✅ 5.6.3 Application CRUD
+✅ 5.6.4 Application Tests
+⏳ 5.6.5 Application Tracker Frontend
 
 ---
 

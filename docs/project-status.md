@@ -120,6 +120,15 @@ Completed
 - Classement des opportunités affiché
 - Intégration React ↔ Ranking Engine validée
 
+- Domaine Application créé
+- Application Model implémenté
+- Application CRUD implémenté
+- Endpoint POST /applications créé
+- Endpoint GET /applications créé
+- Endpoint GET /applications/{id} créé
+- Suite de tests Application créée
+- 13 tests automatisés passants
+
 ---
 
 In Progress
@@ -136,7 +145,7 @@ Aucun
 
 Next Step
 
-Définir le modèle Application.
+Implémenter Application Tracker Frontend.
 
 ---
 
@@ -148,4 +157,4 @@ DEC-034 Application Tracker
 
 Last Commit
 
-4797a7b - docs: close opportunity ranking phase
+834c331 - feat: implement application crud

@@ -102,6 +102,18 @@ V1 :
   - Rejected
   - Accepted
 
+V1 implémentée :
+
+- Application Model
+- Application CRUD
+- Application Tests
+
+APIs disponibles :
+
+- POST /applications
+- GET /applications
+- GET /applications/{application_id}
+
 ### Market
 
 Analyse du marché.

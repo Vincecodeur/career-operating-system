@@ -142,6 +142,8 @@ Implémenté :
 - JobOfferSkill
 - Matching Engine V1
 - Opportunity Ranking Endpoint
+- Application Model
+- Application CRUD
 
 ### Frontend
 
@@ -167,6 +169,7 @@ Des tests existent pour :
 - job offers
 - matching
 - opportunity ranking
+- applications
 
 ## Phases terminées
 
@@ -179,6 +182,10 @@ Des tests existent pour :
 - Phase 5.3 - Dashboard MVP
 - Phase 5.4 - Matching View
 - Phase 5.5 - Opportunity Ranking
+- Phase 5.6.1 - Application Definition
+- Phase 5.6.2 - Application Model
+- Phase 5.6.3 - Application CRUD
+- Phase 5.6.4 - Application Tests
 
 ## Derniers commits importants
 
@@ -227,16 +234,22 @@ Respecter notamment :
 - DEC-031 : Dashboard MVP comme couche de visualisation
 - DEC-032 : Matching View affiche uniquement les résultats backend
 - DEC-033 : Opportunity Ranking calculé exclusivement par le backend
+- DEC-034 : Application Tracker
 
 ## Phase suivante recommandée
 
-Phase 5.6 - Application Tracker
+Phase 5.6.5 - Application Tracker Frontend
 
 Objectif :
+Afficher les candidatures dans le frontend.
 
-Permettre de suivre les candidatures liées aux offres.
+Informations affichées :
 
-Statuts probables :
+- Offre
+- Profil
+- Statut
+
+Statuts :
 
 - Not Applied
 - Applied
@@ -247,12 +260,11 @@ Statuts probables :
 
 Avant de coder cette phase :
 
-1. auditer la documentation ;
-2. vérifier que la Phase 5.5 est bien clôturée ;
-3. proposer une décision DEC-034 ;
-4. définir le modèle minimal ;
-5. appliquer la méthode :
-   documentation → modèle → validation → commit → CRUD → tests → frontend.
+- auditer la documentation ;
+- vérifier que la Phase 5.6.4 est bien clôturée ;
+- mettre à jour project-status.md ;
+- mettre à jour roadmap.md ;
+- préparer le composant React Application Tracker.
 
 ## Méthode de reprise
 
