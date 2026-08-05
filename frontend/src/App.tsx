@@ -1,36 +1,61 @@
 import { useEffect, useState } from "react";
 
 import { Dashboard } from "./components/Dashboard";
-import { getProfiles, getJobOffers } from "./services/api";
+import { getJobOffers, getMatching, getProfiles } from "./services/api";
+
+type Profile = {
+  id: number;
+  full_name: string;
+};
+
+type JobOffer = {
+  id: number;
+  title: string;
+};
+
+type Matching = {
+  profile_id: number;
+  job_offer_id: number;
+  matching_score: number;
+  matching_skills: string[];
+  missing_skills: string[];
+};
 
 function App() {
-  const [profiles, setProfiles] = useState([]);
-  const [jobOffers, setJobOffers] = useState([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
+  const [matching, setMatching] = useState<Matching | null>(null);
 
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function loadData() {
+    async function loadDashboardData() {
       try {
         const profilesData = await getProfiles();
-
-        setProfiles(profilesData);
-
         const jobOffersData = await getJobOffers();
 
+        setProfiles(profilesData);
         setJobOffers(jobOffersData);
+
+        if (profilesData.length > 0 && jobOffersData.length > 0) {
+          const matchingData = await getMatching(
+            profilesData[0].id,
+            jobOffersData[0].id,
+          );
+
+          setMatching(matchingData);
+        }
       } catch (error) {
         console.error("Erreur API :", error);
 
-        setError("Unable to load data.");
+        setError("Unable to load dashboard data.");
       } finally {
         setLoading(false);
       }
     }
 
-    loadData();
+    loadDashboardData();
   }, []);
 
   return (
@@ -40,7 +65,11 @@ function App() {
       {error && <p>{error}</p>}
 
       {!loading && !error && (
-        <Dashboard profiles={profiles} jobOffers={jobOffers} />
+        <Dashboard
+          profiles={profiles}
+          jobOffers={jobOffers}
+          matching={matching}
+        />
       )}
     </div>
   );
