@@ -156,6 +156,7 @@ Implémenté :
 - JobOfferList
 - MatchingResult
 - OpportunityRanking
+- ApplicationTracker
 
 ### Tests
 
@@ -193,6 +194,8 @@ Des tests existent pour :
 - 03567f4 - feat: implement opportunity ranking endpoint
 - cc3e9bd - test: add opportunity ranking coverage
 - d1920f5 - feat: implement opportunity ranking view
+- 7828d0b - feat: add application tracker component
+- f9060c8 - feat: connect application tracker to dashboard
 
 ## Résultat métier validé
 
@@ -238,33 +241,25 @@ Respecter notamment :
 
 ## Phase suivante recommandée
 
-Phase 5.6.5 - Application Tracker Frontend
+Phase 5.6.5.3 - Frontend Validation & Documentation
 
 Objectif :
-Afficher les candidatures dans le frontend.
+Finaliser la validation fonctionnelle du frontend.
 
-Informations affichées :
+Points à vérifier :
 
-- Offre
-- Profil
-- Statut
+- affichage des profils ;
+- affichage des offres ;
+- affichage du matching ;
+- affichage du ranking ;
+- affichage des candidatures ;
+- absence d'erreurs TypeScript ;
+- absence d'erreurs API dans le navigateur.
 
-Statuts :
+Après validation :
 
-- Not Applied
-- Applied
-- Interview
-- Offer
-- Rejected
-- Accepted
-
-Avant de coder cette phase :
-
-- auditer la documentation ;
-- vérifier que la Phase 5.6.4 est bien clôturée ;
-- mettre à jour project-status.md ;
-- mettre à jour roadmap.md ;
-- préparer le composant React Application Tracker.
+- synchronisation documentaire finale ;
+- clôture officielle de la phase 5.6.
 
 ## Méthode de reprise
 

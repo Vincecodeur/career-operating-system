@@ -88,7 +88,9 @@ Comparer profil et offres.
 ✅ 5.6.2 Application Model
 ✅ 5.6.3 Application CRUD
 ✅ 5.6.4 Application Tests
-⏳ 5.6.5 Application Tracker Frontend
+✅ 5.6.5.1 Application Tracker Component
+✅ 5.6.5.2 Dashboard Integration
+⏳ 5.6.5.3 Frontend Validation & Documentation
 
 ---
 

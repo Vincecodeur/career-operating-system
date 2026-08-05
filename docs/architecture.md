@@ -107,6 +107,7 @@ V1 implémentée :
 - Application Model
 - Application CRUD
 - Application Tests
+- Application Tracker Frontend
 
 APIs disponibles :
 

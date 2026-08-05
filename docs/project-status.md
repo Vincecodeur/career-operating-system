@@ -129,6 +129,11 @@ Completed
 - Suite de tests Application créée
 - 13 tests automatisés passants
 
+- ApplicationTracker.tsx créé
+- Intégration Dashboard ↔ Applications validée
+- Endpoint GET /applications consommé depuis React
+- Affichage des candidatures validé dans le Dashboard
+
 ---
 
 In Progress
@@ -145,7 +150,7 @@ Aucun
 
 Next Step
 
-Implémenter Application Tracker Frontend.
+Frontend Validation & Documentation.
 
 ---
 
@@ -157,4 +162,4 @@ DEC-034 Application Tracker
 
 Last Commit
 
-834c331 - feat: implement application crud
+f9060c8 - feat: connect application tracker to dashboard
