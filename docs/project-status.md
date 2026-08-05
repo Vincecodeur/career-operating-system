@@ -85,11 +85,17 @@ Completed
 - Test automatisé du Matching Engine ajouté
 - 5 tests automatisés passants
 
+- Frontend React créé
+- Vite configuré
+- Communication Frontend ↔ Backend validée
+- CORS configuré
+- Premier appel API React implémenté
+
 ---
 
 In Progress
 
-- Préparation de la prochaine étape après Matching Engine V1
+- Développement du Dashboard MVP
 
 ---
 
@@ -101,13 +107,13 @@ Aucun
 
 Next Step
 
-Définir la prochaine évolution du Matching Engine après la V1.
+Implémenter le Dashboard MVP.
 
 ---
 
 Last Decision
 
-DEC-029 - Le Matching Engine V1 compare uniquement les compétences du profil et de l'offre.
+DEC-030 - Le Frontend MVP adopte une approche Dashboard First.
 
 ---
 

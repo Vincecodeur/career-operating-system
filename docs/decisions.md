@@ -407,3 +407,21 @@ Le score est calculé à partir du pourcentage de compétences de l'offre prése
 Les langues, certifications, expériences professionnelles et futures capacités IA sont exclues de la V1.
 
 L'objectif est de valider le flux métier complet avant l'introduction de règles plus avancées.
+
+---
+
+### DEC-030
+
+Le Frontend MVP adopte une approche Dashboard First.
+
+L'utilisateur arrive sur un tableau de bord permettant de visualiser :
+
+- les profils candidats ;
+- les offres d'emploi ;
+- les résultats de matching.
+
+Le Frontend consomme exclusivement les APIs FastAPI existantes.
+
+Aucune logique métier ne doit être implémentée dans React.
+
+Le backend reste la source unique de vérité.

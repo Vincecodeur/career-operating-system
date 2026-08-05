@@ -79,9 +79,12 @@ Comparer profil et offres.
 
 Personal Job Board
 
-Objectif :
+✅ 5.1 Frontend Foundation
+✅ 5.2 API Client
 
-Créer l'interface utilisateur principale.
+⏳ 5.3 Dashboard MVP
+⏳ 5.4 Job Offers View
+⏳ 5.5 Matching View
 
 ---
 
