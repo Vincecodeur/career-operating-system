@@ -44,3 +44,20 @@ export async function getMatching(
 
     return response.json();
 }
+
+export async function getRankedJobOffers(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/ranked-job-offers`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load ranked job offers."
+        );
+    }
+
+    return response.json();
+}
+
