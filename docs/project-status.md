@@ -25,6 +25,7 @@ Phase 5
 ✅ 5.1 Frontend Foundation
 ✅ 5.2 API Client
 ✅ 5.3 Dashboard MVP
+✅ 5.4 Matching View
 
 ---
 
@@ -102,11 +103,18 @@ Completed
 - Affichage des profils depuis le backend validé
 - Affichage des offres depuis le backend validé
 
+- Matching View implémentée
+- MatchingResult.tsx créé
+- Affichage du score de matching validé
+- Affichage des matching skills validé
+- Affichage des missing skills validé
+- Intégration React ↔ Matching Engine validée
+
 ---
 
 In Progress
 
-- Préparation de la Matching View
+- Préparation de la prochaine évolution du Job Board
 
 ---
 
@@ -118,16 +126,16 @@ Aucun
 
 Next Step
 
-Implémenter la Matching View.
+Définir la Phase 5.5.
 
 ---
 
 Last Decision
 
-DEC-031 - Le Dashboard MVP affiche en priorité les profils et les offres d'emploi.
+DEC-032 Matching View
 
 ---
 
 Last Commit
 
-400faf5 - feat: implement dashboard mvp
+1a2dff8 - docs: close dashboard mvp phase

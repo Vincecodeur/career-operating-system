@@ -440,3 +440,16 @@ Le Dashboard ne calcule aucune logique métier.
 Toutes les données affichées proviennent exclusivement des APIs backend.
 
 Le Dashboard constitue une couche de visualisation.
+
+---
+
+### DEC-032
+
+La Matching View affiche exclusivement les résultats
+calculés par le backend.
+
+Le frontend ne réalise aucun calcul de matching.
+
+Le score, les compétences correspondantes
+et les compétences manquantes
+sont entièrement produits par l'API backend.
