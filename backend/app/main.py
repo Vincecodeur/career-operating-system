@@ -13,11 +13,22 @@ from app.jobs.job_offer_skill_router import (
     router as job_offer_skill_router
 )
 from app.matching.router import router as matching_router
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(
     title="Career Operating System API",
     version="0.1.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 create_tables()
