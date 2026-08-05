@@ -82,7 +82,7 @@ Personal Job Board
 ✅ 5.1 Frontend Foundation
 ✅ 5.2 API Client
 
-⏳ 5.3 Dashboard MVP
+✅ 5.3 Dashboard MVP
 ⏳ 5.4 Job Offers View
 ⏳ 5.5 Matching View
 

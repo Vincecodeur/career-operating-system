@@ -18,3 +18,17 @@ export async function getProfiles() {
         throw error;
     }
 }
+
+export async function getJobOffers() {
+    const response = await fetch(
+        `${API_BASE_URL}/job-offers`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load job offers."
+        );
+    }
+
+    return response.json();
+}

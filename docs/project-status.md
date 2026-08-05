@@ -91,11 +91,18 @@ Completed
 - CORS configuré
 - Premier appel API React implémenté
 
+- Dashboard MVP implémenté
+- ProfileList.tsx créé
+- JobOfferList.tsx créé
+- Dashboard.tsx créé
+- Affichage des profils depuis le backend validé
+- Affichage des offres depuis le backend validé
+
 ---
 
 In Progress
 
-- Développement du Dashboard MVP
+- Préparation de la Matching View
 
 ---
 
@@ -107,7 +114,7 @@ Aucun
 
 Next Step
 
-Implémenter le Dashboard MVP.
+Implémenter la Matching View.
 
 ---
 

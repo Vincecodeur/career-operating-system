@@ -425,3 +425,18 @@ Le Frontend consomme exclusivement les APIs FastAPI existantes.
 Aucune logique métier ne doit être implémentée dans React.
 
 Le backend reste la source unique de vérité.
+
+---
+
+### DEC-031
+
+Le Dashboard MVP affiche en priorité :
+
+- les profils ;
+- les offres d'emploi.
+
+Le Dashboard ne calcule aucune logique métier.
+
+Toutes les données affichées proviennent exclusivement des APIs backend.
+
+Le Dashboard constitue une couche de visualisation.

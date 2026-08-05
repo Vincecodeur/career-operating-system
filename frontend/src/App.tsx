@@ -1,45 +1,47 @@
 import { useEffect, useState } from "react";
 
-import { getProfiles } from "./services/api";
+import { Dashboard } from "./components/Dashboard";
+import { getProfiles, getJobOffers } from "./services/api";
 
 function App() {
-  const [profiles, setProfiles] = useState<any[]>([]);
+  const [profiles, setProfiles] = useState([]);
+  const [jobOffers, setJobOffers] = useState([]);
+
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function loadProfiles() {
+    async function loadData() {
       try {
-        const data = await getProfiles();
+        const profilesData = await getProfiles();
 
-        setProfiles(data);
+        setProfiles(profilesData);
+
+        const jobOffersData = await getJobOffers();
+
+        setJobOffers(jobOffersData);
       } catch (error) {
         console.error("Erreur API :", error);
 
-        setError("Unable to load profiles.");
+        setError("Unable to load data.");
       } finally {
         setLoading(false);
       }
     }
 
-    loadProfiles();
+    loadData();
   }, []);
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>Career Operating System</h1>
-
       {loading && <p>Loading...</p>}
 
       {error && <p>{error}</p>}
 
-      <h2>Profiles</h2>
-
-      <ul>
-        {profiles.map((profile) => (
-          <li key={profile.id}>{profile.full_name}</li>
-        ))}
-      </ul>
+      {!loading && !error && (
+        <Dashboard profiles={profiles} jobOffers={jobOffers} />
+      )}
     </div>
   );
 }
