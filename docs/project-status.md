@@ -26,6 +26,7 @@ Phase 5
 ✅ 5.2 API Client
 ✅ 5.3 Dashboard MVP
 ✅ 5.4 Matching View
+✅ 5.5 Opportunity Ranking
 
 ---
 
@@ -33,13 +34,13 @@ Current Phase
 
 Phase 5
 
-Opportunity Ranking
+Application Tracker
 
 ---
 
 Current Objective
 
-Classer les opportunités par pertinence pour un profil donné.
+Créer le suivi des candidatures.
 
 ---
 
@@ -123,7 +124,7 @@ Completed
 
 In Progress
 
-- Préparation Application Tracker
+- Application Tracker
 
 ---
 
@@ -135,16 +136,16 @@ Aucun
 
 Next Step
 
-Définir Application Tracker.
+Définir le modèle Application.
 
 ---
 
 Last Decision
 
-DEC-033 Opportunity Ranking
+DEC-034 Application Tracker
 
 ---
 
 Last Commit
 
-d1920f5 - feat: implement opportunity ranking view
+4797a7b - docs: close opportunity ranking phase

@@ -89,6 +89,19 @@ V1 :
 
 Suivi des candidatures.
 
+V1 :
+
+- Une candidature appartient à un profil.
+- Une candidature référence une offre.
+- Une candidature possède un statut.
+- Les statuts sont :
+  - Not Applied
+  - Applied
+  - Interview
+  - Offer
+  - Rejected
+  - Accepted
+
 ### Market
 
 Analyse du marché.

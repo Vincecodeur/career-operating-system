@@ -473,3 +473,34 @@ Le frontend affiche le classement sans logique métier.
 Le classement s'appuie sur les résultats du Matching Engine.
 
 Les offres sont triées par score décroissant.
+
+---
+
+### DEC-034
+
+Application Tracker
+
+Le système doit permettre de suivre le cycle de vie
+d'une candidature.
+
+Une candidature est liée à :
+
+- un profil candidat
+- une offre d'emploi
+
+Une candidature possède un statut unique.
+
+Les statuts initiaux retenus sont :
+
+- Not Applied
+- Applied
+- Interview
+- Offer
+- Rejected
+- Accepted
+
+Le suivi des candidatures est manuel dans la V1.
+
+Aucune synchronisation avec LinkedIn, Indeed ou d'autres plateformes n'est prévue.
+
+Le système conserve l'historique courant de la candidature afin d'aider à piloter la recherche d'emploi.
