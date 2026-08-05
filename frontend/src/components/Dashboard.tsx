@@ -2,6 +2,7 @@ import { JobOfferList } from "./JobOfferList";
 import { MatchingResult } from "./MatchingResult";
 import { ProfileList } from "./ProfileList";
 import { OpportunityRanking } from "./OpportunityRanking";
+import { ApplicationTracker } from "./ApplicationTracker";
 
 type Profile = {
   id: number;
@@ -29,11 +30,19 @@ type RankedJobOffer = {
   missing_skills: string[];
 };
 
+type Application = {
+  id: number;
+  profile_id: number;
+  job_offer_id: number;
+  status: string;
+};
+
 type Props = {
   profiles: Profile[];
   jobOffers: JobOffer[];
   matching: Matching | null;
   rankedJobOffers: RankedJobOffer[];
+  applications: Application[];
 };
 
 export function Dashboard({
@@ -41,6 +50,7 @@ export function Dashboard({
   jobOffers,
   matching,
   rankedJobOffers,
+  applications,
 }: Props) {
   return (
     <>
@@ -58,6 +68,7 @@ export function Dashboard({
         />
       )}
       <OpportunityRanking rankedJobOffers={rankedJobOffers} />
+      <ApplicationTracker applications={applications} />
     </>
   );
 }

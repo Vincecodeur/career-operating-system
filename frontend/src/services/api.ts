@@ -61,3 +61,16 @@ export async function getRankedJobOffers(
     return response.json();
 }
 
+export async function getApplications() {
+    const response = await fetch(
+        `${API_BASE_URL}/applications`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load applications."
+        );
+    }
+
+    return response.json();
+}

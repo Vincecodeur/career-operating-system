@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Dashboard } from "./components/Dashboard";
 import {
+  getApplications,
   getJobOffers,
   getMatching,
   getProfiles,
@@ -34,11 +35,19 @@ type RankedJobOffer = {
   missing_skills: string[];
 };
 
+type Application = {
+  id: number;
+  profile_id: number;
+  job_offer_id: number;
+  status: string;
+};
+
 function App() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
   const [matching, setMatching] = useState<Matching | null>(null);
   const [rankedJobOffers, setRankedJobOffers] = useState<RankedJobOffer[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -47,9 +56,11 @@ function App() {
       try {
         const profilesData = await getProfiles();
         const jobOffersData = await getJobOffers();
+        const applicationsData = await getApplications();
 
         setProfiles(profilesData);
         setJobOffers(jobOffersData);
+        setApplications(applicationsData);
 
         if (profilesData.length > 0 && jobOffersData.length > 0) {
           const matchingData = await getMatching(
@@ -85,6 +96,7 @@ function App() {
           jobOffers={jobOffers}
           matching={matching}
           rankedJobOffers={rankedJobOffers}
+          applications={applications}
         />
       )}
     </div>
