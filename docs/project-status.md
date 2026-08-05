@@ -20,21 +20,25 @@ main
 
 Current Milestone
 
-Phase 4
+Phase 5
+
+✅ 5.1 Frontend Foundation
+✅ 5.2 API Client
+✅ 5.3 Dashboard MVP
 
 ---
 
 Current Phase
 
-Phase 4
+Phase 5
 
-Matching Engine V1
+Matching View
 
 ---
 
 Current Objective
 
-Construire le premier moteur de matching entre profils et offres d'emploi.
+Afficher les résultats du Matching Engine dans le frontend.
 
 ---
 
@@ -120,10 +124,10 @@ Implémenter la Matching View.
 
 Last Decision
 
-DEC-030 - Le Frontend MVP adopte une approche Dashboard First.
+DEC-031 - Le Dashboard MVP affiche en priorité les profils et les offres d'emploi.
 
 ---
 
 Last Commit
 
-831fc13 - feat: implement matching engine v1
+400faf5 - feat: implement dashboard mvp
