@@ -4,12 +4,12 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.jobs.job_offer_skill_models import JobOfferSkill
 from app.jobs.models import JobOffer
 from app.matching.schemas import MatchingResult
-from app.profile.profile_skill_models import ProfileSkill
+from app.matching.schemas import RankedJobOffer
+from app.matching.service import calculate_matching_result
+from app.matching.service import rank_job_offers_for_profile
 from app.profile.models import Profile
-from app.skills.models import Skill
 
 router = APIRouter(
     tags=["Matching"]
@@ -45,59 +45,32 @@ def calculate_match(
             detail="Job offer not found."
         )
 
-    profile_skill_ids = {
-        item.skill_id
-        for item in db.query(ProfileSkill).filter(
-            ProfileSkill.profile_id == profile_id
-        ).all()
-    }
-
-    job_offer_skill_ids = {
-        item.skill_id
-        for item in db.query(JobOfferSkill).filter(
-            JobOfferSkill.job_offer_id == job_offer_id
-        ).all()
-    }
-
-    matching_ids = (
-        profile_skill_ids
-        & job_offer_skill_ids
-    )
-
-    missing_ids = (
-        job_offer_skill_ids
-        - profile_skill_ids
-    )
-
-    matching_skills = [
-        skill.name
-        for skill in db.query(Skill).filter(
-            Skill.id.in_(matching_ids)
-        ).all()
-    ]
-
-    missing_skills = [
-        skill.name
-        for skill in db.query(Skill).filter(
-            Skill.id.in_(missing_ids)
-        ).all()
-    ]
-
-    if len(job_offer_skill_ids) == 0:
-        score = 0.0
-    else:
-        score = round(
-            (
-                len(matching_ids)
-                / len(job_offer_skill_ids)
-            ) * 100,
-            2
-        )
-
-    return MatchingResult(
+    return calculate_matching_result(
         profile_id=profile_id,
         job_offer_id=job_offer_id,
-        matching_score=score,
-        matching_skills=matching_skills,
-        missing_skills=missing_skills
+        db=db
+    )
+
+
+@router.get(
+    "/profiles/{profile_id}/ranked-job-offers",
+    response_model=list[RankedJobOffer]
+)
+def get_ranked_job_offers(
+    profile_id: int,
+    db: Session = Depends(get_db)
+):
+    profile = db.query(Profile).filter(
+        Profile.id == profile_id
+    ).first()
+
+    if profile is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile not found."
+        )
+
+    return rank_job_offers_for_profile(
+        profile_id=profile_id,
+        db=db
     )
