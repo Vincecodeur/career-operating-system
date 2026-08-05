@@ -77,14 +77,14 @@ Comparer profil et offres.
 
 ## Phase 5
 
-Personal Job Board
-
 ✅ 5.1 Frontend Foundation
 ✅ 5.2 API Client
-
 ✅ 5.3 Dashboard MVP
 ✅ 5.4 Matching View
-⏳ 5.5 Opportunity Ranking
+
+✅ 5.5 Opportunity Ranking
+
+⏳ 5.6 Application Tracker
 
 ---
 

@@ -33,13 +33,13 @@ Current Phase
 
 Phase 5
 
-Matching View
+Opportunity Ranking
 
 ---
 
 Current Objective
 
-Afficher les résultats du Matching Engine dans le frontend.
+Classer les opportunités par pertinence pour un profil donné.
 
 ---
 
@@ -110,11 +110,20 @@ Completed
 - Affichage des missing skills validé
 - Intégration React ↔ Matching Engine validée
 
+- Opportunity Ranking défini
+- service.py créé
+- Endpoint ranked-job-offers créé
+- RankedJobOffer ajouté
+- Tests Opportunity Ranking ajoutés
+- OpportunityRanking.tsx créé
+- Classement des opportunités affiché
+- Intégration React ↔ Ranking Engine validée
+
 ---
 
 In Progress
 
-- Opportunity Ranking
+- Préparation Application Tracker
 
 ---
 
@@ -126,16 +135,16 @@ Aucun
 
 Next Step
 
-Implémenter Opportunity Ranking.
+Définir Application Tracker.
 
 ---
 
 Last Decision
 
-DEC-032 Matching View
+DEC-033 Opportunity Ranking
 
 ---
 
 Last Commit
 
-1a2dff8 - docs: close dashboard mvp phase
+d1920f5 - feat: implement opportunity ranking view
