@@ -84,7 +84,7 @@ Personal Job Board
 
 ✅ 5.3 Dashboard MVP
 ✅ 5.4 Matching View
-⏳ 5.5 À définir
+⏳ 5.5 Opportunity Ranking
 
 ---
 

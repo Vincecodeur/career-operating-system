@@ -114,7 +114,7 @@ Completed
 
 In Progress
 
-- Préparation de la prochaine évolution du Job Board
+- Opportunity Ranking
 
 ---
 
@@ -126,7 +126,7 @@ Aucun
 
 Next Step
 
-Définir la Phase 5.5.
+Implémenter Opportunity Ranking.
 
 ---
 

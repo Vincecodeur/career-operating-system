@@ -453,3 +453,62 @@ Le frontend ne réalise aucun calcul de matching.
 Le score, les compétences correspondantes
 et les compétences manquantes
 sont entièrement produits par l'API backend.
+
+---
+
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git add docs/  
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git commit -m "docs: prepare opportunity ranking phase"
+[main 88d8e33] docs: prepare opportunity ranking phase
+3 files changed, 27 insertions(+), 6 deletions(-)
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git push
+Enumerating objects: 11, done.
+Counting objects: 100% (11/11), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 1013 bytes | 337.00 KiB/s, done.
+Total 6 (delta 5), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (5/5), completed with 5 local objects.  
+To https://github.com/Vincecodeur/career-operating-system.git
+1a2dff8..88d8e33 main -> main
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+(use "git add <file>..." to update what will be committed)
+(use "git restore <file>..." to discard changes in working directory)
+modified: frontend/src/App.tsx
+modified: frontend/src/components/Dashboard.tsx
+modified: frontend/src/services/api.ts
+
+Untracked files:
+(use "git add <file>..." to include in what will be committed)
+frontend/src/components/MatchingResult.tsx
+frontend/src/components/OpportunityRanking.tsx
+
+no changes added to commit (use "git add" and/or "git commit -a")
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git add frontend/
+warning: in the working copy of 'frontend/src/App.tsx', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git commit -m "feat: implement matching view"
+[main d1936da] feat: implement matching view
+5 files changed, 129 insertions(+), 26 deletions(-)
+create mode 100644 frontend/src/components/MatchingResult.tsx
+create mode 100644 frontend/src/components/OpportunityRanking.tsx
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git push
+Enumerating objects: 19, done.
+Counting objects: 100% (19/19), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (9/9), done.
+Writing objects: 100% (11/11), 1.86 KiB | 112.00 KiB/s, done.
+Total 11 (delta 5), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (5/5), completed with 5 local objects.  
+To https://github.com/Vincecodeur/career-operating-system.git
+88d8e33..d1936da main -> main
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system>
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system>
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system> git status  
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+PS C:\Users\vince\Desktop\Projet ANchanto à lancer\Perso\career-operating-system>
