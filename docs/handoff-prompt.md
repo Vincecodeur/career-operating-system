@@ -191,13 +191,13 @@ Implémenté :
 - MatchingResult
 - OpportunityRanking
 - ApplicationTracker
+- React Router
+- Protected Routes
 
 Documenté mais pas encore implémenté :
 
-- React Router
 - Auth Layout
 - App Layout
-- Protected Routes
 - Sidebar rétractable
 - Header léger
 - shadcn/ui
@@ -253,9 +253,11 @@ Des tests existent pour :
 - Phase 5.7.7 - Frontend Structure Plan
 - Phase 5.8.1 Frontend Dependencies & Technical Setup
 - Phase 5.8.2 App Providers
+- Phase 5.8.3 Routing & Protected Routes
 
 ## Derniers commits importants
 
+- b4f3a7b - feat: add frontend routing foundation
 - c015510 - docs: synchronize phase 5.8.1 dependency installation
 - ab9d149 - chore: install frontend architecture dependencies
 - 408b576 - docs: finalize phase 5.7 ux architecture and frontend planning
@@ -320,25 +322,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.3 - Routing & Protected Routes
+Phase 5.8.4 - Authentication Pages
 
 Objectif :
 
-Mettre en place la structure de navigation du frontend.
+Créer les premières pages d'authentification prévues dans l'architecture cible.
 
 Livrables :
 
-- React Router configuration
-- Route tree
-- ProtectedRoute component
-- routing foundation
+- Login Page
+- Forgot Password Page
+- My Account Page placeholder
+- structure d'authentification frontend
 
 Pas encore :
 
-- Login page
-- Forgot password page
-- My Account page
-- Auth backend
+- JWT backend
+- login fonctionnel
+- refresh token
+- API authentication
 
 ## Méthode de reprise
 
