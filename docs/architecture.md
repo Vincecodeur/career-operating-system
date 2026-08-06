@@ -282,6 +282,38 @@ Opportunity Details
 Applications
 Settings
 
+### Architecture Frontend Cible
+
+Stack frontend validée :
+
+- React Router
+- Zustand
+- TanStack Query
+- React Hook Form
+- Zod
+- shadcn/ui
+- Tailwind CSS
+- Lucide Icons
+
+Principes :
+
+- Authentification dès le MVP
+- Routes protégées
+- Sidebar rétractable
+- Desktop First
+- Light Theme
+- Dark Theme
+- WCAG AA
+- Internationalisation dès l'architecture
+
+Langue MVP :
+
+- English
+
+Langue post MVP :
+
+- Français
+
 ---
 
 ## Règles architecture

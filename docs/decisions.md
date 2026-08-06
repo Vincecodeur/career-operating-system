@@ -657,3 +657,120 @@ Gestion des offres expirées :
   - les comparaisons futures.
 
 L'utilisateur peut filtrer l'affichage des offres archivées.
+
+### DEC-042
+
+Frontend Technical Stack
+
+Le frontend cible utilise :
+
+- React Router pour le routing ;
+- Zustand pour le state management global ;
+- TanStack Query pour le server state ;
+- React Hook Form pour les formulaires ;
+- Zod pour la validation ;
+- shadcn/ui pour les composants UI ;
+- Tailwind CSS pour le styling ;
+- Lucide Icons pour les icônes.
+
+Zustand est réservé aux états globaux comme l'utilisateur connecté, le thème, les préférences UI ou l'état de la sidebar.
+
+TanStack Query est responsable des données serveur, du cache, des états loading, des retries et de l'invalidation.
+
+Cette combinaison est retenue pour conserver une architecture simple, moderne et maintenable.
+
+#### DEC-043
+
+Authentication From MVP
+
+L'authentification est intégrée dès le MVP.
+
+Le système démarre avec :
+
+- un seul compte utilisateur ;
+- un compte créé manuellement ;
+- email + mot de passe ;
+- JWT access token ;
+- refresh token ;
+- routes protégées ;
+- redirection vers Login si l'utilisateur n'est pas authentifié.
+
+Aucune inscription publique n'est prévue dans le MVP.
+
+Cette approche permet de rester simple tout en évitant un refactoring majeur si le produit évolue vers plusieurs utilisateurs.
+
+L'architecture doit rester compatible avec :
+
+- plusieurs utilisateurs ;
+- SSO Microsoft ;
+- SSO Google ;
+- autres fournisseurs d'identité futurs.
+
+### DEC-044
+
+Multilingual Ready Frontend
+
+Le frontend doit être pensé multilingue dès le départ.
+
+Langue MVP :
+
+- English
+
+Langue prévue rapidement après MVP :
+
+- Français
+
+Aucune chaîne d'interface ne doit être hardcodée dans les composants React.
+
+Toutes les chaînes UI doivent être externalisées afin de préparer l'internationalisation sans refactoring majeur.
+
+#### DEC-045
+
+Design System Strategy
+
+Le frontend utilise une stratégie design system légère.
+
+Choix validés :
+
+- shadcn/ui ;
+- Tailwind CSS ;
+- Lucide Icons ;
+- thème clair ;
+- thème sombre ;
+- couleur primaire bleue ;
+- variables de thème ;
+- accessibilité cible WCAG AA.
+
+Les couleurs ne doivent pas être utilisées directement dans les composants.
+
+Les composants doivent utiliser des variables comme :
+
+- --primary
+- --secondary
+- --accent
+- --background
+- --foreground
+- --success
+- --warning
+- --danger
+
+Objectif :
+
+Permettre un rebranding futur sans refactoring majeur du frontend.
+
+#### DEC-046
+
+Frontend UX Scope Before Implementation
+
+La Phase 5.7 a été créée pour finaliser la vision UX/UI avant toute évolution majeure du frontend.
+
+Les livrables validés sont :
+
+- information architecture ;
+- user flows ;
+- page inventory ;
+- wireframes ;
+- design direction ;
+- frontend structure plan.
+
+Le développement frontend de Phase 5.8 doit s'appuyer sur ces documents et ne pas introduire de nouvelle décision structurante non documentée.

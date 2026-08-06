@@ -135,6 +135,103 @@ Le développement frontend suit la vision produit et non l'inverse.
 
 ---
 
+### Philosophie Frontend
+
+Le frontend doit être conçu comme une application SaaS personnelle, professionnelle et maintenable.
+
+Décisions structurantes validées :
+
+- approche desktop first ;
+- sidebar gauche rétractable ;
+- header léger ;
+- theme light et dark ;
+- accessibilité cible WCAG AA ;
+- design system basé sur shadcn/ui ;
+- styling basé sur Tailwind CSS ;
+- icônes Lucide ;
+- couleur primaire bleue via variables de thème ;
+- composants réutilisables ;
+- aucune couleur hardcodée dans les composants.
+
+Le frontend doit privilégier :
+
+- la lisibilité ;
+- l'analyse ;
+- la comparaison ;
+- la prise de décision.
+
+Le frontend ne doit pas ressembler à :
+
+- un job board marketing ;
+- un réseau social ;
+- un ATS complet ;
+- une marketplace de recrutement.
+
+---
+
+### Authentification
+
+L'authentification fait partie du MVP.
+
+Décisions validées :
+
+- email + mot de passe au MVP ;
+- SSO possible plus tard ;
+- un seul compte utilisateur créé manuellement au MVP ;
+- pas d'inscription publique dans le MVP ;
+- JWT access token ;
+- refresh token ;
+- routes protégées ;
+- redirection vers Login si utilisateur non authentifié.
+
+Le choix du compte unique manuel est un compromis MVP.
+
+L'architecture doit rester compatible avec une évolution future vers plusieurs utilisateurs.
+
+---
+
+### Internationalisation
+
+Le frontend doit être pensé multilingue dès le départ.
+
+Décisions validées :
+
+- anglais comme première langue MVP ;
+- français prévu rapidement après le MVP ;
+- aucune chaîne UI hardcodée dans les composants ;
+- toutes les chaînes d'interface doivent être externalisées.
+
+L'objectif est d'éviter un refactoring i18n majeur après le MVP.
+
+---
+
+### Stack Frontend Cible
+
+Choix validés pour la structure frontend :
+
+- React Router pour le routing ;
+- Zustand pour le state management global ;
+- TanStack Query pour le server state ;
+- React Hook Form pour les formulaires ;
+- Zod pour la validation ;
+- shadcn/ui pour les composants UI ;
+- Tailwind CSS pour le styling ;
+- Lucide Icons pour les icônes.
+
+Zustand ne doit pas être utilisé pour stocker les données API.
+
+TanStack Query est responsable du cache, des états loading, des retries et de l'invalidation.
+
+La combinaison retenue privilégie :
+
+- la simplicité ;
+- la maintenabilité ;
+- le typage fort ;
+- les standards modernes React ;
+- la limitation des refactorings futurs.
+
+---
+
 ## Vision long terme
 
 Répondre aux questions :

@@ -185,6 +185,27 @@ Implémenté :
 - OpportunityRanking
 - ApplicationTracker
 
+Documenté mais pas encore implémenté :
+
+- React Router
+- Auth Layout
+- App Layout
+- Protected Routes
+- Sidebar rétractable
+- Header léger
+- shadcn/ui
+- Tailwind CSS
+- Lucide Icons
+- Zustand
+- TanStack Query
+- React Hook Form
+- Zod
+- Theme Provider
+- i18n structure
+- Login Page
+- Forgot Password Page
+- My Account Page
+
 ### Tests
 
 Pytest est en place.
@@ -214,6 +235,15 @@ Des tests existent pour :
 - Phase 5.6.2 - Application Model
 - Phase 5.6.3 - Application CRUD
 - Phase 5.6.4 - Application Tests
+- Phase 5.6.5.1 - Application Tracker Component
+- Phase 5.6.5.2 - Dashboard Integration
+- Phase 5.7.1 - Product Clarification
+- Phase 5.7.2 - Information Architecture
+- Phase 5.7.3 - User Flows
+- Phase 5.7.4 - Page Inventory
+- Phase 5.7.5 - Wireframes
+- Phase 5.7.6 - Design Direction
+- Phase 5.7.7 - Frontend Structure Plan
 
 ## Derniers commits importants
 
@@ -271,24 +301,40 @@ Respecter notamment :
 - DEC-039 : Explainable Opportunity Scoring
 - DEC-040 : UX First Frontend Strategy
 - DEC-041 : Standardized Job Evaluation Rules
+- DEC-042 : Frontend Technical Stack
+- DEC-043 : Authentication From MVP
+- DEC-044 : Multilingual Ready Frontend
+- DEC-045 : Design System Strategy
 
-## Phase suivante recommandée
+### Phase suivante recommandée
 
-Phase 5.7.2 - Information Architecture
+Phase 5.8.1 - Frontend Dependencies & Technical Setup
 
 Objectif :
 
-Définir l'architecture informationnelle du Career Operating System.
+Préparer le frontend pour l'implémentation de la structure cible définie en Phase 5.7.
 
 Livrables attendus :
 
-- navigation cible ;
-- liste complète des pages ;
-- parcours utilisateurs ;
-- relations entre les écrans ;
-- contenu de chaque page.
+- vérifier l'état Git ;
+- vérifier l'arborescence frontend ;
+- installer les dépendances validées uniquement si elles ne sont pas déjà présentes ;
+- préparer l'architecture future sans créer de dossiers inutiles ;
+- documenter chaque création de dossier ;
+- éviter tout développement fonctionnel prématuré.
 
-Aucun développement frontend ne doit commencer avant validation de cette étape.
+Dépendances frontend validées :
+
+- React Router
+- Zustand
+- TanStack Query
+- React Hook Form
+- Zod
+- shadcn/ui
+- Tailwind CSS
+- Lucide Icons
+
+Aucun développement frontend complet ne doit commencer avant validation de l'état réel du repository.
 
 ## Méthode de reprise
 

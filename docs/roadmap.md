@@ -101,54 +101,72 @@ UX/UI Product Design & Frontend Structure Preparation
 Objectif :
 Définir la vision UX/UI complète du Career Operating System avant toute évolution majeure du frontend.
 
-Cette phase doit permettre de définir :
+Cette phase a permis de définir :
 
 - l'architecture informationnelle ;
 - les parcours utilisateurs ;
-- la navigation ;
-- les pages ;
-- les wireframes ;
+- l'inventaire des pages ;
+- les wireframes basse fidélité ;
 - la direction visuelle ;
-- les critères de validation UX.
-
-Process validé :
-
-1. Définir l'UX complète.
-2. Définir les écrans.
-3. Générer les wireframes.
-4. Valider le produit.
-5. Mettre à jour la roadmap.
-6. Commencer le refactoring frontend.
+- la stratégie frontend cible ;
+- les choix structurants d'authentification ;
+- les choix frontend liés au state management, server state, formulaires, validation, design system et internationalisation.
 
 Sous-phases :
+✅ 5.7.1 Product Clarification
+✅ 5.7.2 Information Architecture
+✅ 5.7.3 User Flows
+✅ 5.7.4 Page Inventory
+✅ 5.7.5 Wireframes
+✅ 5.7.6 Design Direction
+✅ 5.7.7 Frontend Structure Plan
 
-- 5.7.1 Product Clarification
-- 5.7.2 Information Architecture
-- 5.7.3 User Flows
-- 5.7.4 Page Inventory
-- 5.7.5 Wireframes
-- 5.7.6 Design Direction
-- 5.7.7 Frontend Structure Plan
+Livrables créés :
+
+- docs/information-architecture.md
+- docs/user-flows.md
+- docs/page-inventory.md
+- docs/wireframes.md
+- docs/design-direction.md
+- docs/frontend-structure-plan.md
 
 Statut :
-Planned
+Completed
 
 ### Phase 5.8
 
-Frontend Structure
+Frontend Structure Implementation
 
 Objectif :
+Transformer le Dashboard MVP actuel en une application React multi-pages maintenable, sécurisée, accessible et prête pour les futures phases produit.
 
-Transformer le Dashboard MVP actuel en une application React multi-pages maintenable.
+Cette phase doit implémenter progressivement :
+
+- React Router ;
+- Auth Layout ;
+- App Layout ;
+- Protected Routes ;
+- Sidebar rétractable ;
+- Header léger ;
+- Theme Provider ;
+- TanStack Query Provider ;
+- Zustand stores ;
+- structure i18n ;
+- structure shadcn/ui + Tailwind ;
+- pages MVP skeleton ;
+- migration progressive du Dashboard existant.
 
 Sous-phases :
 
-- 5.8.1 Routing
-- 5.8.2 Layout
-- 5.8.3 Navigation
-- 5.8.4 Dedicated Pages
-- 5.8.5 Minimal Design System
-- 5.8.6 Frontend Documentation
+- 5.8.1 Frontend Dependencies & Technical Setup
+- 5.8.2 App Providers
+- 5.8.3 Routing & Protected Routes
+- 5.8.4 Authentication Pages
+- 5.8.5 App Layout
+- 5.8.6 Sidebar & Header
+- 5.8.7 Dashboard Migration
+- 5.8.8 MVP Page Skeletons
+- 5.8.9 Frontend Structure Documentation
 
 Statut :
 Planned
