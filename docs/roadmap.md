@@ -158,7 +158,7 @@ Cette phase doit implémenter progressivement :
 
 Sous-phases :
 
-- 5.8.1 Frontend Dependencies & Technical Setup
+- ✅ 5.8.1 Frontend Dependencies & Technical Setup
 - 5.8.2 App Providers
 - 5.8.3 Routing & Protected Routes
 - 5.8.4 Authentication Pages

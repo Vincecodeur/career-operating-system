@@ -104,6 +104,13 @@ Frontend :
 - React
 - TypeScript
 - Vite
+- React Router
+- Zustand
+- TanStack Query
+- React Hook Form
+- Zod
+- Hook Form Resolvers
+- Lucide React
 
 Architecture :
 
@@ -244,9 +251,12 @@ Des tests existent pour :
 - Phase 5.7.5 - Wireframes
 - Phase 5.7.6 - Design Direction
 - Phase 5.7.7 - Frontend Structure Plan
+- Phase 5.8.1 Frontend Dependencies & Technical Setup
 
 ## Derniers commits importants
 
+- ab9d149 - chore: install frontend architecture dependencies
+- 408b576 - docs: finalize phase 5.7 ux architecture and frontend planning
 - 0717453 - docs: update application tracker frontend documentation
 - f9060c8 - feat: connect application tracker to dashboard
 - 7828d0b - feat: add application tracker component
@@ -308,20 +318,23 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.1 - Frontend Dependencies & Technical Setup
+Phase 5.8.2 - App Providers
 
 Objectif :
 
-Préparer le frontend pour l'implémentation de la structure cible définie en Phase 5.7.
+Préparer les fondations globales du frontend.
 
-Livrables attendus :
+Livrables :
 
-- vérifier l'état Git ;
-- vérifier l'arborescence frontend ;
-- installer les dépendances validées uniquement si elles ne sont pas déjà présentes ;
-- préparer l'architecture future sans créer de dossiers inutiles ;
-- documenter chaque création de dossier ;
-- éviter tout développement fonctionnel prématuré.
+- QueryClient Provider
+- providers directory
+- application providers composition
+- Zustand foundation
+- documentation synchronization
+
+Aucun routing complet.
+Aucune page.
+Aucun layout.
 
 Dépendances frontend validées :
 

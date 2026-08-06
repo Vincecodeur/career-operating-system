@@ -40,15 +40,15 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.7 Closure
+Phase 5.8.1
 
-Documentation Synchronization
+Frontend Dependencies & Technical Setup
 
 ---
 
 Current Objective
 
-Synchroniser les documents projet après la finalisation de la Phase 5.7 avant le lancement de l'implémentation frontend de la Phase 5.8.
+Préparer les fondations globales du frontend avant l'implémentation du routing, des layouts et de l'authentification.
 
 ---
 
@@ -172,11 +172,21 @@ Completed
 - Authentification MVP validée : email + mot de passe, JWT access token et refresh token
 - Internationalisation validée : anglais MVP, français post-MVP, chaînes externalisées
 
+- Phase 5.8.1 Frontend Dependencies & Technical Setup terminée
+- React Router installé
+- Zustand installé
+- TanStack Query installé
+- React Hook Form installé
+- Zod installé
+- Hook Form Resolvers installés
+- Lucide React installé
+- Frontend dependency baseline créée
+
 ---
 
 In Progress
 
-- Documentation synchronization for Phase 5.7 closure
+- Documentation synchronization for Phase 5.8.1 closure
 
 ---
 
@@ -188,9 +198,15 @@ Aucun
 
 Next Step
 
-Commit Phase 5.7 documentation.
+Phase 5.8.2 App Providers
 
-Then launch Phase 5.8.1 Frontend Dependencies & Technical Setup.
+Create:
+
+- QueryClient Provider
+- Zustand foundation
+- Global providers architecture
+
+No routing implementation yet.
 
 ---
 
@@ -217,4 +233,4 @@ Validated choices:
 
 Last Commit
 
-52ea96c - docs: align career os mvp and ux first roadmap
+ab9d149 - chore: install frontend architecture dependencies
