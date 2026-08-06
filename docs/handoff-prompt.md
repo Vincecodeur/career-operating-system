@@ -252,9 +252,11 @@ Des tests existent pour :
 - Phase 5.7.6 - Design Direction
 - Phase 5.7.7 - Frontend Structure Plan
 - Phase 5.8.1 Frontend Dependencies & Technical Setup
+- Phase 5.8.2 App Providers
 
 ## Derniers commits importants
 
+- c015510 - docs: synchronize phase 5.8.1 dependency installation
 - ab9d149 - chore: install frontend architecture dependencies
 - 408b576 - docs: finalize phase 5.7 ux architecture and frontend planning
 - 0717453 - docs: update application tracker frontend documentation
@@ -318,36 +320,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.2 - App Providers
+Phase 5.8.3 - Routing & Protected Routes
 
 Objectif :
 
-Préparer les fondations globales du frontend.
+Mettre en place la structure de navigation du frontend.
 
 Livrables :
 
-- QueryClient Provider
-- providers directory
-- application providers composition
-- Zustand foundation
-- documentation synchronization
+- React Router configuration
+- Route tree
+- ProtectedRoute component
+- routing foundation
 
-Aucun routing complet.
-Aucune page.
-Aucun layout.
+Pas encore :
 
-Dépendances frontend validées :
-
-- React Router
-- Zustand
-- TanStack Query
-- React Hook Form
-- Zod
-- shadcn/ui
-- Tailwind CSS
-- Lucide Icons
-
-Aucun développement frontend complet ne doit commencer avant validation de l'état réel du repository.
+- Login page
+- Forgot password page
+- My Account page
+- Auth backend
 
 ## Méthode de reprise
 
