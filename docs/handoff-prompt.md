@@ -60,13 +60,19 @@ Career Operating System est un projet personnel destiné à aider Vincent à pil
 
 Le système doit permettre :
 
-- l'analyse du profil professionnel ;
-- la centralisation des offres d'emploi ;
-- le matching entre profil et offres ;
+- la gestion de plusieurs profils candidats ;
+- la centralisation d'une source de vérité carrière ;
+- la collecte automatisée d'opportunités professionnelles ;
+- le filtrage des opportunités ;
+- le matching entre profils et offres ;
+- le calcul de scores explicables ;
+- l'analyse des points forts et des points faibles ;
 - le classement des opportunités ;
-- le suivi des candidatures ;
-- l'analyse du marché ;
+- le suivi manuel des candidatures ;
+- l'analyse future du marché ;
 - la planification de carrière.
+
+Le produit est un système d'intelligence carrière et d'aide à la décision.
 
 ## Contraintes projet
 
@@ -124,6 +130,18 @@ React ne doit pas :
 
 React consomme les APIs FastAPI et affiche les résultats.
 
+## Règles métier importantes
+
+- Le profil structuré constitue la source de vérité.
+- Le système supporte plusieurs profils candidats.
+- Opportunity Discovery est un composant central du MVP.
+- La stratégie Job Discovery est API First.
+- LinkedIn fait partie des sources visées par le MVP.
+- Tous les scores doivent être explicables.
+- Les offres sans salaire restent éligibles mais peuvent recevoir un malus.
+- Les offres expirées sont archivées mais conservées.
+- Toute logique métier appartient au backend.
+
 ## État fonctionnel actuel
 
 ### Backend
@@ -141,9 +159,18 @@ Implémenté :
 - JobOffer
 - JobOfferSkill
 - Matching Engine V1
-- Opportunity Ranking Endpoint
+- Opportunity Ranking
 - Application Model
 - Application CRUD
+
+Non implémenté :
+
+- Search Criteria
+- Job Discovery
+- Job Sources
+- Opportunity Analysis
+- Market Intelligence
+- Career Planning
 
 ### Frontend
 
@@ -190,12 +217,11 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
-- 32a277a - docs: define opportunity ranking
-- 03567f4 - feat: implement opportunity ranking endpoint
-- cc3e9bd - test: add opportunity ranking coverage
-- d1920f5 - feat: implement opportunity ranking view
-- 7828d0b - feat: add application tracker component
+- 0717453 - docs: update application tracker frontend documentation
 - f9060c8 - feat: connect application tracker to dashboard
+- 7828d0b - feat: add application tracker component
+- 9893c4d - docs: synchronize application tracker phase
+- 834c331 - feat: implement application crud
 
 ## Résultat métier validé
 
@@ -233,33 +259,36 @@ Exemple de résultat validé :
 
 Respecter notamment :
 
-- DEC-030 : Frontend Dashboard First
-- DEC-031 : Dashboard MVP comme couche de visualisation
-- DEC-032 : Matching View affiche uniquement les résultats backend
-- DEC-033 : Opportunity Ranking calculé exclusivement par le backend
+- DEC-013 : Profile Source Of Truth
+- DEC-017 : Multi Profiles
+- DEC-030 : Dashboard First MVP
+- DEC-033 : Opportunity Ranking
 - DEC-034 : Application Tracker
+- DEC-035 : Structured Profile Source Of Truth
+- DEC-036 : Opportunity Discovery Core MVP
+- DEC-037 : API First Job Discovery
+- DEC-038 : LinkedIn MVP Target Source
+- DEC-039 : Explainable Opportunity Scoring
+- DEC-040 : UX First Frontend Strategy
+- DEC-041 : Standardized Job Evaluation Rules
 
 ## Phase suivante recommandée
 
-Phase 5.6.5.3 - Frontend Validation & Documentation
+Phase 5.7.2 - Information Architecture
 
 Objectif :
-Finaliser la validation fonctionnelle du frontend.
 
-Points à vérifier :
+Définir l'architecture informationnelle du Career Operating System.
 
-- affichage des profils ;
-- affichage des offres ;
-- affichage du matching ;
-- affichage du ranking ;
-- affichage des candidatures ;
-- absence d'erreurs TypeScript ;
-- absence d'erreurs API dans le navigateur.
+Livrables attendus :
 
-Après validation :
+- navigation cible ;
+- liste complète des pages ;
+- parcours utilisateurs ;
+- relations entre les écrans ;
+- contenu de chaque page.
 
-- synchronisation documentaire finale ;
-- clôture officielle de la phase 5.6.
+Aucun développement frontend ne doit commencer avant validation de cette étape.
 
 ## Méthode de reprise
 

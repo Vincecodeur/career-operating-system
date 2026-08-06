@@ -8,13 +8,19 @@ L'objectif n'est pas simplement de rechercher des offres d'emploi.
 
 L'objectif est de :
 
-- Comprendre la position actuelle de Vincent sur le marché.
-- Identifier les meilleures opportunités professionnelles.
-- Comprendre les compétences les plus demandées.
-- Mesurer l'écart entre le profil actuel et les postes ciblés.
-- Prioriser les actions permettant d'accélérer la progression de carrière.
-- Préparer efficacement les candidatures et les entretiens.
-- Centraliser l'ensemble des informations liées à la carrière au même endroit.
+- Centraliser un ou plusieurs profils candidats.
+- Construire une source de vérité unique pour chaque profil.
+- Enrichir les profils via des CV, analyses Copilot et informations manuelles.
+- Collecter automatiquement des opportunités professionnelles depuis plusieurs sources externes.
+- Filtrer les offres selon des critères configurables.
+- Évaluer objectivement la compatibilité entre un profil et une offre.
+- Expliquer les points forts et les points faibles associés à chaque opportunité.
+- Classer les opportunités selon leur pertinence.
+- Aider à prendre de meilleures décisions de carrière.
+- Conserver l'historique des opportunités analysées.
+- Préparer l'analyse future du marché de l'emploi.
+
+Career Operating System est avant tout un système personnel d'intelligence carrière et d'aide à la décision.
 
 ---
 
@@ -23,14 +29,17 @@ L'objectif est de :
 Le système doit devenir un assistant personnel de gestion de carrière capable de :
 
 - analyser le profil professionnel de Vincent ;
+- centraliser plusieurs profils candidats ;
 - suivre l'évolution du marché ;
-- recommander les meilleures opportunités ;
-- identifier les compétences prioritaires ;
+- collecter automatiquement les opportunités ;
+- identifier les meilleures opportunités ;
+- expliquer pourquoi une opportunité est pertinente ou non ;
+- identifier les compétences prioritaires à développer ;
 - préparer les candidatures ;
 - préparer les entretiens ;
 - construire une roadmap carrière personnalisée ;
-- centraliser l'historique professionnel ;
-- proposer des actions concrètes pour atteindre les objectifs professionnels.
+- proposer des actions concrètes de progression ;
+- mesurer l'évolution du profil dans le temps.
 
 L'objectif est de disposer d'un système de pilotage de carrière basé sur des données plutôt que sur l'intuition.
 
@@ -51,11 +60,11 @@ Aucun objectif commercial n'est prévu à ce stade.
 Aujourd'hui :
 
 - Les offres sont dispersées sur plusieurs plateformes.
-- Les recommandations des job boards sont souvent peu pertinentes.
-- Il est difficile de mesurer objectivement la valeur d'une opportunité.
-- Il est difficile d'identifier les compétences les plus rentables à développer.
-- La préparation des candidatures prend du temps.
-- Les tendances du marché sont difficiles à suivre dans le temps.
+- Il est chronophage de consulter plusieurs job boards chaque jour.
+- Les critères de recherche sont difficiles à maintenir de manière cohérente entre les différentes plateformes.
+- Il est difficile de comparer objectivement plusieurs opportunités entre elles.
+- Les points forts et les points faibles d'une offre ne sont pas toujours visibles immédiatement.
+- Les informations de carrière sont dispersées entre CV, LinkedIn, notes personnelles et outils externes.
 
 ---
 
@@ -89,37 +98,29 @@ Construire une stratégie de carrière basée sur des données.
 
 ## Fonctionnalités cibles
 
-### Candidate Intelligence
-
-Analyse du profil professionnel.
-
-### Opportunity Discovery
-
-Collecte et centralisation des offres.
-
-### Matching Engine
-
-Comparaison profil ↔ offre.
-
-### Personal Job Board
-
-Gestion visuelle des opportunités.
-
-### Application Assistant
-
-Aide à la candidature.
-
-### Market Intelligence
-
-Analyse du marché.
-
-### Career Roadmap
-
-Planification de la progression professionnelle.
-
-### Interview Preparation
-
-Préparation des entretiens.
+- Candidate Intelligence
+- Gestion et enrichissement du profil candidat.
+  Le profil structuré constitue la source de vérité du système.
+- Opportunity Discovery
+  Collecte automatisée d'offres d'emploi via API ou autres sources compatibles.
+- Opportunity Analysis
+  Analyse détaillée des opportunités.
+- Matching Engine
+  Comparaison entre un profil candidat et une offre.
+- Opportunity Ranking
+  Classement des opportunités selon leur pertinence.
+- Personal Opportunity Board
+  Gestion visuelle des opportunités détectées.
+- Application Tracker
+  Suivi manuel des candidatures.
+- Application Assistant
+  Aide à la préparation des candidatures.
+- Market Intelligence
+  Analyse des tendances du marché.
+- Career Roadmap
+  Planification de la progression professionnelle.
+- Interview Preparation
+  Préparation des entretiens.
 
 ---
 
@@ -143,12 +144,30 @@ Les choix techniques doivent privilégier la compréhension et l'apprentissage a
 
 ---
 
+### Définition du MVP
+
+Le MVP est considéré comme terminé lorsque le système permet de :
+
+- créer ou enrichir un profil candidat ;
+- gérer plusieurs profils candidats ;
+- définir des critères de recherche ;
+- collecter automatiquement des offres depuis au moins deux sources externes ;
+- stocker les offres collectées ;
+- filtrer les offres selon les critères définis ;
+- calculer un score de compatibilité explicable ;
+- identifier les points forts et points faibles d'une opportunité ;
+- classer les opportunités ;
+- ouvrir le lien source pour postuler ;
+- suivre manuellement une candidature.
+
+---
+
 ## Hors périmètre MVP
 
 - Multi-utilisateur
 - Candidature automatique
 - Envoi automatique de CV
-- Automatisation avancée LinkedIn
+- Automatisation avancée des candidatures
 - Monétisation
 - Réseau social
 - Produit SaaS public
@@ -160,8 +179,12 @@ Les choix techniques doivent privilégier la compréhension et l'apprentissage a
 Le système doit être capable de répondre clairement aux questions suivantes :
 
 - Quels postes me correspondent aujourd'hui ?
-- Quels postes me correspondront demain ?
+- Quels postes correspondent le mieux à chacun de mes profils candidats ?
+- Pourquoi cette opportunité est-elle recommandée ?
+- Pourquoi cette opportunité n'est-elle pas recommandée ?
+- Quels sont mes points forts face à cette offre ?
+- Quels sont mes points faibles face à cette offre ?
 - Quelles compétences dois-je développer ?
 - Quelle opportunité dois-je privilégier ?
-- Pourquoi cette opportunité est-elle recommandée ?
+- Quelles opportunités méritent réellement mon attention ?
 - Quel est le chemin le plus efficace vers mon prochain objectif professionnel ?

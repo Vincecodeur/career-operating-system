@@ -504,3 +504,156 @@ Le suivi des candidatures est manuel dans la V1.
 Aucune synchronisation avec LinkedIn, Indeed ou d'autres plateformes n'est prévue.
 
 Le système conserve l'historique courant de la candidature afin d'aider à piloter la recherche d'emploi.
+
+### DEC-035
+
+Profile Structured Source Of Truth
+
+Le profil structuré enregistré dans l'application constitue la source de vérité du système.
+
+Les informations peuvent provenir de différentes sources :
+
+- CV ;
+- LinkedIn ;
+- analyses Copilot ;
+- saisie manuelle ;
+- autres sources futures.
+
+Ces sources servent uniquement à enrichir le profil.
+
+Toutes les analyses, comparaisons et recommandations utilisent exclusivement le profil structuré enregistré dans le système.
+
+### DEC-036
+
+Opportunity Discovery As Core MVP Capability
+
+Opportunity Discovery devient un composant central du MVP.
+
+Le système doit permettre :
+
+- la collecte automatisée des offres ;
+- le stockage des offres ;
+- le filtrage des offres ;
+- l'analyse des opportunités ;
+- le classement des opportunités.
+
+Le suivi des candidatures reste un composant du produit mais ne constitue pas le coeur du MVP.
+
+Le coeur du MVP devient :
+
+Profile
+↓
+Opportunity Discovery
+↓
+Opportunity Analysis
+↓
+Opportunity Ranking
+↓
+Decision Support
+↓
+Application Tracker
+
+### DEC-037
+
+API First Job Discovery Strategy
+
+La collecte des offres suit une stratégie API First.
+
+Ordre de priorité :
+
+1. API officielle
+2. Flux publics exploitables
+3. Scraping lorsqu'aucune API exploitable n'existe
+
+Le scraping doit rester compatible avec les conditions d'utilisation des plateformes concernées.
+
+Les offres collectées conservent toujours :
+
+- leur source ;
+- leur URL d'origine ;
+- leur date de collecte.
+
+### DEC-038
+
+LinkedIn MVP Target Source
+
+LinkedIn fait partie des sources d'opportunités visées par le MVP.
+
+La méthode d'intégration sera déterminée pendant la Phase Job Discovery.
+
+Aucune hypothèse technique spécifique n'est retenue à ce stade.
+
+Le MVP ne dépend pas exclusivement de LinkedIn.
+
+Le système doit être capable de fonctionner avec plusieurs sources d'opportunités.
+
+### DEC-039
+
+Explainable Opportunity Scoring
+
+Tous les scores d'opportunité doivent être explicables.
+
+Le système doit pouvoir expliquer :
+
+- les critères utilisés ;
+- les points forts ;
+- les points faibles ;
+- les compétences correspondantes ;
+- les compétences manquantes ;
+- les éventuels malus appliqués.
+
+Aucun score opaque n'est autorisé.
+
+### DEC-040
+
+UX First Frontend Strategy
+
+Le développement frontend suit une stratégie UX First.
+
+Avant toute évolution majeure du frontend :
+
+- les parcours utilisateurs doivent être définis ;
+- l'architecture informationnelle doit être définie ;
+- les pages doivent être identifiées ;
+- les wireframes doivent être validés ;
+- la navigation doit être validée.
+
+Le refactoring frontend intervient uniquement après validation de ces éléments.
+
+### DEC-041
+
+Standardized Job Evaluation Rules
+
+Le système applique des règles standardisées afin de permettre une comparaison cohérente des opportunités.
+
+Work Mode supportés :
+
+- Remote
+- Hybrid
+- Onsite
+
+Ce critère peut être utilisé dans :
+
+- les critères de recherche ;
+- le filtrage ;
+- le scoring ;
+- l'analyse des opportunités.
+
+Gestion des offres sans salaire :
+
+- une offre sans information salariale reste éligible ;
+- l'offre n'est pas exclue ;
+- un malus peut être appliqué dans le scoring ;
+- le malus doit être explicité dans l'analyse.
+
+Gestion des offres expirées :
+
+- les offres expirées sont conservées ;
+- elles sont archivées ;
+- elles restent disponibles pour :
+  - l'historique ;
+  - les analyses marché ;
+  - les statistiques ;
+  - les comparaisons futures.
+
+L'utilisateur peut filtrer l'affichage des offres archivées.
