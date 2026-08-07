@@ -1,7 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
-import App from "../App";
+import { AppLayout } from "../layouts/AppLayout";
 import { AccountPage } from "../pages/AccountPage";
+import { DashboardPage } from "../pages/DashboardPage";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -16,28 +17,25 @@ export const router = createBrowserRouter([
     element: <ForgotPasswordPage />,
   },
   {
-    path: "/",
     element: (
       <ProtectedRoute>
-        <App />
+        <AppLayout />
       </ProtectedRoute>
     ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <ProtectedRoute>
-        <App />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/account",
-    element: (
-      <ProtectedRoute>
-        <AccountPage />
-      </ProtectedRoute>
-    ),
+    children: [
+      {
+        path: "/",
+        element: <Navigate to="/dashboard" replace />,
+      },
+      {
+        path: "/dashboard",
+        element: <DashboardPage />,
+      },
+      {
+        path: "/account",
+        element: <AccountPage />,
+      },
+    ],
   },
   {
     path: "*",
