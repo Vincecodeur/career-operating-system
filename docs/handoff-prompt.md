@@ -202,20 +202,24 @@ Implémenté :
 - Account Page
 - Auth Store
 - JWT Authentication
+- AppLayout
+- DashboardPage
+- Sidebar MVP
+- Header MVP
+- Layout architecture
+- Dashboard Overview
+- Design System document
+- Tailwind CSS
+- PageHeader
+- Section
+- Card
+- StatCard
+- KPI Cards
 
 Documenté mais pas encore implémenté :
 
 - Auth Layout
-- App Layout
-- Sidebar rétractable
-- Header léger
 - shadcn/ui
-- Tailwind CSS
-- Lucide Icons
-- Zustand
-- TanStack Query
-- React Hook Form
-- Zod
 - Theme Provider
 - i18n structure
 
@@ -261,9 +265,17 @@ Des tests existent pour :
 - Phase 5.8.2 App Providers
 - Phase 5.8.3 Routing & Protected Routes
 - Phase 5.8.4 Authentication Flow
+- Phase 5.8.5 App Layout
+- Phase 5.8.6 Sidebar & Header
+- Phase 5.8.7.1 Dashboard Overview
+- Phase 5.8.7.5.0 Design System Document
+- Phase 5.8.7.5.1 Tailwind CSS Installation
+- Phase 5.8.7.5.2 First UI Components
+- Phase 5.8.7.5.3 Dashboard Cards
 
 ## Derniers commits importants
 
+- 6e42175 - docs: add design system foundation
 - 7f285fe - feat: implement frontend authentication flow
 - 8e0560f - feat: implement backend authentication flow
 - 8af58bd - feat: add authentication user model
@@ -333,24 +345,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.5 - App Layout
+Phase 5.8.7.5.4 - Dashboard Component Modernization
 
 Objectif :
-Créer la structure principale de navigation de l'application.
+Moderniser progressivement les composants métier du Dashboard en s'appuyant sur les premières briques du Design System.
 
 Livrables :
 
-- AppLayout
-- Layout architecture
-- Main content container
-- Navigation foundation
+- OpportunityRanking modernisé
+- MatchingResult modernisé
+- ApplicationTracker modernisé
+- ProfileList modernisé
+- JobOfferList modernisé
 
 Pas encore :
 
-- Sidebar finalisée
-- Header finalisé
-- Design system
-- Dashboard migration
+- shadcn/ui
+- responsive final
+- animations
+- refonte complète des pages hors Dashboard
 
 ## Méthode de reprise
 

@@ -169,6 +169,29 @@ Le frontend ne doit pas ressembler à :
 
 ---
 
+#### Design System Foundation
+
+Décisions validées :
+
+- style Modern SaaS + Data Analytics ;
+- sidebar de référence à 280px ;
+- densité visuelle aérée ;
+- dark mode par défaut ;
+- light mode supporté ;
+- KPI Cards utilisées pour les métriques principales ;
+- premières briques UI internes créées avant l'introduction de shadcn/ui.
+
+Composants UI initiaux :
+
+- PageHeader
+- Section
+- Card
+- StatCard
+
+Le Dashboard doit progressivement évoluer vers une interface structurée autour de sections et cartes réutilisables.
+
+---
+
 ### Authentification
 
 L'authentification fait partie du MVP.

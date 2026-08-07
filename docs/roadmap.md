@@ -162,9 +162,15 @@ Sous-phases :
 - ✅ 5.8.2 App Providers
 - ✅ 5.8.3 Routing & Protected Routes
 - ✅ 5.8.4 Authentication Flow
-- 5.8.5 App Layout
-- 5.8.6 Sidebar & Header
-- 5.8.7 Dashboard Migration
+- ✅ 5.8.5 App Layout
+- ✅ 5.8.6 Sidebar & Header
+- ⏳ 5.8.7 Dashboard Migration & Design System Foundation
+  - ✅ 5.8.7.1 Dashboard Overview
+  - ✅ 5.8.7.5.0 Design System Document
+  - ✅ 5.8.7.5.1 Tailwind CSS Installation
+  - ✅ 5.8.7.5.2 First UI Components
+  - ✅ 5.8.7.5.3 Dashboard Cards
+  - ⏳ 5.8.7.5.4 Dashboard Component Modernization
 - 5.8.8 MVP Page Skeletons
 - 5.8.9 Frontend Structure Documentation
 

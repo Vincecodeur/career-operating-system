@@ -40,15 +40,15 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.8.4 Closure
+Phase 5.8.7.5
 
-Documentation Synchronization
+Design System Foundation
 
 ---
 
 Current Objective
 
-Clôturer l'implémentation complète du flux d'authentification MVP avant la phase App Layout.
+Mettre en place les premières fondations visuelles du Design System afin de transformer progressivement le Dashboard en interface SaaS lisible, structurée et maintenable.
 
 ---
 
@@ -218,11 +218,44 @@ Completed
 - Frontend authentication flow implémenté
 - Build frontend validé
 
+- Phase 5.8.5 App Layout terminée
+- AppLayout créé
+- DashboardPage créée
+- Router refactorisé autour du layout
+- Main content container créé
+- Navigation foundation créée
+- Phase 5.8.6 Sidebar & Header terminée
+- Sidebar MVP créée
+- Header MVP créé
+- Navigation Dashboard / Account / Logout visible
+- Login réel validé
+- Logout réel validé
+- Dashboard visible après authentification
+- bcrypt figé en version compatible
+- Phase 5.8.7.1 Dashboard Overview terminée
+- Dashboard Overview créé
+- KPI de synthèse ajoutés au Dashboard
+- Profiles count affiché
+- Job Offers count affiché
+- Applications count affiché
+- Top Match affiché
+- docs/design-system.md créé
+- Design System Foundation documentée
+- Tailwind CSS installé
+- @tailwindcss/vite installé
+- CSS Vite par défaut remplacé
+- Premiers composants UI créés
+- PageHeader créé
+- Section créé
+- StatCard créé
+- Card créé
+- KPI Cards visibles dans le Dashboard
+
 ---
 
 In Progress
 
-- Documentation synchronization for Phase 5.8.4 closure
+- Dashboard Component Modernization
 
 ---
 
@@ -234,16 +267,17 @@ Aucun
 
 Next Step
 
-Phase 5.8.5 App Layout
+Phase 5.8.7.5.4 Dashboard Component Modernization
 
-Create:
+Modernize progressively:
 
-- AppLayout
-- Layout structure
-- Main content area
-- Navigation foundation
+- OpportunityRanking
+- MatchingResult
+- ApplicationTracker
+- ProfileList
+- JobOfferList
 
-No sidebar implementation yet.
+No shadcn/ui implementation yet.
 
 ---
 
@@ -270,4 +304,4 @@ Validated choices:
 
 Last Commit
 
-7f285fe - feat: implement frontend authentication flow
+f0c5534 - feat: introduce dashboard cards and ui foundation
