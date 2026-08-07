@@ -288,6 +288,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 117c972 - feat: add mvp page skeletons
 - 31ed22f - docs: synchronize dashboard component modernization
 - a908f36 - feat: modernize dashboard components
 - 6e42175 - docs: add design system foundation
