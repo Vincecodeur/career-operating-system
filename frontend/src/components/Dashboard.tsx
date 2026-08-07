@@ -3,6 +3,9 @@ import { JobOfferList } from "./JobOfferList";
 import { MatchingResult } from "./MatchingResult";
 import { OpportunityRanking } from "./OpportunityRanking";
 import { ProfileList } from "./ProfileList";
+import { PageHeader } from "./ui/PageHeader";
+import { Section } from "./ui/Section";
+import { StatCard } from "./ui/StatCard";
 
 type Profile = {
   id: number;
@@ -55,36 +58,39 @@ export function Dashboard({
   return (
     <>
       <section>
-        <h1>Dashboard</h1>
-        <p>Overview of profiles, opportunities and applications.</p>
+        <PageHeader
+          title="Dashboard"
+          description="Overview of profiles, opportunities and applications."
+        />
       </section>
-      <section>
-        <h2>Overview</h2>
+      <Section title="Overview">
+        <div className="grid grid-cols-4 gap-4">
+          <StatCard title="Profiles" value={profiles.length} />
 
-        <ul>
-          <li>Profiles: {profiles.length}</li>
+          <StatCard title="Job Offers" value={jobOffers.length} />
 
-          <li>Job Offers: {jobOffers.length}</li>
+          <StatCard title="Applications" value={applications.length} />
 
-          <li>Applications: {applications.length}</li>
-
-          <li>Top Match: {matching ? `${matching.matching_score}%` : "N/A"}</li>
-        </ul>
-      </section>
-      <section>
+          <StatCard
+            title="Top Match"
+            value={matching ? `${matching.matching_score}%` : "N/A"}
+          />
+        </div>
+      </Section>
+      <Section title="Profiles">
         <h2>Profiles</h2>
         <ProfileList profiles={profiles} />
-      </section>
+      </Section>
 
-      <section>
+      <Section title="Opportunities">
         <h2>Opportunities</h2>
 
         <JobOfferList jobOffers={jobOffers} />
 
         <OpportunityRanking rankedJobOffers={rankedJobOffers} />
-      </section>
+      </Section>
 
-      <section>
+      <Section title="Matching Analysis">
         <h2>Matching Analysis</h2>
 
         {matching && (
@@ -94,13 +100,13 @@ export function Dashboard({
             missingSkills={matching.missing_skills}
           />
         )}
-      </section>
+      </Section>
 
-      <section>
+      <Section title="Applications">
         <h2>Applications</h2>
 
         <ApplicationTracker applications={applications} />
-      </section>
+      </Section>
     </>
   );
 }
