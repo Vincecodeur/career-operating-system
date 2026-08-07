@@ -226,6 +226,7 @@ Implémenté :
 - SettingsPage
 - Extended Route Tree
 - Extended Sidebar Navigation
+- Frontend Architecture Documentation
 
 Documenté mais pas encore implémenté :
 
@@ -285,9 +286,11 @@ Des tests existent pour :
 - Phase 5.8.7.5.3 Dashboard Cards
 - Phase 5.8.7.5.4 Dashboard Component Modernization
 - Phase 5.8.8 MVP Page Skeletons
+- Phase 5.8.9 Frontend Structure Documentation
 
 ## Derniers commits importants
 
+- c56bd3b - docs: add frontend architecture documentation
 - 117c972 - feat: add mvp page skeletons
 - 31ed22f - docs: synchronize dashboard component modernization
 - a908f36 - feat: modernize dashboard components
@@ -361,26 +364,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.9 - Frontend Structure Documentation
+Phase 5.9.1 - Job Sources
 
 Objectif :
 
-Documenter la structure frontend désormais en place afin de figer les conventions avant les futures fonctionnalités métier.
+Définir les premières sources d'opportunités du MVP.
 
 Livrables :
 
-- documentation pages/
-- documentation layouts/
-- documentation routing/
-- documentation components/
-- conventions frontend
+- stratégie API First
+- catalogue des sources
+- priorisation des sources
+- documentation Job Sources
 
 Pas encore :
 
-- Job Discovery
-- Search Criteria
-- Opportunity Analysis v2
-- Market Intelligence
+- collecte réelle
+- scraping
+- synchronisation planifiée
 
 ## Méthode de reprise
 

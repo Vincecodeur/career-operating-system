@@ -172,10 +172,10 @@ Sous-phases :
   - ✅ 5.8.7.5.3 Dashboard Cards
   - ✅ 5.8.7.5.4 Dashboard Component Modernization
 - ✅ 5.8.8 MVP Page Skeletons
-- 5.8.9 Frontend Structure Documentation
+- ✅ 5.8.9 Frontend Structure Documentation
 
 Statut :
-Planned
+Completed
 
 ### Phase 5.9
 
