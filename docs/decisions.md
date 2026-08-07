@@ -774,3 +774,64 @@ Les livrables validés sont :
 - frontend structure plan.
 
 Le développement frontend de Phase 5.8 doit s'appuyer sur ces documents et ne pas introduire de nouvelle décision structurante non documentée.
+
+---
+
+#### DEC-047
+
+Connector Pattern
+
+Chaque source d'offres possède son propre connecteur.
+
+Exemples :
+
+- FranceTravailConnector
+- LinkedInConnector
+
+Tous les connecteurs exposent une interface commune.
+
+Objectif :
+Permettre l'ajout de nouvelles sources sans modifier la logique métier.
+
+---
+
+#### DEC-048
+
+Offer As Primary Discovery Entity
+
+L'entité métier principale du Job Discovery est JobOffer.
+
+Les sources sont des mécanismes de découverte.
+
+Une même offre peut être associée à plusieurs sources.
+
+---
+
+#### DEC-049
+
+Job Discovery Pipeline
+
+Toutes les offres suivent obligatoirement le pipeline :
+
+Source
+↓
+Connector
+↓
+Normalization
+↓
+Database
+
+Aucune offre ne peut contourner l'étape de normalisation.
+
+---
+
+#### DEC-050
+
+France Travail First External Source
+
+La première source externe ciblée est France Travail.
+
+Plan B :
+LinkedIn.
+
+La stratégie retenue est API First.
