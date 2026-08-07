@@ -9,14 +9,18 @@ type Props = {
 
 export function JobOfferList({ jobOffers }: Props) {
   return (
-    <section>
-      <h2>Job Offers</h2>
+    <div className="space-y-3">
+      {jobOffers.map((offer) => (
+        <div
+          key={offer.id}
+          className="rounded-lg border border-slate-700 bg-slate-950 p-4">
+          <p className="text-xs uppercase text-slate-400">Job Offer</p>
 
-      <ul>
-        {jobOffers.map((offer) => (
-          <li key={offer.id}>{offer.title}</li>
-        ))}
-      </ul>
-    </section>
+          <h3 className="mt-1 text-lg font-semibold text-white">
+            {offer.title}
+          </h3>
+        </div>
+      ))}
+    </div>
   );
 }

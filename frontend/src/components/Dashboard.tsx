@@ -1,5 +1,5 @@
 import { ApplicationTracker } from "./ApplicationTracker";
-import { JobOfferList } from "./JobOfferList";
+
 import { MatchingResult } from "./MatchingResult";
 import { OpportunityRanking } from "./OpportunityRanking";
 import { ProfileList } from "./ProfileList";
@@ -84,8 +84,6 @@ export function Dashboard({
 
       <Section title="Opportunities">
         <h2>Opportunities</h2>
-
-        <JobOfferList jobOffers={jobOffers} />
 
         <OpportunityRanking rankedJobOffers={rankedJobOffers} />
       </Section>
