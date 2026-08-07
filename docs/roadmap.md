@@ -198,7 +198,7 @@ Sous-phases :
 
 - ✅ 5.9.1 Job Sources
 - ✅ 5.9.2 Search Criteria
-- 5.9.3 Offer Normalization
+- ✅ 5.9.3 Offer Normalization
 - 5.9.4 First External Source
 - 5.9.5 Multi Source Support
 - 5.9.6 Scheduled Synchronization

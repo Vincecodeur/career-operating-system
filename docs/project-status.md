@@ -40,7 +40,7 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.9.2 Closure
+Phase 5.9.3 Closure
 
 Documentation Synchronization
 
@@ -48,7 +48,7 @@ Documentation Synchronization
 
 Current Objective
 
-Synchroniser la documentation après Job Sources et Search Criteria.
+Synchroniser la documentation après Offer Normalization.
 
 ---
 
@@ -292,11 +292,21 @@ Completed
 - Critères de séniorité documentés
 - Search Criteria par Profile documentés
 
+- Phase 5.9.3 Offer Normalization terminée
+- docs/offer-normalization.md créé
+- JobSource documenté
+- JobOffer documenté
+- JobOfferSource documenté
+- Règles de normalisation documentées
+- Règles de qualité documentées
+- Règles de déduplication documentées
+- Règles d'archivage documentées
+
 ---
 
 In Progress
 
-- Documentation synchronization for Phase 5.9.1 and 5.9.2 closure
+- Documentation synchronization for Phase 5.9.3 closure
 
 ---
 
@@ -308,11 +318,11 @@ Aucun
 
 Next Step
 
-Phase 5.9.3 Offer Normalization
+Phase 5.9.4 First External Source
 
 Objectif :
 
-Définir le modèle interne normalisé des offres d'emploi.
+Connecter une première source réelle et produire les premières offres normalisées.
 
 ---
 
@@ -339,4 +349,4 @@ Validated choices:
 
 Last Commit
 
-- ce842f5 - docs: define search criteria
+- 29816fb - docs: define offer normalization

@@ -289,9 +289,11 @@ Des tests existent pour :
 - Phase 5.8.9 Frontend Structure Documentation
 - Phase 5.9.1 Job Sources
 - Phase 5.9.2 Search Criteria
+- Phase 5.9.3 Offer Normalization
 
 ## Derniers commits importants
 
+- 29816fb - docs: define offer normalization
 - ce842f5 - docs: define search criteria
 - 8a0a56a - docs: define job discovery sources
 - c56bd3b - docs: add frontend architecture documentation
@@ -368,26 +370,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.3 - Offer Normalization
+Phase 5.9.4 - First External Source
 
 Objectif :
 
-Définir le format interne normalisé d'une offre d'emploi.
+Connecter une première source réelle d'offres d'emploi.
 
 Livrables :
 
-- modèle normalisé JobOffer
-- règles de normalisation
-- règles de qualité
-- règles de déduplication
-- stratégie de conservation des offres
+- client source
+- récupération d'offres
+- transformation vers JobOffer normalisé
+- persistance des offres
+- validation de bout en bout
 
 Pas encore :
 
-- collecte réelle
-- API
-- scraping
-- synchronisation automatisée
+- multi-source
+- synchronisation planifiée
+- analyse d'opportunités
 
 ## Méthode de reprise
 
