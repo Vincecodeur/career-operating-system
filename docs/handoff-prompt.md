@@ -98,6 +98,9 @@ Backend :
 - SQLAlchemy
 - PostgreSQL
 - Pytest
+- Authentication
+- User Model
+- JWT Authentication
 
 Frontend :
 
@@ -193,6 +196,12 @@ Implémenté :
 - ApplicationTracker
 - React Router
 - Protected Routes
+- Authentication API
+- Login Page
+- Forgot Password Page
+- Account Page
+- Auth Store
+- JWT Authentication
 
 Documenté mais pas encore implémenté :
 
@@ -209,9 +218,6 @@ Documenté mais pas encore implémenté :
 - Zod
 - Theme Provider
 - i18n structure
-- Login Page
-- Forgot Password Page
-- My Account Page
 
 ### Tests
 
@@ -254,9 +260,14 @@ Des tests existent pour :
 - Phase 5.8.1 Frontend Dependencies & Technical Setup
 - Phase 5.8.2 App Providers
 - Phase 5.8.3 Routing & Protected Routes
+- Phase 5.8.4 Authentication Flow
 
 ## Derniers commits importants
 
+- 7f285fe - feat: implement frontend authentication flow
+- 8e0560f - feat: implement backend authentication flow
+- 8af58bd - feat: add authentication user model
+- 21836af - chore: add authentication dependencies
 - b4f3a7b - feat: add frontend routing foundation
 - c015510 - docs: synchronize phase 5.8.1 dependency installation
 - ab9d149 - chore: install frontend architecture dependencies
@@ -322,25 +333,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.4 - Authentication Pages
+Phase 5.8.5 - App Layout
 
 Objectif :
-
-Créer les premières pages d'authentification prévues dans l'architecture cible.
+Créer la structure principale de navigation de l'application.
 
 Livrables :
 
-- Login Page
-- Forgot Password Page
-- My Account Page placeholder
-- structure d'authentification frontend
+- AppLayout
+- Layout architecture
+- Main content container
+- Navigation foundation
 
 Pas encore :
 
-- JWT backend
-- login fonctionnel
-- refresh token
-- API authentication
+- Sidebar finalisée
+- Header finalisé
+- Design system
+- Dashboard migration
 
 ## Méthode de reprise
 

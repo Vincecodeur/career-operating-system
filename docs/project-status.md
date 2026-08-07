@@ -40,7 +40,7 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.8.3 Closure
+Phase 5.8.4 Closure
 
 Documentation Synchronization
 
@@ -48,7 +48,7 @@ Documentation Synchronization
 
 Current Objective
 
-Préparer le routing React et les routes protégées avant l'introduction des pages d'authentification.
+Clôturer l'implémentation complète du flux d'authentification MVP avant la phase App Layout.
 
 ---
 
@@ -198,11 +198,31 @@ Completed
 - Routing foundation implémentée
 - Build Vite validé après intégration du routing
 
+- Phase 5.8.4 Authentication Flow terminée
+- Authentication dependencies ajoutées
+- Domain auth créé
+- User model créé
+- JWT authentication implémentée
+- Auth router implémenté
+- Endpoint POST /auth/register créé
+- Endpoint POST /auth/login créé
+- Endpoint GET /auth/me créé
+- Auth tests créés
+- 16 tests automatisés passants
+- Auth API client créé
+- Auth Store Zustand créé
+- Login Page créée
+- Forgot Password Page créée
+- Account Page créée
+- ProtectedRoute connecté à l'authentification
+- Frontend authentication flow implémenté
+- Build frontend validé
+
 ---
 
 In Progress
 
-- Documentation synchronization for Phase 5.8.3 closure
+- Documentation synchronization for Phase 5.8.4 closure
 
 ---
 
@@ -214,16 +234,16 @@ Aucun
 
 Next Step
 
-Phase 5.8.4 Authentication Pages
+Phase 5.8.5 App Layout
 
 Create:
 
-- Login Page
-- Forgot Password Page
-- My Account Page placeholders
-- Authentication UI foundation
+- AppLayout
+- Layout structure
+- Main content area
+- Navigation foundation
 
-No backend authentication yet.
+No sidebar implementation yet.
 
 ---
 
@@ -250,4 +270,4 @@ Validated choices:
 
 Last Commit
 
-b4f3a7b - feat: add frontend routing foundation
+7f285fe - feat: implement frontend authentication flow
