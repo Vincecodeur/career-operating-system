@@ -38,6 +38,7 @@ from app.certifications.models import Certification
 from app.certifications.models import ProfileCertification
 from app.jobs.models import JobOffer
 from app.jobs.job_offer_skill_models import JobOfferSkill
+from app.auth.models import User
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
