@@ -7,6 +7,8 @@ export function AppLayout() {
 
   const logout = useAuthStore((state) => state.logout);
 
+  const user = useAuthStore((state) => state.user);
+
   function handleLogout() {
     logout();
 
@@ -16,37 +18,61 @@ export function AppLayout() {
   }
 
   return (
-    <div>
-      <nav
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "240px 1fr",
+        minHeight: "100vh",
+      }}>
+      <aside
         style={{
+          borderRight: "1px solid #ddd",
           padding: "1rem",
-          borderBottom: "1px solid #ddd",
-          display: "flex",
-          gap: "1rem",
         }}>
-        <Link to="/dashboard">Dashboard</Link>
+        <h2>Career OS</h2>
 
-        <Link to="/account">Account</Link>
+        <nav
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            marginTop: "2rem",
+          }}>
+          <Link to="/dashboard">Dashboard</Link>
 
-        <button type="button" onClick={handleLogout}>
+          <Link to="/account">Account</Link>
+        </nav>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          style={{
+            marginTop: "2rem",
+          }}>
           Logout
         </button>
-      </nav>
+      </aside>
 
-      <header
-        style={{
-          padding: "1rem",
-          borderBottom: "1px solid #ddd",
-        }}>
-        Header Placeholder
-      </header>
+      <div>
+        <header
+          style={{
+            borderBottom: "1px solid #ddd",
+            padding: "1rem",
+            display: "flex",
+            justifyContent: "space-between",
+          }}>
+          <strong>Career Operating System</strong>
 
-      <main
-        style={{
-          padding: "1rem",
-        }}>
-        <Outlet />
-      </main>
+          <span>{user?.email ?? "Anonymous"}</span>
+        </header>
+
+        <main
+          style={{
+            padding: "1rem",
+          }}>
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

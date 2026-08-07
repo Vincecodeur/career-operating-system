@@ -1,8 +1,8 @@
+import { ApplicationTracker } from "./ApplicationTracker";
 import { JobOfferList } from "./JobOfferList";
 import { MatchingResult } from "./MatchingResult";
-import { ProfileList } from "./ProfileList";
 import { OpportunityRanking } from "./OpportunityRanking";
-import { ApplicationTracker } from "./ApplicationTracker";
+import { ProfileList } from "./ProfileList";
 
 type Profile = {
   id: number;
@@ -54,21 +54,53 @@ export function Dashboard({
 }: Props) {
   return (
     <>
-      <h1>Career Operating System</h1>
+      <section>
+        <h1>Dashboard</h1>
+        <p>Overview of profiles, opportunities and applications.</p>
+      </section>
+      <section>
+        <h2>Overview</h2>
 
-      <ProfileList profiles={profiles} />
+        <ul>
+          <li>Profiles: {profiles.length}</li>
 
-      <JobOfferList jobOffers={jobOffers} />
+          <li>Job Offers: {jobOffers.length}</li>
 
-      {matching && (
-        <MatchingResult
-          matchingScore={matching.matching_score}
-          matchingSkills={matching.matching_skills}
-          missingSkills={matching.missing_skills}
-        />
-      )}
-      <OpportunityRanking rankedJobOffers={rankedJobOffers} />
-      <ApplicationTracker applications={applications} />
+          <li>Applications: {applications.length}</li>
+
+          <li>Top Match: {matching ? `${matching.matching_score}%` : "N/A"}</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Profiles</h2>
+        <ProfileList profiles={profiles} />
+      </section>
+
+      <section>
+        <h2>Opportunities</h2>
+
+        <JobOfferList jobOffers={jobOffers} />
+
+        <OpportunityRanking rankedJobOffers={rankedJobOffers} />
+      </section>
+
+      <section>
+        <h2>Matching Analysis</h2>
+
+        {matching && (
+          <MatchingResult
+            matchingScore={matching.matching_score}
+            matchingSkills={matching.matching_skills}
+            missingSkills={matching.missing_skills}
+          />
+        )}
+      </section>
+
+      <section>
+        <h2>Applications</h2>
+
+        <ApplicationTracker applications={applications} />
+      </section>
     </>
   );
 }
