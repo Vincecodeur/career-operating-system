@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.applications.router import (
     router as applications_router
 )
+from app.auth.router import router as auth_router
 
 
 
@@ -47,6 +48,7 @@ app.include_router(jobs_router)
 app.include_router(job_offer_skill_router)
 app.include_router(matching_router)
 app.include_router(applications_router)
+app.include_router(auth_router)
 
 
 
