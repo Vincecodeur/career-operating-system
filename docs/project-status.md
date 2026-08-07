@@ -40,15 +40,15 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.8 Complete
+Phase 5.9.2 Closure
 
-Ready For Phase 5.9
+Documentation Synchronization
 
 ---
 
 Current Objective
 
-Préparer le démarrage de Phase 5.9 Job Discovery.
+Synchroniser la documentation après Job Sources et Search Criteria.
 
 ---
 
@@ -277,11 +277,26 @@ Completed
 - Responsabilités des dossiers documentées
 - Phase 5.8 clôturée
 
+- Phase 5.9.1 Job Sources terminée
+- docs/job-sources.md créé
+- Sources MVP documentées
+- API First documenté
+- Stratégie LinkedIn documentée
+- Déduplication documentée
+
+- Phase 5.9.2 Search Criteria terminée
+- docs/search-criteria.md créé
+- Critères géographiques documentés
+- Critères contractuels documentés
+- Critères salariaux documentés
+- Critères de séniorité documentés
+- Search Criteria par Profile documentés
+
 ---
 
 In Progress
 
-- Phase 5.9 preparation
+- Documentation synchronization for Phase 5.9.1 and 5.9.2 closure
 
 ---
 
@@ -293,10 +308,11 @@ Aucun
 
 Next Step
 
-Phase 5.9.1 Job Sources
+Phase 5.9.3 Offer Normalization
 
 Objectif :
-Définir les sources d'offres du MVP.
+
+Définir le modèle interne normalisé des offres d'emploi.
 
 ---
 
@@ -323,4 +339,4 @@ Validated choices:
 
 Last Commit
 
-- c56bd3b - docs: add frontend architecture documentation
+- ce842f5 - docs: define search criteria

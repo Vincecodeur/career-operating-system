@@ -287,9 +287,13 @@ Des tests existent pour :
 - Phase 5.8.7.5.4 Dashboard Component Modernization
 - Phase 5.8.8 MVP Page Skeletons
 - Phase 5.8.9 Frontend Structure Documentation
+- Phase 5.9.1 Job Sources
+- Phase 5.9.2 Search Criteria
 
 ## Derniers commits importants
 
+- ce842f5 - docs: define search criteria
+- 8a0a56a - docs: define job discovery sources
 - c56bd3b - docs: add frontend architecture documentation
 - 117c972 - feat: add mvp page skeletons
 - 31ed22f - docs: synchronize dashboard component modernization
@@ -364,24 +368,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.1 - Job Sources
+Phase 5.9.3 - Offer Normalization
 
 Objectif :
 
-Définir les premières sources d'opportunités du MVP.
+Définir le format interne normalisé d'une offre d'emploi.
 
 Livrables :
 
-- stratégie API First
-- catalogue des sources
-- priorisation des sources
-- documentation Job Sources
+- modèle normalisé JobOffer
+- règles de normalisation
+- règles de qualité
+- règles de déduplication
+- stratégie de conservation des offres
 
 Pas encore :
 
 - collecte réelle
+- API
 - scraping
-- synchronisation planifiée
+- synchronisation automatisée
 
 ## Méthode de reprise
 
