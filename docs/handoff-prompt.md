@@ -215,6 +215,11 @@ Implémenté :
 - Card
 - StatCard
 - KPI Cards
+- Dashboard Component Modernization
+- Modernized OpportunityRanking
+- Modernized MatchingResult
+- Modernized ApplicationTracker
+- Modernized ProfileList
 
 Documenté mais pas encore implémenté :
 
@@ -272,9 +277,11 @@ Des tests existent pour :
 - Phase 5.8.7.5.1 Tailwind CSS Installation
 - Phase 5.8.7.5.2 First UI Components
 - Phase 5.8.7.5.3 Dashboard Cards
+- Phase 5.8.7.5.4 Dashboard Component Modernization
 
 ## Derniers commits importants
 
+- a908f36 - feat: modernize dashboard components
 - 6e42175 - docs: add design system foundation
 - 7f285fe - feat: implement frontend authentication flow
 - 8e0560f - feat: implement backend authentication flow
@@ -345,25 +352,27 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.7.5.4 - Dashboard Component Modernization
+Phase 5.8.8 - MVP Page Skeletons
 
 Objectif :
-Moderniser progressivement les composants métier du Dashboard en s'appuyant sur les premières briques du Design System.
+Créer les premières pages métier MVP afin de sortir d'une application centrée uniquement sur le Dashboard.
 
 Livrables :
 
-- OpportunityRanking modernisé
-- MatchingResult modernisé
-- ApplicationTracker modernisé
-- ProfileList modernisé
-- JobOfferList modernisé
+- Profiles page skeleton
+- Opportunities page skeleton
+- Applications page skeleton
+- Settings page skeleton
+- Sidebar navigation update
+- Route tree update
 
 Pas encore :
 
+- logique métier avancée par page
+- formulaires complets
+- filtres avancés
+- tables avancées
 - shadcn/ui
-- responsive final
-- animations
-- refonte complète des pages hors Dashboard
 
 ## Méthode de reprise
 
