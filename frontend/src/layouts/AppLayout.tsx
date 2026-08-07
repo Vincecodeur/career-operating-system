@@ -31,16 +31,32 @@ export function AppLayout() {
         }}>
         <h2>Career OS</h2>
 
-        <nav
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            marginTop: "2rem",
-          }}>
-          <Link to="/dashboard">Dashboard</Link>
+        <nav className="mt-8 flex flex-col gap-3">
+          <Link to="/dashboard" className="text-slate-300 hover:text-white">
+            Dashboard
+          </Link>
 
-          <Link to="/account">Account</Link>
+          <Link to="/profiles" className="text-slate-300 hover:text-white">
+            Profiles
+          </Link>
+
+          <Link to="/opportunities" className="text-slate-300 hover:text-white">
+            Opportunities
+          </Link>
+
+          <Link to="/applications" className="text-slate-300 hover:text-white">
+            Applications
+          </Link>
+
+          <Link to="/settings" className="text-slate-300 hover:text-white">
+            Settings
+          </Link>
+
+          <div className="my-4 border-t border-slate-700" />
+
+          <Link to="/account" className="text-slate-300 hover:text-white">
+            Account
+          </Link>
         </nav>
 
         <button

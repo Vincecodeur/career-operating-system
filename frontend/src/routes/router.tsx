@@ -6,6 +6,10 @@ import { DashboardPage } from "../pages/DashboardPage";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { ApplicationsPage } from "../pages/ApplicationsPage";
+import { OpportunitiesPage } from "../pages/OpportunitiesPage";
+import { ProfilesPage } from "../pages/ProfilesPage";
+import { SettingsPage } from "../pages/SettingsPage";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +38,22 @@ export const router = createBrowserRouter([
       {
         path: "/account",
         element: <AccountPage />,
+      },
+      {
+        path: "/applications",
+        element: <ApplicationsPage />,
+      },
+      {
+        path: "/opportunities",
+        element: <OpportunitiesPage />,
+      },
+      {
+        path: "/profiles",
+        element: <ProfilesPage />,
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />,
       },
     ],
   },

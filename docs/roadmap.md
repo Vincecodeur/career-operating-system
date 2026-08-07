@@ -171,7 +171,7 @@ Sous-phases :
   - ✅ 5.8.7.5.2 First UI Components
   - ✅ 5.8.7.5.3 Dashboard Cards
   - ✅ 5.8.7.5.4 Dashboard Component Modernization
-- 5.8.8 MVP Page Skeletons
+- ✅ 5.8.8 MVP Page Skeletons
 - 5.8.9 Frontend Structure Documentation
 
 Statut :

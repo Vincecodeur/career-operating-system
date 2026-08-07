@@ -220,6 +220,12 @@ Implémenté :
 - Modernized MatchingResult
 - Modernized ApplicationTracker
 - Modernized ProfileList
+- ProfilesPage
+- OpportunitiesPage
+- ApplicationsPage
+- SettingsPage
+- Extended Route Tree
+- Extended Sidebar Navigation
 
 Documenté mais pas encore implémenté :
 
@@ -278,9 +284,11 @@ Des tests existent pour :
 - Phase 5.8.7.5.2 First UI Components
 - Phase 5.8.7.5.3 Dashboard Cards
 - Phase 5.8.7.5.4 Dashboard Component Modernization
+- Phase 5.8.8 MVP Page Skeletons
 
 ## Derniers commits importants
 
+- 31ed22f - docs: synchronize dashboard component modernization
 - a908f36 - feat: modernize dashboard components
 - 6e42175 - docs: add design system foundation
 - 7f285fe - feat: implement frontend authentication flow
@@ -352,27 +360,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.8.8 - MVP Page Skeletons
+Phase 5.8.9 - Frontend Structure Documentation
 
 Objectif :
-Créer les premières pages métier MVP afin de sortir d'une application centrée uniquement sur le Dashboard.
+
+Documenter la structure frontend désormais en place afin de figer les conventions avant les futures fonctionnalités métier.
 
 Livrables :
 
-- Profiles page skeleton
-- Opportunities page skeleton
-- Applications page skeleton
-- Settings page skeleton
-- Sidebar navigation update
-- Route tree update
+- documentation pages/
+- documentation layouts/
+- documentation routing/
+- documentation components/
+- conventions frontend
 
 Pas encore :
 
-- logique métier avancée par page
-- formulaires complets
-- filtres avancés
-- tables avancées
-- shadcn/ui
+- Job Discovery
+- Search Criteria
+- Opportunity Analysis v2
+- Market Intelligence
 
 ## Méthode de reprise
 
