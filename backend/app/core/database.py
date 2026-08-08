@@ -26,7 +26,7 @@ def get_db():
         yield db
     finally:
         db.close()
-        
+
 
 from app.profile.models import Profile
 from app.skills.models import Skill
@@ -38,7 +38,10 @@ from app.certifications.models import Certification
 from app.certifications.models import ProfileCertification
 from app.jobs.models import JobOffer
 from app.jobs.job_offer_skill_models import JobOfferSkill
+from app.jobs.job_source_models import JobSource
+from app.jobs.job_offer_source_models import JobOfferSource
 from app.auth.models import User
+
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
