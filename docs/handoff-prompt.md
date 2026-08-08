@@ -187,7 +187,7 @@ Partiellement implémenté :
 - JobOfferRepository
 - DiscoveryService
 - Pipeline Validation
-  ConnectorInterface
+- ConnectorInterface
 
 Non implémenté :
 
@@ -317,6 +317,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- b42f9f9 - docs: synchronize connector interface
+- c495bf3 - feat: connector_interface.py
 - 4d4956f - feat: pipeline validation
 - 45bbf42 - docs: synchronize pipeline validation
 - 16f5041 - docs: synchronize job offer repository
@@ -407,7 +409,7 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.4 - First External Source
+Phase 5.9.5.2 France Travail Connector
 
 Objectif :
 
