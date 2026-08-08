@@ -1,4 +1,4 @@
-from app.jobs.mock_source_connector import MockSourceConnector
+from app.jobs.connectors.mock_source_connector import MockSourceConnector
 from app.jobs.raw_offer_schema import RawOffer
 
 

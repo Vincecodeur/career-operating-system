@@ -1,5 +1,5 @@
-from app.jobs.connector_interface import ConnectorInterface
-from app.jobs.mock_source_connector import MockSourceConnector
+from app.jobs.connectors.connector_interface import ConnectorInterface
+from app.jobs.connectors.mock_source_connector import MockSourceConnector
 
 
 def test_mock_source_connector_implements_interface():

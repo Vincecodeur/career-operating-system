@@ -3,7 +3,7 @@ from app.jobs.discovery_service import DiscoveryService
 from app.jobs.job_offer_source_models import JobOfferSource
 from app.jobs.job_source_models import JobSource
 from app.jobs.models import JobOffer
-from app.jobs.mock_source_connector import MockSourceConnector
+from app.jobs.connectors.mock_source_connector import MockSourceConnector
 
 
 def cleanup_mock_source_data(db):

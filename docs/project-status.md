@@ -417,4 +417,4 @@ Validated choices:
 
 Last Commit
 
-- 45bbf42 - docs: synchronize pipeline validation
+- b42f9f9 - docs: synchronize connector interface
