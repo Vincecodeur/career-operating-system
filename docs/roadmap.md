@@ -209,7 +209,8 @@ Sous-phases :
   - ✅ 5.9.4.7 DiscoveryService
   - ✅ 5.9.4.8 Pipeline Validation
 
-- 5.9.5 Multi Source Support
+- ✅ 5.9.5.1 Connector Interface
+- ⏳ 5.9.5.2 France Travail Connector
 - 5.9.6 Scheduled Synchronization
 
 Statut :

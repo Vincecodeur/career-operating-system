@@ -187,6 +187,7 @@ Partiellement implémenté :
 - JobOfferRepository
 - DiscoveryService
 - Pipeline Validation
+  ConnectorInterface
 
 Non implémenté :
 
@@ -270,6 +271,7 @@ Des tests existent pour :
 - job offer repository
 - discovery service
 - pipeline validation
+- connector interface
 
 ## Phases terminées
 
@@ -315,6 +317,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 4d4956f - feat: pipeline validation
+- 45bbf42 - docs: synchronize pipeline validation
 - 16f5041 - docs: synchronize job offer repository
 - 0c4f09b - feat: add discovery service
 - cbcb8f9 - commit documentaire DiscoveryService

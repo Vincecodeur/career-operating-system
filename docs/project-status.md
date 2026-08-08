@@ -365,11 +365,17 @@ Completed
 - Orchestration DiscoveryService validée
 - 41 tests automatisés passants
 
+- Phase 5.9.5.1 Connector Interface terminée
+- backend/app/jobs/connector_interface.py créé
+- backend/tests/test_connector_interface.py créé
+- Contrat commun des connecteurs validé
+- 44 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.5 Multi Source Support
+- Phase 5.9.5.2 France Travail Connector
 
 ---
 
@@ -411,4 +417,4 @@ Validated choices:
 
 Last Commit
 
-- cbcb8f9 - commit documentaire DiscoveryService
+- 45bbf42 - docs: synchronize pipeline validation
