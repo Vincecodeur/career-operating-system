@@ -182,6 +182,7 @@ Partiellement implémenté :
 - Job Discovery Persistence Tests
 - RawOffer Schema
 - NormalizedJobOffer Schema
+- MockSourceConnector
 
 Non implémenté :
 
@@ -263,6 +264,7 @@ Des tests existent pour :
 - job discovery models
 - raw offer schema
 - normalized job offer schema
+- mock source connector
 
 ## Phases terminées
 

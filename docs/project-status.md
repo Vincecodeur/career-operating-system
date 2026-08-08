@@ -328,11 +328,17 @@ Completed
 
 - 21 tests automatisés passants
 
+- Phase 5.9.4.4 MockSourceConnector terminée
+- backend/app/jobs/mock_source_connector.py créé
+- backend/tests/test_mock_source_connector.py créé
+- MockSourceConnector validé
+- 25 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.4.4 MockSourceConnector
+- Phase 5.9.4.5 NormalizationService
 
 ---
 
@@ -343,7 +349,8 @@ Aucun
 ---
 
 Next Step
-Phase 5.9.4.4 MockSourceConnector
+
+Phase 5.9.4.5 NormalizationService
 
 Objectif :
 
@@ -374,4 +381,4 @@ Validated choices:
 
 Last Commit
 
-- 93f8b63 - feat: add raw offer schema
+- fafa8f9 - feat: add normalized job offer schema
