@@ -183,11 +183,11 @@ Partiellement implémenté :
 - RawOffer Schema
 - NormalizedJobOffer Schema
 - MockSourceConnector
+- NormalizationService
 
 Non implémenté :
 
 - Connectors
-- NormalizationService
 - JobOfferRepository
 - DiscoveryService
 - Search Criteria
@@ -265,6 +265,7 @@ Des tests existent pour :
 - raw offer schema
 - normalized job offer schema
 - mock source connector
+- normalization service
 
 ## Phases terminées
 

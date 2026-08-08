@@ -334,11 +334,17 @@ Completed
 - MockSourceConnector validé
 - 25 tests automatisés passants
 
+- Phase 5.9.4.5 NormalizationService terminée
+- backend/app/jobs/normalization_service.py créé
+- backend/tests/test_normalization_service.py créé
+- Transformation RawOffer → NormalizedJobOffer validée
+- 30 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.4.5 NormalizationService
+- Phase 5.9.4.6 JobOfferRepository
 
 ---
 
@@ -350,7 +356,7 @@ Aucun
 
 Next Step
 
-Phase 5.9.4.5 NormalizationService
+Phase 5.9.4.6 JobOfferRepository
 
 Objectif :
 
@@ -381,4 +387,4 @@ Validated choices:
 
 Last Commit
 
-- fafa8f9 - feat: add normalized job offer schema
+- 4f5adde - docs: synchronize mock source connector
