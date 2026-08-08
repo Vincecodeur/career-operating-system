@@ -186,6 +186,7 @@ Partiellement implémenté :
 - NormalizationService
 - JobOfferRepository
 - DiscoveryService
+- Pipeline Validation
 
 Non implémenté :
 
@@ -268,6 +269,7 @@ Des tests existent pour :
 - normalization service
 - job offer repository
 - discovery service
+- pipeline validation
 
 ## Phases terminées
 
@@ -313,6 +315,9 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 16f5041 - docs: synchronize job offer repository
+- 0c4f09b - feat: add discovery service
+- cbcb8f9 - commit documentaire DiscoveryService
 - 67e26e6 - docs: synchronize normalization service
 - 4f5adde - docs: synchronize mock source connector
 - 44f2274 - feat: add mock source connector

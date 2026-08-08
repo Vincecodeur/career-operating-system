@@ -199,7 +199,7 @@ Sous-phases :
 - ✅ 5.9.1 Job Sources
 - ✅ 5.9.2 Search Criteria
 - ✅ 5.9.3 Offer Normalization
-- ⏳ 5.9.4 First External Source
+- ✅ 5.9.4 First External Source
   - ✅ 5.9.4.1 Job Discovery Data Models
   - ✅ 5.9.4.2 RawOffer Schema
   - ✅ 5.9.4.3 NormalizedJobOffer Schema
@@ -207,7 +207,7 @@ Sous-phases :
   - ✅ 5.9.4.5 NormalizationService
   - ✅ 5.9.4.6 JobOfferRepository
   - ✅ 5.9.4.7 DiscoveryService
-  - ⏳ 5.9.4.8 Pipeline Validation
+  - ✅ 5.9.4.8 Pipeline Validation
 
 - 5.9.5 Multi Source Support
 - 5.9.6 Scheduled Synchronization

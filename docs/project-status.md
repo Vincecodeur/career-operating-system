@@ -356,11 +356,20 @@ Completed
 - Import Connector → RawOffer → NormalizedJobOffer → JobOffer validé
 - 36 tests automatisés passants
 
+- Phase 5.9.4.8 Pipeline Validation terminée
+- backend/tests/test_pipeline_validation.py créé
+- docs/pipeline-validation.md créé
+- Validation end-to-end du pipeline réalisée
+- Déduplication validée
+- Persistance validée
+- Orchestration DiscoveryService validée
+- 41 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.4.8 Pipeline Validation
+- Phase 5.9.5 Multi Source Support
 
 ---
 
@@ -371,7 +380,7 @@ Aucun
 ---
 
 Next Step
-Phase 5.9.4.8 Pipeline Validation
+Phase 5.9.5 Multi Source Support
 
 Objectif :
 
@@ -402,4 +411,4 @@ Validated choices:
 
 Last Commit
 
-- 16f5041 - docs: synchronize job offer repository
+- cbcb8f9 - commit documentaire DiscoveryService
