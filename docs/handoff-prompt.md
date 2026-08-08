@@ -185,11 +185,11 @@ Partiellement implémenté :
 - MockSourceConnector
 - NormalizationService
 - JobOfferRepository
+- DiscoveryService
 
 Non implémenté :
 
 - Connectors
-- DiscoveryService
 - Search Criteria
 - Opportunity Analysis
 - Market Intelligence
@@ -267,6 +267,7 @@ Des tests existent pour :
 - mock source connector
 - normalization service
 - job offer repository
+- discovery service
 
 ## Phases terminées
 

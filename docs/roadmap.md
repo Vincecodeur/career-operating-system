@@ -206,7 +206,7 @@ Sous-phases :
   - ✅ 5.9.4.4 MockSourceConnector
   - ✅ 5.9.4.5 NormalizationService
   - ✅ 5.9.4.6 JobOfferRepository
-  - ⏳ 5.9.4.7 DiscoveryService
+  - ✅ 5.9.4.7 DiscoveryService
   - ⏳ 5.9.4.8 Pipeline Validation
 
 - 5.9.5 Multi Source Support

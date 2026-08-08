@@ -349,11 +349,18 @@ Completed
 - Upsert JobOffer validé
 - 33 tests automatisés passants
 
+- Phase 5.9.4.7 DiscoveryService terminée
+- backend/app/jobs/discovery_service.py créé
+- backend/tests/test_discovery_service.py créé
+- Pipeline Job Discovery orchestré
+- Import Connector → RawOffer → NormalizedJobOffer → JobOffer validé
+- 36 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.4.7 DiscoveryService
+- Phase 5.9.4.8 Pipeline Validation
 
 ---
 
@@ -364,7 +371,7 @@ Aucun
 ---
 
 Next Step
-Phase 5.9.4.7 DiscoveryService
+Phase 5.9.4.8 Pipeline Validation
 
 Objectif :
 
@@ -395,4 +402,4 @@ Validated choices:
 
 Last Commit
 
-- 67e26e6 - docs: synchronize normalization service
+- 16f5041 - docs: synchronize job offer repository
