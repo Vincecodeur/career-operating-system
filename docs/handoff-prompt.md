@@ -184,11 +184,11 @@ Partiellement implémenté :
 - NormalizedJobOffer Schema
 - MockSourceConnector
 - NormalizationService
+- JobOfferRepository
 
 Non implémenté :
 
 - Connectors
-- JobOfferRepository
 - DiscoveryService
 - Search Criteria
 - Opportunity Analysis
@@ -266,6 +266,7 @@ Des tests existent pour :
 - normalized job offer schema
 - mock source connector
 - normalization service
+- job offer repository
 
 ## Phases terminées
 
@@ -311,6 +312,11 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 67e26e6 - docs: synchronize normalization service
+- 4f5adde - docs: synchronize mock source connector
+- 44f2274 - feat: add mock source connector
+- fafa8f9 - feat: add normalized job offer schema
+- 49aed32 - docs: synchronize raw and normalized offer schemas
 - 93f8b63 - feat: add raw offer schema
 - 733179d - feat: add job discovery data-model.md, model-migration.md technical-design.md
 - 55bc29f - feat: add job discovery data models

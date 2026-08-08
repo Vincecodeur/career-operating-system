@@ -340,11 +340,20 @@ Completed
 - Transformation RawOffer → NormalizedJobOffer validée
 - 30 tests automatisés passants
 
+- Phase 5.9.4.6 JobOfferRepository terminée
+- backend/app/jobs/job_offer_repository.py créé
+- backend/tests/test_job_offer_repository.py créé
+- Persistance JobOffer validée
+- Gestion JobSource validée
+- Gestion JobOfferSource validée
+- Upsert JobOffer validé
+- 33 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.4.6 JobOfferRepository
+- Phase 5.9.4.7 DiscoveryService
 
 ---
 
@@ -355,8 +364,7 @@ Aucun
 ---
 
 Next Step
-
-Phase 5.9.4.6 JobOfferRepository
+Phase 5.9.4.7 DiscoveryService
 
 Objectif :
 
@@ -387,4 +395,4 @@ Validated choices:
 
 Last Commit
 
-- 4f5adde - docs: synchronize mock source connector
+- 67e26e6 - docs: synchronize normalization service
