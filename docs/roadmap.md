@@ -201,8 +201,8 @@ Sous-phases :
 - ✅ 5.9.3 Offer Normalization
 - ⏳ 5.9.4 First External Source
   - ✅ 5.9.4.1 Job Discovery Data Models
-  - ⏳ 5.9.4.2 RawOffer Schema
-  - ⏳ 5.9.4.3 NormalizedJobOffer Schema
+  - ✅ 5.9.4.2 RawOffer Schema
+  - ✅ 5.9.4.3 NormalizedJobOffer Schema
   - ⏳ 5.9.4.4 MockSourceConnector
   - ⏳ 5.9.4.5 NormalizationService
   - ⏳ 5.9.4.6 JobOfferRepository

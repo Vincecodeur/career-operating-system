@@ -180,11 +180,11 @@ Partiellement implémenté :
 - JobOfferSource
 - Job Discovery PostgreSQL Migration
 - Job Discovery Persistence Tests
+- RawOffer Schema
+- NormalizedJobOffer Schema
 
 Non implémenté :
 
-- RawOffer Schema
-- NormalizedJobOffer Schema
 - Connectors
 - NormalizationService
 - JobOfferRepository
@@ -261,6 +261,8 @@ Des tests existent pour :
 - opportunity ranking
 - applications
 - job discovery models
+- raw offer schema
+- normalized job offer schema
 
 ## Phases terminées
 
@@ -306,6 +308,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 93f8b63 - feat: add raw offer schema
 - 733179d - feat: add job discovery data-model.md, model-migration.md technical-design.md
 - 55bc29f - feat: add job discovery data models
 - 29816fb - docs: define offer normalization

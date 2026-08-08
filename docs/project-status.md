@@ -316,12 +316,23 @@ Completed
 - 17 tests automatisés passants
 - Pipeline de persistance Job Discovery validé
 
+- Phase 5.9.4.2 RawOffer Schema terminée
+- backend/app/jobs/raw_offer_schema.py créé
+- backend/tests/test_raw_offer_schema.py créé
+- RawOffer contract validé
+
+- Phase 5.9.4.3 NormalizedJobOffer Schema terminée
+- backend/app/jobs/normalized_job_offer_schema.py créé
+- backend/tests/test_normalized_job_offer_schema.py créé
+- NormalizedJobOffer contract validé
+
+- 21 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.4.2 RawOffer Schema
-- Phase 5.9.4.3 NormalizedJobOffer Schema
+- Phase 5.9.4.4 MockSourceConnector
 
 ---
 
@@ -332,8 +343,7 @@ Aucun
 ---
 
 Next Step
-
-Phase 5.9.4.2 RawOffer Schema
+Phase 5.9.4.4 MockSourceConnector
 
 Objectif :
 
@@ -364,4 +374,4 @@ Validated choices:
 
 Last Commit
 
-- 733179d - feat: add job discovery data-model.md, model-migration.md technical-design.md
+- 93f8b63 - feat: add raw offer schema
