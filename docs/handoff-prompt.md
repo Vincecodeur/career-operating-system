@@ -173,11 +173,23 @@ Implémenté :
 - Application Model
 - Application CRUD
 
+Partiellement implémenté :
+
+- Job Discovery Data Models
+- JobSource
+- JobOfferSource
+- Job Discovery PostgreSQL Migration
+- Job Discovery Persistence Tests
+
 Non implémenté :
 
+- RawOffer Schema
+- NormalizedJobOffer Schema
+- Connectors
+- NormalizationService
+- JobOfferRepository
+- DiscoveryService
 - Search Criteria
-- Job Discovery
-- Job Sources
 - Opportunity Analysis
 - Market Intelligence
 - Career Planning
@@ -248,6 +260,7 @@ Des tests existent pour :
 - matching
 - opportunity ranking
 - applications
+- job discovery models
 
 ## Phases terminées
 
@@ -293,6 +306,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 733179d - feat: add job discovery data-model.md, model-migration.md technical-design.md
+- 55bc29f - feat: add job discovery data models
 - 29816fb - docs: define offer normalization
 - ce842f5 - docs: define search criteria
 - 8a0a56a - docs: define job discovery sources

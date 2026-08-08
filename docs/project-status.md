@@ -40,7 +40,7 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.9.3 Closure
+Phase 5.9.4 First External Source
 
 Documentation Synchronization
 
@@ -48,7 +48,8 @@ Documentation Synchronization
 
 Current Objective
 
-Synchroniser la documentation après Offer Normalization.
+Préparer le pipeline Job Discovery :
+RawOffer → NormalizedJobOffer → Connector → Repository → DiscoveryService
 
 ---
 
@@ -302,11 +303,25 @@ Completed
 - Règles de déduplication documentées
 - Règles d'archivage documentées
 
+- Phase 5.9.4.1 Job Discovery Data Models terminée
+- docs/job-discovery-technical-design.md créé
+- docs/job-discovery-data-model.md créé
+- docs/job-discovery-model-migration.md créé
+- JobOffer enrichi
+- JobSource implémenté
+- JobOfferSource implémenté
+- Migration PostgreSQL Job Discovery créée
+- Permissions PostgreSQL validées
+- Test de persistance Job Discovery créé
+- 17 tests automatisés passants
+- Pipeline de persistance Job Discovery validé
+
 ---
 
 In Progress
 
-- Documentation synchronization for Phase 5.9.3 closure
+- Phase 5.9.4.2 RawOffer Schema
+- Phase 5.9.4.3 NormalizedJobOffer Schema
 
 ---
 
@@ -318,7 +333,7 @@ Aucun
 
 Next Step
 
-Phase 5.9.4 First External Source
+Phase 5.9.4.2 RawOffer Schema
 
 Objectif :
 
@@ -349,4 +364,4 @@ Validated choices:
 
 Last Commit
 
-- 29816fb - docs: define offer normalization
+- 733179d - feat: add job discovery data-model.md, model-migration.md technical-design.md
