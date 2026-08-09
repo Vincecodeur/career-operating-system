@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+from app.jobs.connectors.connector_registry import ConnectorRegistry
 from app.jobs.job_offer_repository import JobOfferRepository
 from app.jobs.normalization_service import NormalizationService
 
@@ -52,6 +53,47 @@ class DiscoveryService:
             "source_name": self._get_source_name(raw_offers),
             "offers_fetched": len(raw_offers),
             "offers_imported": len(imported_offers),
+        }
+
+    def import_from_connector_names(
+        self,
+        connector_names: list[str],
+        source_type: str = "MANUAL",
+    ) -> dict:
+        import_results = []
+
+        total_offers_fetched = 0
+        total_offers_imported = 0
+
+        for connector_name in connector_names:
+            connector_class = ConnectorRegistry.get_connector(
+                connector_name
+            )
+
+            connector = connector_class()
+
+            result = self.import_from_connector(
+                connector=connector,
+                source_type=source_type,
+            )
+
+            import_results.append(
+                {
+                    "connector_name": connector_name,
+                    "source_name": result["source_name"],
+                    "offers_fetched": result["offers_fetched"],
+                    "offers_imported": result["offers_imported"],
+                }
+            )
+
+            total_offers_fetched += result["offers_fetched"]
+            total_offers_imported += result["offers_imported"]
+
+        return {
+            "connectors_processed": len(connector_names),
+            "offers_fetched": total_offers_fetched,
+            "offers_imported": total_offers_imported,
+            "results": import_results,
         }
 
     @staticmethod
