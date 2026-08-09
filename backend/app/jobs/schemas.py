@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class JobOfferCreate(BaseModel):
     title: str
-    company_name: str
+    company_name: str | None = None
     location: str | None = None
     source: str | None = None
     source_url: str | None = None
@@ -15,13 +15,13 @@ class JobOfferCreate(BaseModel):
 class JobOfferResponse(BaseModel):
     id: int
     title: str
-    company_name: str
-    location: str | None
-    source: str | None
-    source_url: str | None
+    company_name: str | None = None
+    location: str | None = None
+    source: str | None = None
+    source_url: str | None = None
     description: str
     created_at: datetime
 
     model_config = {
-        "from_attributes": True
+        "from_attributes": True,
     }
