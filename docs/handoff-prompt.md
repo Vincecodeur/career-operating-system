@@ -213,12 +213,6 @@ Implémenté :
 - Experience explanations
 - Work mode explanations
 - Location explanations
-- Explainable scoring visualization
-- Explanations display
-- Skills explanation display
-- Experience explanation display
-- Work mode explanation display
-- Location explanation display
 
 Partiellement implémenté :
 
@@ -295,6 +289,12 @@ Implémenté :
 - Experience explanations
 - Work mode explanations
 - Location explanations
+- Explainable scoring visualization
+- Explanations display
+- Skills explanation display
+- Experience explanation display
+- Work mode explanation display
+- Location explanation display
 
 Documenté mais pas encore implémenté :
 
