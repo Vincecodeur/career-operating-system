@@ -14,6 +14,8 @@ Tu reprends le projet Career Operating System.
 - Ne jamais générer de code sans comprendre l'état réel du projet.
 - Ne jamais introduire de complexité inutile.
 - Toujours privilégier l'apprentissage, la clarté et la maintenabilité.
+- Une fonctionnalité backend n'est pas considérée comme terminée tant qu'elle n'a pas été rendue visible et validée dans le frontend.
+- Toujours privilégier une démonstration utilisateur rapide avant d'ajouter de nouvelles sources, de l'IA ou de nouvelles couches de complexité.
 
 ## Règle Git obligatoire
 
@@ -432,25 +434,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase suivante recommandée
-
-Phase 6.0.1 Matching V2
+Phase 5.9.7.1 Opportunities List
 
 Objectif :
-Comparer automatiquement les offres collectées avec les profils candidats.
+Afficher les offres réelles collectées depuis France Travail dans le frontend.
 
 Premiers livrables :
 
-- définition du score V2
-- critères de pondération
-- matching enrichi
-- préparation du scoring explicable
+- liste des offres
+- source de l'offre
+- localisation
+- date d'import
+- navigation depuis OpportunitiesPage
 
 Pas encore :
 
-- analyse des forces
-- analyse des faiblesses
-- classement V2
+- scoring V2
+- analyse IA
+- LinkedIn
 
 ## Méthode de reprise
 

@@ -40,13 +40,7 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 6.0 Opportunity Analysis & Advanced Matching
-
----
-
-Current Objective
-
-Comparer automatiquement les offres collectées avec les profils candidats et préparer la génération d'un score explicable de nouvelle génération.
+Phase 5.9.7 Job Discovery Visualization
 
 ---
 
@@ -404,7 +398,7 @@ Completed
 
 In Progress
 
-- Phase 6.0.1 Matching V2
+- Phase 5.9.7 Job Discovery Visualization
 
 ---
 
@@ -416,11 +410,11 @@ Aucun
 
 Next Step
 
-- Phase 6.0.1 Matching V2
+- Phase 5.9.7.1 Opportunities List
 
 Objectif :
 
-Comparer automatiquement les offres collectées avec les profils candidats.
+Visualiser les résultats du pipeline Job Discovery dans le frontend.
 
 ---
 
@@ -447,4 +441,4 @@ Validated choices:
 
 Last Commit
 
-- ad29764 - feat: add scheduled job discovery
+- ec28349 - docs: synchronize scheduled synchronization

@@ -10,6 +10,26 @@ Une phase est terminée uniquement lorsque :
 - project-status.md est à jour ;
 - la prochaine étape est clairement définie.
 
+Toute fonctionnalité métier majeure doit suivre le cycle :
+
+Design
+↓
+Backend
+↓
+Tests backend
+↓
+Frontend Validation
+↓
+Validation fonctionnelle
+↓
+Documentation
+↓
+Commit documentaire
+↓
+Phase suivante
+
+Une phase backend n'est considérée comme réellement terminée que lorsque sa valeur est visible et validée dans le frontend.
+
 ---
 
 ## Phase 0
@@ -216,6 +236,13 @@ Sous-phases :
 - ✅ 5.9.5.5 Multi Source Validation
 - ✅ 5.9.6 Scheduled Synchronization
 
+- ⏳ 5.9.7 Job Discovery Visualization
+
+- 5.9.7.1 Opportunities List
+- 5.9.7.2 Opportunity Details
+- 5.9.7.3 Discovery Dashboard KPI
+- 5.9.7.4 End-to-End Validation
+
 Statut :
 In Progress
 
@@ -224,7 +251,6 @@ In Progress
 Opportunity Analysis & Advanced Matching
 
 Objectif :
-
 Comparer automatiquement les offres collectées avec les profils candidats.
 
 Le système doit :
@@ -234,72 +260,172 @@ Le système doit :
 - identifier les points forts ;
 - identifier les points faibles ;
 - détecter les compétences manquantes ;
-- classer les opportunités.
+- recommander des opportunités pertinentes.
 
 Sous-phases :
 
-- 6.0.1 Matching V2
-- 6.0.2 Explainable Scoring
-- 6.0.3 Strengths Analysis
-- 6.0.4 Weaknesses Analysis
-- 6.0.5 Opportunity Ranking V2
-- 6.0.6 Opportunity Details
+- 6.0.1 Matching V2 Design
+- 6.0.2 Matching V2 Backend
+- 6.0.3 Matching V2 Frontend Validation
+- 6.0.4 Explainable Scoring Backend
+- 6.0.5 Explainable Scoring Frontend Validation
+- 6.0.6 Opportunity Analysis Backend
+- 6.0.7 Opportunity Analysis Frontend Validation
 
 Statut :
 Planned
 
 ### Phase 6.1
 
-Application Assistant
+External Sources Expansion
 
 Objectif :
+Étendre progressivement les sources d'opportunités professionnelles supportées par le système.
 
-Aider à préparer les candidatures à partir :
+Principes :
 
-- du profil candidat ;
-- des opportunités analysées ;
-- des points forts ;
-- des points faibles.
+- architecture multi-source ;
+- réutilisation du pipeline existant ;
+- visibilité frontend obligatoire ;
+- validation bout en bout avant ajout d'une nouvelle source.
 
-Limites :
+Sous-phases :
 
-- aucune candidature automatique ;
-- aucun envoi automatique de CV ;
-- aucun agent autonome.
+- 6.1.1 LinkedIn Connector Design
+- 6.1.2 LinkedIn Connector Backend
+- 6.1.3 Source Visualization Frontend
+- 6.1.4 End-to-End Validation
 
 Statut :
 Planned
 
-### Phase 7
+### Phase 7.0
 
-Market Intelligence
+AI Explanation Layer
 
 Objectif :
+Utiliser l'IA pour expliquer les résultats générés par les moteurs déterministes du système.
 
-Analyser le marché de l'emploi à partir des offres collectées.
+Principes :
 
-Exemples :
+- l'IA n'effectue pas le calcul du score ;
+- le score reste déterministe ;
+- le score reste testable ;
+- le score reste explicable ;
+- l'IA fournit des explications complémentaires.
 
-- compétences les plus demandées ;
-- postes les plus présents ;
-- évolution du marché ;
-- tendances de recrutement.
+Sous-phases :
+
+- 7.0.1 AI Score Explanation
+- 7.0.2 AI Opportunity Summary
+- 7.0.3 AI Suggestion Generation
+
+Statut :
+Planned
+
+### Phase 7.1
+
+AI Gap Analysis
+
+Objectif :
+Identifier automatiquement les écarts entre le profil candidat et les opportunités ciblées.
+
+Le système doit :
+
+- identifier les compétences manquantes ;
+- suggérer des pistes de progression ;
+- proposer des actions d'amélioration.
+
+Sous-phases :
+
+- 7.1.1 Missing Skills Analysis
+- 7.1.2 Learning Suggestions
+- 7.1.3 Certification Suggestions
+
+Statut :
+Planned
+
+### Phase 7.2
+
+AI Career Advisor
+
+Objectif :
+Fournir un accompagnement personnalisé dans les décisions de carrière.
+
+Le système doit :
+
+- analyser les opportunités ;
+- analyser les compétences ;
+- analyser les écarts ;
+- proposer des trajectoires cohérentes.
+
+Sous-phases :
+
+- 7.2.1 Career Path Suggestions
+- 7.2.2 Opportunity Strategy
+- 7.2.3 Long-Term Career Planning
 
 Statut :
 Planned
 
 ### Phase 8
 
+Market Intelligence
+
+Objectif :
+Analyser le marché de l'emploi à partir des offres collectées.
+
+Le système doit permettre :
+
+- d'identifier les compétences les plus demandées ;
+- d'identifier les postes les plus présents ;
+- d'analyser les évolutions du marché ;
+- d'observer les tendances de recrutement ;
+- d'analyser l'évolution des salaires.
+
+Sous-phases :
+
+- 8.1 Market Intelligence Design
+- 8.2 Market Data Aggregation Backend
+- 8.3 Market Analytics Backend
+- 8.4 Market Intelligence Frontend Validation
+- 8.5 Skills Trends Dashboard
+- 8.6 Jobs Trends Dashboard
+- 8.7 Salary Trends Dashboard
+- 8.8 Market Insights Visualization
+- 8.9 End-to-End Validation
+
+Statut :
+Planned
+
+### Phase 9
+
 Career Roadmap
 
 Objectif :
-
 Construire une stratégie de progression de carrière basée sur :
 
 - le profil candidat ;
 - les opportunités ;
 - le marché ;
 - les écarts de compétences.
+
+Le système doit permettre :
+
+- la définition d'objectifs ;
+- la projection de carrière ;
+- le suivi des progrès ;
+- la planification long terme.
+
+Sous-phases :
+
+- 9.1 Career Roadmap Design
+- 9.2 Career Roadmap Backend
+- 9.3 Career Roadmap Frontend Validation
+- 9.4 Roadmap Visualization
+- 9.5 Progress Tracking
+- 9.6 Scenario Planning
+- 9.7 End-to-End Validation
 
 Statut :
 Planned
