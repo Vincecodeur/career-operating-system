@@ -26,18 +26,18 @@ Phase 6
 - ✅ 6.0.2 Matching V2 Backend
 - ✅ 6.0.3 Matching V2 Frontend Validation
 - ✅ 6.0.4 Explainable Scoring Backend
-- 6.0.5 Explainable Scoring Frontend Validation
+- ✅ 6.0.5 Explainable Scoring Frontend Validation
 - 6.0.6 Opportunity Analysis Backend
 - 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.5
-Explainable Scoring Frontend Validation
+Phase 6.0.6
+Opportunity Analysis Backend
 
 ---
 
 Current Phase
-Phase 6.0.5 Explainable Scoring Frontend Validation
+Phase 6.0.6 Opportunity Analysis Backend
 
 ---
 
@@ -485,6 +485,17 @@ Completed
 - Tests Explainable Scoring ajoutés
 - 68 tests backend passants
 
+- Phase 6.0.5 Explainable Scoring Frontend Validation terminée
+- Explanations affichées dans MatchingResult
+- Skills explanation affichée
+- Experience explanation affichée
+- Work mode explanation affichée
+- Location explanation affichée
+- OpportunitiesPage synchronisée avec le nouveau contrat API
+- Dashboard synchronisé avec le nouveau contrat API
+- Validation visuelle réalisée
+- Build frontend validé
+
 ---
 
 In Progress
@@ -501,17 +512,18 @@ Aucun
 
 Next Step
 
-- Phase 6.0.5 Explainable Scoring Frontend Validation
+- Phase 6.0.6 Opportunity Analysis Backend
 
 Objectif :
-Afficher les explications déterministes produites par le moteur Matching V2.
+Construire une analyse déterministe des opportunités basée sur les résultats du Matching V2.
 
 Livrables :
 
-- affichage des explanations
-- affichage par critère
-- validation visuelle
-- aucun calcul React
+- analyse automatique des points forts
+- analyse automatique des points faibles
+- recommandations déterministes
+- contrat API enrichi
+- tests backend
 
 Pas encore :
 
@@ -519,7 +531,6 @@ Pas encore :
 - LLM
 - embeddings
 - analyse sémantique
-- Opportunity Analysis
 
 ---
 
@@ -546,4 +557,4 @@ Validated choices:
 
 Last Commit
 
-- 53f059b - feat: add deterministic matching explanations
+- e33bc1f - feat: add explainable scoring frontend

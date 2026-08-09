@@ -213,6 +213,12 @@ Implémenté :
 - Experience explanations
 - Work mode explanations
 - Location explanations
+- Explainable scoring visualization
+- Explanations display
+- Skills explanation display
+- Experience explanation display
+- Work mode explanation display
+- Location explanation display
 
 Partiellement implémenté :
 
@@ -384,9 +390,11 @@ Des tests existent pour :
 - Phase 6.0.2 Matching V2 Backend
 - Phase 6.0.3 Matching V2 Frontend Validation
 - Phase 6.0.4 Explainable Scoring Backend
+- Phase 6.0.5 Explainable Scoring Frontend Validation
 
 ## Derniers commits importants
 
+- e33bc1f - feat: add explainable scoring frontend
 - 53f059b - feat: add deterministic matching explanations
 - 35df497 - feat: add matching v2 frontend validation
 - 1452dcc - feat: implement matching v2 backend scoring
@@ -496,25 +504,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.5 Explainable Scoring Frontend Validation
+Phase 6.0.6 Opportunity Analysis Backend
 
 Objectif :
-Afficher dans l'interface les explications déterministes renvoyées par le backend.
+Ajouter une analyse déterministe des opportunités basée sur les résultats du Matching V2.
 
 Livrables :
 
-- affichage des explanations
-- affichage par critère
-- validation visuelle
-- build frontend validé
+- opportunity strengths analysis
+- opportunity weaknesses analysis
+- deterministic recommendations
+- backend API contract
+- tests backend
 
 Contraintes :
 
-- aucun calcul React
-- aucune logique métier frontend
 - aucune IA
 - aucun LLM
 - aucun embedding
+- aucune analyse sémantique
+- logique métier backend uniquement
 - respecter DEC-039
 - respecter DEC-041
 
