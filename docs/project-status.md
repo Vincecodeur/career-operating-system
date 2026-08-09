@@ -20,25 +20,24 @@ main
 
 Current Milestone
 
-Phase 5
+Phase 6
 
-✅ 5.1 Frontend Foundation
-✅ 5.2 API Client
-✅ 5.3 Dashboard MVP
-✅ 5.4 Matching View
-✅ 5.5 Opportunity Ranking
-✅ 5.6 Application Tracker
-✅ 5.7 UX/UI Product Design & Frontend Structure Preparation
-✅ 5.8 Frontend Structure Implementation
+- ✅ 6.0.1 Matching V2 Design
+- 6.0.2 Matching V2 Backend
+- 6.0.3 Matching V2 Frontend Validation
+- 6.0.4 Explainable Scoring Backend
+- 6.0.5 Explainable Scoring Frontend Validation
+- 6.0.6 Opportunity Analysis Backend
+- 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.1
-Matching V2 Design
+Phase 6.0.2
+Matching V2 Backend
 
 ---
 
 Current Phase
-Phase 6.0.1 Matching V2 Design
+Phase 6.0.2 Matching V2 Backend
 
 ---
 
@@ -434,11 +433,26 @@ Completed
 - KPI Data Sources corrigé
 - Flux complet Job Discovery validé
 
+- Phase 6.0.1 Matching V2 Design terminée
+- docs/matching-v2-design.md créé
+- Score Matching V2 défini sur 100 points
+- Pondérations Matching V2 définies
+- Skills Match défini
+- Experience Match défini
+- Work Mode Match défini
+- Location Match défini
+- Contract Match défini
+- Sortie API attendue documentée
+- Responsabilités backend documentées
+- Responsabilités frontend documentées
+- Hors périmètre Matching V2 documenté
+- Aucun développement backend réalisé pendant la phase de design
+
 ---
 
 In Progress
 
-- Phase 5.9.7 Job Discovery Visualization
+- Phase 6.0 Opportunity Analysis & Advanced Matching
 
 ---
 
@@ -450,21 +464,28 @@ Aucun
 
 Next Step
 
-- Phase 6.0.1 Matching V2 Design
+- Phase 6.0.2 Matching V2 Backend
 
 Objectif :
-Concevoir le moteur de Matching V2 avant tout développement backend.
+Implémenter le moteur déterministe Matching V2 côté backend conformément au document docs/matching-v2-design.md.
 
 Livrables :
 
-- règles de scoring V2
-- critères de pondération
-- prise en compte des compétences manquantes
-- gestion de l’expérience
-- gestion de la localisation
-- gestion des critères contractuels
+- schémas de réponse Matching V2
+- calcul des sous-scores
+- calcul du score final pondéré
+- strengths et weaknesses déterministes
+- explications déterministes
+- tests Pytest du moteur Matching V2
+- maintien du frontend hors logique métier
 
-Aucun développement backend durant cette phase.
+Pas encore :
+
+- frontend Matching V2
+- IA
+- embeddings
+- analyse sémantique
+- Market Intelligence
 
 ---
 
@@ -491,4 +512,4 @@ Validated choices:
 
 Last Commit
 
-- 467c150 - fix: make dashboard source KPI accurate
+- 47725a5 - docs: define matching v2 design

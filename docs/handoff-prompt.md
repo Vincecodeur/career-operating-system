@@ -201,6 +201,7 @@ Implémenté :
 - Imported Opportunities KPI
 - Data Source KPI
 - Discovery Status KPI
+- Matching V2 Design documented
 
 Partiellement implémenté :
 
@@ -354,9 +355,11 @@ Des tests existent pour :
 - Phase 5.9.7.2 Opportunity Details
 - Phase 5.9.7.3 Discovery Dashboard KPI
 - Phase 5.9.7.4 End-to-End Validation
+- Phase 6.0.1 Matching V2 Design
 
 ## Derniers commits importants
 
+- 47725a5 - docs: define matching v2 design
 - 467c150 - fix: make dashboard source KPI accurate
 - 2dabed2 - feat: add job discovery dashboard kpis
 - 30caf05 - feat: improve opportunity details experience
@@ -462,21 +465,31 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.1 Matching V2 Design
+Phase 6.0.2 Matching V2 Backend
 
 Objectif :
-Concevoir le moteur de Matching V2 avant tout développement backend.
+Implémenter le moteur déterministe Matching V2 côté backend conformément au document docs/matching-v2-design.md.
 
 Livrables :
 
-- règles de scoring V2
-- critères de pondération
-- prise en compte des compétences manquantes
-- gestion de l’expérience
-- gestion de la localisation
-- gestion des critères contractuels
+- schémas de réponse Matching V2
+- calcul des sous-scores
+- calcul du score final pondéré
+- strengths et weaknesses déterministes
+- explications déterministes
+- tests Pytest du moteur Matching V2
 
-Aucun développement backend durant cette phase.
+Contraintes :
+
+- aucune logique métier dans le frontend
+- aucun scoring IA
+- aucun embedding
+- aucun LLM
+- aucune analyse sémantique
+- respecter docs/matching-v2-design.md
+- respecter DEC-006
+- respecter DEC-039
+- respecter DEC-041
 
 ## Méthode de reprise
 
