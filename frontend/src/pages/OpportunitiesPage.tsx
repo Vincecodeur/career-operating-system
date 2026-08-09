@@ -49,6 +49,10 @@ export function OpportunitiesPage() {
         description="Explore and analyze opportunities."
       />
 
+      <p className="mb-6 text-sm text-slate-400">
+        {offers.length} opportunities found
+      </p>
+
       {loading && <p className="text-slate-400">Loading opportunities...</p>}
 
       {error && <p className="text-red-500">{error}</p>}
@@ -59,8 +63,13 @@ export function OpportunitiesPage() {
             {offers.map((offer) => (
               <button
                 key={offer.id}
+                type="button"
                 onClick={() => setSelectedOffer(offer)}
-                className="block w-full text-left">
+                className={`block w-full rounded-lg text-left transition-all ${
+                  selectedOffer?.id === offer.id
+                    ? "border-2 border-blue-500 bg-slate-800 shadow-lg shadow-blue-500/20"
+                    : ""
+                }`}>
                 <Card>
                   <h3 className="font-medium text-white">{offer.title}</h3>
 
@@ -74,49 +83,82 @@ export function OpportunitiesPage() {
             ))}
           </div>
 
-          <div className="lg:col-span-2 sticky top-6 self-start">
+          <div className="sticky top-6 self-start lg:col-span-2">
             {selectedOffer ? (
               <Card>
-                <h2 className="mb-2 text-2xl font-bold text-white">
+                <h2 className="mb-6 text-3xl font-bold text-white">
                   {selectedOffer.title}
                 </h2>
 
-                <div className="mb-6 space-y-1 text-sm text-slate-400">
-                  <p>Company: {selectedOffer.company_name ?? "Unknown"}</p>
+                <div className="mb-8 grid grid-cols-2 gap-4 text-sm text-slate-400">
+                  <div>
+                    <p className="font-medium text-slate-300">Company</p>
 
-                  <p>Location: {selectedOffer.location}</p>
+                    <p>{selectedOffer.company_name ?? "Unknown"}</p>
+                  </div>
 
-                  <p>Source: {selectedOffer.source}</p>
+                  <div>
+                    <p className="font-medium text-slate-300">Source</p>
 
-                  <p>
-                    Imported:{" "}
-                    {new Date(selectedOffer.created_at).toLocaleString()}
-                  </p>
+                    <p>{selectedOffer.source ?? "Unknown"}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-slate-300">Location</p>
+
+                    <p>{selectedOffer.location ?? "Unknown"}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-slate-300">Imported</p>
+
+                    <p>{new Date(selectedOffer.created_at).toLocaleString()}</p>
+                  </div>
                 </div>
 
-                <div className="mb-6">
-                  <h3 className="mb-2 text-lg font-semibold text-white">
+                <div className="mb-8">
+                  <h3 className="mb-3 text-lg font-semibold text-white">
                     Description
                   </h3>
 
                   <p className="whitespace-pre-wrap text-slate-300">
-                    {selectedOffer.description}
+                    {selectedOffer.description ?? "No description available."}
                   </p>
                 </div>
 
+                <div className="border-t border-slate-700 pt-6">
+                  <h3 className="mb-2 text-lg font-semibold text-white">
+                    Matching Analysis
+                  </h3>
+
+                  <p className="text-slate-400">Available in Phase 6.</p>
+                </div>
+
+                <div className="mt-8 border-t border-slate-700 pt-6">
+                  <h3 className="mb-2 text-lg font-semibold text-white">
+                    AI Recommendations
+                  </h3>
+
+                  <p className="text-slate-400">Available in Phase 7.</p>
+                </div>
+
                 {selectedOffer.source_url && (
-                  <a
-                    href={selectedOffer.source_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300">
-                    Open Source Offer
-                  </a>
+                  <div className="mt-8 border-t border-slate-700 pt-6">
+                    <a
+                      href={selectedOffer.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300">
+                      Open Source Offer
+                    </a>
+                  </div>
                 )}
               </Card>
             ) : (
               <Card>
-                <p className="text-slate-400">Select an opportunity.</p>
+                <p className="text-slate-400">
+                  Select an opportunity to view details.
+                </p>
               </Card>
             )}
           </div>
