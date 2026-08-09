@@ -27,17 +27,17 @@ Phase 6
 - ✅ 6.0.3 Matching V2 Frontend Validation
 - ✅ 6.0.4 Explainable Scoring Backend
 - ✅ 6.0.5 Explainable Scoring Frontend Validation
-- 6.0.6 Opportunity Analysis Backend
+- ✅ 6.0.6 Opportunity Analysis Backend
 - 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.6
-Opportunity Analysis Backend
+Phase 6.0.7
+Opportunity Analysis Frontend Validation
 
 ---
 
 Current Phase
-Phase 6.0.6 Opportunity Analysis Backend
+Phase 6.0.7 Opportunity Analysis Frontend Validation
 
 ---
 
@@ -496,6 +496,16 @@ Completed
 - Validation visuelle réalisée
 - Build frontend validé
 
+- Phase 6.0.6 Opportunity Analysis Backend terminée
+- OpportunityAnalysis schema créé
+- MatchingResult enrichi avec opportunity_analysis
+- Verdict déterministe implémenté
+- Recommendation déterministe implémentée
+- Summary déterministe implémenté
+- Contrat API Matching enrichi
+- Tests Opportunity Analysis ajoutés
+- 69 tests backend passants
+
 ---
 
 In Progress
@@ -512,18 +522,18 @@ Aucun
 
 Next Step
 
-- Phase 6.0.6 Opportunity Analysis Backend
+- Phase 6.0.7 Opportunity Analysis Frontend Validation
 
 Objectif :
-Construire une analyse déterministe des opportunités basée sur les résultats du Matching V2.
+Afficher Opportunity Analysis dans l'interface Opportunities.
 
 Livrables :
 
-- analyse automatique des points forts
-- analyse automatique des points faibles
-- recommandations déterministes
-- contrat API enrichi
-- tests backend
+- verdict display
+- recommendation display
+- summary display
+- validation visuelle
+- build frontend
 
 Pas encore :
 
@@ -557,4 +567,4 @@ Validated choices:
 
 Last Commit
 
-- e33bc1f - feat: add explainable scoring frontend
+- 906f405 - feat: add opportunity analysis backend

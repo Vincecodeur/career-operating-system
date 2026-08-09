@@ -213,6 +213,11 @@ Implémenté :
 - Experience explanations
 - Work mode explanations
 - Location explanations
+- OpportunityAnalysis schema
+- Opportunity Analysis
+- Deterministic verdict
+- Deterministic recommendation
+- Deterministic summary
 
 Partiellement implémenté :
 
@@ -333,6 +338,7 @@ Des tests existent pour :
 - matching v2 backend scoring
 - matching v2 frontend validation
 - explainable scoring backend
+- opportunity analysis backend
 
 ## Phases terminées
 
@@ -391,9 +397,11 @@ Des tests existent pour :
 - Phase 6.0.3 Matching V2 Frontend Validation
 - Phase 6.0.4 Explainable Scoring Backend
 - Phase 6.0.5 Explainable Scoring Frontend Validation
+- Phase 6.0.6 Opportunity Analysis Backend
 
 ## Derniers commits importants
 
+- 906f405 - feat: add opportunity analysis backend
 - e33bc1f - feat: add explainable scoring frontend
 - 53f059b - feat: add deterministic matching explanations
 - 35df497 - feat: add matching v2 frontend validation
@@ -504,26 +512,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.6 Opportunity Analysis Backend
+Phase 6.0.7 Opportunity Analysis Frontend Validation
 
 Objectif :
-Ajouter une analyse déterministe des opportunités basée sur les résultats du Matching V2.
+Afficher Opportunity Analysis dans l'interface Opportunities.
 
 Livrables :
 
-- opportunity strengths analysis
-- opportunity weaknesses analysis
-- deterministic recommendations
-- backend API contract
-- tests backend
+- verdict display
+- recommendation display
+- summary display
+- validation visuelle
+- build frontend
 
 Contraintes :
 
+- aucun calcul React
+- aucune logique métier frontend
 - aucune IA
 - aucun LLM
 - aucun embedding
-- aucune analyse sémantique
-- logique métier backend uniquement
 - respecter DEC-039
 - respecter DEC-041
 
