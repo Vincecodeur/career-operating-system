@@ -255,6 +255,12 @@ Implémenté :
 - Opportunity Selection
 - Opportunity Detail Panel
 - Source Offer Navigation
+- Improved Opportunity Details Experience
+- Selected Opportunity Visual Highlight
+- Opportunities Counter
+- Opportunity Metadata Grid
+- Matching Analysis Placeholder
+- AI Recommendations Placeholder
 
 Documenté mais pas encore implémenté :
 
@@ -340,9 +346,11 @@ Des tests existent pour :
 - Phase 5.9.5.5 Multi Source Validation
 - Phase 5.9.6 Scheduled Synchronization
 - Phase 5.9.7.1 Opportunities List
+- Phase 5.9.7.2 Opportunity Details
 
 ## Derniers commits importants
 
+- 30caf05 - feat: improve opportunity details experience
 - 7ccac70 - feat: implement opportunities master detail view
 - a141ae3 - docs: validate france travail end-to-end pipeline
 - ad29764 - feat: add scheduled job discovery
@@ -445,24 +453,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.7.2 Opportunity Details
+Phase 5.9.7.3 Discovery Dashboard KPI
 
 Objectif :
-Améliorer l'exploitation du détail des opportunités sélectionnées dans OpportunitiesPage.
+Afficher des indicateurs de synthèse liés au Job Discovery dans le Dashboard.
 
 Premiers livrables :
 
-- mise en évidence visuelle de l'offre sélectionnée
-- amélioration de la lisibilité du panneau détail
-- préparation des emplacements futurs pour Matching V2
-- préparation des emplacements futurs pour les recommandations IA
-- amélioration UX sans ajout de logique métier frontend
+- identifier les données déjà disponibles depuis le backend
+- définir les KPI affichables sans nouveau moteur métier
+- afficher les premiers indicateurs Job Discovery dans le Dashboard
+- conserver une logique frontend strictement présentative
 
 Pas encore :
 
 - scoring V2
 - analyse IA
 - LinkedIn
+- market intelligence
 
 ## Méthode de reprise
 

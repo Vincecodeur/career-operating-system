@@ -31,15 +31,14 @@ Phase 5
 ✅ 5.7 UX/UI Product Design & Frontend Structure Preparation
 ✅ 5.8 Frontend Structure Implementation
 
-Next Planned Milestone  
-Phase 5.9.7.2
-Opportunity Details
+Next Planned Milestone
+Phase 5.9.7.3
+Discovery Dashboard KPI
 
 ---
 
-Current Phase
-
-Phase 5.9.7.2 Opportunity Details
+Current Phase  
+Phase 5.9.7.3 Discovery Dashboard KPI
 
 ---
 
@@ -407,6 +406,16 @@ Completed
 - Navigation vers l'offre source implémentée
 - Panneau détail fixe validé
 
+- Phase 5.9.7.2 Opportunity Details terminée
+- Mise en évidence visuelle de l'offre sélectionnée implémentée
+- Compteur d'opportunités affiché
+- Métadonnées de l'opportunité mieux structurées
+- Panneau détail amélioré
+- Description de l'offre repositionnée correctement
+- Emplacement Matching Analysis préparé pour Phase 6
+- Emplacement AI Recommendations préparé pour Phase 7
+- Amélioration UX réalisée sans ajout de logique métier frontend
+
 ---
 
 In Progress
@@ -423,11 +432,10 @@ Aucun
 
 Next Step
 
-- Phase 5.9.7.2 Opportunity Details
+- Phase 5.9.7.3 Discovery Dashboard KPI
 
 Objectif :
-
-Visualiser les résultats du pipeline Job Discovery dans le frontend.
+Afficher des indicateurs de synthèse liés au Job Discovery dans le Dashboard.
 
 ---
 
@@ -454,4 +462,4 @@ Validated choices:
 
 Last Commit
 
-- 7ccac70 - feat: implement opportunities master detail view
+- 30caf05 - feat: improve opportunity details experience
