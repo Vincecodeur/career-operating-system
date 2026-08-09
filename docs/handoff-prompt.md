@@ -430,9 +430,12 @@ Des tests existent pour :
 - Phase 6.0.7 Opportunity Analysis Frontend Validation
 - Phase 6.1.1 LinkedIn Connector Design
 - Phase 6.1.2 LinkedIn Connector Backend
-- Phase 6.1.3 Greenhouse Connector Design
+- Phase 6.1.3 Verification possibilité Welcome to the Jungle
 - Phase 6.1.4 Greenhouse Connector Backend
 - Phase 6.1.5 Greenhouse End-to-End Validation
+- Phase 6.1.6 Greenhouse End-to-End Validation
+- Phase 6.1.7 Source Visualization Frontend
+- Phase 6.1.8 Multi-Source Validation
 
 ## Derniers commits importants
 
@@ -551,25 +554,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.1.8 Multi-Source Validation
+Phase 7.0.1 AI Score Explanation Design
 
 Objectif :
-Valider le fonctionnement simultané des connecteurs supportés.
+
+Définir comment l'IA expliquera les résultats déjà produits par les moteurs déterministes.
 
 Livrables :
 
-- Validation multi-source
-- Validation DiscoveryScheduler
-- Validation PostgreSQL
-- Validation API
-- Validation Frontend
-- Validation déduplication
+- AI score explanation design
+- AI prompt strategy
+- séparation moteur déterministe / IA
+- architecture d'appel IA
+- règles de traçabilité
 
 Pas encore :
 
-- nouvelles sources
-- IA
-- analyse marché
+- génération IA
+- appels LLM
+- recommandations IA
 
 ## Méthode de reprise
 

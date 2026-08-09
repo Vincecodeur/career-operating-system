@@ -306,15 +306,15 @@ Sous-phases :
 
 - ✅ 6.1.1 LinkedIn Connector Design
 - ✅ 6.1.2 LinkedIn Connector Backend
-- ✅ 6.1.3 Verifieication possibilité Welcome to the Jungle
+- ✅ 6.1.3 Verification possibilité Welcome to the Jungle
 - ✅ 6.1.4 Greenhouse Connector Design
 - ✅ 6.1.5 Greenhouse Connector Backend
 - ✅ 6.1.6 Greenhouse End-to-End Validation
 - ✅ 6.1.7 Source Visualization Frontend
-- ⏳ 6.1.8 Multi-Source Validation
+- ✅ 6.1.8 Multi-Source Validation
 
 Statut :
-In Progress
+Completed
 
 ### Phase 7.0
 

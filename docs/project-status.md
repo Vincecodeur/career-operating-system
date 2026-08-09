@@ -33,13 +33,13 @@ Phase 6
 ---
 
 Current Phase
-Documentation Governance & Project Process Review
+Phase 7.0 AI Explanation Layer Design
 
 ---
 
 Next Planned Milestone
 
-Finalize project process update before resuming Phase 6.1.8 Multi-Source Validation
+Phase 7.0.1 AI Score Explanation Design
 
 ---
 
@@ -575,6 +575,15 @@ Completed
 - New project workflow validated by Vincent:
   Design → Code → Tests → Functional Validation → Frontend Validation if applicable → Audit → Technical Commit → Documentation → Documentation Commit → Clean Status
 
+- Phase 6.1.8 Multi-Source Validation terminée
+- DiscoveryScheduler multi-source validé
+- ConnectorRegistry multi-source validé
+- PostgreSQL multi-source validé
+- API Job Discovery multi-source validée
+- Frontend Opportunities multi-source validé
+- Déduplication fonctionnelle validée
+- docs/multi-source-validation-results.md créé
+
 ---
 
 In Progress
@@ -591,25 +600,24 @@ Aucun
 
 Next Step
 
-- Phase 6.1.8 Multi-Source Validation
+- Phase 7.0.1 AI Score Explanation Design
 
 Objectif :
-Valider le fonctionnement simultané des connecteurs supportés.
+Définir comment l'IA expliquera les résultats déjà produits par les moteurs déterministes.
 
 Livrables :
 
-- Validation multi-source
-- Validation DiscoveryScheduler
-- Validation PostgreSQL
-- Validation API
-- Validation Frontend
-- Validation déduplication
+- AI score explanation design
+- AI prompt strategy
+- séparation moteur déterministe / IA
+- architecture d'appel IA
+- règles de traçabilité
 
 Pas encore :
 
-- nouvelles sources
-- IA
-- analyse marché
+- génération IA
+- appels LLM
+- recommandations IA
 
 ---
 
