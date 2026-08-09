@@ -33,6 +33,11 @@ type Matching = {
 
   strengths: string[];
   weaknesses: string[];
+  opportunity_analysis: {
+    verdict: string;
+    recommendation: string;
+    summary: string;
+  };
   explanations: {
     criterion: string;
     score: number;
@@ -138,6 +143,7 @@ export function Dashboard({
             strengths={matching.strengths}
             weaknesses={matching.weaknesses}
             explanations={matching.explanations}
+            opportunityAnalysis={matching.opportunity_analysis}
           />
         )}
       </Section>

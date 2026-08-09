@@ -35,6 +35,11 @@ type Matching = {
 
   strengths: string[];
   weaknesses: string[];
+  opportunity_analysis: {
+    verdict: string;
+    recommendation: string;
+    summary: string;
+  };
   explanations: {
     criterion: string;
     score: number;

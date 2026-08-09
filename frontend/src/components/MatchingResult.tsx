@@ -1,3 +1,9 @@
+type OpportunityAnalysis = {
+  verdict: string;
+  recommendation: string;
+  summary: string;
+};
+
 type ScoreExplanation = {
   criterion: string;
   score: number;
@@ -15,6 +21,7 @@ type Props = {
   strengths: string[];
   weaknesses: string[];
   explanations: ScoreExplanation[];
+  opportunityAnalysis: OpportunityAnalysis;
 };
 
 export function MatchingResult({
@@ -28,6 +35,7 @@ export function MatchingResult({
   strengths,
   weaknesses,
   explanations,
+  opportunityAnalysis,
 }: Props) {
   return (
     <div className="space-y-6">
@@ -103,6 +111,35 @@ export function MatchingResult({
             ))}
           </div>
         )}
+      </div>
+      <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <h3 className="mb-3 text-lg font-semibold text-white">
+          Opportunity Analysis
+        </h3>
+
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs uppercase text-slate-400">Verdict</p>
+
+            <p className="font-medium text-white">
+              {opportunityAnalysis.verdict}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase text-slate-400">Recommendation</p>
+
+            <p className="font-medium text-white">
+              {opportunityAnalysis.recommendation}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs uppercase text-slate-400">Summary</p>
+
+            <p className="text-slate-300">{opportunityAnalysis.summary}</p>
+          </div>
+        </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">

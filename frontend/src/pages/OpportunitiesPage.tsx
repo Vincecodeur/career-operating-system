@@ -23,6 +23,12 @@ type ScoreExplanation = {
   message: string;
 };
 
+type OpportunityAnalysis = {
+  verdict: string;
+  recommendation: string;
+  summary: string;
+};
+
 type MatchingData = {
   matching_score: number;
   skills_score: number;
@@ -33,7 +39,7 @@ type MatchingData = {
   missing_skills: string[];
   strengths: string[];
   weaknesses: string[];
-
+  opportunity_analysis: OpportunityAnalysis;
   explanations: ScoreExplanation[];
 };
 
@@ -156,6 +162,17 @@ export function OpportunitiesPage() {
                   </div>
                 </div>
 
+                {selectedOffer.source_url && (
+                  <div className="mb-8">
+                    <a
+                      href={selectedOffer.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300">
+                      🔗 View Original Offer
+                    </a>
+                  </div>
+                )}
                 <div className="mb-8">
                   <h3 className="mb-3 text-lg font-semibold text-white">
                     Description
@@ -183,6 +200,7 @@ export function OpportunitiesPage() {
                       strengths={matching.strengths}
                       weaknesses={matching.weaknesses}
                       explanations={matching.explanations}
+                      opportunityAnalysis={matching.opportunity_analysis}
                     />
                   ) : (
                     <p className="text-slate-400">
