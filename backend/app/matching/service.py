@@ -4,6 +4,7 @@ from app.jobs.job_offer_skill_models import JobOfferSkill
 from app.jobs.models import JobOffer
 from app.matching.schemas import MatchingResult
 from app.matching.schemas import RankedJobOffer
+from app.matching.schemas import ScoreExplanation
 from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
 from app.skills.models import Skill
@@ -127,6 +128,14 @@ def calculate_matching_result(
         location_score=location_score,
         missing_skills=missing_skills,
     )
+    explanations = build_explanations(
+        skills_score=skills_score,
+        experience_score=experience_score,
+        work_mode_score=work_mode_score,
+        location_score=location_score,
+        matching_skills=matching_skills,
+        missing_skills=missing_skills,
+    )
 
     return MatchingResult(
         profile_id=profile_id,
@@ -140,6 +149,7 @@ def calculate_matching_result(
         missing_skills=missing_skills,
         strengths=strengths,
         weaknesses=weaknesses,
+        explanations=explanations,
     )
 
 
@@ -521,6 +531,48 @@ def build_weaknesses(
 
     return weaknesses
 
+def build_explanations(
+    skills_score: float,
+    experience_score: float,
+    work_mode_score: float,
+    location_score: float,
+    matching_skills: list[str],
+    missing_skills: list[str],
+) -> list[ScoreExplanation]:
+    return [
+        ScoreExplanation(
+            criterion="skills",
+            score=skills_score,
+            message=(
+                f"{len(matching_skills)} matching skills "
+                f"and {len(missing_skills)} missing skills."
+            ),
+        ),
+        ScoreExplanation(
+            criterion="experience",
+            score=experience_score,
+            message=(
+                "Experience score calculated from profile "
+                "experience and job seniority."
+            ),
+        ),
+        ScoreExplanation(
+            criterion="work_mode",
+            score=work_mode_score,
+            message=(
+                "Work mode compatibility between profile "
+                "preference and opportunity."
+            ),
+        ),
+        ScoreExplanation(
+            criterion="location",
+            score=location_score,
+            message=(
+                "Location compatibility between profile "
+                "and opportunity."
+            ),
+        ),
+    ]
 
 def normalize_work_mode(
     value: str | None,
@@ -585,3 +637,4 @@ def is_unknown(
         "none",
         "null",
     }
+    

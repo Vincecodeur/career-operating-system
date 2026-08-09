@@ -222,3 +222,46 @@ def test_ranking_is_sorted_descending():
         scores,
         reverse=True
     )
+    
+def test_matching_v2_explanations_are_present():
+    ranking_response = client.get(
+        "/profiles/1/ranked-job-offers"
+    )
+
+    assert ranking_response.status_code == 200
+
+    ranked_job_offers = ranking_response.json()
+
+    if len(ranked_job_offers) == 0:
+        return
+
+    job_offer_id = ranked_job_offers[0]["job_offer_id"]
+
+    response = client.get(
+        f"/matching/1/{job_offer_id}"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "explanations" in data
+
+    explanations = data["explanations"]
+
+    assert isinstance(explanations, list)
+
+    criteria = {
+        item["criterion"]
+        for item in explanations
+    }
+
+    assert "skills" in criteria
+    assert "experience" in criteria
+    assert "work_mode" in criteria
+    assert "location" in criteria
+
+    for item in explanations:
+        assert "criterion" in item
+        assert "score" in item
+        assert "message" in item
