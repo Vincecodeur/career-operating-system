@@ -202,6 +202,11 @@ Implémenté :
 - Data Source KPI
 - Discovery Status KPI
 - Matching V2 Design documented
+- Matching V2 Backend scoring
+- Matching V2 sub-scores
+- Matching V2 strengths
+- Matching V2 weaknesses
+- Matching V2 ranking
 
 Partiellement implémenté :
 
@@ -302,6 +307,7 @@ Des tests existent pour :
 - connector registry
 - multi source discovery service
 - scheduler
+- matching v2 backend scoring
 
 ## Phases terminées
 
@@ -356,9 +362,11 @@ Des tests existent pour :
 - Phase 5.9.7.3 Discovery Dashboard KPI
 - Phase 5.9.7.4 End-to-End Validation
 - Phase 6.0.1 Matching V2 Design
+- Phase 6.0.2 Matching V2 Backend
 
 ## Derniers commits importants
 
+- 1452dcc - feat: implement matching v2 backend scoring
 - 47725a5 - docs: define matching v2 design
 - 467c150 - fix: make dashboard source KPI accurate
 - 2dabed2 - feat: add job discovery dashboard kpis
@@ -465,23 +473,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.2 Matching V2 Backend
+Phase 6.0.3 Matching V2 Frontend Validation
 
 Objectif :
-Implémenter le moteur déterministe Matching V2 côté backend conformément au document docs/matching-v2-design.md.
+Afficher et valider dans le frontend les résultats produits par le moteur Matching V2, sans ajouter de logique métier côté React.
 
 Livrables :
 
-- schémas de réponse Matching V2
-- calcul des sous-scores
-- calcul du score final pondéré
-- strengths et weaknesses déterministes
-- explications déterministes
-- tests Pytest du moteur Matching V2
+- affichage du score Matching V2
+- affichage des sous-scores
+- affichage des matching skills
+- affichage des missing skills
+- affichage des strengths
+- affichage des weaknesses
+- validation visuelle dans le Dashboard ou la zone Opportunities
 
 Contraintes :
 
 - aucune logique métier dans le frontend
+- aucun calcul de score dans React
 - aucun scoring IA
 - aucun embedding
 - aucun LLM

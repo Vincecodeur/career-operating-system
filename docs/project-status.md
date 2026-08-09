@@ -23,7 +23,7 @@ Current Milestone
 Phase 6
 
 - ✅ 6.0.1 Matching V2 Design
-- 6.0.2 Matching V2 Backend
+- ✅ 6.0.2 Matching V2 Backend
 - 6.0.3 Matching V2 Frontend Validation
 - 6.0.4 Explainable Scoring Backend
 - 6.0.5 Explainable Scoring Frontend Validation
@@ -31,13 +31,13 @@ Phase 6
 - 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.2
-Matching V2 Backend
+Phase 6.0.3
+Matching V2 Frontend Validation
 
 ---
 
 Current Phase
-Phase 6.0.2 Matching V2 Backend
+Phase 6.0.3 Matching V2 Frontend Validation
 
 ---
 
@@ -448,6 +448,20 @@ Completed
 - Hors périmètre Matching V2 documenté
 - Aucun développement backend réalisé pendant la phase de design
 
+- Phase 6.0.2 Matching V2 Backend terminée
+- MatchingResult enrichi avec les sous-scores V2
+- RankedJobOffer enrichi avec les sous-scores V2
+- Skills score implémenté
+- Experience score implémenté
+- Work mode score implémenté
+- Location score implémenté
+- Score final pondéré implémenté
+- Strengths déterministes implémentées
+- Weaknesses déterministes implémentées
+- Ranking basé sur le score Matching V2 validé
+- Tests Matching V2 ajoutés
+- Suite backend complète validée avec 67 tests passants
+
 ---
 
 In Progress
@@ -464,28 +478,29 @@ Aucun
 
 Next Step
 
-- Phase 6.0.2 Matching V2 Backend
+- Phase 6.0.3 Matching V2 Frontend Validation
 
 Objectif :
-Implémenter le moteur déterministe Matching V2 côté backend conformément au document docs/matching-v2-design.md.
+Afficher et valider dans le frontend les résultats produits par le moteur Matching V2, sans ajouter de logique métier côté React.
 
 Livrables :
 
-- schémas de réponse Matching V2
-- calcul des sous-scores
-- calcul du score final pondéré
-- strengths et weaknesses déterministes
-- explications déterministes
-- tests Pytest du moteur Matching V2
-- maintien du frontend hors logique métier
+- affichage du score Matching V2
+- affichage des sous-scores
+- affichage des matching skills
+- affichage des missing skills
+- affichage des strengths
+- affichage des weaknesses
+- validation visuelle dans le Dashboard ou la zone Opportunities
+- maintien du frontend comme couche de présentation uniquement
 
 Pas encore :
 
-- frontend Matching V2
 - IA
 - embeddings
 - analyse sémantique
 - Market Intelligence
+- refonte UX majeure
 
 ---
 
@@ -512,4 +527,4 @@ Validated choices:
 
 Last Commit
 
-- 47725a5 - docs: define matching v2 design
+- 1452dcc - feat: implement matching v2 backend scoring

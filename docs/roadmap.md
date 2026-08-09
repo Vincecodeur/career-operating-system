@@ -266,7 +266,7 @@ Le système doit :
 Sous-phases :
 
 - ✅ 6.0.1 Matching V2 Design
-- 6.0.2 Matching V2 Backend
+- ✅ 6.0.2 Matching V2 Backend
 - 6.0.3 Matching V2 Frontend Validation
 - 6.0.4 Explainable Scoring Backend
 - 6.0.5 Explainable Scoring Frontend Validation
