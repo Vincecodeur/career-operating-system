@@ -196,6 +196,11 @@ Implémenté :
 - Real France Travail OAuth Validation
 - Real France Travail API Validation
 - Real France Travail PostgreSQL Persistence Validation
+- Job Discovery Overview
+- Total Opportunities KPI
+- Imported Opportunities KPI
+- Data Source KPI
+- Discovery Status KPI
 
 Partiellement implémenté :
 
@@ -347,9 +352,11 @@ Des tests existent pour :
 - Phase 5.9.6 Scheduled Synchronization
 - Phase 5.9.7.1 Opportunities List
 - Phase 5.9.7.2 Opportunity Details
+- Phase 5.9.7.3 Discovery Dashboard KPI
 
 ## Derniers commits importants
 
+- 2dabed2 - feat: add job discovery dashboard kpis
 - 30caf05 - feat: improve opportunity details experience
 - 7ccac70 - feat: implement opportunities master detail view
 - a141ae3 - docs: validate france travail end-to-end pipeline
@@ -453,24 +460,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.7.3 Discovery Dashboard KPI
+Phase 5.9.7.4 End-to-End Validation
 
 Objectif :
-Afficher des indicateurs de synthèse liés au Job Discovery dans le Dashboard.
+Valider l'ensemble du parcours Job Discovery depuis la collecte jusqu'à la visualisation frontend.
 
 Premiers livrables :
 
-- identifier les données déjà disponibles depuis le backend
-- définir les KPI affichables sans nouveau moteur métier
-- afficher les premiers indicateurs Job Discovery dans le Dashboard
-- conserver une logique frontend strictement présentative
+- validation Dashboard
+- validation Opportunities
+- validation données synchronisées
+- validation UX globale
+- vérification cohérence documentation
 
 Pas encore :
 
-- scoring V2
-- analyse IA
+- Matching V2
+- Analyse IA
 - LinkedIn
-- market intelligence
+- Market Intelligence
 
 ## Méthode de reprise
 

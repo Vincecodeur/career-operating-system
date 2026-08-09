@@ -32,13 +32,13 @@ Phase 5
 ✅ 5.8 Frontend Structure Implementation
 
 Next Planned Milestone
-Phase 5.9.7.3
-Discovery Dashboard KPI
+Phase 5.9.7.4
+End-to-End Validation
 
 ---
 
-Current Phase  
-Phase 5.9.7.3 Discovery Dashboard KPI
+Current Phase
+Phase 5.9.7.4 End-to-End Validation
 
 ---
 
@@ -416,6 +416,15 @@ Completed
 - Emplacement AI Recommendations préparé pour Phase 7
 - Amélioration UX réalisée sans ajout de logique métier frontend
 
+- Phase 5.9.7.3 Discovery Dashboard KPI terminée
+- Job Discovery Overview ajouté au Dashboard
+- KPI Total Opportunities affiché
+- KPI Imported Opportunities affiché
+- KPI Data Source affiché
+- KPI Discovery Status affiché
+- Dashboard enrichi sans modification backend
+- Dashboard enrichi sans nouvelle API
+
 ---
 
 In Progress
@@ -432,10 +441,10 @@ Aucun
 
 Next Step
 
-- Phase 5.9.7.3 Discovery Dashboard KPI
+- Phase 5.9.7.4 End-to-End Validation
 
 Objectif :
-Afficher des indicateurs de synthèse liés au Job Discovery dans le Dashboard.
+Valider le flux complet France Travail → PostgreSQL → FastAPI → Dashboard → Opportunities.
 
 ---
 
@@ -462,4 +471,4 @@ Validated choices:
 
 Last Commit
 
-- 30caf05 - feat: improve opportunity details experience
+- 2dabed2 - feat: add job discovery dashboard kpis
