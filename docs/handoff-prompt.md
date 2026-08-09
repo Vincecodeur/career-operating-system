@@ -25,15 +25,34 @@ Tu reprends le projet Career Operating System.
 
 Pour chaque étape :
 
-1. Développement de l'étape
-2. Validation fonctionnelle
-3. Tests si applicable
-4. Commit dédié
-5. Mise à jour documentaire
-6. Commit documentaire dédié
-7. Push
-8. `git status` propre
-9. Étape suivante uniquement après validation
+Design
+↓
+Code
+↓
+Tests
+↓
+Validation fonctionnelle
+↓
+Validation frontend si applicable
+↓
+Audit de cohérence
+↓
+Commit technique
+↓
+Push
+↓
+Documentation
+↓
+Commit documentaire
+↓
+Push
+↓
+git status propre
+↓
+Étape suivante
+
+Une feature technique doit être commitée avec le code et les tests associés.
+Un connecteur, service, endpoint ou module backend ne doit pas être commité sans ses tests lorsqu'ils sont applicables.
 
 Ne pas mélanger dans le même commit :
 

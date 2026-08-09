@@ -268,3 +268,20 @@ Répondre aux questions :
 - Quelle opportunité dois-je privilégier ?
 - Comment accélérer ma progression professionnelle ?
 - Comment évolue ma position sur le marché ?
+
+## Documentation Governance Incident - Greenhouse Integration
+
+During the Greenhouse connector integration, documentation became partially inconsistent after a thread change.
+
+Root cause:
+
+- technical implementation, tests, validation and documentation were not handled as a single coherent feature milestone;
+- handoff and status documents temporarily carried outdated next-step information;
+- roadmap numbering was affected by mid-thread source strategy changes.
+
+Decision:
+
+- the repository, tests and Git history are the primary source of truth;
+- documentation must be synchronized only after technical validation;
+- feature work must include code, tests and validation before being considered complete;
+- after each thread change, project state must be reconstructed from git status, git log, tests and key documents before generating new code or roadmap changes.

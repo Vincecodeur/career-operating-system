@@ -14,20 +14,32 @@ Toute fonctionnalité métier majeure doit suivre le cycle :
 
 Design
 ↓
-Backend
+Code
 ↓
-Tests backend
-↓
-Frontend Validation
+Tests
 ↓
 Validation fonctionnelle
+↓
+Validation frontend si applicable
+↓
+Audit de cohérence
+↓
+Commit technique
+↓
+Push
 ↓
 Documentation
 ↓
 Commit documentaire
 ↓
-Phase suivante
+Push
+↓
+git status propre
+↓
+Étape suivante
 
+Une phase technique n'est pas terminée si le code existe mais que les tests associés sont absents.
+Le repository, les tests passants et l'historique Git priment sur la documentation en cas de contradiction.
 Une phase backend n'est considérée comme réellement terminée que lorsque sa valeur est visible et validée dans le frontend.
 
 ---

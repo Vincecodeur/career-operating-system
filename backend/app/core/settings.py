@@ -108,6 +108,20 @@ class Settings:
         "LINKEDIN_TIMEOUT",
         "10",
     )
+    GREENHOUSE_BOARD_TOKEN: str = os.getenv(
+    "GREENHOUSE_BOARD_TOKEN",
+    "",
+    )   
+
+    GREENHOUSE_API_URL: str = os.getenv(
+        "GREENHOUSE_API_URL",
+        "https://boards-api.greenhouse.io/v1/boards",
+    )
+
+    GREENHOUSE_TIMEOUT: int = _get_int_env(
+        "GREENHOUSE_TIMEOUT",
+        "10",
+    )
 
 
 settings = Settings()

@@ -33,13 +33,13 @@ Phase 6
 ---
 
 Current Phase
-⏳ 6.1.8 Multi-Source Validation
+Documentation Governance & Project Process Review
 
 ---
 
 Next Planned Milestone
 
-Valider le fonctionnement simultané des connecteurs supportés.
+Finalize project process update before resuming Phase 6.1.8 Multi-Source Validation
 
 ---
 
@@ -567,9 +567,13 @@ Completed
 
 - 16 offres Greenhouse visibles dans Opportunities
 - Source Greenhouse visible dans le frontend
-
 - Suite backend validée
 - 87 tests passants
+
+- Greenhouse integration documentation synchronized
+- Process review started after Greenhouse documentation incident
+- New project workflow validated by Vincent:
+  Design → Code → Tests → Functional Validation → Frontend Validation if applicable → Audit → Technical Commit → Documentation → Documentation Commit → Clean Status
 
 ---
 
@@ -590,21 +594,22 @@ Next Step
 - Phase 6.1.8 Multi-Source Validation
 
 Objectif :
-Implémenter le connecteur LinkedIn en réutilisant l'architecture ConnectorInterface existante.
+Valider le fonctionnement simultané des connecteurs supportés.
 
 Livrables :
 
-- LinkedInConnector
-- configuration settings
-- ConnectorRegistry integration
-- mapping RawOffer
-- tests unitaires
+- Validation multi-source
+- Validation DiscoveryScheduler
+- Validation PostgreSQL
+- Validation API
+- Validation Frontend
+- Validation déduplication
 
 Pas encore :
 
-- frontend
-- visualisation source
-- validation end-to-end
+- nouvelles sources
+- IA
+- analyse marché
 
 ---
 
@@ -631,4 +636,4 @@ Validated choices:
 
 Last Commit
 
-- 5303d32 - docs : add greenhouse connector design
+- 90e3b24 - docs: synchronize greenhouse integration

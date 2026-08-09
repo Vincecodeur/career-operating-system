@@ -8,6 +8,9 @@ from app.jobs.connectors.mock_source_connector import (
     MockSourceConnector,
 )
 
+from app.jobs.connectors.greenhouse_connector import (
+    GreenhouseConnector,
+)
 
 class ConnectorRegistry:
     """
@@ -24,6 +27,7 @@ class ConnectorRegistry:
             "mock": MockSourceConnector,
             "france_travail": FranceTravailConnector,
             "linkedin": LinkedInConnector,
+            "greenhouse": GreenhouseConnector,
         }
 
     @classmethod

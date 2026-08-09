@@ -17,7 +17,7 @@ from app.jobs.connectors.mock_source_connector import (
 def test_registry_returns_all_connectors():
     connectors = ConnectorRegistry.get_connectors()
 
-    assert len(connectors) == 3
+    assert len(connectors) == 4
 
 
 def test_registry_contains_mock_connector():
