@@ -6,6 +6,9 @@ from app.jobs.connectors.connector_registry import (
 from app.jobs.connectors.france_travail_connector import (
     FranceTravailConnector,
 )
+from app.jobs.connectors.linkedin_connector import (
+    LinkedInConnector,
+)
 from app.jobs.connectors.mock_source_connector import (
     MockSourceConnector,
 )
@@ -14,7 +17,7 @@ from app.jobs.connectors.mock_source_connector import (
 def test_registry_returns_all_connectors():
     connectors = ConnectorRegistry.get_connectors()
 
-    assert len(connectors) == 2
+    assert len(connectors) == 3
 
 
 def test_registry_contains_mock_connector():
@@ -34,6 +37,16 @@ def test_registry_contains_france_travail_connector():
     )
 
 
+def test_registry_contains_linkedin_connector():
+    connectors = ConnectorRegistry.get_connectors()
+
+    assert "linkedin" in connectors
+    assert (
+        connectors["linkedin"]
+        is LinkedInConnector
+    )
+
+
 def test_get_connector_returns_mock_connector():
     connector_class = ConnectorRegistry.get_connector(
         "mock"
@@ -48,6 +61,14 @@ def test_get_connector_returns_france_travail_connector():
     )
 
     assert connector_class is FranceTravailConnector
+
+
+def test_get_connector_returns_linkedin_connector():
+    connector_class = ConnectorRegistry.get_connector(
+        "linkedin"
+    )
+
+    assert connector_class is LinkedInConnector
 
 
 def test_get_connector_raises_for_unknown_connector():

@@ -412,6 +412,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- c26f13a - docs: synchronize Linkedin Connecteur Backend
 - de999b3 - docs: linkedin-connector-backend-design.md
 - 7a2eb90 - feat: add opportunity analysis frontend
 - 906f405 - feat: add opportunity analysis backend

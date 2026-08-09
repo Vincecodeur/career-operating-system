@@ -83,6 +83,31 @@ class Settings:
         "DISCOVERY_CONNECTORS",
         "france_travail",
     )
+    
+    LINKEDIN_CLIENT_ID: str = os.getenv(
+        "LINKEDIN_CLIENT_ID",
+        "",
+    )
+
+    LINKEDIN_CLIENT_SECRET: str = os.getenv(
+        "LINKEDIN_CLIENT_SECRET",
+        "",
+    )
+
+    LINKEDIN_ACCESS_TOKEN: str = os.getenv(
+        "LINKEDIN_ACCESS_TOKEN",
+        "",
+    )
+
+    LINKEDIN_API_URL: str = os.getenv(
+        "LINKEDIN_API_URL",
+        "",
+    )
+
+    LINKEDIN_TIMEOUT: int = _get_int_env(
+        "LINKEDIN_TIMEOUT",
+        "10",
+    )
 
 
 settings = Settings()

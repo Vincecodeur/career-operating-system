@@ -596,4 +596,4 @@ Validated choices:
 
 Last Commit
 
-- de999b3 - docs: linkedin-connector-backend-design.md
+- c26f13a - docs: synchronize Linkedin Connecteur Backend
