@@ -375,6 +375,13 @@ Sous-phases :
 ✅ 7.1.10 AI Explanation Frontend Technical Design
 ✅ 7.1.11 AI Explanation Frontend Repository Review
 ✅ 7.1.12 AI Explanation Frontend Implementation
+✅ 7.1.13.1 Profile Management Visualization Design
+✅ 7.1.13.2 Profile Management Visualization Review
+✅ 7.1.13.3 Profile Management Visualization Implementation Plan
+✅ 7.1.13.4 Profile Management Visualization Repository Audit
+✅ 7.1.13.5 Profile Management Visualization Implementation
+⬜ 7.1.14 Applications Visualization
+⬜ 7.1.15 MVP Experience Review
 
 Statut :
 
