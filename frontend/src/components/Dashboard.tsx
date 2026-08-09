@@ -77,6 +77,19 @@ export function Dashboard({
           />
         </div>
       </Section>
+
+      <Section title="Job Discovery Overview">
+        <div className="grid grid-cols-4 gap-4">
+          <StatCard title="Total Opportunities" value={jobOffers.length} />
+
+          <StatCard title="Imported Opportunities" value={jobOffers.length} />
+
+          <StatCard title="Data Source" value="France Travail" />
+
+          <StatCard title="Discovery Status" value="Active" />
+        </div>
+      </Section>
+
       <Section title="Profiles">
         <h2>Profiles</h2>
         <ProfileList profiles={profiles} />
