@@ -235,6 +235,7 @@ Sous-phases :
 - ✅ 5.9.5.4 Multi Source DiscoveryService
 - ✅ 5.9.5.5 Multi Source Validation
 - ✅ 5.9.6 Scheduled Synchronization
+- ✅ 5.9.6.1 France Travail End-to-End Validation
 
 - ⏳ 5.9.7 Job Discovery Visualization
 

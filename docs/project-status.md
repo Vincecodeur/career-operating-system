@@ -29,12 +29,11 @@ Phase 5
 ✅ 5.5 Opportunity Ranking
 ✅ 5.6 Application Tracker
 ✅ 5.7 UX/UI Product Design & Frontend Structure Preparation
+✅ 5.8 Frontend Structure Implementation
 
-Next Planned Milestone
-
-Phase 5.8
-
-Frontend Structure Implementation
+Next Planned Milestone  
+Phase 5.9.7.1  
+Opportunities List
 
 ---
 
@@ -392,6 +391,10 @@ Completed
 - Intégration FastAPI lifespan réalisée
 - Validation réelle France Travail réalisée
 - Validation PostgreSQL réalisée
+- OAuth2 France Travail validé contre l'API réelle
+- 50 offres récupérées depuis France Travail
+- 50 offres importées dans PostgreSQL
+- Pipeline complet France Travail → PostgreSQL validé
 - 63 tests automatisés passants
 
 ---
@@ -441,4 +444,4 @@ Validated choices:
 
 Last Commit
 
-- ec28349 - docs: synchronize scheduled synchronization
+- ea0c926 - docs: revise roadmap and delivery strategy

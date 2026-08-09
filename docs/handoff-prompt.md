@@ -193,6 +193,9 @@ Implémenté :
 - Pipeline Validation
 - DiscoveryScheduler
 - Scheduled Synchronization
+- Real France Travail OAuth Validation
+- Real France Travail API Validation
+- Real France Travail PostgreSQL Persistence Validation
 
 Partiellement implémenté :
 
