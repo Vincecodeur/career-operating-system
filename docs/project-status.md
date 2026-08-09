@@ -30,14 +30,16 @@ Phase 6
 - ✅ 6.0.6 Opportunity Analysis Backend
 - ✅ 6.0.7 Opportunity Analysis Frontend Validation
 
-Next Planned Milestone
-Phase 6.1.3
-Source Visualization Frontend
-
 ---
 
 Current Phase
-Phase 6.1.3 Source Visualization Frontend
+⏳ 6.1.8 Multi-Source Validation
+
+---
+
+Next Planned Milestone
+
+Valider le fonctionnement simultané des connecteurs supportés.
 
 ---
 
@@ -546,6 +548,29 @@ Completed
 - Suite backend validée
 - 78 tests passants
 
+- Phase 6.1.4 Greenhouse Connector Design terminée
+- docs/greenhouse-connector-design.md créé
+
+- Phase 6.1.5 Greenhouse Connector Backend terminée
+- backend/app/jobs/connectors/greenhouse_connector.py créé
+- Settings Greenhouse ajoutés
+- ConnectorRegistry enrichi avec Greenhouse
+- Mapping Greenhouse → RawOffer implémenté
+
+- backend/tests/test_greenhouse_connector.py créé
+- Tests Greenhouse ajoutés
+
+- Validation Greenhouse API réalisée
+- Validation PostgreSQL réalisée
+- Validation FastAPI réalisée
+- Validation Frontend réalisée
+
+- 16 offres Greenhouse visibles dans Opportunities
+- Source Greenhouse visible dans le frontend
+
+- Suite backend validée
+- 87 tests passants
+
 ---
 
 In Progress
@@ -562,7 +587,7 @@ Aucun
 
 Next Step
 
-- Phase 6.1.2 LinkedIn Connector Backend
+- Phase 6.1.8 Multi-Source Validation
 
 Objectif :
 Implémenter le connecteur LinkedIn en réutilisant l'architecture ConnectorInterface existante.
@@ -606,4 +631,4 @@ Validated choices:
 
 Last Commit
 
-- c26f13a - docs: synchronize Linkedin Connecteur Backend
+- 5303d32 - docs : add greenhouse connector design

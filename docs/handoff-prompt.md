@@ -218,15 +218,16 @@ Implémenté :
 - Deterministic verdict
 - Deterministic recommendation
 - Deterministic summary
+- LinkedInConnector
+- GreenhouseConnector
+- Greenhouse End-to-End Validation
 
 Partiellement implémenté :
 
 Non implémenté :
 
-- Opportunity Analysis
 - Market Intelligence
 - Career Planning
-- LinkedIn Connector Backend
 
 ### Frontend
 
@@ -346,6 +347,8 @@ Des tests existent pour :
 - explainable scoring backend
 - opportunity analysis backend
 - opportunity analysis frontend validation
+- linkedin connector
+- greenhouse connector
 
 ## Phases terminées
 
@@ -408,9 +411,13 @@ Des tests existent pour :
 - Phase 6.0.7 Opportunity Analysis Frontend Validation
 - Phase 6.1.1 LinkedIn Connector Design
 - Phase 6.1.2 LinkedIn Connector Backend
+- Phase 6.1.3 Greenhouse Connector Design
+- Phase 6.1.4 Greenhouse Connector Backend
+- Phase 6.1.5 Greenhouse End-to-End Validation
 
 ## Derniers commits importants
 
+- 5303d32 - docs : add greenhouse connector design
 - c26f13a - docs: synchronize Linkedin Connecteur Backend
 - de999b3 - docs: linkedin-connector-backend-design.md
 - 7a2eb90 - feat: add opportunity analysis frontend
@@ -525,24 +532,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.1.2 LinkedIn Connector Backend
+Phase 6.1.8 Multi-Source Validation
 
 Objectif :
-Implémenter le connecteur LinkedIn en réutilisant l'architecture ConnectorInterface existante.
+Valider le fonctionnement simultané des connecteurs supportés.
 
 Livrables :
 
-- LinkedInConnector
-- configuration settings
-- ConnectorRegistry integration
-- mapping RawOffer
-- tests unitaires
+- Validation multi-source
+- Validation DiscoveryScheduler
+- Validation PostgreSQL
+- Validation API
+- Validation Frontend
+- Validation déduplication
 
 Pas encore :
 
-- frontend
-- visualisation source
-- validation end-to-end
+- nouvelles sources
+- IA
+- analyse marché
 
 ## Méthode de reprise
 
