@@ -189,6 +189,8 @@ Implémenté :
 - JobOfferRepository
 - DiscoveryService
 - Pipeline Validation
+- DiscoveryScheduler
+- Scheduled Synchronization
 
 Partiellement implémenté :
 
@@ -277,6 +279,7 @@ Des tests existent pour :
 - ConnectorRegistry
 - connector registry
 - multi source discovery service
+- scheduler
 
 ## Phases terminées
 
@@ -324,9 +327,12 @@ Des tests existent pour :
 - Phase 5.9.5.2 France Travail Connector
 - Phase 5.9.5.3 Connector Registry
 - Phase 5.9.5.4 Multi Source DiscoveryService
+- Phase 5.9.5.5 Multi Source Validation
+- Phase 5.9.6 Scheduled Synchronization
 
 ## Derniers commits importants
 
+- ad29764 - feat: add scheduled job discovery
 - 09b52bc - docs: synchronize France Travail connector
 - 87aa796 - feat: add multi source discovery service
 - 587f1ec - feat: add connector registry
@@ -426,25 +432,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.5.5 Multi Source Validation
+Phase suivante recommandée
+
+Phase 6.0.1 Matching V2
 
 Objectif :
-Valider le fonctionnement complet du pipeline multi-source,
-la consolidation des imports et la préservation de la déduplication.
+Comparer automatiquement les offres collectées avec les profils candidats.
 
-Livrables :
+Premiers livrables :
 
-- validation du pipeline multi-source
-- validation de la consolidation des imports
-- validation de la déduplication
-- scénarios de régression
-- tests automatisés
+- définition du score V2
+- critères de pondération
+- matching enrichi
+- préparation du scoring explicable
 
 Pas encore :
 
-- LinkedIn
-- synchronisation planifiée
-- interface utilisateur de gestion des sources
+- analyse des forces
+- analyse des faiblesses
+- classement V2
 
 ## Méthode de reprise
 

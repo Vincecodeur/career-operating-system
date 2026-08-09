@@ -40,13 +40,13 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.9.5.5 Multi Source Validation
+Phase 6.0 Opportunity Analysis & Advanced Matching
 
 ---
 
 Current Objective
 
-Valider le fonctionnement complet du pipeline multi-source, la consolidation des imports et la préservation de la déduplication.
+Comparer automatiquement les offres collectées avec les profils candidats et préparer la génération d'un score explicable de nouvelle génération.
 
 ---
 
@@ -388,11 +388,23 @@ Completed
 - Déduplication multi-source validée
 - 58 tests automatisés passants
 
+- Phase 5.9.5.5 Multi Source Validation terminée
+
+- Phase 5.9.6 Scheduled Synchronization terminée
+- DiscoveryScheduler créé
+- DISCOVERY_ENABLED ajouté
+- DISCOVERY_INTERVAL_MINUTES ajouté
+- DISCOVERY_CONNECTORS ajouté
+- Intégration FastAPI lifespan réalisée
+- Validation réelle France Travail réalisée
+- Validation PostgreSQL réalisée
+- 63 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.5.5 Multi Source Validation
+- Phase 6.0.1 Matching V2
 
 ---
 
@@ -404,11 +416,11 @@ Aucun
 
 Next Step
 
-- Phase 5.9.6 Scheduled Synchronization
+- Phase 6.0.1 Matching V2
 
 Objectif :
 
-Automatiser l'exécution périodique des connecteurs et la synchronisation des offres.
+Comparer automatiquement les offres collectées avec les profils candidats.
 
 ---
 
@@ -435,4 +447,4 @@ Validated choices:
 
 Last Commit
 
-- 09b52bc docs: synchronize France Travail connector
+- ad29764 - feat: add scheduled job discovery

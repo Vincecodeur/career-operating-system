@@ -213,8 +213,8 @@ Sous-phases :
 - ✅ 5.9.5.2 France Travail Connector
 - ✅ 5.9.5.3 Connector Registry
 - ✅ 5.9.5.4 Multi Source DiscoveryService
-- ⏳ 5.9.5.5 Multi Source Validation
-- 5.9.6 Scheduled Synchronization
+- ✅ 5.9.5.5 Multi Source Validation
+- ✅ 5.9.6 Scheduled Synchronization
 
 Statut :
 In Progress
