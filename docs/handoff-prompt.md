@@ -250,6 +250,11 @@ Implémenté :
 - Extended Route Tree
 - Extended Sidebar Navigation
 - Frontend Architecture Documentation
+- OpportunitiesPage
+- Opportunities Master / Detail View
+- Opportunity Selection
+- Opportunity Detail Panel
+- Source Offer Navigation
 
 Documenté mais pas encore implémenté :
 
@@ -334,9 +339,12 @@ Des tests existent pour :
 - Phase 5.9.5.4 Multi Source DiscoveryService
 - Phase 5.9.5.5 Multi Source Validation
 - Phase 5.9.6 Scheduled Synchronization
+- Phase 5.9.7.1 Opportunities List
 
 ## Derniers commits importants
 
+- 7ccac70 - feat: implement opportunities master detail view
+- a141ae3 - docs: validate france travail end-to-end pipeline
 - ad29764 - feat: add scheduled job discovery
 - 09b52bc - docs: synchronize France Travail connector
 - 87aa796 - feat: add multi source discovery service
@@ -437,18 +445,18 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.7.1 Opportunities List
+Phase 5.9.7.2 Opportunity Details
 
 Objectif :
-Afficher les offres réelles collectées depuis France Travail dans le frontend.
+Améliorer l'exploitation du détail des opportunités sélectionnées dans OpportunitiesPage.
 
 Premiers livrables :
 
-- liste des offres
-- source de l'offre
-- localisation
-- date d'import
-- navigation depuis OpportunitiesPage
+- mise en évidence visuelle de l'offre sélectionnée
+- amélioration de la lisibilité du panneau détail
+- préparation des emplacements futurs pour Matching V2
+- préparation des emplacements futurs pour les recommandations IA
+- amélioration UX sans ajout de logique métier frontend
 
 Pas encore :
 

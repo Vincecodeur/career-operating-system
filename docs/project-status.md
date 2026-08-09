@@ -32,14 +32,14 @@ Phase 5
 ✅ 5.8 Frontend Structure Implementation
 
 Next Planned Milestone  
-Phase 5.9.7.1  
-Opportunities List
+Phase 5.9.7.2
+Opportunity Details
 
 ---
 
 Current Phase
 
-Phase 5.9.7 Job Discovery Visualization
+Phase 5.9.7.2 Opportunity Details
 
 ---
 
@@ -397,6 +397,16 @@ Completed
 - Pipeline complet France Travail → PostgreSQL validé
 - 63 tests automatisés passants
 
+- Phase 5.9.7.1 Opportunities List terminée
+- OpportunitiesPage connectée au pipeline Job Discovery
+- Visualisation des offres réelles validée
+- Master / Detail View implémentée
+- Sélection d'une opportunité implémentée
+- Affichage du détail d'une opportunité validé
+- Description complète affichée
+- Navigation vers l'offre source implémentée
+- Panneau détail fixe validé
+
 ---
 
 In Progress
@@ -413,7 +423,7 @@ Aucun
 
 Next Step
 
-- Phase 5.9.7.1 Opportunities List
+- Phase 5.9.7.2 Opportunity Details
 
 Objectif :
 
@@ -444,4 +454,4 @@ Validated choices:
 
 Last Commit
 
-- ea0c926 - docs: revise roadmap and delivery strategy
+- 7ccac70 - feat: implement opportunities master detail view
