@@ -20,15 +20,32 @@ type JobOffer = {
 type Matching = {
   profile_id: number;
   job_offer_id: number;
+
   matching_score: number;
+
+  skills_score: number;
+  experience_score: number;
+  work_mode_score: number;
+  location_score: number;
+
   matching_skills: string[];
   missing_skills: string[];
+
+  strengths: string[];
+  weaknesses: string[];
 };
 
 type RankedJobOffer = {
   job_offer_id: number;
   title: string;
+
   matching_score: number;
+
+  skills_score: number;
+  experience_score: number;
+  work_mode_score: number;
+  location_score: number;
+
   matching_skills: string[];
   missing_skills: string[];
 };
@@ -107,8 +124,14 @@ export function Dashboard({
         {matching && (
           <MatchingResult
             matchingScore={matching.matching_score}
+            skillsScore={matching.skills_score}
+            experienceScore={matching.experience_score}
+            workModeScore={matching.work_mode_score}
+            locationScore={matching.location_score}
             matchingSkills={matching.matching_skills}
             missingSkills={matching.missing_skills}
+            strengths={matching.strengths}
+            weaknesses={matching.weaknesses}
           />
         )}
       </Section>

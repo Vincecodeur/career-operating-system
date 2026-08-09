@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
 import { getJobOffers } from "../services/api";
+import { getMatching } from "../services/api";
+import { MatchingResult } from "../components/MatchingResult";
 
 type JobOffer = {
   id: number;
@@ -15,10 +17,22 @@ type JobOffer = {
   created_at: string;
 };
 
+type MatchingData = {
+  matching_score: number;
+  skills_score: number;
+  experience_score: number;
+  work_mode_score: number;
+  location_score: number;
+  matching_skills: string[];
+  missing_skills: string[];
+  strengths: string[];
+  weaknesses: string[];
+};
+
 export function OpportunitiesPage() {
   const [offers, setOffers] = useState<JobOffer[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<JobOffer | null>(null);
-
+  const [matching, setMatching] = useState<MatchingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,6 +55,24 @@ export function OpportunitiesPage() {
 
     loadOffers();
   }, []);
+
+  useEffect(() => {
+    async function loadMatching() {
+      if (!selectedOffer) {
+        return;
+      }
+
+      try {
+        const result = await getMatching(1, selectedOffer.id);
+
+        setMatching(result);
+      } catch {
+        setMatching(null);
+      }
+    }
+
+    loadMatching();
+  }, [selectedOffer]);
 
   return (
     <>
@@ -127,11 +159,27 @@ export function OpportunitiesPage() {
                 </div>
 
                 <div className="border-t border-slate-700 pt-6">
-                  <h3 className="mb-2 text-lg font-semibold text-white">
+                  <h3 className="mb-4 text-lg font-semibold text-white">
                     Matching Analysis
                   </h3>
 
-                  <p className="text-slate-400">Available in Phase 6.</p>
+                  {matching ? (
+                    <MatchingResult
+                      matchingScore={matching.matching_score}
+                      skillsScore={matching.skills_score}
+                      experienceScore={matching.experience_score}
+                      workModeScore={matching.work_mode_score}
+                      locationScore={matching.location_score}
+                      matchingSkills={matching.matching_skills}
+                      missingSkills={matching.missing_skills}
+                      strengths={matching.strengths}
+                      weaknesses={matching.weaknesses}
+                    />
+                  ) : (
+                    <p className="text-slate-400">
+                      Matching information unavailable.
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-8 border-t border-slate-700 pt-6">

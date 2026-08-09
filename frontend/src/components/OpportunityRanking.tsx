@@ -2,6 +2,10 @@ type RankedJobOffer = {
   job_offer_id: number;
   title: string;
   matching_score: number;
+  skills_score: number;
+  experience_score: number;
+  work_mode_score: number;
+  location_score: number;
   matching_skills: string[];
   missing_skills: string[];
 };
@@ -35,6 +39,13 @@ export function OpportunityRanking({ rankedJobOffers }: Props) {
                 {offer.matching_score}%
               </p>
             </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-slate-300">
+            <p>Skills: {offer.skills_score}%</p>
+            <p>Experience: {offer.experience_score}%</p>
+            <p>Work Mode: {offer.work_mode_score}%</p>
+            <p>Location: {offer.location_score}%</p>
           </div>
         </div>
       ))}
