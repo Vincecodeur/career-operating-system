@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { AIExplanationCard } from "../components/AIExplanationCard";
 import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
 import { getJobOffers } from "../services/api";
@@ -29,6 +30,15 @@ type OpportunityAnalysis = {
   summary: string;
 };
 
+type AIExplanation = {
+  summary: string;
+  detailed_explanation: string;
+  action_plan: string[];
+  provider_name: string;
+  model_name: string;
+  prompt_version: string;
+};
+
 type MatchingData = {
   matching_score: number;
   skills_score: number;
@@ -41,6 +51,7 @@ type MatchingData = {
   weaknesses: string[];
   opportunity_analysis: OpportunityAnalysis;
   explanations: ScoreExplanation[];
+  ai_explanation?: AIExplanation | null;
 };
 
 export function OpportunitiesPage() {
@@ -48,6 +59,7 @@ export function OpportunitiesPage() {
   const [selectedOffer, setSelectedOffer] = useState<JobOffer | null>(null);
   const [matching, setMatching] = useState<MatchingData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [matchingLoading, setMatchingLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -76,12 +88,16 @@ export function OpportunitiesPage() {
         return;
       }
 
+      setMatchingLoading(true);
+
       try {
         const result = await getMatching(1, selectedOffer.id);
 
         setMatching(result);
       } catch {
         setMatching(null);
+      } finally {
+        setMatchingLoading(false);
       }
     }
 
@@ -105,7 +121,7 @@ export function OpportunitiesPage() {
 
       {!loading && !error && (
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="max-h-[calc(100vh-220px)] overflow-y-auto space-y-3 pr-2">
+          <div className="max-h-[calc(100vh-220px)] space-y-3 overflow-y-auto pr-2">
             {offers.map((offer) => (
               <button
                 key={offer.id}
@@ -168,11 +184,12 @@ export function OpportunitiesPage() {
                       href={selectedOffer.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300">
-                      🔗 View Original Offer
+                      className="text-blue-500 hover:text-blue-400">
+                      View Original Offer
                     </a>
                   </div>
                 )}
+
                 <div className="mb-8">
                   <h3 className="mb-3 text-lg font-semibold text-white">
                     Description
@@ -210,11 +227,11 @@ export function OpportunitiesPage() {
                 </div>
 
                 <div className="mt-8 border-t border-slate-700 pt-6">
-                  <h3 className="mb-2 text-lg font-semibold text-white">
-                    AI Recommendations
-                  </h3>
-
-                  <p className="text-slate-400">Available in Phase 7.</p>
+                  <AIExplanationCard
+                    explanation={matching?.ai_explanation ?? null}
+                    isLoading={matchingLoading}
+                    error={null}
+                  />
                 </div>
 
                 {selectedOffer.source_url && (
@@ -223,7 +240,7 @@ export function OpportunitiesPage() {
                       href={selectedOffer.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300">
+                      className="text-blue-500 hover:text-blue-400">
                       Open Source Offer
                     </a>
                   </div>
