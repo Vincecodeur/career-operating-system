@@ -207,6 +207,12 @@ Implémenté :
 - Matching V2 strengths
 - Matching V2 weaknesses
 - Matching V2 ranking
+- Matching V2 deterministic explanations
+- ScoreExplanation schema
+- Skills explanations
+- Experience explanations
+- Work mode explanations
+- Location explanations
 
 Partiellement implémenté :
 
@@ -277,6 +283,12 @@ Implémenté :
 - Matching V2 strengths display
 - Matching V2 weaknesses display
 - Matching V2 skills analysis display
+- Matching V2 deterministic explanations
+- ScoreExplanation schema
+- Skills explanations
+- Experience explanations
+- Work mode explanations
+- Location explanations
 
 Documenté mais pas encore implémenté :
 
@@ -314,6 +326,7 @@ Des tests existent pour :
 - scheduler
 - matching v2 backend scoring
 - matching v2 frontend validation
+- explainable scoring backend
 
 ## Phases terminées
 
@@ -370,9 +383,11 @@ Des tests existent pour :
 - Phase 6.0.1 Matching V2 Design
 - Phase 6.0.2 Matching V2 Backend
 - Phase 6.0.3 Matching V2 Frontend Validation
+- Phase 6.0.4 Explainable Scoring Backend
 
 ## Derniers commits importants
 
+- 53f059b - feat: add deterministic matching explanations
 - 35df497 - feat: add matching v2 frontend validation
 - 1452dcc - feat: implement matching v2 backend scoring
 - 47725a5 - docs: define matching v2 design
@@ -481,28 +496,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.4 Explainable Scoring Backend
+Phase 6.0.5 Explainable Scoring Frontend Validation
 
 Objectif :
-Ajouter des explications déterministes structurées au moteur Matching V2.
+Afficher dans l'interface les explications déterministes renvoyées par le backend.
 
 Livrables :
 
-- explications Skills Score
-- explications Experience Score
-- explications Work Mode Score
-- explications Location Score
-- structure API d'explications
-- tests backend
+- affichage des explanations
+- affichage par critère
+- validation visuelle
+- build frontend validé
 
 Contraintes :
 
+- aucun calcul React
+- aucune logique métier frontend
 - aucune IA
 - aucun LLM
 - aucun embedding
-- aucune analyse sémantique
-- logique métier backend uniquement
-- respecter docs/matching-v2-design.md
 - respecter DEC-039
 - respecter DEC-041
 

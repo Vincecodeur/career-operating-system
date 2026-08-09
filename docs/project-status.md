@@ -25,19 +25,19 @@ Phase 6
 - ✅ 6.0.1 Matching V2 Design
 - ✅ 6.0.2 Matching V2 Backend
 - ✅ 6.0.3 Matching V2 Frontend Validation
-- 6.0.4 Explainable Scoring Backend
+- ✅ 6.0.4 Explainable Scoring Backend
 - 6.0.5 Explainable Scoring Frontend Validation
 - 6.0.6 Opportunity Analysis Backend
 - 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.4
-Explainable Scoring Backend
+Phase 6.0.5
+Explainable Scoring Frontend Validation
 
 ---
 
 Current Phase
-Phase 6.0.4 Explainable Scoring Backend
+Phase 6.0.5 Explainable Scoring Frontend Validation
 
 ---
 
@@ -473,6 +473,18 @@ Completed
 - Validation visuelle du Matching V2 réalisée
 - Build frontend validé
 
+- Phase 6.0.4 Explainable Scoring Backend terminée
+- ScoreExplanation schema créé
+- MatchingResult enrichi avec explanations
+- Explanations déterministes implémentées
+- Skills explanation implémentée
+- Experience explanation implémentée
+- Work mode explanation implémentée
+- Location explanation implémentée
+- Contrat API Matching enrichi
+- Tests Explainable Scoring ajoutés
+- 68 tests backend passants
+
 ---
 
 In Progress
@@ -489,28 +501,25 @@ Aucun
 
 Next Step
 
-- Phase 6.0.4 Explainable Scoring Backend
+- Phase 6.0.5 Explainable Scoring Frontend Validation
 
 Objectif :
-Ajouter des explications déterministes structurées au moteur Matching V2 afin de rendre chaque sous-score explicitement justifiable.
+Afficher les explications déterministes produites par le moteur Matching V2.
 
 Livrables :
 
-- explications backend structurées
-- explications Skills Score
-- explications Experience Score
-- explications Work Mode Score
-- explications Location Score
-- contrats API mis à jour
-- tests Pytest
+- affichage des explanations
+- affichage par critère
+- validation visuelle
+- aucun calcul React
 
 Pas encore :
 
 - IA
+- LLM
 - embeddings
 - analyse sémantique
-- LLM
-- Market Intelligence
+- Opportunity Analysis
 
 ---
 
@@ -537,4 +546,4 @@ Validated choices:
 
 Last Commit
 
-- 35df497 - feat: add matching v2 frontend validation
+- 53f059b - feat: add deterministic matching explanations
