@@ -14,6 +14,128 @@ export async function getProfiles() {
     return response.json();
 }
 
+export async function getProfile(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getProfileSkills(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/skills`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile skills."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getSkills() {
+    const response = await fetch(
+        `${API_BASE_URL}/skills`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load skills."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getProfileWorkExperiences(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/work-experiences`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile work experiences."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getLanguages() {
+    const response = await fetch(
+        `${API_BASE_URL}/languages`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load languages."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getProfileLanguages(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/languages`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile languages."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getCertifications() {
+    const response = await fetch(
+        `${API_BASE_URL}/certifications`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load certifications."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getProfileCertifications(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/certifications`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile certifications."
+        );
+    }
+
+    return response.json();
+}
+
 export async function getJobOffers() {
     const response = await fetch(
         `${API_BASE_URL}/job-offers`
