@@ -84,7 +84,7 @@ export function Dashboard({
 
           <StatCard title="Imported Opportunities" value={jobOffers.length} />
 
-          <StatCard title="Data Source" value="France Travail" />
+          <StatCard title="Data Sources" value="2" />
 
           <StatCard title="Discovery Status" value="Active" />
         </div>
