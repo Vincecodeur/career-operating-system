@@ -353,9 +353,11 @@ Des tests existent pour :
 - Phase 5.9.7.1 Opportunities List
 - Phase 5.9.7.2 Opportunity Details
 - Phase 5.9.7.3 Discovery Dashboard KPI
+- Phase 5.9.7.4 End-to-End Validation
 
 ## Derniers commits importants
 
+- 467c150 - fix: make dashboard source KPI accurate
 - 2dabed2 - feat: add job discovery dashboard kpis
 - 30caf05 - feat: improve opportunity details experience
 - 7ccac70 - feat: implement opportunities master detail view
@@ -460,25 +462,21 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.7.4 End-to-End Validation
+Phase 6.0.1 Matching V2 Design
 
 Objectif :
-Valider l'ensemble du parcours Job Discovery depuis la collecte jusqu'à la visualisation frontend.
+Concevoir le moteur de Matching V2 avant tout développement backend.
 
-Premiers livrables :
+Livrables :
 
-- validation Dashboard
-- validation Opportunities
-- validation données synchronisées
-- validation UX globale
-- vérification cohérence documentation
+- règles de scoring V2
+- critères de pondération
+- prise en compte des compétences manquantes
+- gestion de l’expérience
+- gestion de la localisation
+- gestion des critères contractuels
 
-Pas encore :
-
-- Matching V2
-- Analyse IA
-- LinkedIn
-- Market Intelligence
+Aucun développement backend durant cette phase.
 
 ## Méthode de reprise
 

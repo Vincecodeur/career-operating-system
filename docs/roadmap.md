@@ -242,7 +242,7 @@ Sous-phases :
 - ✅ 5.9.7.1 Opportunities List
 - ✅ 5.9.7.2 Opportunity Details
 - ✅ 5.9.7.3 Discovery Dashboard KPI
-- 5.9.7.4 End-to-End Validation
+- ✅ 5.9.7.4 End-to-End Validation
 
 Statut :
 In Progress

@@ -32,13 +32,13 @@ Phase 5
 ✅ 5.8 Frontend Structure Implementation
 
 Next Planned Milestone
-Phase 5.9.7.4
-End-to-End Validation
+Phase 6.0.1
+Matching V2 Design
 
 ---
 
 Current Phase
-Phase 5.9.7.4 End-to-End Validation
+Phase 6.0.1 Matching V2 Design
 
 ---
 
@@ -425,6 +425,15 @@ Completed
 - Dashboard enrichi sans modification backend
 - Dashboard enrichi sans nouvelle API
 
+- Phase 5.9.7.4 End-to-End Validation terminée
+- Validation France Travail → PostgreSQL réalisée
+- Validation PostgreSQL → FastAPI réalisée
+- Validation Dashboard réalisée
+- Validation Opportunities réalisée
+- Cohérence Dashboard / Opportunities validée
+- KPI Data Sources corrigé
+- Flux complet Job Discovery validé
+
 ---
 
 In Progress
@@ -441,10 +450,21 @@ Aucun
 
 Next Step
 
-- Phase 5.9.7.4 End-to-End Validation
+- Phase 6.0.1 Matching V2 Design
 
 Objectif :
-Valider le flux complet France Travail → PostgreSQL → FastAPI → Dashboard → Opportunities.
+Concevoir le moteur de Matching V2 avant tout développement backend.
+
+Livrables :
+
+- règles de scoring V2
+- critères de pondération
+- prise en compte des compétences manquantes
+- gestion de l’expérience
+- gestion de la localisation
+- gestion des critères contractuels
+
+Aucun développement backend durant cette phase.
 
 ---
 
@@ -471,4 +491,4 @@ Validated choices:
 
 Last Commit
 
-- 2dabed2 - feat: add job discovery dashboard kpis
+- 467c150 - fix: make dashboard source KPI accurate
