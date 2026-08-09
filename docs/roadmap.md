@@ -292,7 +292,7 @@ Principes :
 
 Sous-phases :
 
-- 6.1.1 LinkedIn Connector Design
+- ✅ 6.1.1 LinkedIn Connector Design
 - 6.1.2 LinkedIn Connector Backend
 - 6.1.3 Source Visualization Frontend
 - 6.1.4 End-to-End Validation

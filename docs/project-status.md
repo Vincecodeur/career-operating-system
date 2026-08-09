@@ -31,13 +31,13 @@ Phase 6
 - ✅ 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.1.1
-LinkedIn Connector Design
+Phase 6.1.2
+LinkedIn Connector Backend
 
 ---
 
 Current Phase
-Phase 6.1.1 LinkedIn Connector Design
+Phase 6.1.2 LinkedIn Connector Backend
 
 ---
 
@@ -517,6 +517,17 @@ Completed
 - Validation visuelle réalisée
 - Build frontend validé
 
+- Phase 6.1.1 LinkedIn Connector Design terminée
+- docs/linkedin-connector-design.md créé
+- Architecture LinkedIn documentée
+- API First strategy documentée
+- Fallback strategy documentée
+- RawOffer mapping strategy documentée
+- Connector responsibilities documentées
+- Security strategy documentée
+- Extensibility strategy documentée
+- Aucun code produit pendant la phase
+
 ---
 
 In Progress
@@ -533,24 +544,24 @@ Aucun
 
 Next Step
 
-- Phase 6.1.1 LinkedIn Connector Design
+- Phase 6.1.2 LinkedIn Connector Backend
 
 Objectif :
-Définir l'intégration LinkedIn dans l'architecture Job Discovery.
+Implémenter le connecteur LinkedIn en réutilisant l'architecture ConnectorInterface existante.
 
 Livrables :
 
-- analyse faisabilité
-- contraintes LinkedIn
-- architecture cible
-- stratégie API
-- stratégie fallback
+- LinkedInConnector
+- configuration settings
+- ConnectorRegistry integration
+- mapping RawOffer
+- tests unitaires
 
 Pas encore :
 
-- développement
-- scraping
-- implémentation connecteur
+- frontend
+- visualisation source
+- validation end-to-end
 
 ---
 

@@ -221,6 +221,8 @@ Implémenté :
 
 Partiellement implémenté :
 
+- LinkedIn Connector Design
+
 Non implémenté :
 
 - Opportunity Analysis
@@ -405,6 +407,7 @@ Des tests existent pour :
 - Phase 6.0.5 Explainable Scoring Frontend Validation
 - Phase 6.0.6 Opportunity Analysis Backend
 - Phase 6.0.7 Opportunity Analysis Frontend Validation
+- Phase 6.1.1 LinkedIn Connector Design
 
 ## Derniers commits importants
 
@@ -520,24 +523,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.1.1 LinkedIn Connector Design
+Phase 6.1.2 LinkedIn Connector Backend
 
 Objectif :
-Définir l'intégration LinkedIn dans l'architecture Job Discovery.
+Implémenter le connecteur LinkedIn en réutilisant l'architecture ConnectorInterface existante.
 
 Livrables :
 
-- analyse faisabilité
-- contraintes LinkedIn
-- architecture cible
-- stratégie API
-- stratégie fallback
+- LinkedInConnector
+- configuration settings
+- ConnectorRegistry integration
+- mapping RawOffer
+- tests unitaires
 
 Pas encore :
 
-- développement
-- scraping
-- implémentation connecteur
+- frontend
+- visualisation source
+- validation end-to-end
 
 ## Méthode de reprise
 
