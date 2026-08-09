@@ -435,4 +435,4 @@ Validated choices:
 
 Last Commit
 
-- 87aa796 - feat: add multi source discovery service
+- 09b52bc docs: synchronize France Travail connector

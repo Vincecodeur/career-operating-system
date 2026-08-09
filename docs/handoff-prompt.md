@@ -327,6 +327,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 09b52bc - docs: synchronize France Travail connector
 - 87aa796 - feat: add multi source discovery service
 - 587f1ec - feat: add connector registry
 - e7f92d4 - docs: synchronize connector registry
