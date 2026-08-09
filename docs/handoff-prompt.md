@@ -300,6 +300,11 @@ Implémenté :
 - Experience explanation display
 - Work mode explanation display
 - Location explanation display
+- Opportunity Analysis visualization
+- Opportunity Analysis display
+- Verdict display
+- Recommendation display
+- Summary display
 
 Documenté mais pas encore implémenté :
 
@@ -339,6 +344,7 @@ Des tests existent pour :
 - matching v2 frontend validation
 - explainable scoring backend
 - opportunity analysis backend
+- opportunity analysis frontend validation
 
 ## Phases terminées
 
@@ -398,9 +404,11 @@ Des tests existent pour :
 - Phase 6.0.4 Explainable Scoring Backend
 - Phase 6.0.5 Explainable Scoring Frontend Validation
 - Phase 6.0.6 Opportunity Analysis Backend
+- Phase 6.0.7 Opportunity Analysis Frontend Validation
 
 ## Derniers commits importants
 
+- 7a2eb90 - feat: add opportunity analysis frontend
 - 906f405 - feat: add opportunity analysis backend
 - e33bc1f - feat: add explainable scoring frontend
 - 53f059b - feat: add deterministic matching explanations
@@ -512,28 +520,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.7 Opportunity Analysis Frontend Validation
+Phase 6.1.1 LinkedIn Connector Design
 
 Objectif :
-Afficher Opportunity Analysis dans l'interface Opportunities.
+Définir l'intégration LinkedIn dans l'architecture Job Discovery.
 
 Livrables :
 
-- verdict display
-- recommendation display
-- summary display
-- validation visuelle
-- build frontend
+- analyse faisabilité
+- contraintes LinkedIn
+- architecture cible
+- stratégie API
+- stratégie fallback
 
-Contraintes :
+Pas encore :
 
-- aucun calcul React
-- aucune logique métier frontend
-- aucune IA
-- aucun LLM
-- aucun embedding
-- respecter DEC-039
-- respecter DEC-041
+- développement
+- scraping
+- implémentation connecteur
 
 ## Méthode de reprise
 

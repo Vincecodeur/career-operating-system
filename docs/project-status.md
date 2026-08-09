@@ -28,16 +28,16 @@ Phase 6
 - ✅ 6.0.4 Explainable Scoring Backend
 - ✅ 6.0.5 Explainable Scoring Frontend Validation
 - ✅ 6.0.6 Opportunity Analysis Backend
-- 6.0.7 Opportunity Analysis Frontend Validation
+- ✅ 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.7
-Opportunity Analysis Frontend Validation
+Phase 6.1.1
+LinkedIn Connector Design
 
 ---
 
 Current Phase
-Phase 6.0.7 Opportunity Analysis Frontend Validation
+Phase 6.1.1 LinkedIn Connector Design
 
 ---
 
@@ -506,6 +506,17 @@ Completed
 - Tests Opportunity Analysis ajoutés
 - 69 tests backend passants
 
+- Phase 6.0.7 Opportunity Analysis Frontend Validation terminée
+- Opportunity Analysis affichée dans MatchingResult
+- Verdict affiché
+- Recommendation affichée
+- Summary affiché
+- OpportunitiesPage synchronisée avec le contrat API
+- Dashboard synchronisé avec le contrat API
+- Lien offre source remonté avant l'analyse
+- Validation visuelle réalisée
+- Build frontend validé
+
 ---
 
 In Progress
@@ -522,25 +533,24 @@ Aucun
 
 Next Step
 
-- Phase 6.0.7 Opportunity Analysis Frontend Validation
+- Phase 6.1.1 LinkedIn Connector Design
 
 Objectif :
-Afficher Opportunity Analysis dans l'interface Opportunities.
+Définir l'intégration LinkedIn dans l'architecture Job Discovery.
 
 Livrables :
 
-- verdict display
-- recommendation display
-- summary display
-- validation visuelle
-- build frontend
+- analyse faisabilité
+- contraintes LinkedIn
+- architecture cible
+- stratégie API
+- stratégie fallback
 
 Pas encore :
 
-- IA
-- LLM
-- embeddings
-- analyse sémantique
+- développement
+- scraping
+- implémentation connecteur
 
 ---
 
@@ -567,4 +577,4 @@ Validated choices:
 
 Last Commit
 
-- 906f405 - feat: add opportunity analysis backend
+- 7a2eb90 - feat: add opportunity analysis frontend

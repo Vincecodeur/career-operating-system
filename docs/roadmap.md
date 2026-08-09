@@ -271,7 +271,7 @@ Sous-phases :
 - ✅ 6.0.4 Explainable Scoring Backend
 - ✅ 6.0.5 Explainable Scoring Frontend Validation
 - ✅ 6.0.6 Opportunity Analysis Backend
-- 6.0.7 Opportunity Analysis Frontend Validation
+- ✅ 6.0.7 Opportunity Analysis Frontend Validation
 
 Statut :
 In Progress
