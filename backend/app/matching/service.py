@@ -5,6 +5,7 @@ from app.jobs.models import JobOffer
 from app.matching.schemas import MatchingResult
 from app.matching.schemas import RankedJobOffer
 from app.matching.schemas import ScoreExplanation
+from app.matching.schemas import OpportunityAnalysis
 from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
 from app.skills.models import Skill
@@ -136,6 +137,9 @@ def calculate_matching_result(
         matching_skills=matching_skills,
         missing_skills=missing_skills,
     )
+    opportunity_analysis = build_opportunity_analysis(
+        matching_score=matching_score,
+    )
 
     return MatchingResult(
         profile_id=profile_id,
@@ -150,6 +154,7 @@ def calculate_matching_result(
         strengths=strengths,
         weaknesses=weaknesses,
         explanations=explanations,
+        opportunity_analysis=opportunity_analysis,
     )
 
 
@@ -573,6 +578,36 @@ def build_explanations(
             ),
         ),
     ]
+
+def build_opportunity_analysis(
+    matching_score: float,
+) -> OpportunityAnalysis:
+    if matching_score >= 80:
+        return OpportunityAnalysis(
+            verdict="excellent",
+            recommendation="apply_now",
+            summary="Highly compatible opportunity.",
+        )
+
+    if matching_score >= 60:
+        return OpportunityAnalysis(
+            verdict="good",
+            recommendation="consider",
+            summary="Opportunity looks compatible.",
+        )
+
+    if matching_score >= 40:
+        return OpportunityAnalysis(
+            verdict="moderate",
+            recommendation="review",
+            summary="Opportunity requires further review.",
+        )
+
+    return OpportunityAnalysis(
+        verdict="weak",
+        recommendation="low_priority",
+        summary="Opportunity has limited compatibility.",
+    )
 
 def normalize_work_mode(
     value: str | None,

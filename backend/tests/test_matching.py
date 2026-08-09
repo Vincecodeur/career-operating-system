@@ -265,3 +265,33 @@ def test_matching_v2_explanations_are_present():
         assert "criterion" in item
         assert "score" in item
         assert "message" in item
+        
+def test_opportunity_analysis_is_present():
+    ranking_response = client.get(
+        "/profiles/1/ranked-job-offers"
+    )
+
+    assert ranking_response.status_code == 200
+
+    ranked_job_offers = ranking_response.json()
+
+    if len(ranked_job_offers) == 0:
+        return
+
+    job_offer_id = ranked_job_offers[0]["job_offer_id"]
+
+    response = client.get(
+        f"/matching/1/{job_offer_id}"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "opportunity_analysis" in data
+
+    analysis = data["opportunity_analysis"]
+
+    assert "verdict" in analysis
+    assert "recommendation" in analysis
+    assert "summary" in analysis

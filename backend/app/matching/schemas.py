@@ -18,6 +18,7 @@ class MatchingResult(BaseModel):
     strengths: list[str]
     weaknesses: list[str]
     explanations: list[ScoreExplanation]
+    opportunity_analysis: OpportunityAnalysis
 
 
 class RankedJobOffer(BaseModel):
@@ -38,3 +39,8 @@ class ScoreExplanation(BaseModel):
     criterion: str
     score: float
     message: str
+    
+class OpportunityAnalysis(BaseModel):
+    verdict: str
+    recommendation: str
+    summary: str
