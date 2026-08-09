@@ -274,6 +274,8 @@ Des tests existent pour :
 - pipeline validation
 - connector interface
 - france travail connector
+- ConnectorRegistry
+- connector registry
 
 ## Phases terminées
 
@@ -414,16 +416,17 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.5.3 Connector Registry
+Phase 5.9.5.4 Multi Source DiscoveryService
 
 Objectif :
-Centraliser les connecteurs disponibles afin de permettre au DiscoveryService d’orchestrer plusieurs sources.
+Permettre au DiscoveryService d'exécuter plusieurs connecteurs via le Connector Registry.
 
 Livrables :
 
-- Connector Registry
-- enregistrement MockSourceConnector
-- enregistrement FranceTravailConnector
+- DiscoveryService multi-source
+- exécution de plusieurs connecteurs
+- import consolidé
+- déduplication préservée
 - tests automatisés
 
 Pas encore :

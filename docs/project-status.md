@@ -378,11 +378,17 @@ Completed
 - Mapping France Travail → RawOffer validé
 - 49 tests automatisés passants
 
+- Phase 5.9.5.3 Connector Registry terminée
+- backend/app/jobs/connectors/connector_registry.py créé
+- backend/tests/test_connector_registry.py créé
+- Registry centralisé des connecteurs validé
+- 55 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.5.3 Connector Registry
+- Phase 5.9.5.4 Multi Source DiscoveryService
 
 ---
 
@@ -425,4 +431,4 @@ Validated choices:
 
 Last Commit
 
-- bddc081 - feat: add France Travail connector
+- 587f1e - feat: add connector registry
