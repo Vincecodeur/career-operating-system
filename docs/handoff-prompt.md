@@ -240,6 +240,12 @@ Implémenté :
 - LinkedInConnector
 - GreenhouseConnector
 - Greenhouse End-to-End Validation
+- AI Explanation Domain
+- AIExplanation schemas
+- AIProvider interface
+- PromptBuilder
+- MockAIProvider
+- AIExplanationService
 
 Partiellement implémenté :
 
@@ -368,6 +374,13 @@ Des tests existent pour :
 - opportunity analysis frontend validation
 - linkedin connector
 - greenhouse connector
+- ai schemas
+- ai exceptions
+- ai provider interface
+- ai validators
+- ai prompt builder
+- ai explanation service
+- mock ai provider
 
 ## Phases terminées
 
@@ -446,6 +459,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- a95a2af - feat: add ai explanation domain foundation
 - 4993cec - docs: close phase 7 review
 - a1646fc - docs: synchronize phase 7 review status
 - 5303d32 - docs : add greenhouse connector design
@@ -563,33 +577,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1 Design Review
+Phase 7.1.9 AI Explanation Frontend Integration Design
 
 Objectif :
 
-Réaliser la revue complète des documents de conception produits pour l'AI Explanation Layer avant toute implémentation.
-
-Points à vérifier :
-
-- cohérence domaine
-- cohérence schémas
-- cohérence providers
-- cohérence services
-- cohérence prompts
-- cohérence plan d'implémentation
-- cohérence roadmap
-- cohérence project-status
+Définir comment exposer les explications IA dans l'interface Opportunities.
 
 Livrables :
 
-- docs/phase-7-1-design-review.md
+- design API integration
+- design frontend data flow
+- design UI integration
+- design fallback strategy
 
 Pas encore :
 
-- implémentation
-- fournisseur IA
+- fournisseur IA réel
+- OpenAI
+- Azure OpenAI
 - appels LLM
-- code backend IA
 
 ## Méthode de reprise
 

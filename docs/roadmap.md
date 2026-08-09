@@ -369,8 +369,9 @@ Sous-phases :
 ✅ 7.1.5 AI Explanation Service Design
 ✅ 7.1.6 AI Prompt Builder Design
 ✅ 7.1.7 AI Domain Implementation Plan
-⏳ 7.1 Review
-⬜ 7.1.8 AI Domain Implementation
+✅ 7.1 Review
+✅ 7.1.8 AI Domain Implementation
+⬜ 7.1.9 AI Explanation Frontend Integration Design
 
 Statut :
 
