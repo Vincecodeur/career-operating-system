@@ -24,20 +24,20 @@ Phase 6
 
 - ✅ 6.0.1 Matching V2 Design
 - ✅ 6.0.2 Matching V2 Backend
-- 6.0.3 Matching V2 Frontend Validation
+- ✅ 6.0.3 Matching V2 Frontend Validation
 - 6.0.4 Explainable Scoring Backend
 - 6.0.5 Explainable Scoring Frontend Validation
 - 6.0.6 Opportunity Analysis Backend
 - 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.0.3
-Matching V2 Frontend Validation
+Phase 6.0.4
+Explainable Scoring Backend
 
 ---
 
 Current Phase
-Phase 6.0.3 Matching V2 Frontend Validation
+Phase 6.0.4 Explainable Scoring Backend
 
 ---
 
@@ -462,6 +462,17 @@ Completed
 - Tests Matching V2 ajoutés
 - Suite backend complète validée avec 67 tests passants
 
+- Phase 6.0.3 Matching V2 Frontend Validation terminée
+- MatchingResult connecté au moteur Matching V2
+- Sous-scores affichés dans le frontend
+- Strengths affichées dans le frontend
+- Weaknesses affichées dans le frontend
+- Matching Skills affichées dans le frontend
+- Missing Skills affichées dans le frontend
+- OpportunitiesPage connectée au endpoint Matching V2
+- Validation visuelle du Matching V2 réalisée
+- Build frontend validé
+
 ---
 
 In Progress
@@ -478,29 +489,28 @@ Aucun
 
 Next Step
 
-- Phase 6.0.3 Matching V2 Frontend Validation
+- Phase 6.0.4 Explainable Scoring Backend
 
 Objectif :
-Afficher et valider dans le frontend les résultats produits par le moteur Matching V2, sans ajouter de logique métier côté React.
+Ajouter des explications déterministes structurées au moteur Matching V2 afin de rendre chaque sous-score explicitement justifiable.
 
 Livrables :
 
-- affichage du score Matching V2
-- affichage des sous-scores
-- affichage des matching skills
-- affichage des missing skills
-- affichage des strengths
-- affichage des weaknesses
-- validation visuelle dans le Dashboard ou la zone Opportunities
-- maintien du frontend comme couche de présentation uniquement
+- explications backend structurées
+- explications Skills Score
+- explications Experience Score
+- explications Work Mode Score
+- explications Location Score
+- contrats API mis à jour
+- tests Pytest
 
 Pas encore :
 
 - IA
 - embeddings
 - analyse sémantique
+- LLM
 - Market Intelligence
-- refonte UX majeure
 
 ---
 
@@ -527,4 +537,4 @@ Validated choices:
 
 Last Commit
 
-- 1452dcc - feat: implement matching v2 backend scoring
+- 35df497 - feat: add matching v2 frontend validation

@@ -272,6 +272,11 @@ Implémenté :
 - Opportunity Metadata Grid
 - Matching Analysis Placeholder
 - AI Recommendations Placeholder
+- Matching V2 visualization
+- Matching V2 score details
+- Matching V2 strengths display
+- Matching V2 weaknesses display
+- Matching V2 skills analysis display
 
 Documenté mais pas encore implémenté :
 
@@ -308,6 +313,7 @@ Des tests existent pour :
 - multi source discovery service
 - scheduler
 - matching v2 backend scoring
+- matching v2 frontend validation
 
 ## Phases terminées
 
@@ -363,9 +369,11 @@ Des tests existent pour :
 - Phase 5.9.7.4 End-to-End Validation
 - Phase 6.0.1 Matching V2 Design
 - Phase 6.0.2 Matching V2 Backend
+- Phase 6.0.3 Matching V2 Frontend Validation
 
 ## Derniers commits importants
 
+- 35df497 - feat: add matching v2 frontend validation
 - 1452dcc - feat: implement matching v2 backend scoring
 - 47725a5 - docs: define matching v2 design
 - 467c150 - fix: make dashboard source KPI accurate
@@ -473,31 +481,28 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 6.0.3 Matching V2 Frontend Validation
+Phase 6.0.4 Explainable Scoring Backend
 
 Objectif :
-Afficher et valider dans le frontend les résultats produits par le moteur Matching V2, sans ajouter de logique métier côté React.
+Ajouter des explications déterministes structurées au moteur Matching V2.
 
 Livrables :
 
-- affichage du score Matching V2
-- affichage des sous-scores
-- affichage des matching skills
-- affichage des missing skills
-- affichage des strengths
-- affichage des weaknesses
-- validation visuelle dans le Dashboard ou la zone Opportunities
+- explications Skills Score
+- explications Experience Score
+- explications Work Mode Score
+- explications Location Score
+- structure API d'explications
+- tests backend
 
 Contraintes :
 
-- aucune logique métier dans le frontend
-- aucun calcul de score dans React
-- aucun scoring IA
-- aucun embedding
+- aucune IA
 - aucun LLM
+- aucun embedding
 - aucune analyse sémantique
+- logique métier backend uniquement
 - respecter docs/matching-v2-design.md
-- respecter DEC-006
 - respecter DEC-039
 - respecter DEC-041
 
