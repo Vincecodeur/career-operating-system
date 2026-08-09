@@ -431,11 +431,17 @@ Des tests existent pour :
 - Phase 6.1.1 LinkedIn Connector Design
 - Phase 6.1.2 LinkedIn Connector Backend
 - Phase 6.1.3 Verification possibilité Welcome to the Jungle
-- Phase 6.1.4 Greenhouse Connector Backend
-- Phase 6.1.5 Greenhouse End-to-End Validation
+- Phase 6.1.4 Greenhouse Connector Design
+- Phase 6.1.5 Greenhouse Connector Backend
 - Phase 6.1.6 Greenhouse End-to-End Validation
 - Phase 6.1.7 Source Visualization Frontend
 - Phase 6.1.8 Multi-Source Validation
+- Phase 7.0.1 AI Score Explanation Design
+- Phase 7.0.2 AI Explanation Backend Design
+- Phase 7.0.3 AI Prompt Architecture Design
+- Phase 7.0.4 AI Explanation API Design
+- Phase 7.0.5 AI Provider Strategy Design
+- Phase 7.0.6 AI Security & Governance Design
 
 ## Derniers commits importants
 
@@ -554,25 +560,22 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.0.1 AI Score Explanation Design
+Phase 7.0 Review
 
 Objectif :
 
-Définir comment l'IA expliquera les résultats déjà produits par les moteurs déterministes.
+Vérifier l'ensemble des documents IA avant toute implémentation.
 
-Livrables :
+Points à vérifier :
 
-- AI score explanation design
-- AI prompt strategy
-- séparation moteur déterministe / IA
-- architecture d'appel IA
-- règles de traçabilité
+- cohérence métier
+- cohérence backend
+- cohérence API
+- cohérence sécurité
+- cohérence roadmap
+- cohérence frontend
 
-Pas encore :
-
-- génération IA
-- appels LLM
-- recommandations IA
+Aucun code avant validation de cette revue.
 
 ## Méthode de reprise
 

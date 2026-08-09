@@ -20,15 +20,7 @@ main
 
 Current Milestone
 
-Phase 6
-
-- ✅ 6.0.1 Matching V2 Design
-- ✅ 6.0.2 Matching V2 Backend
-- ✅ 6.0.3 Matching V2 Frontend Validation
-- ✅ 6.0.4 Explainable Scoring Backend
-- ✅ 6.0.5 Explainable Scoring Frontend Validation
-- ✅ 6.0.6 Opportunity Analysis Backend
-- ✅ 6.0.7 Opportunity Analysis Frontend Validation
+Phase 7.0 AI Explanation Layer Design
 
 ---
 
@@ -39,7 +31,7 @@ Phase 7.0 AI Explanation Layer Design
 
 Next Planned Milestone
 
-Phase 7.0.1 AI Score Explanation Design
+Phase 7.0 Review
 
 ---
 
@@ -584,11 +576,29 @@ Completed
 - Déduplication fonctionnelle validée
 - docs/multi-source-validation-results.md créé
 
+- Phase 7.0.1 AI Score Explanation Design terminée
+- docs/ai-score-explanation-design.md créé
+
+- Phase 7.0.2 AI Explanation Backend Design terminée
+- docs/ai-explanation-backend-design.md créé
+
+- Phase 7.0.3 AI Prompt Architecture Design terminée
+- docs/ai-prompt-architecture-design.md créé
+
+- Phase 7.0.4 AI Explanation API Design terminée
+- docs/ai-explanation-api-design.md créé
+
+- Phase 7.0.5 AI Provider Strategy Design terminée
+- docs/ai-provider-strategy-design.md créé
+
+- Phase 7.0.6 AI Security & Governance Design terminée
+- docs/ai-security-governance-design.md créé
+
 ---
 
 In Progress
 
-- Phase 6.1 External Sources Expansion
+- Phase 7.0 Review
 
 ---
 
@@ -600,24 +610,24 @@ Aucun
 
 Next Step
 
-- Phase 7.0.1 AI Score Explanation Design
+- Phase 7.0 Review
 
 Objectif :
-Définir comment l'IA expliquera les résultats déjà produits par les moteurs déterministes.
+Réaliser une revue complète de la conception IA avant toute implémentation.
 
 Livrables :
 
-- AI score explanation design
-- AI prompt strategy
-- séparation moteur déterministe / IA
-- architecture d'appel IA
-- règles de traçabilité
+- revue fonctionnelle
+- revue technique
+- revue sécurité
+- revue API
+- revue roadmap
 
 Pas encore :
 
-- génération IA
+- code IA
+- fournisseur IA
 - appels LLM
-- recommandations IA
 
 ---
 
@@ -644,4 +654,4 @@ Validated choices:
 
 Last Commit
 
-- 90e3b24 - docs: synchronize greenhouse integration
+- fb86bc8 - docs: close multi-source validation phase

@@ -333,12 +333,16 @@ Principes :
 
 Sous-phases :
 
-- 7.0.1 AI Score Explanation
-- 7.0.2 AI Opportunity Summary
-- 7.0.3 AI Suggestion Generation
+- ✅ 7.0.1 AI Score Explanation Design
+- ✅ 7.0.2 AI Explanation Backend Design
+- ✅ 7.0.3 AI Prompt Architecture Design
+- ✅ 7.0.4 AI Explanation API Design
+- ✅ 7.0.5 AI Provider Strategy Design
+- ✅ 7.0.6 AI Security & Governance Design
+- ⏳ 7.0 Review
 
 Statut :
-Planned
+In Progress
 
 ### Phase 7.1
 
