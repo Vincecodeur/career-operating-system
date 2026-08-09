@@ -33,6 +33,11 @@ type Matching = {
 
   strengths: string[];
   weaknesses: string[];
+  explanations: {
+    criterion: string;
+    score: number;
+    message: string;
+  }[];
 };
 
 type RankedJobOffer = {
@@ -132,6 +137,7 @@ export function Dashboard({
             missingSkills={matching.missing_skills}
             strengths={matching.strengths}
             weaknesses={matching.weaknesses}
+            explanations={matching.explanations}
           />
         )}
       </Section>

@@ -35,6 +35,11 @@ type Matching = {
 
   strengths: string[];
   weaknesses: string[];
+  explanations: {
+    criterion: string;
+    score: number;
+    message: string;
+  }[];
 };
 
 type RankedJobOffer = {

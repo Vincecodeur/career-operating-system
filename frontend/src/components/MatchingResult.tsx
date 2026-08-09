@@ -1,3 +1,9 @@
+type ScoreExplanation = {
+  criterion: string;
+  score: number;
+  message: string;
+};
+
 type Props = {
   matchingScore: number;
   skillsScore: number;
@@ -8,6 +14,7 @@ type Props = {
   missingSkills: string[];
   strengths: string[];
   weaknesses: string[];
+  explanations: ScoreExplanation[];
 };
 
 export function MatchingResult({
@@ -20,6 +27,7 @@ export function MatchingResult({
   missingSkills,
   strengths,
   weaknesses,
+  explanations,
 }: Props) {
   return (
     <div className="space-y-6">
@@ -73,7 +81,29 @@ export function MatchingResult({
           </ul>
         )}
       </div>
+      <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <h3 className="mb-3 text-lg font-semibold text-white">
+          Score Explanations
+        </h3>
 
+        {explanations.length === 0 ? (
+          <p className="text-slate-400">No explanations available.</p>
+        ) : (
+          <div className="space-y-3">
+            {explanations.map((item) => (
+              <div
+                key={item.criterion}
+                className="rounded-md border border-slate-800 bg-slate-900 p-3">
+                <p className="font-medium text-white">
+                  {item.criterion} ({item.score}%)
+                </p>
+
+                <p className="mt-1 text-sm text-slate-300">{item.message}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
           <h3 className="mb-3 text-lg font-semibold text-white">

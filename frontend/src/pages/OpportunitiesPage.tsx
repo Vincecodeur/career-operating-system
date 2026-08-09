@@ -17,6 +17,12 @@ type JobOffer = {
   created_at: string;
 };
 
+type ScoreExplanation = {
+  criterion: string;
+  score: number;
+  message: string;
+};
+
 type MatchingData = {
   matching_score: number;
   skills_score: number;
@@ -27,6 +33,8 @@ type MatchingData = {
   missing_skills: string[];
   strengths: string[];
   weaknesses: string[];
+
+  explanations: ScoreExplanation[];
 };
 
 export function OpportunitiesPage() {
@@ -174,6 +182,7 @@ export function OpportunitiesPage() {
                       missingSkills={matching.missing_skills}
                       strengths={matching.strengths}
                       weaknesses={matching.weaknesses}
+                      explanations={matching.explanations}
                     />
                   ) : (
                     <p className="text-slate-400">
