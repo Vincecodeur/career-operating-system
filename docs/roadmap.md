@@ -346,25 +346,35 @@ Completed
 
 ### Phase 7.1
 
-AI Gap Analysis
+AI Explanation Implementation Preparation
 
 Objectif :
-Identifier automatiquement les écarts entre le profil candidat et les opportunités ciblées.
 
-Le système doit :
+Préparer l'implémentation de l'AI Explanation Layer défini pendant la Phase 7.0.
 
-- identifier les compétences manquantes ;
-- suggérer des pistes de progression ;
-- proposer des actions d'amélioration.
+Principes :
+
+- l'IA n'effectue pas le calcul du score ;
+- le score reste déterministe ;
+- les recommandations restent déterministes ;
+- l'IA enrichit uniquement les explications ;
+- aucune logique métier ne dépend directement d'un fournisseur IA.
 
 Sous-phases :
 
-- 7.1.1 Missing Skills Analysis
-- 7.1.2 Learning Suggestions
-- 7.1.3 Certification Suggestions
+✅ 7.1.1 AI Explanation Domain Design
+✅ 7.1.2 AI Explanation Backend Package Design
+✅ 7.1.3 AI Explanation Schema Design
+✅ 7.1.4 AI Provider Interface Design
+✅ 7.1.5 AI Explanation Service Design
+✅ 7.1.6 AI Prompt Builder Design
+✅ 7.1.7 AI Domain Implementation Plan
+⏳ 7.1 Review
+⬜ 7.1.8 AI Domain Implementation
 
 Statut :
-Planned
+
+In Progress
 
 ### Phase 7.2
 

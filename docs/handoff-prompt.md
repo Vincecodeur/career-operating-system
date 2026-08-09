@@ -446,6 +446,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 4993cec - docs: close phase 7 review
 - a1646fc - docs: synchronize phase 7 review status
 - 5303d32 - docs : add greenhouse connector design
 - c26f13a - docs: synchronize Linkedin Connecteur Backend
@@ -562,24 +563,33 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.1 AI Explanation Domain Design
+Phase 7.1 Design Review
 
 Objectif :
 
-Définir précisément les schémas Python, les modèles Pydantic, la structure des services et les interfaces nécessaires avant la première ligne de code IA.
+Réaliser la revue complète des documents de conception produits pour l'AI Explanation Layer avant toute implémentation.
+
+Points à vérifier :
+
+- cohérence domaine
+- cohérence schémas
+- cohérence providers
+- cohérence services
+- cohérence prompts
+- cohérence plan d'implémentation
+- cohérence roadmap
+- cohérence project-status
 
 Livrables :
 
-- AI domain design
-- AI schemas design
-- AI service design
-- AI provider abstraction design
+- docs/phase-7-1-design-review.md
 
 Pas encore :
 
 - implémentation
 - fournisseur IA
 - appels LLM
+- code backend IA
 
 ## Méthode de reprise
 
