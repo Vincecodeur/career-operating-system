@@ -172,28 +172,28 @@ Implémenté :
 - Opportunity Ranking
 - Application Model
 - Application CRUD
-
-Partiellement implémenté :
-
+- ConnectorInterface
+- FranceTravailConnector
+- MockSourceConnector
+- Multi Source DiscoveryService
+- ConnectorRegistry
 - Job Discovery Data Models
+- Search Criteria
 - JobSource
 - JobOfferSource
 - Job Discovery PostgreSQL Migration
 - Job Discovery Persistence Tests
 - RawOffer Schema
 - NormalizedJobOffer Schema
-- MockSourceConnector
 - NormalizationService
 - JobOfferRepository
 - DiscoveryService
 - Pipeline Validation
-- ConnectorInterface
-- FranceTravailConnector
+
+Partiellement implémenté :
 
 Non implémenté :
 
-- Connectors
-- Search Criteria
 - Opportunity Analysis
 - Market Intelligence
 - Career Planning
@@ -276,6 +276,7 @@ Des tests existent pour :
 - france travail connector
 - ConnectorRegistry
 - connector registry
+- multi source discovery service
 
 ## Phases terminées
 
@@ -318,9 +319,17 @@ Des tests existent pour :
 - Phase 5.9.1 Job Sources
 - Phase 5.9.2 Search Criteria
 - Phase 5.9.3 Offer Normalization
+- Phase 5.9.4 First External Source
+- Phase 5.9.5.1 Connector Interface
+- Phase 5.9.5.2 France Travail Connector
+- Phase 5.9.5.3 Connector Registry
+- Phase 5.9.5.4 Multi Source DiscoveryService
 
 ## Derniers commits importants
 
+- 87aa796 - feat: add multi source discovery service
+- 587f1ec - feat: add connector registry
+- e7f92d4 - docs: synchronize connector registry
 - bddc081 - feat: add France Travail connector
 - 2599fb8 - docs: synchronize connector package refactor
 - 5d45a13 - refactor: move connectors to dedicated package
@@ -416,17 +425,18 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.5.4 Multi Source DiscoveryService
+Phase 5.9.5.5 Multi Source Validation
 
 Objectif :
-Permettre au DiscoveryService d'exécuter plusieurs connecteurs via le Connector Registry.
+Valider le fonctionnement complet du pipeline multi-source,
+la consolidation des imports et la préservation de la déduplication.
 
 Livrables :
 
-- DiscoveryService multi-source
-- exécution de plusieurs connecteurs
-- import consolidé
-- déduplication préservée
+- validation du pipeline multi-source
+- validation de la consolidation des imports
+- validation de la déduplication
+- scénarios de régression
 - tests automatisés
 
 Pas encore :
