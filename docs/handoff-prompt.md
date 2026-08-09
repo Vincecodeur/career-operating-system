@@ -221,13 +221,12 @@ Implémenté :
 
 Partiellement implémenté :
 
-- LinkedIn Connector Backend
-
 Non implémenté :
 
 - Opportunity Analysis
 - Market Intelligence
 - Career Planning
+- LinkedIn Connector Backend
 
 ### Frontend
 
@@ -408,7 +407,7 @@ Des tests existent pour :
 - Phase 6.0.6 Opportunity Analysis Backend
 - Phase 6.0.7 Opportunity Analysis Frontend Validation
 - Phase 6.1.1 LinkedIn Connector Design
-- Phase 6.1.2 Backend Technical Design
+- Phase 6.1.2 LinkedIn Connector Backend
 
 ## Derniers commits importants
 

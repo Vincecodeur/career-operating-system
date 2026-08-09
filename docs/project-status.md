@@ -31,13 +31,13 @@ Phase 6
 - ✅ 6.0.7 Opportunity Analysis Frontend Validation
 
 Next Planned Milestone
-Phase 6.1.2
-LinkedIn Connector Backend
+Phase 6.1.3
+Source Visualization Frontend
 
 ---
 
 Current Phase
-Phase 6.1.2 LinkedIn Connector Backend
+Phase 6.1.3 Source Visualization Frontend
 
 ---
 
@@ -536,11 +536,21 @@ Completed
 - ConnectorRegistry integration documentée
 - Aucun code produit pendant cette étape
 
+- Phase 6.1.2 LinkedIn Connector Backend terminée
+- backend/app/jobs/connectors/linkedin_connector.py créé
+- backend/tests/test_linkedin_connector.py créé
+- Settings LinkedIn ajoutés
+- ConnectorRegistry enrichi avec LinkedIn
+- Mapping LinkedIn → RawOffer implémenté
+- Tests LinkedIn ajoutés
+- Suite backend validée
+- 78 tests passants
+
 ---
 
 In Progress
 
-- Phase 6.0 Opportunity Analysis & Advanced Matching
+- Phase 6.1 External Sources Expansion
 
 ---
 
