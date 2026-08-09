@@ -188,6 +188,7 @@ Partiellement implémenté :
 - DiscoveryService
 - Pipeline Validation
 - ConnectorInterface
+- FranceTravailConnector
 
 Non implémenté :
 
@@ -272,6 +273,7 @@ Des tests existent pour :
 - discovery service
 - pipeline validation
 - connector interface
+- france travail connector
 
 ## Phases terminées
 
@@ -317,6 +319,9 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- bddc081 - feat: add France Travail connector
+- 2599fb8 - docs: synchronize connector package refactor
+- 5d45a13 - refactor: move connectors to dedicated package
 - b42f9f9 - docs: synchronize connector interface
 - c495bf3 - feat: connector_interface.py
 - 4d4956f - feat: pipeline validation
@@ -409,25 +414,23 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 5.9.5.2 France Travail Connector
+Phase 5.9.5.3 Connector Registry
 
 Objectif :
-
-Connecter une première source réelle d'offres d'emploi.
+Centraliser les connecteurs disponibles afin de permettre au DiscoveryService d’orchestrer plusieurs sources.
 
 Livrables :
 
-- client source
-- récupération d'offres
-- transformation vers JobOffer normalisé
-- persistance des offres
-- validation de bout en bout
+- Connector Registry
+- enregistrement MockSourceConnector
+- enregistrement FranceTravailConnector
+- tests automatisés
 
 Pas encore :
 
-- multi-source
+- LinkedIn
 - synchronisation planifiée
-- analyse d'opportunités
+- interface utilisateur de gestion des sources
 
 ## Méthode de reprise
 

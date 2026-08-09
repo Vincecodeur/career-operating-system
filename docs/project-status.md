@@ -40,7 +40,7 @@ Frontend Structure Implementation
 
 Current Phase
 
-Phase 5.9.4 First External Source
+Phase 5.9.5.3 Connector Registry
 
 Documentation Synchronization
 
@@ -48,8 +48,7 @@ Documentation Synchronization
 
 Current Objective
 
-Préparer le pipeline Job Discovery :
-RawOffer → NormalizedJobOffer → Connector → Repository → DiscoveryService
+Centraliser les connecteurs disponibles afin de permettre au DiscoveryService d'orchestrer plusieurs sources.
 
 ---
 
@@ -371,11 +370,19 @@ Completed
 - Contrat commun des connecteurs validé
 - 44 tests automatisés passants
 
+- Phase 5.9.5.2 France Travail Connector terminée
+- backend/app/jobs/connectors/france_travail_connector.py créé
+- backend/tests/test_france_travail_connector.py créé
+- Authentification OAuth2 France Travail mockée
+- Appel GET /v2/offres/search mocké
+- Mapping France Travail → RawOffer validé
+- 49 tests automatisés passants
+
 ---
 
 In Progress
 
-- Phase 5.9.5.2 France Travail Connector
+- Phase 5.9.5.3 Connector Registry
 
 ---
 
@@ -386,11 +393,12 @@ Aucun
 ---
 
 Next Step
-Phase 5.9.5 Multi Source Support
+
+5.9.5.4 Multi Source DiscoveryService
 
 Objectif :
 
-Connecter une première source réelle et produire les premières offres normalisées.
+Permettre au DiscoveryService d'exécuter plusieurs connecteurs via le Connector Registry.
 
 ---
 
@@ -417,4 +425,4 @@ Validated choices:
 
 Last Commit
 
-- b42f9f9 - docs: synchronize connector interface
+- bddc081 - feat: add France Travail connector
