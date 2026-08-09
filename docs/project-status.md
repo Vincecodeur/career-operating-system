@@ -528,6 +528,14 @@ Completed
 - Extensibility strategy documentée
 - Aucun code produit pendant la phase
 
+- Phase 6.1.2 Backend Technical Design terminée
+- docs/linkedin-connector-backend-design.md créé
+- Structure LinkedInConnector documentée
+- Strategy settings documentée
+- Strategy tests documentée
+- ConnectorRegistry integration documentée
+- Aucun code produit pendant cette étape
+
 ---
 
 In Progress
@@ -588,4 +596,4 @@ Validated choices:
 
 Last Commit
 
-- 7a2eb90 - feat: add opportunity analysis frontend
+- de999b3 - docs: linkedin-connector-backend-design.md
