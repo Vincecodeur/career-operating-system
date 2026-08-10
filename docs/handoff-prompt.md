@@ -479,9 +479,18 @@ Des tests existent pour :
 - Phase 7.1.13.4 Profile Management Visualization Repository Audit
 - Phase 7.1.13.5 Profile Management Visualization Implementation
 - Phase 7.1.14 Applications Visualization
+- Phase 7.1.15.3 Profile CRUD
+- Phase 7.1.15.3.1 Backend CRUD Completion
+- Phase 7.1.15.3.2 Backend CRUD Tests
+- Phase 7.1.15.3.3 Backend CRUD Validation
+- Phase 7.1.15.3.4 Frontend CRUD Design
+- Phase 7.1.15.3.5 Frontend CRUD Implementation
+- Phase 7.1.15.3.6 Frontend Validation
+- Phase 7.1.15.3.7 Documentation Synchronization
 
 ## Derniers commits importants
 
+- 367f3f1 - docs: synchronize profile frontend crud
 - 0da9765 - feat: implement profile frontend crud
 - be143c6 - docs: close profile crud validation
 - 5f55b9e - feat: implement applications visualization
@@ -608,26 +617,35 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.7 Documentation Synchronization
+Phase 7.1.15.4.1 Backend CRUD Completion
 
 Objectif :
 
-Synchroniser la documentation CRUD Profile.
+Compléter le CRUD backend du domaine Skills.
 
 Livrables :
 
-- EditProfileModal.tsx
-- DeleteProfileDialog.tsx
-- updateProfile API
-- deleteProfile API
-- intégration ProfilesPage
-- intégration ProfileDetail
+- SkillUpdate schema
+- PUT /skills/{skill_id}
+- DELETE /skills/{skill_id}
+- tests backend associés
 
-Pré-requis :
+Pré-requis validés :
 
-- Backend CRUD validé
-- Swagger validé
-- Design CRUD frontend validé
+- Profile CRUD backend validé
+- Profile CRUD frontend validé
+- Profile CRUD documentation synchronisée
+- Audit Skills réalisé
+
+Constat audit Skills :
+
+- POST /skills existe
+- GET /skills existe
+- GET /skills/{skill_id} existe
+- PUT /skills/{skill_id} absent
+- DELETE /skills/{skill_id} absent
+- test_get_skills existe
+- tests create/update/delete absents
 
 ## Méthode de reprise
 

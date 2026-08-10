@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.7 Documentation Synchronization
+7.1.15.4.1 Backend CRUD Completion
 
 ---
 
@@ -749,6 +749,13 @@ Completed
 - Phase 7.1.15.3.5 Frontend CRUD Implementation terminée
 - Phase 7.1.15.3.6 Frontend Validation terminée
 
+- Phase 7.1.15.3.7 Documentation Synchronization terminée
+- Roadmap synchronisée après Profile Frontend CRUD
+- Project Status synchronisé après Profile Frontend CRUD
+- Handoff Prompt synchronisé après Profile Frontend CRUD
+- Phase 7.1.15.3 Profile CRUD terminée
+- Prochaine étape définie : 7.1.15.4.1 Backend CRUD Completion
+
 ---
 
 Phase In Progress
@@ -763,22 +770,24 @@ Aucun
 
 ---
 
-Phase 7.1.15.3.7 Documentation Synchronization
+Phase 7.1.15.4.1 Backend CRUD Completion
 
 Objectif :
 
-Synchroniser la documentation du CRUD Profile.
+Compléter le CRUD backend du domaine Skills.
 
 Livrables :
 
-- roadmap.md
-- project-status.md
-- handoff-prompt.md
+- SkillUpdate schema
+- PUT /skills/{skill_id}
+- DELETE /skills/{skill_id}
+- Tests backend associés
 
-Validation :
+Contraintes :
 
-- cohérence code/documents
-- git status propre
+- code et tests associés dans le même commit technique
+- ne pas supprimer une compétence utilisée sans stratégie explicite
+- validation pytest obligatoire
 
 ---
 
@@ -822,4 +831,4 @@ Validated choices:
 
 Last Commit
 
-- 0da9765 - feat: implement profile frontend crud
+- 367f3f1 - docs: synchronize profile frontend crud

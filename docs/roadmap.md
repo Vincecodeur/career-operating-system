@@ -401,14 +401,14 @@ Sous-phases :
 
 ✅ 7.1.15.2 CRUD Design
 
-⬜ 7.1.15.3 Profile CRUD
+✅ 7.1.15.3 Profile CRUD
 ✅ 7.1.15.3.1 Backend CRUD Completion
 ✅ 7.1.15.3.2 Backend CRUD Tests
 ✅ 7.1.15.3.3 Backend CRUD Validation
 ✅ 7.1.15.3.4 Frontend CRUD Design
 ✅ 7.1.15.3.5 Frontend CRUD Implementation
 ✅ 7.1.15.3.6 Frontend Validation
-⬜ 7.1.15.3.7 Documentation Synchronization
+✅ 7.1.15.3.7 Documentation Synchronization
 
 ⬜ 7.1.15.4 Skills Management
 ⬜ 7.1.15.4.1 Backend CRUD Completion
