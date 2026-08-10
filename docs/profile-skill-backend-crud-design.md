@@ -6,7 +6,7 @@
 
 ### Statut
 
-Design
+Completed
 
 ### Contexte
 
@@ -392,6 +392,36 @@ La phase est terminée lorsque :
 ### Livrable
 
 docs/profile-skill-backend-crud-design.md
+
+### Implementation Status
+
+Completed.
+
+Implemented :
+
+- ProfileSkillUpdate
+- PUT /profile-skills/{profile_id}/{skill_id}
+- DELETE /profile-skills/{profile_id}/{skill_id}
+
+Tests :
+
+- test_create_profile_skill
+- test_list_profile_skills
+- test_list_skills_for_profile
+- test_update_profile_skill
+- test_update_profile_skill_not_found
+- test_delete_profile_skill
+- test_delete_profile_skill_not_found
+
+Validation :
+
+- 7 ProfileSkill tests passants
+- 143 tests backend passants
+- Swagger validation réalisée
+
+Technical Commit :
+
+- b1db1ca - feat: complete profile skill crud backend
 
 ### Étape suivante recommandée
 

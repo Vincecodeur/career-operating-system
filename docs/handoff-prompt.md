@@ -246,6 +246,9 @@ Implémenté :
 - PromptBuilder
 - MockAIProvider
 - AIExplanationService
+- ProfileSkill Update
+- ProfileSkill Delete
+- ProfileSkill CRUD Completion
 
 Partiellement implémenté :
 
@@ -401,6 +404,7 @@ Des tests existent pour :
 - ai prompt builder
 - ai explanation service
 - mock ai provider
+- profile skills
 
 ## Phases terminées
 
@@ -491,9 +495,13 @@ Des tests existent pour :
 - Phase 7.1.15.3.6 Frontend Validation
 - Phase 7.1.15.3.7 Documentation Synchronization
 - Phase 7.1.15.3.8 Frontend Profile Creation
+- Phase 7.1.15.4.A ProfileSkill Backend CRUD Design
+- Phase 7.1.15.4.B ProfileSkill Backend CRUD Completion
+- Phase 7.1.15.4.C ProfileSkill Backend Validation
 
 ## Derniers commits importants
 
+- b1db1ca - feat: complete profile skill crud backend
 - f54172e - feat: add frontend profile creation
 - aba55bd - feat: complete skills update crud
 - 367f3f1 - docs: synchronize profile frontend crud
@@ -623,36 +631,37 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.4.2 Backend CRUD Validation
+Phase 7.1.15.4.4 Frontend CRUD Implementation
 
 Objectif :
 
-Valider fonctionnellement le CRUD backend Skills disponible pour le MVP.
+Rendre ProfileSkill modifiable depuis l'interface Profiles.
 
 Livrables :
 
-- validation Swagger POST /skills
-- validation Swagger GET /skills
-- validation Swagger GET /skills/{skill_id}
-- validation Swagger PUT /skills/{skill_id}
-- validation 404 Skill inexistante
-- validation 409 nom de Skill déjà existant
+- AddProfileSkillModal.tsx
+- EditProfileSkillModal.tsx
+- DeleteProfileSkillDialog.tsx
+- createProfileSkill()
+- updateProfileSkill()
+- deleteProfileSkill()
+- intégration dans ProfileDetail.tsx
 
 Pré-requis validés :
 
-- SkillUpdate schema créé
-- PUT /skills/{skill_id} implémenté
-- tests backend Skills étendus
-- 136 tests backend passants
-- DELETE Skill volontairement reporté
-- Frontend Profile Creation terminée
+- ProfileSkillUpdate créé
+- PUT ProfileSkill validé
+- DELETE ProfileSkill validé
+- Swagger validé
+- 143 tests passants
+- commit b1db1ca réalisé
 
 Décisions produit :
 
-- DELETE Skill reste hors périmètre MVP ;
-- Skill est un référentiel partagé utilisé par ProfileSkill ;
-- la création de profil est faite depuis Profiles, pas depuis Settings ;
-- la prochaine étape doit valider le backend Skills avant toute interface frontend Skills.
+- Skills Management concerne ProfileSkill
+- Skill reste un catalogue partagé
+- le CRUD Skill et le CRUD ProfileSkill sont distincts
+- aucune suppression globale de Skill dans le MVP
 
 ## Méthode de reprise
 

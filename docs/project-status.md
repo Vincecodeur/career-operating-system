@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.4.2 Backend CRUD Validation
+7.1.15.4.4 Frontend CRUD Implementation
 
 ---
 
@@ -786,6 +786,20 @@ Completed
 - Commit technique f54172e créé
 - Push GitHub réalisé
 
+- Phase 7.1.15.4.A ProfileSkill Backend CRUD Design terminée
+- docs/profile-skill-backend-crud-design.md créé
+- Phase 7.1.15.4.B ProfileSkill Backend CRUD Completion terminée
+- ProfileSkillUpdate schema créé
+- PUT /profile-skills/{profile_id}/{skill_id} implémenté
+- DELETE /profile-skills/{profile_id}/{skill_id} implémenté
+- backend/tests/test_profile_skills.py créé
+- 7 tests ProfileSkill passants
+- Validation pytest réalisée
+- 143 tests backend passants
+- Commit technique b1db1ca créé
+- Push GitHub réalisé
+- Validation Swagger ProfileSkill réalisée
+
 ---
 
 Phase In Progress
@@ -800,25 +814,28 @@ Aucun
 
 ---
 
-Phase 7.1.15.4.2 Backend CRUD Validation
+Phase 7.1.15.4.4 Frontend CRUD Implementation
 
-Objectif :  
-Valider fonctionnellement le CRUD backend Skills disponible pour le MVP.
+Objectif :
+
+Implémenter le CRUD frontend ProfileSkill.
 
 Livrables :
 
-- validation Swagger POST /skills
-- validation Swagger GET /skills
-- validation Swagger GET /skills/{skill_id}
-- validation Swagger PUT /skills/{skill_id}
-- validation 404 Skill inexistante
-- validation 409 nom de Skill déjà existant
+- AddProfileSkillModal.tsx
+- EditProfileSkillModal.tsx
+- DeleteProfileSkillDialog.tsx
+- createProfileSkill API
+- updateProfileSkill API
+- deleteProfileSkill API
+- intégration dans ProfileDetail.tsx
+- validation visuelle
 
 Contraintes :
 
-- DELETE Skill reste volontairement hors périmètre MVP
-- ne pas passer au frontend Skills avant validation backend
-- documenter clairement le report de DELETE Skill
+- utiliser uniquement ProfileSkill
+- ne jamais supprimer Skill
+- conserver les patterns UX utilisés pour Profile CRUD
 
 ---
 
@@ -862,4 +879,4 @@ Validated choices:
 
 Last Commit
 
-- f54172e - feat: add frontend profile creation
+- b1db1ca - feat: complete profile skill crud backend
