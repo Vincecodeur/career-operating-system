@@ -601,25 +601,27 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.2 Backend CRUD Tests
+Phase 7.1.15.3.3 Backend CRUD Validation
 
 Objectif :
 
-Valider le CRUD complet du domaine Profile.
+Valider fonctionnellement le CRUD Profile.
 
 Livrables :
 
-- test_create_profile
-- test_list_profiles
-- test_get_profile
-- test_update_profile
-- test_delete_profile
-- test_profile_not_found
-- test_soft_delete_sets_is_active_false
+- Validation POST /profiles
+- Validation GET /profiles
+- Validation GET /profiles/{profile_id}
+- Validation PUT /profiles/{profile_id}
+- Validation DELETE /profiles/{profile_id}
+- Validation Soft Delete
+- Validation 404
 
 Pré-requis :
 
 - 97bb6d4 - feat: add profile update and soft delete
+- CRUD Profile Tests validés
+- 130 tests passants
 
 ## Méthode de reprise
 

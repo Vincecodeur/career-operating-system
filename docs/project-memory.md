@@ -310,3 +310,31 @@ Exemple :
 7.1.15.3.4 Frontend CRUD Implementation
 7.1.15.3.5 Frontend Validation
 7.1.15.3.6 Documentation Synchronization
+
+### Règle de livraison Code + Tests
+
+À partir de la phase 7.1.15 :
+
+- Une implémentation backend doit inclure les tests associés dans la même étape.
+- Le code et les tests sont développés ensemble avant le commit technique.
+- Une étape backend n'est pas terminée tant que :
+  - le code est implémenté ;
+  - les tests associés existent ;
+  - les tests passent.
+- La documentation reste traitée dans une étape distincte après le commit technique.
+
+Cycle :
+
+Code
+↓
+Tests associés
+↓
+Pytest
+↓
+Validation
+↓
+Commit technique
+↓
+Documentation
+↓
+Commit documentaire

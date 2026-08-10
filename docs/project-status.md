@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.2 Backend CRUD Tests
+7.1.15.3.3 Backend CRUD Validation
 
 ---
 
@@ -706,6 +706,18 @@ Completed
 - Repository synchronisé avec origin/main
 - Working tree clean validé
 
+- Phase 7.1.15.3.2 Backend CRUD Tests terminée
+- test_create_profile créé
+- test_get_profiles créé
+- test_get_profile créé
+- test_update_profile créé
+- test_delete_profile créé
+- test_profile_not_found créé
+- test_soft_delete_sets_is_active_false créé
+- Validation CRUD Profile réalisée
+- 7 tests CRUD Profile passants
+- 130 tests backend passants
+
 ---
 
 In Progress
@@ -722,27 +734,26 @@ Aucun
 
 In Progress:
 
-Phase 7.1.15.3.2 Backend CRUD Tests
+Phase 7.1.15.3.3 Backend CRUD Validation
 
 Objectif :
 
-Créer la couverture complète des tests CRUD Profile.
+Valider fonctionnellement le CRUD Profile avec Swagger.
 
 Livrables :
 
-- test_create_profile
-- test_list_profiles
-- test_get_profile
-- test_update_profile
-- test_delete_profile
-- test_profile_not_found
-- test_soft_delete_sets_is_active_false
+- Validation POST /profiles
+- Validation GET /profiles
+- Validation GET /profiles/{profile_id}
+- Validation PUT /profiles/{profile_id}
+- Validation DELETE /profiles/{profile_id}
+- Validation Soft Delete
+- Validation comportement 404
 
 Contraintes :
 
-- aucun test manuel uniquement
-- couverture automatisée obligatoire
-- validation pytest obligatoire
+- validation manuelle Swagger obligatoire
+- aucune modification de code prévue
 
 ---
 
@@ -786,4 +797,4 @@ Validated choices:
 
 Last Commit
 
-- 97bb6d4 - feat: add profile update and soft delete
+- 0256b0c - docs: synchronize profile crud completion
