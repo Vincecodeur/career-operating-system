@@ -435,7 +435,7 @@ Sous-phases :
 ⬜ 7.1.19.5 Default Profile Selection
 ⬜ 7.1.19.6 Default CV Selection
 ⬜ 7.1.19.7 Application Workflow Settings
-
+⬜ 7.1.19.8 Opportunity Discovery Preferences
 ⬜ 7.1.20 Profile Completeness
 ⬜ 7.1.20.1 Completeness Scoring
 ⬜ 7.1.20.2 Missing Information Detection
