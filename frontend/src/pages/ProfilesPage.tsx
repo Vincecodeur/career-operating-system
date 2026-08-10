@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+
+import { CreateProfileModal } from "../components/CreateProfileModal";
+import type { CreateProfileFormValues } from "../components/CreateProfileModal";
 import { DeleteProfileDialog } from "../components/DeleteProfileDialog";
 import { EditProfileModal } from "../components/EditProfileModal";
 import type { ProfileFormValues } from "../components/EditProfileModal";
@@ -6,6 +9,8 @@ import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
 import {
+  createProfile,
+  deleteProfile,
   getCertifications,
   getLanguages,
   getProfileCertifications,
@@ -14,7 +19,6 @@ import {
   getProfileWorkExperiences,
   getProfiles,
   getSkills,
-  deleteProfile,
   updateProfile,
 } from "../services/api";
 
@@ -107,28 +111,35 @@ export function ProfilesPage() {
   const [certifications, setCertifications] = useState<Certification[]>([]);
 
   const [loadingProfiles, setLoadingProfiles] = useState(true);
-
   const [loadingDetails, setLoadingDetails] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+  const [isCreatingProfile, setIsCreatingProfile] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isDeletingProfile, setIsDeletingProfile] = useState(false);
 
   const [profileMutationError, setProfileMutationError] = useState<
     string | null
   >(null);
+
   useEffect(() => {
     async function loadProfiles() {
       try {
         const data = await getProfiles();
 
-        setProfiles(data);
+        const activeProfiles = data.filter(
+          (profile: Profile) => profile.is_active,
+        );
 
-        if (data.length > 0) {
-          setSelectedProfile(data[0]);
+        setProfiles(activeProfiles);
+
+        if (activeProfiles.length > 0) {
+          setSelectedProfile(activeProfiles[0]);
         }
       } catch {
         setError("Unable to load profiles.");
@@ -184,6 +195,27 @@ export function ProfilesPage() {
     loadDetails();
   }, [selectedProfile]);
 
+  async function handleCreateProfile(values: CreateProfileFormValues) {
+    setIsCreatingProfile(true);
+    setProfileMutationError(null);
+
+    try {
+      const createdProfile = await createProfile(values);
+
+      setProfiles((profiles) => [
+        createdProfile,
+        ...profiles.filter((profile) => profile.id !== createdProfile.id),
+      ]);
+
+      setSelectedProfile(createdProfile);
+      setIsCreateModalOpen(false);
+    } catch {
+      setProfileMutationError("Unable to create profile.");
+    } finally {
+      setIsCreatingProfile(false);
+    }
+  }
+
   async function handleUpdateProfile(values: ProfileFormValues) {
     if (!selectedProfile) {
       return;
@@ -226,9 +258,7 @@ export function ProfilesPage() {
       );
 
       setProfiles(remainingProfiles);
-
       setSelectedProfile(remainingProfiles[0] ?? null);
-
       setIsDeleteDialogOpen(false);
     } catch {
       setProfileMutationError("Unable to archive profile.");
@@ -239,7 +269,19 @@ export function ProfilesPage() {
 
   return (
     <>
-      <PageHeader title="Profiles" description="Manage candidate profiles." />
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <PageHeader title="Profiles" description="Manage candidate profiles." />
+
+        <button
+          type="button"
+          onClick={() => {
+            setProfileMutationError(null);
+            setIsCreateModalOpen(true);
+          }}
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+          New Profile
+        </button>
+      </div>
 
       {loadingProfiles && <p className="text-slate-400">Loading profiles...</p>}
 
@@ -284,6 +326,15 @@ export function ProfilesPage() {
           </div>
         </div>
       )}
+
+      <CreateProfileModal
+        isOpen={isCreateModalOpen}
+        isSaving={isCreatingProfile}
+        error={profileMutationError}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreate={handleCreateProfile}
+      />
+
       <EditProfileModal
         profile={selectedProfile}
         isOpen={isEditModalOpen}

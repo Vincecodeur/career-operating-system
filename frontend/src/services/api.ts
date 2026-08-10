@@ -1,5 +1,17 @@
 const API_BASE_URL = "http://127.0.0.1:8000";
 
+type ProfilePayload = {
+    profile_name: string;
+    full_name: string;
+    current_title: string;
+    location: string;
+    years_of_experience: number;
+    target_role_short_term: string;
+    target_role_long_term: string;
+    remote_preference: string;
+    preferred_countries: string;
+};
+
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -30,17 +42,28 @@ export async function getProfile(
     return response.json();
 }
 
-type ProfilePayload = {
-    profile_name: string;
-    full_name: string;
-    current_title: string;
-    location: string;
-    years_of_experience: number;
-    target_role_short_term: string;
-    target_role_long_term: string;
-    remote_preference: string;
-    preferred_countries: string;
-};
+export async function createProfile(
+    payload: ProfilePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to create profile."
+        );
+    }
+
+    return response.json();
+}
 
 export async function updateProfile(
     profileId: number,
