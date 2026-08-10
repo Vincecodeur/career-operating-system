@@ -1028,3 +1028,36 @@ Rules:
 - future AI features may leverage professional_context to improve profile understanding and explanation quality.
 
 Out of scope for MVP.
+
+### Frontend Profile Creation Gap
+
+During Profile CRUD validation, a product gap was identified:
+
+The backend supports profile creation through POST /profiles, but the frontend Profiles page currently supports only:
+
+- profile visualization;
+- profile edition;
+- profile archive.
+
+Decision:
+
+Profile creation must be added to the Profiles page, not to Settings.
+
+Rationale:
+
+- Profiles are first-class business objects;
+- Career Operating System supports multiple profiles;
+- creation belongs to the same user journey as viewing, editing and archiving profiles;
+- Settings should remain focused on preferences and defaults.
+
+Follow-up phase:
+
+7.1.15.3.8 Frontend Profile Creation
+
+Out of scope:
+
+- professional_context;
+- profile duplication;
+- default profile setting;
+- multi-profile switcher;
+- Skill deletion.

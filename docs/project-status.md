@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.4.1 Backend CRUD Completion
+7.1.15.3.8 Frontend Profile Creation
 
 ---
 
@@ -756,6 +756,25 @@ Completed
 - Phase 7.1.15.3 Profile CRUD terminée
 - Prochaine étape définie : 7.1.15.4.1 Backend CRUD Completion
 
+- Phase 7.1.15.4.1 Backend CRUD Completion terminée côté Update Skill
+- SkillUpdate schema créé
+- PUT /skills/{skill_id} implémenté
+- Tests backend Skills étendus
+- test_create_skill créé
+- test_get_skills validé
+- test_get_skill créé
+- test_skill_not_found créé
+- test_duplicate_skill_name créé
+- test_update_skill créé
+- test_update_skill_not_found créé
+- Validation pytest réalisée
+- 136 tests backend passants
+- Commit technique aba55bd créé
+- DELETE Skill volontairement reporté pour le MVP
+- Décision produit : les Skills sont un référentiel partagé ; la suppression nécessite une stratégie dédiée avec ProfileSkill
+- Lacune identifiée : création de profil absente côté frontend
+- Nouvelle phase corrective définie : 7.1.15.3.8 Frontend Profile Creation
+
 ---
 
 Phase In Progress
@@ -770,24 +789,29 @@ Aucun
 
 ---
 
-Phase 7.1.15.4.1 Backend CRUD Completion
+Phase 7.1.15.3.8 Frontend Profile Creation
 
 Objectif :
 
-Compléter le CRUD backend du domaine Skills.
+Ajouter la création de profil depuis la page Profiles.
 
 Livrables :
 
-- SkillUpdate schema
-- PUT /skills/{skill_id}
-- DELETE /skills/{skill_id}
-- Tests backend associés
+- createProfile API dans frontend/src/services/api.ts
+- CreateProfileModal.tsx
+- bouton New Profile dans ProfilesPage
+- appel POST /profiles depuis le frontend
+- ajout du profil créé dans la liste
+- sélection automatique du nouveau profil
+- build frontend validé
+- validation visuelle réalisée
 
 Contraintes :
 
-- code et tests associés dans le même commit technique
-- ne pas supprimer une compétence utilisée sans stratégie explicite
-- validation pytest obligatoire
+- création de profil dans Profiles, pas dans Settings
+- ne pas refactorer EditProfileModal dans cette étape
+- garder une implémentation MVP simple
+- ne pas ajouter professional_context dans cette phase
 
 ---
 
@@ -831,4 +855,4 @@ Validated choices:
 
 Last Commit
 
-- 367f3f1 - docs: synchronize profile frontend crud
+- aba55bd - feat: complete skills update crud

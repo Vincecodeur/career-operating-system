@@ -490,6 +490,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- aba55bd - feat: complete skills update crud
 - 367f3f1 - docs: synchronize profile frontend crud
 - 0da9765 - feat: implement profile frontend crud
 - be143c6 - docs: close profile crud validation
@@ -617,35 +618,38 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.4.1 Backend CRUD Completion
+Phase 7.1.15.3.8 Frontend Profile Creation
 
 Objectif :
 
-Compléter le CRUD backend du domaine Skills.
+Ajouter la création de profil depuis la page Profiles.
 
 Livrables :
 
-- SkillUpdate schema
-- PUT /skills/{skill_id}
-- DELETE /skills/{skill_id}
-- tests backend associés
+- createProfile API dans frontend/src/services/api.ts
+- CreateProfileModal.tsx
+- bouton New Profile dans ProfilesPage
+- appel POST /profiles depuis le frontend
+- ajout du profil créé à la liste
+- sélection automatique du nouveau profil créé
+- build frontend validé
+- validation visuelle réalisée
 
 Pré-requis validés :
 
 - Profile CRUD backend validé
-- Profile CRUD frontend validé
-- Profile CRUD documentation synchronisée
-- Audit Skills réalisé
+- Profile Edit frontend validé
+- Profile Archive frontend validé
+- Skills Update backend implémenté
+- 136 tests backend passants
+- DELETE Skill volontairement reporté
 
-Constat audit Skills :
+Décisions produit :
 
-- POST /skills existe
-- GET /skills existe
-- GET /skills/{skill_id} existe
-- PUT /skills/{skill_id} absent
-- DELETE /skills/{skill_id} absent
-- test_get_skills existe
-- tests create/update/delete absents
+- la création de profil doit être faite depuis Profiles, pas depuis Settings ;
+- DELETE Skill est reporté car Skill est un référentiel partagé utilisé par ProfileSkill ;
+- professional_context reste post-MVP ou future phase Profile Enrichment ;
+- le MVP doit privilégier la création de profil avant la suppression physique de Skills.
 
 ## Méthode de reprise
 
