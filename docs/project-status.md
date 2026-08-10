@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.4.5 Documentation Synchronization
+7.1.15.5.3 Frontend CRUD Design
 
 ---
 
@@ -816,6 +816,21 @@ Completed
 - Commit technique a2c1ef0 créé
 - Push GitHub réalisé
 
+- WorkExperienceUpdate schema créé
+- PUT /work-experiences/{work_experience_id} implémenté
+- DELETE /work-experiences/{work_experience_id} implémenté
+- Validation Swagger WorkExperience réalisée
+- Validation fonctionnelle WorkExperience réalisée
+- 143 tests backend passants
+- Commit technique ca1ce1b créé
+- backend/tests/test_work_experiences.py créé
+- 8 tests CRUD WorkExperience ajoutés
+- 151 tests backend passants
+- Commit technique da0635b créé
+- Push GitHub réalisé
+- Phase 7.1.15.5.1 Backend CRUD Completion terminée
+- Phase 7.1.15.5.2 Backend CRUD Validation terminée
+
 ---
 
 Phase In Progress
@@ -830,40 +845,24 @@ Aucun
 
 ---
 
-Phase 7.1.15.4.5 Documentation Synchronization
+Phase 7.1.15.5.3 Frontend CRUD Design
 
 Objectif :
-
-Synchroniser la documentation suite à l'implémentation du CRUD frontend ProfileSkill.
+Définir la stratégie frontend CRUD WorkExperience.
 
 Livrables :
 
-- roadmap.md
-- project-status.md
-- handoff-prompt.md
+- design UX édition expérience
+- design UX suppression expérience
+- stratégie modales
+- APIs frontend nécessaires
+- plan d'intégration ProfileDetail
 
 Contraintes :
 
-- refléter uniquement l'état réellement validé
-- utiliser le commit a2c1ef0
-- ne pas annoncer la phase suivante avant synchronisation
-
----
-
-MVP Backlog Before AI Career Advisor
-
-- Profile Management CRUD
-- CV Management
-- Application Workflow
-- Opportunities Search & Filters
-- Settings Management
-- Profile Completeness
-- Saved Searches
-- MVP Experience Review
-
-Post-MVP Backlog
-
-- Dashboard Evolution
+- aucun code
+- aucun test
+- design uniquement
 
 ---
 
@@ -890,4 +889,4 @@ Validated choices:
 
 Last Commit
 
-- a2c1ef0 - feat: add frontend profile skill crud
+- da0635b - test: add work experience crud coverage

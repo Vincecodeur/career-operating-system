@@ -249,6 +249,10 @@ Implémenté :
 - ProfileSkill Update
 - ProfileSkill Delete
 - ProfileSkill CRUD Completion
+- WorkExperienceUpdate
+- WorkExperience Update
+- WorkExperience Delete
+- WorkExperience CRUD Completion
 
 Partiellement implémenté :
 
@@ -412,6 +416,7 @@ Des tests existent pour :
 - ai explanation service
 - mock ai provider
 - profile skills
+- work experiences
 
 ## Phases terminées
 
@@ -506,9 +511,13 @@ Des tests existent pour :
 - Phase 7.1.15.4.B ProfileSkill Backend CRUD Completion
 - Phase 7.1.15.4.C ProfileSkill Backend Validation
 - Phase 7.1.15.4.4 Frontend CRUD Implementation
+- Phase 7.1.15.5.1 Backend CRUD Completion
+- Phase 7.1.15.5.2 Backend CRUD Validation
 
 ## Derniers commits importants
 
+- da0635b - test: add work experience crud coverage
+- ca1ce1b - feat: complete work experience crud backend
 - a2c1ef0 - feat: add frontend profile skill crud
 - b1db1ca - feat: complete profile skill crud backend
 - f54172e - feat: add frontend profile creation
@@ -640,32 +649,28 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.4.5 Documentation Synchronization
+Phase 7.1.15.5.3 Frontend CRUD Design
 
 Objectif :
-
-Synchroniser l'ensemble de la documentation après la livraison du CRUD ProfileSkill frontend.
-
-Livrables :
-
-- roadmap.md
-- project-status.md
-- handoff-prompt.md
+Définir le CRUD frontend WorkExperience.
 
 Pré-requis validés :
 
-- CRUD backend ProfileSkill
-- CRUD frontend ProfileSkill
-- Build frontend
-- Validation visuelle
-- Commit a2c1ef0
-- Push GitHub
+- Backend CRUD terminé
+- Tests CRUD terminés
+- 151/151 tests passants
+- Repository propre
+- GitHub synchronisé
 
-Décisions produit :
+Périmètre :
 
-- Skill reste un catalogue partagé
-- CRUD frontend agit uniquement sur ProfileSkill
-- aucune suppression globale de Skill dans le MVP
+- audit des composants frontend existants
+- UX édition expérience
+- UX suppression expérience
+- stratégie des modales
+- APIs frontend nécessaires
+
+Aucun développement pendant cette phase.
 
 ## Méthode de reprise
 
