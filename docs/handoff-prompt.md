@@ -601,24 +601,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.1 Backend CRUD Completion
+Phase 7.1.15.3.2 Backend CRUD Tests
 
 Objectif :
 
-Compléter le CRUD Profile.
+Valider le CRUD complet du domaine Profile.
 
 Livrables :
 
-- ProfileUpdate schema
-- PUT /profiles/{profile_id}
-- DELETE /profiles/{profile_id}
-- Soft Delete Strategy
+- test_create_profile
+- test_list_profiles
+- test_get_profile
+- test_update_profile
+- test_delete_profile
+- test_profile_not_found
+- test_soft_delete_sets_is_active_false
 
-Contraintes :
+Pré-requis :
 
-- aucune suppression physique
-- is_active = false
-- tests obligatoires avant validation
+- 97bb6d4 - feat: add profile update and soft delete
 
 ## Méthode de reprise
 

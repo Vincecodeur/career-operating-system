@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.1 Backend CRUD Completion
+7.1.15.3.2 Backend CRUD Tests
 
 ---
 
@@ -694,6 +694,18 @@ Completed
 - Audit des tests CRUD réalisé
 - Absence de couverture CRUD complète confirmée
 
+- Phase 7.1.15.3.1 Backend CRUD Completion terminée
+- ProfileUpdate schema créé
+- PUT /profiles/{profile_id} implémenté
+- DELETE /profiles/{profile_id} implémenté
+- Soft Delete Profile implémenté
+- Validation pytest réalisée
+- 124 tests passants
+- Commit technique 97bb6d4 créé
+- Push GitHub réalisé
+- Repository synchronisé avec origin/main
+- Working tree clean validé
+
 ---
 
 In Progress
@@ -708,25 +720,29 @@ Aucun
 
 ---
 
-Phase 7.1.15.3.1 Backend CRUD Completion
+In Progress:
+
+Phase 7.1.15.3.2 Backend CRUD Tests
 
 Objectif :
 
-Implémenter le CRUD complet du domaine Profile.
+Créer la couverture complète des tests CRUD Profile.
 
 Livrables :
 
-- ProfileUpdate schema
-- PUT /profiles/{profile_id}
-- DELETE /profiles/{profile_id}
-- Soft Delete via is_active = false
-- Tests backend CRUD associés
+- test_create_profile
+- test_list_profiles
+- test_get_profile
+- test_update_profile
+- test_delete_profile
+- test_profile_not_found
+- test_soft_delete_sets_is_active_false
 
 Contraintes :
 
-- aucune suppression physique
-- couverture de tests obligatoire
-- validation Swagger obligatoire avant clôture
+- aucun test manuel uniquement
+- couverture automatisée obligatoire
+- validation pytest obligatoire
 
 ---
 
@@ -770,4 +786,4 @@ Validated choices:
 
 Last Commit
 
-- 4818690 - docs: synchronize applications visualization
+- 97bb6d4 - feat: add profile update and soft delete
