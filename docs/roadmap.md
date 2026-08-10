@@ -418,8 +418,8 @@ Sous-phases :
 ✅ 7.1.15.4.A ProfileSkill Backend CRUD Design
 ✅ 7.1.15.4.B ProfileSkill Backend CRUD Completion
 ✅ 7.1.15.4.C ProfileSkill Backend Validation
-⬜ 7.1.15.4.4 Frontend CRUD Implementation
-⬜ 7.1.15.4.5 Frontend Validation
+✅ 7.1.15.4.4 Frontend CRUD Implementation
+✅ 7.1.15.4.5 Frontend Validation
 ⬜ 7.1.15.4.6 Documentation Synchronization
 
 ⬜ 7.1.15.5 Experience Management

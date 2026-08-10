@@ -355,6 +355,13 @@ Implémenté :
 - CreateProfileModal
 - Profile Create
 - Frontend Profile Creation
+- AddProfileSkillModal
+- EditProfileSkillModal
+- DeleteProfileSkillDialog
+- createProfileSkill
+- updateProfileSkill
+- deleteProfileSkill
+- Frontend ProfileSkill CRUD
 
 Documenté mais pas encore implémenté :
 
@@ -498,9 +505,11 @@ Des tests existent pour :
 - Phase 7.1.15.4.A ProfileSkill Backend CRUD Design
 - Phase 7.1.15.4.B ProfileSkill Backend CRUD Completion
 - Phase 7.1.15.4.C ProfileSkill Backend Validation
+- Phase 7.1.15.4.4 Frontend CRUD Implementation
 
 ## Derniers commits importants
 
+- a2c1ef0 - feat: add frontend profile skill crud
 - b1db1ca - feat: complete profile skill crud backend
 - f54172e - feat: add frontend profile creation
 - aba55bd - feat: complete skills update crud
@@ -631,36 +640,31 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.4.4 Frontend CRUD Implementation
+Phase 7.1.15.4.5 Documentation Synchronization
 
 Objectif :
 
-Rendre ProfileSkill modifiable depuis l'interface Profiles.
+Synchroniser l'ensemble de la documentation après la livraison du CRUD ProfileSkill frontend.
 
 Livrables :
 
-- AddProfileSkillModal.tsx
-- EditProfileSkillModal.tsx
-- DeleteProfileSkillDialog.tsx
-- createProfileSkill()
-- updateProfileSkill()
-- deleteProfileSkill()
-- intégration dans ProfileDetail.tsx
+- roadmap.md
+- project-status.md
+- handoff-prompt.md
 
 Pré-requis validés :
 
-- ProfileSkillUpdate créé
-- PUT ProfileSkill validé
-- DELETE ProfileSkill validé
-- Swagger validé
-- 143 tests passants
-- commit b1db1ca réalisé
+- CRUD backend ProfileSkill
+- CRUD frontend ProfileSkill
+- Build frontend
+- Validation visuelle
+- Commit a2c1ef0
+- Push GitHub
 
 Décisions produit :
 
-- Skills Management concerne ProfileSkill
 - Skill reste un catalogue partagé
-- le CRUD Skill et le CRUD ProfileSkill sont distincts
+- CRUD frontend agit uniquement sur ProfileSkill
 - aucune suppression globale de Skill dans le MVP
 
 ## Méthode de reprise
