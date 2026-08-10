@@ -346,19 +346,32 @@ Completed
 
 ### Phase 7.1
 
-AI Explanation Implementation Preparation
+MVP Experience Completion
 
 Objectif :
 
-Préparer l'implémentation de l'AI Explanation Layer défini pendant la Phase 7.0.
+Finaliser les fonctionnalités cœur du MVP avant de poursuivre les fonctionnalités avancées d'assistance IA.
+
+Cette phase vise à transformer Career Operating System en produit utilisable quotidiennement, en complétant :
+
+- la visualisation et la gestion des profils ;
+- la visualisation des candidatures ;
+- la gestion du CV ;
+- le workflow de candidature ;
+- les filtres d'opportunités ;
+- les paramètres de recherche et de matching ;
+- la complétude du profil ;
+- les recherches sauvegardées ;
+- la revue globale de l'expérience MVP.
 
 Principes :
 
-- l'IA n'effectue pas le calcul du score ;
-- le score reste déterministe ;
-- les recommandations restent déterministes ;
-- l'IA enrichit uniquement les explications ;
-- aucune logique métier ne dépend directement d'un fournisseur IA.
+- le profil structuré reste la source de vérité principale ;
+- les CV associés enrichissent le profil mais ne le remplacent pas ;
+- l'historique des candidatures fait partie de la source de vérité carrière ;
+- les filtres et préférences doivent être configurables avant d'ajouter une couche IA avancée ;
+- l'AI Career Advisor est volontairement repoussé après la finalisation des fonctionnalités cœur du MVP ;
+- le Dashboard Evolution est considéré comme post-MVP.
 
 Sous-phases :
 
@@ -381,7 +394,61 @@ Sous-phases :
 ✅ 7.1.13.4 Profile Management Visualization Repository Audit
 ✅ 7.1.13.5 Profile Management Visualization Implementation
 ⬜ 7.1.14 Applications Visualization
-⬜ 7.1.15 MVP Experience Review
+
+⬜ 7.1.15 Profile Management CRUD
+⬜ 7.1.15.1 Profile CRUD
+⬜ 7.1.15.2 Skills Management
+⬜ 7.1.15.3 Experience Management
+⬜ 7.1.15.4 Languages Management
+⬜ 7.1.15.5 Certifications Management
+⬜ 7.1.15.6 Multi Profile Management
+
+⬜ 7.1.16 CV Management
+⬜ 7.1.16.1 CV Upload
+⬜ 7.1.16.2 CV Library
+⬜ 7.1.16.3 CV Parsing
+⬜ 7.1.16.4 Profile Enrichment
+
+⬜ 7.1.17 Application Workflow
+⬜ 7.1.17.1 Application Status Model
+⬜ 7.1.17.2 Application Status Visualization
+⬜ 7.1.17.3 Application Status Update
+⬜ 7.1.17.4 Application Notes
+⬜ 7.1.17.5 Application Timeline
+
+⬜ 7.1.18 Opportunities Search & Filters
+⬜ 7.1.18.1 Keyword Search
+⬜ 7.1.18.2 Location Filters
+⬜ 7.1.18.3 Remote Filters
+⬜ 7.1.18.4 Salary Filters
+⬜ 7.1.18.5 Source Filters
+⬜ 7.1.18.6 Matching Score Filters
+⬜ 7.1.18.7 Required Skills Filters
+⬜ 7.1.18.8 Publication Date Filters
+⬜ 7.1.18.9 User Status Filters
+
+⬜ 7.1.19 Settings Management
+⬜ 7.1.19.1 Job Discovery Settings
+⬜ 7.1.19.2 Search Criteria Settings
+⬜ 7.1.19.3 Matching Weights Configuration
+⬜ 7.1.19.4 Source Configuration
+⬜ 7.1.19.5 Default Profile Selection
+⬜ 7.1.19.6 Default CV Selection
+⬜ 7.1.19.7 Application Workflow Settings
+
+⬜ 7.1.20 Profile Completeness
+⬜ 7.1.20.1 Completeness Scoring
+⬜ 7.1.20.2 Missing Information Detection
+⬜ 7.1.20.3 Profile Quality Recommendations
+⬜ 7.1.20.4 Profile Completeness Visualization
+
+⬜ 7.1.21 Saved Searches
+⬜ 7.1.21.1 Search Presets
+⬜ 7.1.21.2 Saved Filters
+⬜ 7.1.21.3 Default Search Strategy
+⬜ 7.1.21.4 Saved Search Execution
+
+⬜ 7.1.22 MVP Experience Review
 
 Statut :
 
@@ -408,6 +475,36 @@ Sous-phases :
 - 7.2.3 Long-Term Career Planning
 
 Statut :
+Planned
+
+### Phase 7.3
+
+Dashboard Evolution
+
+Objectif :
+
+Transformer le Dashboard actuel en véritable cockpit de pilotage carrière après la finalisation du MVP.
+
+Le Dashboard actuel reste un dashboard MVP de validation technique et fonctionnelle.
+
+Le Dashboard Evolution devra permettre :
+
+- de suivre le pipeline de candidatures ;
+- de visualiser la qualité du profil ;
+- de suivre les performances du matching ;
+- de suivre l'activité des opportunités ;
+- de fournir une aide à la décision quotidienne.
+
+Sous-phases :
+
+⬜ 7.3.1 Career KPI Dashboard
+⬜ 7.3.2 Application Funnel
+⬜ 7.3.3 Profile Quality Dashboard
+⬜ 7.3.4 Job Discovery Analytics
+⬜ 7.3.5 Decision Support Dashboard
+
+Statut :
+
 Planned
 
 ### Phase 8

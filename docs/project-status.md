@@ -19,8 +19,7 @@ main
 ---
 
 Current Milestone
-
-Phase 7.1 AI Explanation Implementation Preparation
+Phase 7.1 MVP Experience Completion
 
 ---
 
@@ -704,6 +703,23 @@ Pas encore :
 - IA Career Advisor
 - génération de CV
 - génération de lettre de motivation
+
+---
+
+MVP Backlog Before AI Career Advisor
+
+- Profile Management CRUD
+- CV Management
+- Application Workflow
+- Opportunities Search & Filters
+- Settings Management
+- Profile Completeness
+- Saved Searches
+- MVP Experience Review
+
+Post-MVP Backlog
+
+- Dashboard Evolution
 
 ---
 

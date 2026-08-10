@@ -188,3 +188,15 @@ Le système doit être capable de répondre clairement aux questions suivantes :
 - Quelle opportunité dois-je privilégier ?
 - Quelles opportunités méritent réellement mon attention ?
 - Quel est le chemin le plus efficace vers mon prochain objectif professionnel ?
+
+---
+
+## Career Source of Truth
+
+Le système considère comme source de vérité carrière :
+
+- le profil structuré ;
+- les CV associés ;
+- l'historique des candidatures.
+
+Toutes les fonctionnalités IA doivent s'appuyer sur cette base avant de produire des recommandations.

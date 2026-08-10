@@ -601,9 +601,18 @@ Respecter notamment :
 
 Phase 7.1.14 Applications Visualization
 
-Objectif :
+L'AI Career Advisor a été volontairement repoussé après la complétion des fonctionnalités cœur du Career Operating System :
 
-Transformer Applications en véritable page métier afin de compléter le parcours MVP visible.
+- Profile CRUD
+- CV Management
+- Application Workflow
+- Opportunity Filters
+- Settings
+- Profile Completeness
+- Saved Searches
+
+Objectif :
+Construire un MVP utilisable quotidiennement avant d'ajouter des fonctionnalités d'assistance IA.
 
 Contexte :
 
@@ -627,6 +636,10 @@ Pas encore :
 - automatisation
 - IA Career Advisor
 - génération de documents
+
+Note roadmap :
+
+La phase Dashboard Evolution est identifiée comme post-MVP et ne doit pas être traitée avant la finalisation du MVP Experience Review.
 
 ## Méthode de reprise
 
