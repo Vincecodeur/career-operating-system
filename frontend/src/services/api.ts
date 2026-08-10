@@ -30,6 +30,61 @@ export async function getProfile(
     return response.json();
 }
 
+type ProfilePayload = {
+    profile_name: string;
+    full_name: string;
+    current_title: string;
+    location: string;
+    years_of_experience: number;
+    target_role_short_term: string;
+    target_role_long_term: string;
+    remote_preference: string;
+    preferred_countries: string;
+};
+
+export async function updateProfile(
+    profileId: number,
+    payload: ProfilePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update profile."
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteProfile(
+    profileId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to archive profile."
+        );
+    }
+
+    return response.json();
+}
+
 export async function getProfileSkills(
     profileId: number,
 ) {

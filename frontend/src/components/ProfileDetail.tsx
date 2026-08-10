@@ -82,6 +82,8 @@ type Props = {
   profileCertifications: ProfileCertification[];
   certifications: Certification[];
   loading?: boolean;
+  onEditProfile: () => void;
+  onArchiveProfile: () => void;
 };
 
 function formatDate(value: string | null) {
@@ -102,6 +104,8 @@ export function ProfileDetail({
   profileCertifications,
   certifications,
   loading = false,
+  onEditProfile,
+  onArchiveProfile,
 }: Props) {
   const skillById = new Map(skills.map((skill) => [skill.id, skill]));
 
@@ -123,16 +127,34 @@ export function ProfileDetail({
 
   return (
     <Card>
-      <div className="mb-8">
-        <p className="text-sm uppercase text-slate-400">Candidate Profile</p>
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <p className="text-sm uppercase text-slate-400">Candidate Profile</p>
 
-        <h2 className="mt-2 text-3xl font-bold text-white">
-          {profile.full_name}
-        </h2>
+          <h2 className="mt-2 text-3xl font-bold text-white">
+            {profile.full_name}
+          </h2>
 
-        <p className="mt-2 text-slate-300">
-          {profile.current_title ?? "No current title"}
-        </p>
+          <p className="mt-2 text-slate-300">
+            {profile.current_title ?? "No current title"}
+          </p>
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={onEditProfile}
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+            Edit Profile
+          </button>
+
+          <button
+            type="button"
+            onClick={onArchiveProfile}
+            className="rounded-md border border-red-700 px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-950">
+            Archive Profile
+          </button>
+        </div>
       </div>
 
       <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">

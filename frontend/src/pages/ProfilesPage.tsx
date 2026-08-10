@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-
+import { DeleteProfileDialog } from "../components/DeleteProfileDialog";
+import { EditProfileModal } from "../components/EditProfileModal";
+import type { ProfileFormValues } from "../components/EditProfileModal";
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
@@ -12,6 +14,8 @@ import {
   getProfileWorkExperiences,
   getProfiles,
   getSkills,
+  deleteProfile,
+  updateProfile,
 } from "../services/api";
 
 type Profile = {
@@ -107,7 +111,15 @@ export function ProfilesPage() {
   const [loadingDetails, setLoadingDetails] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isDeletingProfile, setIsDeletingProfile] = useState(false);
+
+  const [profileMutationError, setProfileMutationError] = useState<
+    string | null
+  >(null);
   useEffect(() => {
     async function loadProfiles() {
       try {
@@ -172,6 +184,59 @@ export function ProfilesPage() {
     loadDetails();
   }, [selectedProfile]);
 
+  async function handleUpdateProfile(values: ProfileFormValues) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingProfile(true);
+    setProfileMutationError(null);
+
+    try {
+      const updatedProfile = await updateProfile(selectedProfile.id, values);
+
+      setProfiles((profiles) =>
+        profiles.map((profile) =>
+          profile.id === updatedProfile.id ? updatedProfile : profile,
+        ),
+      );
+
+      setSelectedProfile(updatedProfile);
+      setIsEditModalOpen(false);
+    } catch {
+      setProfileMutationError("Unable to update profile.");
+    } finally {
+      setIsSavingProfile(false);
+    }
+  }
+
+  async function handleArchiveProfile() {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsDeletingProfile(true);
+    setProfileMutationError(null);
+
+    try {
+      const archivedProfile = await deleteProfile(selectedProfile.id);
+
+      const remainingProfiles = profiles.filter(
+        (profile) => profile.id !== archivedProfile.id,
+      );
+
+      setProfiles(remainingProfiles);
+
+      setSelectedProfile(remainingProfiles[0] ?? null);
+
+      setIsDeleteDialogOpen(false);
+    } catch {
+      setProfileMutationError("Unable to archive profile.");
+    } finally {
+      setIsDeletingProfile(false);
+    }
+  }
+
   return (
     <>
       <PageHeader title="Profiles" description="Manage candidate profiles." />
@@ -202,6 +267,14 @@ export function ProfilesPage() {
                 profileCertifications={profileCertifications}
                 certifications={certifications}
                 loading={loadingDetails}
+                onEditProfile={() => {
+                  setProfileMutationError(null);
+                  setIsEditModalOpen(true);
+                }}
+                onArchiveProfile={() => {
+                  setProfileMutationError(null);
+                  setIsDeleteDialogOpen(true);
+                }}
               />
             ) : (
               <p className="text-slate-400">
@@ -211,6 +284,23 @@ export function ProfilesPage() {
           </div>
         </div>
       )}
+      <EditProfileModal
+        profile={selectedProfile}
+        isOpen={isEditModalOpen}
+        isSaving={isSavingProfile}
+        error={profileMutationError}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={handleUpdateProfile}
+      />
+
+      <DeleteProfileDialog
+        profile={selectedProfile}
+        isOpen={isDeleteDialogOpen}
+        isDeleting={isDeletingProfile}
+        error={profileMutationError}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleArchiveProfile}
+      />
     </>
   );
 }
