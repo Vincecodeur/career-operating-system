@@ -999,3 +999,32 @@ Validation attendue :
 
 - tests backend Profile CRUD passants ;
 - aucun changement frontend pendant cette sous-phase.
+
+### Future Profile Enrichment
+
+A future version of the profile model may introduce an additional field:
+
+professional_context
+
+Purpose:
+
+Provide free-text career context complementing the structured profile.
+
+Examples:
+
+- professional positioning
+- industry expertise
+- preferred missions
+- career narrative
+- domain expertise
+- transition goals
+- strategic context
+
+Rules:
+
+- structured profile remains the primary source of truth;
+- professional_context is supplementary information;
+- deterministic matching must continue to rely on structured fields;
+- future AI features may leverage professional_context to improve profile understanding and explanation quality.
+
+Out of scope for MVP.

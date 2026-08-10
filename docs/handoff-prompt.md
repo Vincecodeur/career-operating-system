@@ -477,6 +477,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- be143c6 - docs: close profile crud validation
 - 5f55b9e - feat: implement applications visualization
 - 94727f8 - feat: implement profile management visualization
 - a612b0b - docs: define profile management visualization
@@ -601,27 +602,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.4 Frontend CRUD Design
+Phase 7.1.15.3.5 Frontend CRUD Implementation
 
 Objectif :
 
-Définir l'expérience utilisateur du CRUD Profile.
+Implémenter le CRUD Profile dans le frontend.
 
 Livrables :
 
-- Design Edit Profile
-- Design Delete Profile
-- Design formulaire Profile
-- Design validation formulaire
-- Design gestion erreurs API
-- Design intégration ProfilesPage
+- EditProfileModal.tsx
+- DeleteProfileDialog.tsx
+- updateProfile API
+- deleteProfile API
+- intégration ProfilesPage
+- intégration ProfileDetail
 
 Pré-requis :
 
-- CRUD Profile backend implémenté
-- CRUD Profile tests validés
-- Validation Swagger réalisée
-- Soft Delete validé
+- Backend CRUD validé
+- Swagger validé
+- Design CRUD frontend validé
 
 ## Méthode de reprise
 

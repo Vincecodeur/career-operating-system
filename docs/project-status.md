@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.4 Frontend CRUD Design
+7.1.15.3.5 Frontend CRUD Implementation
 
 ---
 
@@ -728,6 +728,15 @@ Completed
 - Validation comportement 404 réalisée
 - Validation fonctionnelle CRUD Profile réussie
 
+- Phase 7.1.15.3.4 Frontend CRUD Design terminée
+- UX Edit Profile définie
+- UX Archive Profile définie
+- Modal strategy validée
+- Archive confirmation dialog validée
+- Gestion des erreurs frontend définie
+- Architecture frontend CRUD validée
+- Positionnement futur du champ professional_context défini
+
 ---
 
 Phase In Progress
@@ -742,26 +751,25 @@ Aucun
 
 ---
 
-Phase 7.1.15.3.4 Frontend CRUD Design
+Phase 7.1.15.3.5 Frontend CRUD Implementation
 
 Objectif :
 
-Définir l'expérience utilisateur de modification et suppression de profil.
+Implémenter le CRUD Profile dans le frontend.
 
 Livrables :
 
-- Design Edit Profile
-- Design Delete Profile
-- Design formulaire Profile
-- Design états de validation
-- Design gestion erreurs API
-- Design intégration dans ProfilesPage
+- EditProfileModal.tsx
+- DeleteProfileDialog.tsx
+- updateProfile API
+- deleteProfile API
+- Intégration ProfileDetail
+- Intégration ProfilesPage
 
-Contraintes :
+Validation :
 
-- aucune logique métier dans React
-- backend reste source de vérité
-- utilisation des endpoints CRUD existants
+- npm run build
+- validation visuelle
 
 ---
 
@@ -805,4 +813,4 @@ Validated choices:
 
 Last Commit
 
-- c979b6a - docs: close profile crud tests
+- be143c6 - docs: close profile crud validation
