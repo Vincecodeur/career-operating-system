@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15 Profile Management CRUD
+7.1.15.3.1 Backend CRUD Completion
 
 ---
 
@@ -667,6 +667,33 @@ Completed
 - Validation visuelle Applications réalisée
 - Phase 7.1.14 Applications Visualization terminée
 
+- Phase 7.1.15.1 Repository Audit terminée
+- Audit CRUD Profile réalisé
+- Audit CRUD Skills réalisé
+- Audit CRUD ProfileSkills réalisé
+- Audit CRUD WorkExperience réalisé
+- Audit CRUD Languages réalisé
+- Audit CRUD Certifications réalisé
+- Audit OpenAPI réalisé
+- Backend confirmé en mode Create + Read uniquement
+- Absence d'endpoints Update/Delete confirmée
+- Support multi-profile confirmé dans le modèle Profile
+
+- Phase 7.1.15.2 CRUD Design terminée
+- Soft Delete Profile validé
+- Stratégie Update/Delete Profile définie
+- Stratégie Update/Delete Skills définie
+- Stratégie Update/Delete WorkExperience définie
+- Stratégie Update/Delete Languages définie
+- Stratégie Update/Delete Certifications définie
+- Stratégie Multi-Profile validée
+- Stratégie clés composites validée pour :
+  - ProfileSkill
+  - ProfileLanguage
+  - ProfileCertification
+- Audit des tests CRUD réalisé
+- Absence de couverture CRUD complète confirmée
+
 ---
 
 In Progress
@@ -681,21 +708,25 @@ Aucun
 
 ---
 
-Next Step
-
-Phase 7.1.15 Profile Management CRUD
+Phase 7.1.15.3.1 Backend CRUD Completion
 
 Objectif :
-Permettre la création, la modification et la suppression des éléments constituant la source de vérité carrière.
 
-Livrables attendus :
+Implémenter le CRUD complet du domaine Profile.
 
-- Profile CRUD
-- Skills Management
-- Experience Management
-- Languages Management
-- Certifications Management
-- Multi Profile Management
+Livrables :
+
+- ProfileUpdate schema
+- PUT /profiles/{profile_id}
+- DELETE /profiles/{profile_id}
+- Soft Delete via is_active = false
+- Tests backend CRUD associés
+
+Contraintes :
+
+- aucune suppression physique
+- couverture de tests obligatoire
+- validation Swagger obligatoire avant clôture
 
 ---
 
@@ -739,4 +770,4 @@ Validated choices:
 
 Last Commit
 
-- 5f55b9e - feat: implement applications visualization
+- 4818690 - docs: synchronize applications visualization

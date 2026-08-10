@@ -285,3 +285,28 @@ Decision:
 - documentation must be synchronized only after technical validation;
 - feature work must include code, tests and validation before being considered complete;
 - after each thread change, project state must be reconstructed from git status, git log, tests and key documents before generating new code or roadmap changes.
+
+## Règle de structuration des phases
+
+Niveau X
+= Capacité produit majeure
+
+Niveau X.Y
+= Fonctionnalité métier
+
+Niveau X.Y.Z
+= Sous-fonctionnalité métier
+
+Niveau X.Y.Z.W
+= Exécution technique
+
+Exemple :
+
+7.1.15 Profile Management CRUD
+7.1.15.3 Profile CRUD
+7.1.15.3.1 Backend CRUD Completion
+7.1.15.3.2 Backend CRUD Validation
+7.1.15.3.3 Frontend CRUD Design
+7.1.15.3.4 Frontend CRUD Implementation
+7.1.15.3.5 Frontend Validation
+7.1.15.3.6 Documentation Synchronization

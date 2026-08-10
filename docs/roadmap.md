@@ -396,12 +396,59 @@ Sous-phases :
 ✅ 7.1.14 Applications Visualization
 
 ⬜ 7.1.15 Profile Management CRUD
-⬜ 7.1.15.1 Profile CRUD
-⬜ 7.1.15.2 Skills Management
-⬜ 7.1.15.3 Experience Management
-⬜ 7.1.15.4 Languages Management
-⬜ 7.1.15.5 Certifications Management
-⬜ 7.1.15.6 Multi Profile Management
+
+✅ 7.1.15.1 Repository Audit
+
+✅ 7.1.15.2 CRUD Design
+
+⬜ 7.1.15.3 Profile CRUD
+⬜ 7.1.15.3.1 Backend CRUD Completion
+⬜ 7.1.15.3.2 Backend CRUD Tests
+⬜ 7.1.15.3.3 Backend CRUD Validation
+⬜ 7.1.15.3.4 Frontend CRUD Design
+⬜ 7.1.15.3.5 Frontend CRUD Implementation
+⬜ 7.1.15.3.6 Frontend Validation
+⬜ 7.1.15.3.7 Documentation Synchronization
+
+⬜ 7.1.15.4 Skills Management
+⬜ 7.1.15.4.1 Backend CRUD Completion
+⬜ 7.1.15.4.2 Backend CRUD Validation
+⬜ 7.1.15.4.3 Frontend CRUD Design
+⬜ 7.1.15.4.4 Frontend CRUD Implementation
+⬜ 7.1.15.4.5 Frontend Validation
+⬜ 7.1.15.4.6 Documentation Synchronization
+
+⬜ 7.1.15.5 Experience Management
+⬜ 7.1.15.5.1 Backend CRUD Completion
+⬜ 7.1.15.5.2 Backend CRUD Validation
+⬜ 7.1.15.5.3 Frontend CRUD Design
+⬜ 7.1.15.5.4 Frontend CRUD Implementation
+⬜ 7.1.15.5.5 Frontend Validation
+⬜ 7.1.15.5.6 Documentation Synchronization
+
+⬜ 7.1.15.6 Languages Management
+⬜ 7.1.15.6.1 Backend CRUD Completion
+⬜ 7.1.15.6.2 Backend CRUD Validation
+⬜ 7.1.15.6.3 Frontend CRUD Design
+⬜ 7.1.15.6.4 Frontend CRUD Implementation
+⬜ 7.1.15.6.5 Frontend Validation
+⬜ 7.1.15.6.6 Documentation Synchronization
+
+⬜ 7.1.15.7 Certifications Management
+⬜ 7.1.15.7.1 Backend CRUD Completion
+⬜ 7.1.15.7.2 Backend CRUD Validation
+⬜ 7.1.15.7.3 Frontend CRUD Design
+⬜ 7.1.15.7.4 Frontend CRUD Implementation
+⬜ 7.1.15.7.5 Frontend Validation
+⬜ 7.1.15.7.6 Documentation Synchronization
+
+⬜ 7.1.15.8 Multi Profile Management
+⬜ 7.1.15.8.1 Backend Validation
+⬜ 7.1.15.8.2 Frontend UX Design
+⬜ 7.1.15.8.3 Profile Switcher Implementation
+⬜ 7.1.15.8.4 Active Profile Management
+⬜ 7.1.15.8.5 Validation
+⬜ 7.1.15.8.6 Documentation Synchronization
 
 ⬜ 7.1.16 CV Management
 ⬜ 7.1.16.1 CV Upload

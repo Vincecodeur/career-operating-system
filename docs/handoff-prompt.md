@@ -601,26 +601,24 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15 Profile Management CRUD
+Phase 7.1.15.3.1 Backend CRUD Completion
 
 Objectif :
 
-Permettre la création, modification et suppression des éléments constituant la source de vérité carrière.
+Compléter le CRUD Profile.
 
 Livrables :
 
-- Profile CRUD
-- Skills Management
-- Experience Management
-- Languages Management
-- Certifications Management
-- Multi Profile Management
+- ProfileUpdate schema
+- PUT /profiles/{profile_id}
+- DELETE /profiles/{profile_id}
+- Soft Delete Strategy
 
-Contexte :
+Contraintes :
 
-Profiles est désormais visualisable.
-Applications est désormais visualisable.
-La priorité MVP est maintenant de permettre la maintenance réelle du profil candidat avant l'introduction du CV Management et de l'AI Career Advisor.
+- aucune suppression physique
+- is_active = false
+- tests obligatoires avant validation
 
 ## Méthode de reprise
 
