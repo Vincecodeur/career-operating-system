@@ -8,6 +8,7 @@ from app.profile.models import Profile
 from app.profile.schemas import ProfileCreate
 from app.profile.schemas import ProfileResponse
 from app.profile.schemas import ProfileUpdate
+from app.skills.schemas import SkillUpdate
 
 router = APIRouter(
     prefix="/profiles",
@@ -132,3 +133,4 @@ def delete_profile(
     db.refresh(profile)
 
     return profile
+

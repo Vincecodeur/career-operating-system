@@ -17,3 +17,7 @@ class SkillResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+    
+class SkillUpdate(BaseModel):
+    name: str
+    category: str
