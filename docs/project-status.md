@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.8 Frontend Profile Creation
+7.1.15.4.2 Backend CRUD Validation
 
 ---
 
@@ -775,6 +775,17 @@ Completed
 - Lacune identifiée : création de profil absente côté frontend
 - Nouvelle phase corrective définie : 7.1.15.3.8 Frontend Profile Creation
 
+- Phase 7.1.15.3.8 Frontend Profile Creation terminée
+- frontend/src/components/CreateProfileModal.tsx créé
+- createProfile API implémenté dans frontend/src/services/api.ts
+- bouton New Profile ajouté dans ProfilesPage
+- appel POST /profiles intégré côté frontend
+- ajout automatique du profil créé dans la liste réalisé
+- sélection automatique du profil créé réalisée
+- validation visuelle de création de profil réalisée
+- Commit technique f54172e créé
+- Push GitHub réalisé
+
 ---
 
 Phase In Progress
@@ -789,29 +800,25 @@ Aucun
 
 ---
 
-Phase 7.1.15.3.8 Frontend Profile Creation
+Phase 7.1.15.4.2 Backend CRUD Validation
 
-Objectif :
-
-Ajouter la création de profil depuis la page Profiles.
+Objectif :  
+Valider fonctionnellement le CRUD backend Skills disponible pour le MVP.
 
 Livrables :
 
-- createProfile API dans frontend/src/services/api.ts
-- CreateProfileModal.tsx
-- bouton New Profile dans ProfilesPage
-- appel POST /profiles depuis le frontend
-- ajout du profil créé dans la liste
-- sélection automatique du nouveau profil
-- build frontend validé
-- validation visuelle réalisée
+- validation Swagger POST /skills
+- validation Swagger GET /skills
+- validation Swagger GET /skills/{skill_id}
+- validation Swagger PUT /skills/{skill_id}
+- validation 404 Skill inexistante
+- validation 409 nom de Skill déjà existant
 
 Contraintes :
 
-- création de profil dans Profiles, pas dans Settings
-- ne pas refactorer EditProfileModal dans cette étape
-- garder une implémentation MVP simple
-- ne pas ajouter professional_context dans cette phase
+- DELETE Skill reste volontairement hors périmètre MVP
+- ne pas passer au frontend Skills avant validation backend
+- documenter clairement le report de DELETE Skill
 
 ---
 
@@ -855,4 +862,4 @@ Validated choices:
 
 Last Commit
 
-- aba55bd - feat: complete skills update crud
+- f54172e - feat: add frontend profile creation

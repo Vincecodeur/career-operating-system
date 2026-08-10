@@ -349,6 +349,9 @@ Implémenté :
 - Profile Update
 - Profile Archive
 - Profile Frontend CRUD
+- CreateProfileModal
+- Profile Create
+- Frontend Profile Creation
 
 Documenté mais pas encore implémenté :
 
@@ -487,9 +490,11 @@ Des tests existent pour :
 - Phase 7.1.15.3.5 Frontend CRUD Implementation
 - Phase 7.1.15.3.6 Frontend Validation
 - Phase 7.1.15.3.7 Documentation Synchronization
+- Phase 7.1.15.3.8 Frontend Profile Creation
 
 ## Derniers commits importants
 
+- f54172e - feat: add frontend profile creation
 - aba55bd - feat: complete skills update crud
 - 367f3f1 - docs: synchronize profile frontend crud
 - 0da9765 - feat: implement profile frontend crud
@@ -618,38 +623,36 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.8 Frontend Profile Creation
+Phase 7.1.15.4.2 Backend CRUD Validation
 
 Objectif :
 
-Ajouter la création de profil depuis la page Profiles.
+Valider fonctionnellement le CRUD backend Skills disponible pour le MVP.
 
 Livrables :
 
-- createProfile API dans frontend/src/services/api.ts
-- CreateProfileModal.tsx
-- bouton New Profile dans ProfilesPage
-- appel POST /profiles depuis le frontend
-- ajout du profil créé à la liste
-- sélection automatique du nouveau profil créé
-- build frontend validé
-- validation visuelle réalisée
+- validation Swagger POST /skills
+- validation Swagger GET /skills
+- validation Swagger GET /skills/{skill_id}
+- validation Swagger PUT /skills/{skill_id}
+- validation 404 Skill inexistante
+- validation 409 nom de Skill déjà existant
 
 Pré-requis validés :
 
-- Profile CRUD backend validé
-- Profile Edit frontend validé
-- Profile Archive frontend validé
-- Skills Update backend implémenté
+- SkillUpdate schema créé
+- PUT /skills/{skill_id} implémenté
+- tests backend Skills étendus
 - 136 tests backend passants
 - DELETE Skill volontairement reporté
+- Frontend Profile Creation terminée
 
 Décisions produit :
 
-- la création de profil doit être faite depuis Profiles, pas depuis Settings ;
-- DELETE Skill est reporté car Skill est un référentiel partagé utilisé par ProfileSkill ;
-- professional_context reste post-MVP ou future phase Profile Enrichment ;
-- le MVP doit privilégier la création de profil avant la suppression physique de Skills.
+- DELETE Skill reste hors périmètre MVP ;
+- Skill est un référentiel partagé utilisé par ProfileSkill ;
+- la création de profil est faite depuis Profiles, pas depuis Settings ;
+- la prochaine étape doit valider le backend Skills avant toute interface frontend Skills.
 
 ## Méthode de reprise
 

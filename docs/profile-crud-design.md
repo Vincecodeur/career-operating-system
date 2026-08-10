@@ -1052,12 +1052,25 @@ Rationale:
 
 Follow-up phase:
 
-7.1.15.3.8 Frontend Profile Creation
+Implementation status:
 
-Out of scope:
+Completed.
 
-- professional_context;
-- profile duplication;
-- default profile setting;
-- multi-profile switcher;
-- Skill deletion.
+Implemented in:
+
+- frontend/src/components/CreateProfileModal.tsx
+- frontend/src/services/api.ts
+- frontend/src/pages/ProfilesPage.tsx
+
+Validated behavior:
+
+- user can open the New Profile modal from Profiles;
+- user can create a profile through the frontend;
+- the frontend calls POST /profiles;
+- the created profile is added to the profile list;
+- the created profile is automatically selected;
+- the created profile details are displayed immediately.
+
+Technical commit:
+
+- f54172e - feat: add frontend profile creation

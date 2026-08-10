@@ -409,7 +409,7 @@ Sous-phases :
 ✅ 7.1.15.3.5 Frontend CRUD Implementation
 ✅ 7.1.15.3.6 Frontend Validation
 ✅ 7.1.15.3.7 Documentation Synchronization
-⬜ 7.1.15.3.8 Frontend Profile Creation
+✅ 7.1.15.3.8 Frontend Profile Creation
 
 ⬜ 7.1.15.4 Skills Management
 ✅ 7.1.15.4.1 Backend CRUD Completion
