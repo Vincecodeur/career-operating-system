@@ -9,6 +9,7 @@ from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
 from app.profile.profile_skill_schemas import ProfileSkillCreate
 from app.profile.profile_skill_schemas import ProfileSkillResponse
+from app.profile.profile_skill_schemas import ProfileSkillUpdate
 from app.skills.models import Skill
 
 router = APIRouter(
@@ -98,3 +99,71 @@ def list_skills_for_profile(
     return db.query(ProfileSkill).filter(
         ProfileSkill.profile_id == profile_id
     ).all()
+
+
+@router.put(
+    "/profile-skills/{profile_id}/{skill_id}",
+    response_model=ProfileSkillResponse
+)
+def update_profile_skill(
+    profile_id: int,
+    skill_id: int,
+    profile_skill_update: ProfileSkillUpdate,
+    db: Session = Depends(get_db)
+):
+    profile_skill = db.query(ProfileSkill).filter(
+        ProfileSkill.profile_id == profile_id,
+        ProfileSkill.skill_id == skill_id
+    ).first()
+
+    if profile_skill is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile skill relationship not found."
+        )
+
+    profile_skill.years_of_experience = (
+        profile_skill_update.years_of_experience
+    )
+    profile_skill.self_assessment_level = (
+        profile_skill_update.self_assessment_level
+    )
+
+    db.commit()
+    db.refresh(profile_skill)
+
+    return profile_skill
+
+
+@router.delete(
+    "/profile-skills/{profile_id}/{skill_id}",
+    response_model=ProfileSkillResponse
+)
+def delete_profile_skill(
+    profile_id: int,
+    skill_id: int,
+    db: Session = Depends(get_db)
+):
+    profile_skill = db.query(ProfileSkill).filter(
+        ProfileSkill.profile_id == profile_id,
+        ProfileSkill.skill_id == skill_id
+    ).first()
+
+    if profile_skill is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile skill relationship not found."
+        )
+
+    deleted_profile_skill = {
+        "profile_id": profile_skill.profile_id,
+        "skill_id": profile_skill.skill_id,
+        "years_of_experience": profile_skill.years_of_experience,
+        "self_assessment_level": profile_skill.self_assessment_level,
+        "created_at": profile_skill.created_at,
+    }
+
+    db.delete(profile_skill)
+    db.commit()
+
+    return deleted_profile_skill
