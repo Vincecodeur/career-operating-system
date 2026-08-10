@@ -24,6 +24,25 @@ type ProfileSkillUpdatePayload = {
     self_assessment_level: string;
 };
 
+type WorkExperiencePayload = {
+    profile_id: number;
+    company_name: string;
+    job_title: string;
+    start_date: string;
+    end_date: string | null;
+    is_current_position: boolean;
+    description: string;
+};
+
+type WorkExperienceUpdatePayload = {
+    company_name: string;
+    job_title: string;
+    start_date: string;
+    end_date: string | null;
+    is_current_position: boolean;
+    description: string;
+};
+
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -228,6 +247,72 @@ export async function getProfileWorkExperiences(
     if (!response.ok) {
         throw new Error(
             "Unable to load profile work experiences."
+        );
+    }
+
+    return response.json();
+}
+
+export async function createWorkExperience(
+    payload: WorkExperiencePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/work-experiences`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to add work experience.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateWorkExperience(
+    workExperienceId: number,
+    payload: WorkExperienceUpdatePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/work-experiences/${workExperienceId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update work experience.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteWorkExperience(
+    workExperienceId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/work-experiences/${workExperienceId}`,
+        {
+            method: "DELETE",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to remove work experience.",
         );
     }
 

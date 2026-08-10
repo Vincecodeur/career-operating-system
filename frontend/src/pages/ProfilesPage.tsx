@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 
 import { AddProfileSkillModal } from "../components/AddProfileSkillModal";
 import type { AddProfileSkillFormValues } from "../components/AddProfileSkillModal";
+import { AddWorkExperienceModal } from "../components/AddWorkExperienceModal";
+import type { AddWorkExperienceFormValues } from "../components/AddWorkExperienceModal";
 import { CreateProfileModal } from "../components/CreateProfileModal";
 import type { CreateProfileFormValues } from "../components/CreateProfileModal";
 import { DeleteProfileDialog } from "../components/DeleteProfileDialog";
 import { DeleteProfileSkillDialog } from "../components/DeleteProfileSkillDialog";
+import { DeleteWorkExperienceDialog } from "../components/DeleteWorkExperienceDialog";
 import { EditProfileModal } from "../components/EditProfileModal";
 import type { ProfileFormValues } from "../components/EditProfileModal";
 import { EditProfileSkillModal } from "../components/EditProfileSkillModal";
 import type { EditProfileSkillFormValues } from "../components/EditProfileSkillModal";
+import { EditWorkExperienceModal } from "../components/EditWorkExperienceModal";
+import type { EditWorkExperienceFormValues } from "../components/EditWorkExperienceModal";
+
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
@@ -28,6 +34,9 @@ import {
   getSkills,
   updateProfile,
   updateProfileSkill,
+  createWorkExperience,
+  updateWorkExperience,
+  deleteWorkExperience,
 } from "../services/api";
 
 type Profile = {
@@ -133,17 +142,30 @@ export function ProfilesPage() {
     useState(false);
   const [isDeleteProfileSkillDialogOpen, setIsDeleteProfileSkillDialogOpen] =
     useState(false);
+  const [isAddWorkExperienceModalOpen, setIsAddWorkExperienceModalOpen] =
+    useState(false);
 
+  const [isEditWorkExperienceModalOpen, setIsEditWorkExperienceModalOpen] =
+    useState(false);
+
+  const [
+    isDeleteWorkExperienceDialogOpen,
+    setIsDeleteWorkExperienceDialogOpen,
+  ] = useState(false);
   const [selectedProfileSkill, setSelectedProfileSkill] =
     useState<ProfileSkill | null>(null);
-
+  const [selectedWorkExperience, setSelectedWorkExperience] =
+    useState<WorkExperience | null>(null);
   const [isCreatingProfile, setIsCreatingProfile] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isDeletingProfile, setIsDeletingProfile] = useState(false);
 
   const [isSavingProfileSkill, setIsSavingProfileSkill] = useState(false);
   const [isDeletingProfileSkill, setIsDeletingProfileSkill] = useState(false);
+  const [isSavingWorkExperience, setIsSavingWorkExperience] = useState(false);
 
+  const [isDeletingWorkExperience, setIsDeletingWorkExperience] =
+    useState(false);
   const [profileMutationError, setProfileMutationError] = useState<
     string | null
   >(null);
@@ -151,6 +173,9 @@ export function ProfilesPage() {
   const [profileSkillMutationError, setProfileSkillMutationError] = useState<
     string | null
   >(null);
+
+  const [workExperienceMutationError, setWorkExperienceMutationError] =
+    useState<string | null>(null);
 
   const selectedSkill =
     selectedProfileSkill === null
@@ -382,6 +407,92 @@ export function ProfilesPage() {
     }
   }
 
+  function normalizeOptionalDate(value: string | undefined) {
+    return value && value.length > 0 ? value : null;
+  }
+
+  async function handleAddWorkExperience(values: AddWorkExperienceFormValues) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingWorkExperience(true);
+    setWorkExperienceMutationError(null);
+
+    try {
+      await createWorkExperience({
+        profile_id: selectedProfile.id,
+        company_name: values.company_name,
+        job_title: values.job_title,
+        start_date: values.start_date,
+        end_date: normalizeOptionalDate(values.end_date),
+        is_current_position: values.is_current_position,
+        description: values.description,
+      });
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setIsAddWorkExperienceModalOpen(false);
+    } catch {
+      setWorkExperienceMutationError("Unable to add work experience.");
+    } finally {
+      setIsSavingWorkExperience(false);
+    }
+  }
+
+  async function handleUpdateWorkExperience(
+    values: EditWorkExperienceFormValues,
+  ) {
+    if (!selectedWorkExperience) {
+      return;
+    }
+
+    setIsSavingWorkExperience(true);
+    setWorkExperienceMutationError(null);
+
+    try {
+      await updateWorkExperience(selectedWorkExperience.id, {
+        company_name: values.company_name,
+        job_title: values.job_title,
+        start_date: values.start_date,
+        end_date: normalizeOptionalDate(values.end_date),
+        is_current_position: values.is_current_position,
+        description: values.description,
+      });
+
+      await reloadSelectedProfileDetails(selectedWorkExperience.profile_id);
+
+      setSelectedWorkExperience(null);
+      setIsEditWorkExperienceModalOpen(false);
+    } catch {
+      setWorkExperienceMutationError("Unable to update work experience.");
+    } finally {
+      setIsSavingWorkExperience(false);
+    }
+  }
+
+  async function handleDeleteWorkExperience() {
+    if (!selectedWorkExperience) {
+      return;
+    }
+
+    setIsDeletingWorkExperience(true);
+    setWorkExperienceMutationError(null);
+
+    try {
+      await deleteWorkExperience(selectedWorkExperience.id);
+
+      await reloadSelectedProfileDetails(selectedWorkExperience.profile_id);
+
+      setSelectedWorkExperience(null);
+      setIsDeleteWorkExperienceDialogOpen(false);
+    } catch {
+      setWorkExperienceMutationError("Unable to remove work experience.");
+    } finally {
+      setIsDeletingWorkExperience(false);
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -445,6 +556,20 @@ export function ProfilesPage() {
                   setSelectedProfileSkill(profileSkill);
                   setProfileSkillMutationError(null);
                   setIsDeleteProfileSkillDialogOpen(true);
+                }}
+                onAddWorkExperience={() => {
+                  setWorkExperienceMutationError(null);
+                  setIsAddWorkExperienceModalOpen(true);
+                }}
+                onEditWorkExperience={(workExperience) => {
+                  setSelectedWorkExperience(workExperience);
+                  setWorkExperienceMutationError(null);
+                  setIsEditWorkExperienceModalOpen(true);
+                }}
+                onDeleteWorkExperience={(workExperience) => {
+                  setSelectedWorkExperience(workExperience);
+                  setWorkExperienceMutationError(null);
+                  setIsDeleteWorkExperienceDialogOpen(true);
                 }}
               />
             ) : (
@@ -521,6 +646,42 @@ export function ProfilesPage() {
           setIsDeleteProfileSkillDialogOpen(false);
         }}
         onConfirm={handleDeleteProfileSkill}
+      />
+      <AddWorkExperienceModal
+        isOpen={isAddWorkExperienceModalOpen}
+        isSaving={isSavingWorkExperience}
+        error={workExperienceMutationError}
+        onClose={() => {
+          setWorkExperienceMutationError(null);
+          setIsAddWorkExperienceModalOpen(false);
+        }}
+        onAdd={handleAddWorkExperience}
+      />
+
+      <EditWorkExperienceModal
+        workExperience={selectedWorkExperience}
+        isOpen={isEditWorkExperienceModalOpen}
+        isSaving={isSavingWorkExperience}
+        error={workExperienceMutationError}
+        onClose={() => {
+          setSelectedWorkExperience(null);
+          setWorkExperienceMutationError(null);
+          setIsEditWorkExperienceModalOpen(false);
+        }}
+        onSave={handleUpdateWorkExperience}
+      />
+
+      <DeleteWorkExperienceDialog
+        workExperience={selectedWorkExperience}
+        isOpen={isDeleteWorkExperienceDialogOpen}
+        isDeleting={isDeletingWorkExperience}
+        error={workExperienceMutationError}
+        onClose={() => {
+          setSelectedWorkExperience(null);
+          setWorkExperienceMutationError(null);
+          setIsDeleteWorkExperienceDialogOpen(false);
+        }}
+        onConfirm={handleDeleteWorkExperience}
       />
     </>
   );
