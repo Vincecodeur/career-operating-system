@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.5.3 Frontend CRUD Design
+7.1.15.6 Languages Management
 
 ---
 
@@ -831,6 +831,32 @@ Completed
 - Phase 7.1.15.5.1 Backend CRUD Completion terminée
 - Phase 7.1.15.5.2 Backend CRUD Validation terminée
 
+- Phase 7.1.15.5.3 Frontend CRUD Design terminée
+- UX Add Work Experience définie
+- UX Edit Work Experience définie
+- UX Delete Work Experience définie
+- Modal strategy validée
+- APIs frontend identifiées
+
+- Phase 7.1.15.5.4 Frontend CRUD Implementation terminée
+- frontend/src/components/AddWorkExperienceModal.tsx créé
+- frontend/src/components/EditWorkExperienceModal.tsx créé
+- frontend/src/components/DeleteWorkExperienceDialog.tsx créé
+- createWorkExperience API implémenté
+- updateWorkExperience API implémenté
+- deleteWorkExperience API implémenté
+- ProfileDetail.tsx enrichi avec CRUD WorkExperience
+- ProfilesPage.tsx enrichi avec CRUD WorkExperience
+- Build frontend validé
+- Commit technique 93afcae créé
+- Push GitHub réalisé
+
+- Phase 7.1.15.5.5 Frontend Validation terminée
+- Validation visuelle Add Work Experience réalisée
+- Validation visuelle Edit Work Experience réalisée
+- Validation visuelle Remove Work Experience réalisée
+- Validation fonctionnelle complète réalisée
+
 ---
 
 Phase In Progress
@@ -845,24 +871,27 @@ Aucun
 
 ---
 
-Phase 7.1.15.5.3 Frontend CRUD Design
+Phase 7.1.15.6 Languages Management
 
 Objectif :
-Définir la stratégie frontend CRUD WorkExperience.
+Compléter le CRUD du domaine ProfileLanguage.
 
-Livrables :
+Pré-requis :
 
-- design UX édition expérience
-- design UX suppression expérience
-- stratégie modales
-- APIs frontend nécessaires
-- plan d'intégration ProfileDetail
+- WorkExperience CRUD terminé
+- Frontend WorkExperience CRUD validé
+- Repository synchronisé
 
-Contraintes :
+Prochaine étape active :
+7.1.15.6.1 Backend CRUD Completion
 
-- aucun code
-- aucun test
-- design uniquement
+Périmètre :
+
+- audit du domaine ProfileLanguage
+- revue OpenAPI
+- stratégie Update/Delete
+- analyse des clés composites
+- validation des impacts frontend
 
 ---
 
@@ -889,4 +918,4 @@ Validated choices:
 
 Last Commit
 
-- da0635b - test: add work experience crud coverage
+- 93afcae - feat: add frontend work experience crud

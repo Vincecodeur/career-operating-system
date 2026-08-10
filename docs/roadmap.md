@@ -422,13 +422,13 @@ Sous-phases :
 ✅ 7.1.15.4.5 Frontend Validation
 ✅ 7.1.15.4.6 Documentation Synchronization
 
-⬜ 7.1.15.5 Experience Management
+✅ 7.1.15.5 Experience Management
 ✅ 7.1.15.5.1 Backend CRUD Completion
 ✅ 7.1.15.5.2 Backend CRUD Validation
-⬜ 7.1.15.5.3 Frontend CRUD Design
-⬜ 7.1.15.5.4 Frontend CRUD Implementation
-⬜ 7.1.15.5.5 Frontend Validation
-⬜ 7.1.15.5.6 Documentation Synchronization
+✅ 7.1.15.5.3 Frontend CRUD Design
+✅ 7.1.15.5.4 Frontend CRUD Implementation
+✅ 7.1.15.5.5 Frontend Validation
+✅ 7.1.15.5.6 Documentation Synchronization
 
 ⬜ 7.1.15.6 Languages Management
 ⬜ 7.1.15.6.1 Backend CRUD Completion

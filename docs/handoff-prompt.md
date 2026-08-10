@@ -366,6 +366,13 @@ Implémenté :
 - updateProfileSkill
 - deleteProfileSkill
 - Frontend ProfileSkill CRUD
+- AddWorkExperienceModal
+- EditWorkExperienceModal
+- DeleteWorkExperienceDialog
+- createWorkExperience
+- updateWorkExperience
+- deleteWorkExperience
+- Frontend WorkExperience CRUD
 
 Documenté mais pas encore implémenté :
 
@@ -513,9 +520,14 @@ Des tests existent pour :
 - Phase 7.1.15.4.4 Frontend CRUD Implementation
 - Phase 7.1.15.5.1 Backend CRUD Completion
 - Phase 7.1.15.5.2 Backend CRUD Validation
+- Phase 7.1.15.5.3 Frontend CRUD Design
+- Phase 7.1.15.5.4 Frontend CRUD Implementation
+- Phase 7.1.15.5.5 Frontend Validation
+- Phase 7.1.15.5.6 Documentation Synchronization
 
 ## Derniers commits importants
 
+- 93afcae - feat: add frontend work experience crud
 - da0635b - test: add work experience crud coverage
 - ca1ce1b - feat: complete work experience crud backend
 - a2c1ef0 - feat: add frontend profile skill crud
@@ -649,26 +661,28 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.5.3 Frontend CRUD Design
+Phase suivante recommandée
+
+Phase 7.1.15.6.1 Backend CRUD Completion
 
 Objectif :
-Définir le CRUD frontend WorkExperience.
+Ajouter le CRUD Update/Delete pour ProfileLanguage.
 
 Pré-requis validés :
 
-- Backend CRUD terminé
-- Tests CRUD terminés
-- 151/151 tests passants
-- Repository propre
-- GitHub synchronisé
+- WorkExperience CRUD backend terminé
+- WorkExperience CRUD frontend terminé
+- Validation frontend réalisée
+- Commit technique réalisé
+- Repository synchronisé
 
 Périmètre :
 
-- audit des composants frontend existants
-- UX édition expérience
-- UX suppression expérience
-- stratégie des modales
-- APIs frontend nécessaires
+- audit du domaine ProfileLanguage
+- analyse OpenAPI
+- stratégie Update/Delete
+- revue des clés composites
+- validation impacts frontend
 
 Aucun développement pendant cette phase.
 
