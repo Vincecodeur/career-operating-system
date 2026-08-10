@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.5 Frontend CRUD Implementation
+7.1.15.3.7 Documentation Synchronization
 
 ---
 
@@ -737,6 +737,18 @@ Completed
 - Architecture frontend CRUD validée
 - Positionnement futur du champ professional_context défini
 
+- frontend/src/components/EditProfileModal.tsx créé
+- frontend/src/components/DeleteProfileDialog.tsx créé
+- updateProfile API implémenté
+- deleteProfile API implémenté
+- Intégration ProfileDetail réalisée
+- Intégration ProfilesPage réalisée
+- Validation visuelle Edit Profile réalisée
+- Validation visuelle Archive Profile réalisée
+- Build frontend validé
+- Phase 7.1.15.3.5 Frontend CRUD Implementation terminée
+- Phase 7.1.15.3.6 Frontend Validation terminée
+
 ---
 
 Phase In Progress
@@ -751,25 +763,22 @@ Aucun
 
 ---
 
-Phase 7.1.15.3.5 Frontend CRUD Implementation
+Phase 7.1.15.3.7 Documentation Synchronization
 
 Objectif :
 
-Implémenter le CRUD Profile dans le frontend.
+Synchroniser la documentation du CRUD Profile.
 
 Livrables :
 
-- EditProfileModal.tsx
-- DeleteProfileDialog.tsx
-- updateProfile API
-- deleteProfile API
-- Intégration ProfileDetail
-- Intégration ProfilesPage
+- roadmap.md
+- project-status.md
+- handoff-prompt.md
 
 Validation :
 
-- npm run build
-- validation visuelle
+- cohérence code/documents
+- git status propre
 
 ---
 
@@ -813,4 +822,4 @@ Validated choices:
 
 Last Commit
 
-- be143c6 - docs: close profile crud validation
+- 0da9765 - feat: implement profile frontend crud

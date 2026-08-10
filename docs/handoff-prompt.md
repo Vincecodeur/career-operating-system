@@ -344,6 +344,11 @@ Implémenté :
 - Profile work experience visualization
 - Profile languages visualization
 - Profile certifications visualization
+- EditProfileModal
+- DeleteProfileDialog
+- Profile Update
+- Profile Archive
+- Profile Frontend CRUD
 
 Documenté mais pas encore implémenté :
 
@@ -477,6 +482,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 0da9765 - feat: implement profile frontend crud
 - be143c6 - docs: close profile crud validation
 - 5f55b9e - feat: implement applications visualization
 - 94727f8 - feat: implement profile management visualization
@@ -602,11 +608,11 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.5 Frontend CRUD Implementation
+Phase 7.1.15.3.7 Documentation Synchronization
 
 Objectif :
 
-Implémenter le CRUD Profile dans le frontend.
+Synchroniser la documentation CRUD Profile.
 
 Livrables :
 
