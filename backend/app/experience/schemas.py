@@ -14,6 +14,15 @@ class WorkExperienceCreate(BaseModel):
     description: str
 
 
+class WorkExperienceUpdate(BaseModel):
+    company_name: str
+    job_title: str
+    start_date: date
+    end_date: date | None = None
+    is_current_position: bool = False
+    description: str
+
+
 class WorkExperienceResponse(BaseModel):
     id: int
     profile_id: int
