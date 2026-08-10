@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.3.3 Backend CRUD Validation
+7.1.15.3.4 Frontend CRUD Design
 
 ---
 
@@ -718,9 +718,19 @@ Completed
 - 7 tests CRUD Profile passants
 - 130 tests backend passants
 
+- Phase 7.1.15.3.3 Backend CRUD Validation terminée
+- Validation Swagger POST /profiles réalisée
+- Validation Swagger GET /profiles réalisée
+- Validation Swagger GET /profiles/{id} réalisée
+- Validation Swagger PUT /profiles/{id} réalisée
+- Validation Swagger DELETE /profiles/{id} réalisée
+- Validation Soft Delete réalisée
+- Validation comportement 404 réalisée
+- Validation fonctionnelle CRUD Profile réussie
+
 ---
 
-In Progress
+Phase In Progress
 
 - Phase 7.1 MVP Experience Completion
 
@@ -732,28 +742,26 @@ Aucun
 
 ---
 
-In Progress:
-
-Phase 7.1.15.3.3 Backend CRUD Validation
+Phase 7.1.15.3.4 Frontend CRUD Design
 
 Objectif :
 
-Valider fonctionnellement le CRUD Profile avec Swagger.
+Définir l'expérience utilisateur de modification et suppression de profil.
 
 Livrables :
 
-- Validation POST /profiles
-- Validation GET /profiles
-- Validation GET /profiles/{profile_id}
-- Validation PUT /profiles/{profile_id}
-- Validation DELETE /profiles/{profile_id}
-- Validation Soft Delete
-- Validation comportement 404
+- Design Edit Profile
+- Design Delete Profile
+- Design formulaire Profile
+- Design états de validation
+- Design gestion erreurs API
+- Design intégration dans ProfilesPage
 
 Contraintes :
 
-- validation manuelle Swagger obligatoire
-- aucune modification de code prévue
+- aucune logique métier dans React
+- backend reste source de vérité
+- utilisation des endpoints CRUD existants
 
 ---
 
@@ -797,4 +805,4 @@ Validated choices:
 
 Last Commit
 
-- 0256b0c - docs: synchronize profile crud completion
+- c979b6a - docs: close profile crud tests

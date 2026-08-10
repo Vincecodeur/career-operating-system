@@ -601,27 +601,27 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.3.3 Backend CRUD Validation
+Phase 7.1.15.3.4 Frontend CRUD Design
 
 Objectif :
 
-Valider fonctionnellement le CRUD Profile.
+Définir l'expérience utilisateur du CRUD Profile.
 
 Livrables :
 
-- Validation POST /profiles
-- Validation GET /profiles
-- Validation GET /profiles/{profile_id}
-- Validation PUT /profiles/{profile_id}
-- Validation DELETE /profiles/{profile_id}
-- Validation Soft Delete
-- Validation 404
+- Design Edit Profile
+- Design Delete Profile
+- Design formulaire Profile
+- Design validation formulaire
+- Design gestion erreurs API
+- Design intégration ProfilesPage
 
 Pré-requis :
 
-- 97bb6d4 - feat: add profile update and soft delete
-- CRUD Profile Tests validés
-- 130 tests passants
+- CRUD Profile backend implémenté
+- CRUD Profile tests validés
+- Validation Swagger réalisée
+- Soft Delete validé
 
 ## Méthode de reprise
 
