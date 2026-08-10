@@ -393,7 +393,7 @@ Sous-phases :
 ✅ 7.1.13.3 Profile Management Visualization Implementation Plan
 ✅ 7.1.13.4 Profile Management Visualization Repository Audit
 ✅ 7.1.13.5 Profile Management Visualization Implementation
-⬜ 7.1.14 Applications Visualization
+✅ 7.1.14 Applications Visualization
 
 ⬜ 7.1.15 Profile Management CRUD
 ⬜ 7.1.15.1 Profile CRUD

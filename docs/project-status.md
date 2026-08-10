@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-Phase 7.1.13.5 Profile Management Visualization Implementation
+7.1.15 Profile Management CRUD
 
 ---
 
 Next Planned Milestone
-Phase 7.1.14 Applications Visualization
+Phase 7.1.15 Profile Management CRUD
 
 ---
 
@@ -657,6 +657,16 @@ Completed
 - Validation visuelle Profiles réalisée
 - Phase 7.1.13.5 Profile Management Visualization Implementation terminée
 
+- ApplicationsPage connectée au backend
+- Applications master/detail layout implémenté
+- Application KPI summary implémenté
+- Visualisation des candidatures implémentée
+- Visualisation du détail candidature implémentée
+- Statut candidature visualisé
+- Tri décroissant par date de création implémenté
+- Validation visuelle Applications réalisée
+- Phase 7.1.14 Applications Visualization terminée
+
 ---
 
 In Progress
@@ -673,36 +683,19 @@ Aucun
 
 Next Step
 
-Phase 7.1.14 Applications Visualization
+Phase 7.1.15 Profile Management CRUD
 
 Objectif :
-
-Transformer Applications en véritable page métier afin de visualiser les candidatures existantes et compléter le parcours MVP :
-
-Profile
-↓
-Opportunities
-↓
-Matching
-↓
-Applications
+Permettre la création, la modification et la suppression des éléments constituant la source de vérité carrière.
 
 Livrables attendus :
 
-- ApplicationsPage connectée aux données backend
-- liste des candidatures visible
-- statut des candidatures visible
-- lien avec profile_id et job_offer_id visible
-- layout cohérent avec le reste du frontend
-- validation visuelle réalisée
-
-Pas encore :
-
-- édition avancée des candidatures
-- automatisation des candidatures
-- IA Career Advisor
-- génération de CV
-- génération de lettre de motivation
+- Profile CRUD
+- Skills Management
+- Experience Management
+- Languages Management
+- Certifications Management
+- Multi Profile Management
 
 ---
 
@@ -746,6 +739,4 @@ Validated choices:
 
 Last Commit
 
-- 94727f8 - feat: implement profile management visualization
-- a612b0b - docs: define profile management visualization
-- 14e6830 - docs: synchronize ai explanation frontend implementation
+- 5f55b9e - feat: implement applications visualization

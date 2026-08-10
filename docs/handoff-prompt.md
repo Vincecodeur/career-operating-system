@@ -473,9 +473,11 @@ Des tests existent pour :
 - Phase 7.1.13.3 Profile Management Visualization Implementation Plan
 - Phase 7.1.13.4 Profile Management Visualization Repository Audit
 - Phase 7.1.13.5 Profile Management Visualization Implementation
+- Phase 7.1.14 Applications Visualization
 
 ## Derniers commits importants
 
+- 5f55b9e - feat: implement applications visualization
 - 94727f8 - feat: implement profile management visualization
 - a612b0b - docs: define profile management visualization
 - 14e6830 - docs: synchronize ai explanation frontend implementation
@@ -599,47 +601,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.14 Applications Visualization
-
-L'AI Career Advisor a été volontairement repoussé après la complétion des fonctionnalités cœur du Career Operating System :
-
-- Profile CRUD
-- CV Management
-- Application Workflow
-- Opportunity Filters
-- Settings
-- Profile Completeness
-- Saved Searches
+Phase 7.1.15 Profile Management CRUD
 
 Objectif :
-Construire un MVP utilisable quotidiennement avant d'ajouter des fonctionnalités d'assistance IA.
 
-Contexte :
-
-La page Opportunities est fonctionnelle.
-La page Profiles est désormais connectée aux données backend.
-La page Applications reste encore trop faible pour un Career Operating System MVP.
+Permettre la création, modification et suppression des éléments constituant la source de vérité carrière.
 
 Livrables :
 
-- ApplicationsPage connectée au backend
-- liste des candidatures visible
-- statut des candidatures visible
-- affichage profile_id
-- affichage job_offer_id
-- structure visuelle cohérente avec le reste du produit
-- validation frontend réalisée
+- Profile CRUD
+- Skills Management
+- Experience Management
+- Languages Management
+- Certifications Management
+- Multi Profile Management
 
-Pas encore :
+Contexte :
 
-- édition avancée
-- automatisation
-- IA Career Advisor
-- génération de documents
-
-Note roadmap :
-
-La phase Dashboard Evolution est identifiée comme post-MVP et ne doit pas être traitée avant la finalisation du MVP Experience Review.
+Profiles est désormais visualisable.
+Applications est désormais visualisable.
+La priorité MVP est maintenant de permettre la maintenance réelle du profil candidat avant l'introduction du CV Management et de l'AI Career Advisor.
 
 ## Méthode de reprise
 
