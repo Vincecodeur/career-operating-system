@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
 
+import { AddProfileSkillModal } from "../components/AddProfileSkillModal";
+import type { AddProfileSkillFormValues } from "../components/AddProfileSkillModal";
 import { CreateProfileModal } from "../components/CreateProfileModal";
 import type { CreateProfileFormValues } from "../components/CreateProfileModal";
 import { DeleteProfileDialog } from "../components/DeleteProfileDialog";
+import { DeleteProfileSkillDialog } from "../components/DeleteProfileSkillDialog";
 import { EditProfileModal } from "../components/EditProfileModal";
 import type { ProfileFormValues } from "../components/EditProfileModal";
+import { EditProfileSkillModal } from "../components/EditProfileSkillModal";
+import type { EditProfileSkillFormValues } from "../components/EditProfileSkillModal";
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
 import {
   createProfile,
+  createProfileSkill,
   deleteProfile,
+  deleteProfileSkill,
   getCertifications,
   getLanguages,
   getProfileCertifications,
@@ -20,6 +27,7 @@ import {
   getProfiles,
   getSkills,
   updateProfile,
+  updateProfileSkill,
 } from "../services/api";
 
 type Profile = {
@@ -119,13 +127,64 @@ export function ProfilesPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+  const [isAddProfileSkillModalOpen, setIsAddProfileSkillModalOpen] =
+    useState(false);
+  const [isEditProfileSkillModalOpen, setIsEditProfileSkillModalOpen] =
+    useState(false);
+  const [isDeleteProfileSkillDialogOpen, setIsDeleteProfileSkillDialogOpen] =
+    useState(false);
+
+  const [selectedProfileSkill, setSelectedProfileSkill] =
+    useState<ProfileSkill | null>(null);
+
   const [isCreatingProfile, setIsCreatingProfile] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isDeletingProfile, setIsDeletingProfile] = useState(false);
 
+  const [isSavingProfileSkill, setIsSavingProfileSkill] = useState(false);
+  const [isDeletingProfileSkill, setIsDeletingProfileSkill] = useState(false);
+
   const [profileMutationError, setProfileMutationError] = useState<
     string | null
   >(null);
+
+  const [profileSkillMutationError, setProfileSkillMutationError] = useState<
+    string | null
+  >(null);
+
+  const selectedSkill =
+    selectedProfileSkill === null
+      ? null
+      : (skills.find((skill) => skill.id === selectedProfileSkill.skill_id) ??
+        null);
+
+  async function reloadSelectedProfileDetails(profileId: number) {
+    const [
+      profileSkillsData,
+      skillsData,
+      workExperiencesData,
+      profileLanguagesData,
+      languagesData,
+      profileCertificationsData,
+      certificationsData,
+    ] = await Promise.all([
+      getProfileSkills(profileId),
+      getSkills(),
+      getProfileWorkExperiences(profileId),
+      getProfileLanguages(profileId),
+      getLanguages(),
+      getProfileCertifications(profileId),
+      getCertifications(),
+    ]);
+
+    setProfileSkills(profileSkillsData);
+    setSkills(skillsData);
+    setWorkExperiences(workExperiencesData);
+    setProfileLanguages(profileLanguagesData);
+    setLanguages(languagesData);
+    setProfileCertifications(profileCertificationsData);
+    setCertifications(certificationsData);
+  }
 
   useEffect(() => {
     async function loadProfiles() {
@@ -160,31 +219,7 @@ export function ProfilesPage() {
       setLoadingDetails(true);
 
       try {
-        const [
-          profileSkillsData,
-          skillsData,
-          workExperiencesData,
-          profileLanguagesData,
-          languagesData,
-          profileCertificationsData,
-          certificationsData,
-        ] = await Promise.all([
-          getProfileSkills(selectedProfile.id),
-          getSkills(),
-          getProfileWorkExperiences(selectedProfile.id),
-          getProfileLanguages(selectedProfile.id),
-          getLanguages(),
-          getProfileCertifications(selectedProfile.id),
-          getCertifications(),
-        ]);
-
-        setProfileSkills(profileSkillsData);
-        setSkills(skillsData);
-        setWorkExperiences(workExperiencesData);
-        setProfileLanguages(profileLanguagesData);
-        setLanguages(languagesData);
-        setProfileCertifications(profileCertificationsData);
-        setCertifications(certificationsData);
+        await reloadSelectedProfileDetails(selectedProfile.id);
       } catch {
         setError("Unable to load profile details.");
       } finally {
@@ -267,6 +302,86 @@ export function ProfilesPage() {
     }
   }
 
+  async function handleAddProfileSkill(values: AddProfileSkillFormValues) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingProfileSkill(true);
+    setProfileSkillMutationError(null);
+
+    try {
+      await createProfileSkill({
+        profile_id: selectedProfile.id,
+        skill_id: values.skill_id,
+        years_of_experience: values.years_of_experience,
+        self_assessment_level: values.self_assessment_level,
+      });
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setIsAddProfileSkillModalOpen(false);
+    } catch {
+      setProfileSkillMutationError("Unable to add skill.");
+    } finally {
+      setIsSavingProfileSkill(false);
+    }
+  }
+
+  async function handleUpdateProfileSkill(values: EditProfileSkillFormValues) {
+    if (!selectedProfileSkill) {
+      return;
+    }
+
+    setIsSavingProfileSkill(true);
+    setProfileSkillMutationError(null);
+
+    try {
+      await updateProfileSkill(
+        selectedProfileSkill.profile_id,
+        selectedProfileSkill.skill_id,
+        {
+          years_of_experience: values.years_of_experience,
+          self_assessment_level: values.self_assessment_level,
+        },
+      );
+
+      await reloadSelectedProfileDetails(selectedProfileSkill.profile_id);
+
+      setSelectedProfileSkill(null);
+      setIsEditProfileSkillModalOpen(false);
+    } catch {
+      setProfileSkillMutationError("Unable to update skill.");
+    } finally {
+      setIsSavingProfileSkill(false);
+    }
+  }
+
+  async function handleDeleteProfileSkill() {
+    if (!selectedProfileSkill) {
+      return;
+    }
+
+    setIsDeletingProfileSkill(true);
+    setProfileSkillMutationError(null);
+
+    try {
+      await deleteProfileSkill(
+        selectedProfileSkill.profile_id,
+        selectedProfileSkill.skill_id,
+      );
+
+      await reloadSelectedProfileDetails(selectedProfileSkill.profile_id);
+
+      setSelectedProfileSkill(null);
+      setIsDeleteProfileSkillDialogOpen(false);
+    } catch {
+      setProfileSkillMutationError("Unable to remove skill.");
+    } finally {
+      setIsDeletingProfileSkill(false);
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -317,6 +432,20 @@ export function ProfilesPage() {
                   setProfileMutationError(null);
                   setIsDeleteDialogOpen(true);
                 }}
+                onAddProfileSkill={() => {
+                  setProfileSkillMutationError(null);
+                  setIsAddProfileSkillModalOpen(true);
+                }}
+                onEditProfileSkill={(profileSkill) => {
+                  setSelectedProfileSkill(profileSkill);
+                  setProfileSkillMutationError(null);
+                  setIsEditProfileSkillModalOpen(true);
+                }}
+                onDeleteProfileSkill={(profileSkill) => {
+                  setSelectedProfileSkill(profileSkill);
+                  setProfileSkillMutationError(null);
+                  setIsDeleteProfileSkillDialogOpen(true);
+                }}
               />
             ) : (
               <p className="text-slate-400">
@@ -351,6 +480,47 @@ export function ProfilesPage() {
         error={profileMutationError}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleArchiveProfile}
+      />
+
+      <AddProfileSkillModal
+        skills={skills}
+        profileSkills={profileSkills}
+        isOpen={isAddProfileSkillModalOpen}
+        isSaving={isSavingProfileSkill}
+        error={profileSkillMutationError}
+        onClose={() => {
+          setProfileSkillMutationError(null);
+          setIsAddProfileSkillModalOpen(false);
+        }}
+        onAdd={handleAddProfileSkill}
+      />
+
+      <EditProfileSkillModal
+        profileSkill={selectedProfileSkill}
+        skill={selectedSkill}
+        isOpen={isEditProfileSkillModalOpen}
+        isSaving={isSavingProfileSkill}
+        error={profileSkillMutationError}
+        onClose={() => {
+          setSelectedProfileSkill(null);
+          setProfileSkillMutationError(null);
+          setIsEditProfileSkillModalOpen(false);
+        }}
+        onSave={handleUpdateProfileSkill}
+      />
+
+      <DeleteProfileSkillDialog
+        profileSkill={selectedProfileSkill}
+        skill={selectedSkill}
+        isOpen={isDeleteProfileSkillDialogOpen}
+        isDeleting={isDeletingProfileSkill}
+        error={profileSkillMutationError}
+        onClose={() => {
+          setSelectedProfileSkill(null);
+          setProfileSkillMutationError(null);
+          setIsDeleteProfileSkillDialogOpen(false);
+        }}
+        onConfirm={handleDeleteProfileSkill}
       />
     </>
   );

@@ -12,6 +12,18 @@ type ProfilePayload = {
     preferred_countries: string;
 };
 
+type ProfileSkillPayload = {
+    profile_id: number;
+    skill_id: number;
+    years_of_experience: number;
+    self_assessment_level: string;
+};
+
+type ProfileSkillUpdatePayload = {
+    years_of_experience: number;
+    self_assessment_level: string;
+};
+
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -118,6 +130,74 @@ export async function getProfileSkills(
     if (!response.ok) {
         throw new Error(
             "Unable to load profile skills."
+        );
+    }
+
+    return response.json();
+}
+
+export async function createProfileSkill(
+    payload: ProfileSkillPayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-skills`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to add profile skill."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateProfileSkill(
+    profileId: number,
+    skillId: number,
+    payload: ProfileSkillUpdatePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-skills/${profileId}/${skillId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update profile skill."
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteProfileSkill(
+    profileId: number,
+    skillId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-skills/${profileId}/${skillId}`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to remove profile skill."
         );
     }
 

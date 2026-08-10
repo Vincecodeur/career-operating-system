@@ -84,6 +84,9 @@ type Props = {
   loading?: boolean;
   onEditProfile: () => void;
   onArchiveProfile: () => void;
+  onAddProfileSkill: () => void;
+  onEditProfileSkill: (profileSkill: ProfileSkill) => void;
+  onDeleteProfileSkill: (profileSkill: ProfileSkill) => void;
 };
 
 function formatDate(value: string | null) {
@@ -106,6 +109,9 @@ export function ProfileDetail({
   loading = false,
   onEditProfile,
   onArchiveProfile,
+  onAddProfileSkill,
+  onEditProfileSkill,
+  onDeleteProfileSkill,
 }: Props) {
   const skillById = new Map(skills.map((skill) => [skill.id, skill]));
 
@@ -240,26 +246,67 @@ export function ProfileDetail({
       </div>
 
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
-        <h3 className="mb-4 text-lg font-semibold text-white">Skills</h3>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-lg font-semibold text-white">Skills</h3>
+
+          <button
+            type="button"
+            onClick={onAddProfileSkill}
+            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+            Add Skill
+          </button>
+        </div>
 
         {profileSkills.length === 0 ? (
           <p className="text-slate-400">No skills available.</p>
         ) : (
-          <div className="flex flex-wrap gap-2">
+          <div className="space-y-3">
             {profileSkills.map((profileSkill) => {
               const skill = skillById.get(profileSkill.skill_id);
 
               return (
-                <span
+                <div
                   key={profileSkill.skill_id}
-                  className="rounded-md border border-blue-700 bg-blue-950 px-3 py-1 text-sm text-blue-300">
-                  {skill?.name ?? `Skill ${profileSkill.skill_id}`}
-                </span>
+                  className="rounded-md border border-slate-800 bg-slate-900 p-4">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <p className="font-semibold text-white">
+                        {skill?.name ?? `Skill ${profileSkill.skill_id}`}
+                      </p>
+
+                      <p className="mt-1 text-sm text-slate-400">
+                        {skill?.category ?? "No category"}
+                      </p>
+
+                      <p className="mt-2 text-sm text-slate-300">
+                        {profileSkill.years_of_experience ?? 0} years ·{" "}
+                        {profileSkill.self_assessment_level ?? "No level"}
+                      </p>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => onEditProfileSkill(profileSkill)}
+                        className="rounded-md border border-slate-600 px-3 py-1 text-sm text-slate-300 hover:bg-slate-800">
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onDeleteProfileSkill(profileSkill)}
+                        className="rounded-md border border-red-700 px-3 py-1 text-sm text-red-300 hover:bg-red-950">
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>
         )}
       </div>
+
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
         <h3 className="mb-4 text-lg font-semibold text-white">
           Work Experience
