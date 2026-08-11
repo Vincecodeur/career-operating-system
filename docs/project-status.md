@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.6 Languages Management
+7.1.15.7 Certifications Management
 
 ---
 
@@ -878,6 +878,28 @@ Completed
 - APIs frontend identifiées
 - Composants frontend identifiés
 
+- Phase 7.1.15.6.4 Frontend CRUD Implementation terminée
+- frontend/src/components/AddProfileLanguageModal.tsx créé
+- frontend/src/components/EditProfileLanguageModal.tsx créé
+- frontend/src/components/DeleteProfileLanguageDialog.tsx créé
+- createProfileLanguage API implémenté
+- updateProfileLanguage API implémenté
+- deleteProfileLanguage API implémenté
+- ProfileDetail.tsx enrichi avec CRUD ProfileLanguage
+- ProfilesPage.tsx enrichi avec CRUD ProfileLanguage
+- Nettoyage des sections dupliquées dans ProfileDetail.tsx réalisé
+- Build frontend validé
+- Commit technique f955978 créé
+- Push GitHub réalisé
+
+- Phase 7.1.15.6.5 Frontend Validation terminée
+- Validation visuelle Add Language réalisée
+- Validation visuelle Edit Language réalisée
+- Validation visuelle Remove Language réalisée
+- Validation fonctionnelle complète réalisée
+
+- Phase 7.1.15.6.6 Documentation Synchronization terminée
+
 ---
 
 Phase In Progress
@@ -892,30 +914,20 @@ Aucun
 
 ---
 
-Phase 7.1.15.6 Languages Management
+Phase 7.1.15.7 Certifications Management
 
 Objectif :
-Compléter le CRUD du domaine ProfileLanguage.
-
-Pré-requis :
-
-- WorkExperience CRUD terminé
-- Frontend WorkExperience CRUD validé
-- Repository synchronisé
-
-Prochaine étape active :
-7.1.15.6.4 Frontend CRUD Implementation
+Compléter le CRUD du domaine ProfileCertification.
 
 Périmètre :
 
-- AddProfileLanguageModal
-- EditProfileLanguageModal
-- DeleteProfileLanguageDialog
-- createProfileLanguage
-- updateProfileLanguage
-- deleteProfileLanguage
-- intégration ProfileDetail
-- intégration ProfilesPage
+- audit du domaine ProfileCertification
+- revue du modèle ProfileCertification
+- revue des schémas ProfileCertification
+- revue des routes FastAPI existantes
+- stratégie Update/Delete
+- analyse de la clé composite profile_id + certification_id
+- validation des tests existants
 
 ---
 
@@ -942,4 +954,4 @@ Validated choices:
 
 Last Commit
 
-- 0c33a61 - docs: synchronize profile language
+- f955978 - feat: add profile language frontend crud

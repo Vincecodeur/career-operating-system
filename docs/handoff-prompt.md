@@ -377,6 +377,13 @@ Implémenté :
 - updateWorkExperience
 - deleteWorkExperience
 - Frontend WorkExperience CRUD
+- AddProfileLanguageModal
+- EditProfileLanguageModal
+- DeleteProfileLanguageDialog
+- createProfileLanguage
+- updateProfileLanguage
+- deleteProfileLanguage
+- Frontend ProfileLanguage CRUD
 
 Documenté mais pas encore implémenté :
 
@@ -523,15 +530,24 @@ Des tests existent pour :
 - Phase 7.1.15.4.B ProfileSkill Backend CRUD Completion
 - Phase 7.1.15.4.C ProfileSkill Backend Validation
 - Phase 7.1.15.4.4 Frontend CRUD Implementation
+- Phase 7.1.15.5 Experience Management
 - Phase 7.1.15.5.1 Backend CRUD Completion
 - Phase 7.1.15.5.2 Backend CRUD Validation
 - Phase 7.1.15.5.3 Frontend CRUD Design
 - Phase 7.1.15.5.4 Frontend CRUD Implementation
 - Phase 7.1.15.5.5 Frontend Validation
 - Phase 7.1.15.5.6 Documentation Synchronization
+- Phase 7.1.15.6 Languages Management
+- Phase 7.1.15.6.1 Backend CRUD Completion
+- Phase 7.1.15.6.2 Backend CRUD Validation
+- Phase 7.1.15.6.3 Frontend CRUD Design
+- Phase 7.1.15.6.4 Frontend CRUD Implementation
+- Phase 7.1.15.6.5 Frontend Validation
+- Phase 7.1.15.6.6 Documentation Synchronization
 
 ## Derniers commits importants
 
+- f955978 - feat: add profile language frontend crud
 - 0c33a61 - docs: synchronize profile language
 - c06e745 - feat: complete profile language crud backend
 - 93afcae - feat: add frontend work experience crud
@@ -668,10 +684,10 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.6.4 Frontend CRUD Implementation
+Phase 7.1.15.7.1 Backend CRUD Completion
 
 Objectif :
-Implémenter le CRUD frontend ProfileLanguage.
+Compléter le CRUD backend du domaine ProfileCertification.
 
 Pré-requis validés :
 
@@ -683,12 +699,13 @@ Pré-requis validés :
 
 Périmètre :
 
-- AddProfileLanguageModal
-- EditProfileLanguageModal
-- DeleteProfileLanguageDialog
-- API client ProfileLanguage
-- Intégration ProfileDetail
-- Intégration ProfilesPage
+- audit du domaine ProfileCertification
+- revue du modèle ProfileCertification
+- revue des schémas ProfileCertification
+- revue des routes FastAPI existantes
+- stratégie Update/Delete
+- analyse de la clé composite profile_id + certification_id
+- validation des tests existants
 
 ## Méthode de reprise
 
