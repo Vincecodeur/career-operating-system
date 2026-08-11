@@ -67,6 +67,26 @@ type ProfileCertificationUpdatePayload = {
     credential_id: string | null;
 };
 
+export type Cv = {
+    id: number;
+    profile_id: number;
+    file_name: string;
+    original_file_name: string;
+    storage_path: string;
+    file_size_bytes: number;
+    mime_type: string;
+    language: string | null;
+    version_label: string | null;
+    is_default: boolean;
+    parsing_status: string;
+    uploaded_at: string;
+    updated_at: string;
+};
+
+type CvUpdatePayload = {
+    language: string | null;
+    version_label: string | null;
+};
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -472,6 +492,135 @@ export async function getProfileCertifications(
 
     return response.json();
 }
+
+export async function getProfileCvs(
+    profileId: number,
+): Promise<Cv[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/cvs`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load CVs."
+        );
+    }
+
+    return response.json();
+}
+
+export async function uploadCv(
+    profileId: number,
+    file: File,
+    language?: string,
+    versionLabel?: string,
+    isDefault = false,
+): Promise<Cv> {
+    const formData = new FormData();
+
+    formData.append("cv_file", file);
+
+    if (language) {
+        formData.append("language", language);
+    }
+
+    if (versionLabel) {
+        formData.append(
+            "version_label",
+            versionLabel,
+        );
+    }
+
+    formData.append(
+        "is_default",
+        String(isDefault),
+    );
+
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/cvs`,
+        {
+            method: "POST",
+            body: formData,
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to upload CV.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateCv(
+    cvId: number,
+    payload: CvUpdatePayload,
+): Promise<Cv> {
+    const response = await fetch(
+        `${API_BASE_URL}/cvs/${cvId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update CV.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function setDefaultCv(
+    cvId: number,
+): Promise<Cv> {
+    const response = await fetch(
+        `${API_BASE_URL}/cvs/${cvId}/set-default`,
+        {
+            method: "POST",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to set default CV.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteCv(
+    cvId: number,
+): Promise<Cv> {
+    const response = await fetch(
+        `${API_BASE_URL}/cvs/${cvId}`,
+        {
+            method: "DELETE",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to delete CV.",
+        );
+    }
+
+    return response.json();
+}
+
+export function getCvDownloadUrl(
+    cvId: number,
+) {
+    return `${API_BASE_URL}/cvs/${cvId}/download`;
+}
+
 
 export async function getJobOffers() {
     const response = await fetch(

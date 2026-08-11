@@ -1,4 +1,6 @@
 import { Card } from "./ui/Card";
+import type { Cv } from "../services/api";
+import { getCvDownloadUrl } from "../services/api";
 
 type Profile = {
   id: number;
@@ -81,6 +83,7 @@ type Props = {
   languages: Language[];
   profileCertifications: ProfileCertification[];
   certifications: Certification[];
+  cvs: Cv[];
   loading?: boolean;
 
   onEditProfile: () => void;
@@ -105,6 +108,9 @@ type Props = {
   onDeleteProfileCertification: (
     profileCertification: ProfileCertification,
   ) => void;
+  onUploadCv: () => void;
+  onDeleteCv: (cv: Cv) => void;
+  onSetDefaultCv: (cv: Cv) => void | Promise<void>;
 };
 
 function formatDate(value: string | null) {
@@ -113,6 +119,18 @@ function formatDate(value: string | null) {
   }
 
   return new Date(value).toLocaleDateString();
+}
+
+function formatFileSize(fileSizeBytes: number) {
+  if (fileSizeBytes < 1024) {
+    return `${fileSizeBytes} B`;
+  }
+
+  if (fileSizeBytes < 1024 * 1024) {
+    return `${Math.round(fileSizeBytes / 1024)} KB`;
+  }
+
+  return `${(fileSizeBytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export function ProfileDetail({
@@ -124,6 +142,7 @@ export function ProfileDetail({
   languages,
   profileCertifications,
   certifications,
+  cvs,
   loading = false,
   onEditProfile,
   onArchiveProfile,
@@ -139,6 +158,9 @@ export function ProfileDetail({
   onAddProfileCertification,
   onEditProfileCertification,
   onDeleteProfileCertification,
+  onUploadCv,
+  onDeleteCv,
+  onSetDefaultCv,
 }: Props) {
   const skillById = new Map(skills.map((skill) => [skill.id, skill]));
 
@@ -277,6 +299,86 @@ export function ProfileDetail({
             <p>{profile.is_active ? "Active" : "Inactive"}</p>
           </div>
         </div>
+      </div>
+      <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-lg font-semibold text-white">CVs</h3>
+
+          <button
+            type="button"
+            onClick={onUploadCv}
+            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+            Upload CV
+          </button>
+        </div>
+
+        {cvs.length === 0 ? (
+          <p className="text-slate-400">No CV uploaded.</p>
+        ) : (
+          <div className="space-y-3">
+            {cvs.map((cv) => (
+              <div
+                key={cv.id}
+                className="rounded-md border border-slate-800 bg-slate-900 p-4">
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <p className="font-semibold text-white">
+                      {cv.original_file_name}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-400">
+                      {cv.version_label ?? "No version"}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-400">
+                      Language: {cv.language ?? "Unknown"}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-400">
+                      Size: {formatFileSize(cv.file_size_bytes)}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-400">
+                      Status: {cv.parsing_status}
+                    </p>
+
+                    {cv.is_default && (
+                      <p className="mt-2 text-sm font-medium text-blue-300">
+                        Default CV
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <a
+                      href={getCvDownloadUrl(cv.id)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-md border border-green-700 px-3 py-1 text-sm text-green-300 hover:bg-green-950">
+                      Download
+                    </a>
+
+                    {!cv.is_default && (
+                      <button
+                        type="button"
+                        onClick={() => onSetDefaultCv(cv)}
+                        className="rounded-md border border-blue-700 px-3 py-1 text-sm text-blue-300 hover:bg-blue-950">
+                        Set Default
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => onDeleteCv(cv)}
+                      className="rounded-md border border-red-700 px-3 py-1 text-sm text-red-300 hover:bg-red-950">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
         <div className="mb-4 flex items-center justify-between gap-3">

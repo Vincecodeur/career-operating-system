@@ -16,6 +16,7 @@ from app.cv.service import clear_default_cv_for_profile
 from app.cv.service import delete_cv_file
 from app.cv.service import save_cv_file
 from app.profile.models import Profile
+from fastapi.responses import FileResponse
 
 
 router = APIRouter(
@@ -115,6 +116,29 @@ def list_cvs_for_profile(
     "/cvs/{cv_id}",
     response_model=CVResponse,
 )
+
+@router.get(
+    "/cvs/{cv_id}/download",
+)
+def download_cv(
+    cv_id: int,
+    db: Session = Depends(get_db),
+):
+    cv = db.query(CV).filter(
+        CV.id == cv_id,
+    ).first()
+
+    if cv is None:
+        raise HTTPException(
+            status_code=404,
+            detail="CV not found.",
+        )
+
+    return FileResponse(
+        path=cv.storage_path,
+        filename=cv.original_file_name,
+    )
+    
 def get_cv(
     cv_id: int,
     db: Session = Depends(get_db),

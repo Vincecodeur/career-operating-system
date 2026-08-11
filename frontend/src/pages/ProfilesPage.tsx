@@ -28,6 +28,12 @@ import { EditProfileCertificationModal } from "../components/EditProfileCertific
 import type { EditProfileCertificationFormValues } from "../components/EditProfileCertificationModal";
 import { DeleteProfileCertificationDialog } from "../components/DeleteProfileCertificationDialog";
 
+import { UploadCvModal } from "../components/UploadCvModal";
+import type { UploadCvFormValues } from "../components/UploadCvModal";
+import { DeleteCvDialog } from "../components/DeleteCvDialog";
+
+import type { Cv } from "../services/api";
+
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
@@ -55,6 +61,10 @@ import {
   createProfileCertification,
   updateProfileCertification,
   deleteProfileCertification,
+  getProfileCvs,
+  uploadCv,
+  deleteCv,
+  setDefaultCv,
 } from "../services/api";
 
 type Profile = {
@@ -267,6 +277,20 @@ export function ProfilesPage() {
     setProfileCertificationMutationError,
   ] = useState<string | null>(null);
 
+  const [cvs, setCvs] = useState<Cv[]>([]);
+
+  const [selectedCv, setSelectedCv] = useState<Cv | null>(null);
+
+  const [isUploadCvModalOpen, setIsUploadCvModalOpen] = useState(false);
+
+  const [isDeleteCvDialogOpen, setIsDeleteCvDialogOpen] = useState(false);
+
+  const [isSavingCv, setIsSavingCv] = useState(false);
+
+  const [isDeletingCv, setIsDeletingCv] = useState(false);
+
+  const [cvMutationError, setCvMutationError] = useState<string | null>(null);
+
   async function reloadSelectedProfileDetails(profileId: number) {
     const [
       profileSkillsData,
@@ -276,6 +300,7 @@ export function ProfilesPage() {
       languagesData,
       profileCertificationsData,
       certificationsData,
+      cvsData,
     ] = await Promise.all([
       getProfileSkills(profileId),
       getSkills(),
@@ -284,6 +309,7 @@ export function ProfilesPage() {
       getLanguages(),
       getProfileCertifications(profileId),
       getCertifications(),
+      getProfileCvs(profileId),
     ]);
 
     setProfileSkills(profileSkillsData);
@@ -293,6 +319,7 @@ export function ProfilesPage() {
     setLanguages(languagesData);
     setProfileCertifications(profileCertificationsData);
     setCertifications(certificationsData);
+    setCvs(cvsData);
   }
 
   useEffect(() => {
@@ -767,6 +794,65 @@ export function ProfilesPage() {
     }
   }
 
+  async function handleUploadCv(values: UploadCvFormValues) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingCv(true);
+    setCvMutationError(null);
+
+    try {
+      await uploadCv(
+        selectedProfile.id,
+        values.file,
+        values.language,
+        values.versionLabel,
+        values.isDefault,
+      );
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setIsUploadCvModalOpen(false);
+    } catch {
+      setCvMutationError("Unable to upload CV.");
+    } finally {
+      setIsSavingCv(false);
+    }
+  }
+
+  async function handleDeleteCv() {
+    if (!selectedCv) {
+      return;
+    }
+
+    setIsDeletingCv(true);
+    setCvMutationError(null);
+
+    try {
+      await deleteCv(selectedCv.id);
+
+      await reloadSelectedProfileDetails(selectedCv.profile_id);
+
+      setSelectedCv(null);
+      setIsDeleteCvDialogOpen(false);
+    } catch {
+      setCvMutationError("Unable to delete CV.");
+    } finally {
+      setIsDeletingCv(false);
+    }
+  }
+
+  async function handleSetDefaultCv(cv: Cv) {
+    try {
+      await setDefaultCv(cv.id);
+
+      await reloadSelectedProfileDetails(cv.profile_id);
+    } catch {
+      setCvMutationError("Unable to set default CV.");
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -873,6 +959,17 @@ export function ProfilesPage() {
                   setProfileCertificationMutationError(null);
                   setIsDeleteProfileCertificationDialogOpen(true);
                 }}
+                cvs={cvs}
+                onUploadCv={() => {
+                  setCvMutationError(null);
+                  setIsUploadCvModalOpen(true);
+                }}
+                onDeleteCv={(cv: Cv) => {
+                  setSelectedCv(cv);
+                  setCvMutationError(null);
+                  setIsDeleteCvDialogOpen(true);
+                }}
+                onSetDefaultCv={handleSetDefaultCv}
               />
             ) : (
               <p className="text-slate-400">
@@ -1065,6 +1162,28 @@ export function ProfilesPage() {
           setIsDeleteProfileCertificationDialogOpen(false);
         }}
         onConfirm={handleDeleteProfileCertification}
+      />
+      <UploadCvModal
+        isOpen={isUploadCvModalOpen}
+        isSaving={isSavingCv}
+        error={cvMutationError}
+        onClose={() => {
+          setCvMutationError(null);
+          setIsUploadCvModalOpen(false);
+        }}
+        onUpload={handleUploadCv}
+      />
+      <DeleteCvDialog
+        cv={selectedCv}
+        isOpen={isDeleteCvDialogOpen}
+        isDeleting={isDeletingCv}
+        error={cvMutationError}
+        onClose={() => {
+          setSelectedCv(null);
+          setCvMutationError(null);
+          setIsDeleteCvDialogOpen(false);
+        }}
+        onConfirm={handleDeleteCv}
       />
     </>
   );
