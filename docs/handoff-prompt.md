@@ -268,6 +268,11 @@ Implémenté :
 - CV Storage
 - Profile ↔ CV Relationship
 - CV Download Endpoint
+- CV Parsing Schemas
+- CV Parsing Service
+- PDF Text Extraction
+- DOCX Text Extraction
+- Structured CV Parsing
 
 Partiellement implémenté :
 
@@ -593,9 +598,18 @@ Des tests existent pour :
 - Phase 7.1.16.9 Backend Validation
 - Phase 7.1.16.10 Frontend Implementation
 - Phase 7.1.16.11 Frontend Validation
+- Phase 7.1.16.12 CV Parsing Design
+- Phase 7.1.16.13 CV Parsing Implementation
+- Phase 7.1.16.13.1 Parsing Schemas
+- Phase 7.1.16.13.2 Parsing Service
+- Phase 7.1.16.13.3 PDF Support
+- Phase 7.1.16.13.4 DOCX Support
+- Phase 7.1.16.13.5 Parsing Tests
+- Phase 7.1.16.13.6 Backend Validation
 
 ## Derniers commits importants
 
+- 0528f74 - feat: CV parsing service implementation
 - a923afc - feat: complete cv management frontend
 - 42f1bb2 - docs: synchronize cv backend implementation status
 - 4cf5193 - chore: ignore generated cv storage directory
@@ -743,9 +757,7 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase suivante recommandée
-
-Phase 7.1.16.12 CV Parsing Design
+Phase 7.1.16.14 Profile Enrichment
 
 Objectif :
 Définir la stratégie d’analyse automatique des CV uploadés.

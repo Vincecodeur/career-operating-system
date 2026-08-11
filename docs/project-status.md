@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.12 CV Parsing Design
+7.1.16.14 Profile Enrichment
 
 ---
 
@@ -1001,6 +1001,22 @@ Completed
 - Delete validé
 - Download validé
 
+- Phase 7.1.16.12 CV Parsing Design terminée
+- Phase 7.1.16.13 CV Parsing Implementation terminée
+- parsing_schemas.py créé
+- parsing_service.py créé
+- Support PDF implémenté
+- Support DOCX implémenté
+- Extraction texte CV implémentée
+- Parsing structuré CV implémenté
+- test_cv_parsing_service.py créé
+- Validation pytest réalisée
+- 182 tests passants
+- Commit technique 0528f74 créé
+- Push GitHub réalisé
+- Repository synchronisé avec origin/main
+- Working tree clean validé
+
 ---
 
 Phase In Progress
@@ -1045,4 +1061,4 @@ Validated choices:
 
 Last Commit
 
-- a923afc - feat: complete cv management frontend
+- 0528f74 - feat: CV parsing service implementation

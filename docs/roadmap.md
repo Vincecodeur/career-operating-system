@@ -473,9 +473,14 @@ Résultat :
 ✅ 7.1.16.9 Backend Validation
 ✅ 7.1.16.10 Frontend Implementation
 ✅ 7.1.16.11 Frontend Validation
-⬜ 7.1.16.12 CV Parsing Design
-⬜ 7.1.16.12 CV Parsing Design
-⬜ 7.1.16.13 CV Parsing Implementation
+✅ 7.1.16.12 CV Parsing Design
+✅ 7.1.16.13 CV Parsing Implementation
+✅ 7.1.16.13.1 Parsing Schemas
+✅ 7.1.16.13.2 Parsing Service
+✅ 7.1.16.13.3 PDF Support
+✅ 7.1.16.13.4 DOCX Support
+✅ 7.1.16.13.5 Parsing Tests
+✅ 7.1.16.13.6 Backend Validation
 ⬜ 7.1.16.14 Profile Enrichment
 ⬜ 7.1.16.15 Documentation Synchronization
 
