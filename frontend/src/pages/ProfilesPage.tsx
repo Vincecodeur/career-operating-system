@@ -16,6 +16,12 @@ import type { EditProfileSkillFormValues } from "../components/EditProfileSkillM
 import { EditWorkExperienceModal } from "../components/EditWorkExperienceModal";
 import type { EditWorkExperienceFormValues } from "../components/EditWorkExperienceModal";
 
+import { AddProfileLanguageModal } from "../components/AddProfileLanguageModal";
+import type { AddProfileLanguageFormValues } from "../components/AddProfileLanguageModal";
+import { DeleteProfileLanguageDialog } from "../components/DeleteProfileLanguageDialog";
+import { EditProfileLanguageModal } from "../components/EditProfileLanguageModal";
+import type { EditProfileLanguageFormValues } from "../components/EditProfileLanguageModal";
+
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
@@ -37,6 +43,9 @@ import {
   createWorkExperience,
   updateWorkExperience,
   deleteWorkExperience,
+  createProfileLanguage,
+  updateProfileLanguage,
+  deleteProfileLanguage,
 } from "../services/api";
 
 type Profile = {
@@ -177,11 +186,40 @@ export function ProfilesPage() {
   const [workExperienceMutationError, setWorkExperienceMutationError] =
     useState<string | null>(null);
 
+  const [selectedProfileLanguage, setSelectedProfileLanguage] =
+    useState<ProfileLanguage | null>(null);
+
   const selectedSkill =
     selectedProfileSkill === null
       ? null
       : (skills.find((skill) => skill.id === selectedProfileSkill.skill_id) ??
         null);
+
+  const selectedLanguage =
+    selectedProfileLanguage === null
+      ? null
+      : (languages.find(
+          (language) => language.id === selectedProfileLanguage.language_id,
+        ) ?? null);
+
+  const [isAddProfileLanguageModalOpen, setIsAddProfileLanguageModalOpen] =
+    useState(false);
+
+  const [isEditProfileLanguageModalOpen, setIsEditProfileLanguageModalOpen] =
+    useState(false);
+
+  const [
+    isDeleteProfileLanguageDialogOpen,
+    setIsDeleteProfileLanguageDialogOpen,
+  ] = useState(false);
+
+  const [isSavingProfileLanguage, setIsSavingProfileLanguage] = useState(false);
+
+  const [isDeletingProfileLanguage, setIsDeletingProfileLanguage] =
+    useState(false);
+
+  const [profileLanguageMutationError, setProfileLanguageMutationError] =
+    useState<string | null>(null);
 
   async function reloadSelectedProfileDetails(profileId: number) {
     const [
@@ -493,6 +531,88 @@ export function ProfilesPage() {
     }
   }
 
+  async function handleAddProfileLanguage(
+    values: AddProfileLanguageFormValues,
+  ) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingProfileLanguage(true);
+    setProfileLanguageMutationError(null);
+
+    try {
+      await createProfileLanguage({
+        profile_id: selectedProfile.id,
+        language_id: values.language_id,
+        proficiency_level: values.proficiency_level,
+      });
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setIsAddProfileLanguageModalOpen(false);
+    } catch {
+      setProfileLanguageMutationError("Unable to add language.");
+    } finally {
+      setIsSavingProfileLanguage(false);
+    }
+  }
+
+  async function handleUpdateProfileLanguage(
+    values: EditProfileLanguageFormValues,
+  ) {
+    if (!selectedProfileLanguage) {
+      return;
+    }
+
+    setIsSavingProfileLanguage(true);
+    setProfileLanguageMutationError(null);
+
+    try {
+      await updateProfileLanguage(
+        selectedProfileLanguage.profile_id,
+        selectedProfileLanguage.language_id,
+        {
+          proficiency_level: values.proficiency_level,
+        },
+      );
+
+      await reloadSelectedProfileDetails(selectedProfileLanguage.profile_id);
+
+      setSelectedProfileLanguage(null);
+      setIsEditProfileLanguageModalOpen(false);
+    } catch {
+      setProfileLanguageMutationError("Unable to update language.");
+    } finally {
+      setIsSavingProfileLanguage(false);
+    }
+  }
+
+  async function handleDeleteProfileLanguage() {
+    if (!selectedProfileLanguage) {
+      return;
+    }
+
+    setIsDeletingProfileLanguage(true);
+    setProfileLanguageMutationError(null);
+
+    try {
+      await deleteProfileLanguage(
+        selectedProfileLanguage.profile_id,
+        selectedProfileLanguage.language_id,
+      );
+
+      await reloadSelectedProfileDetails(selectedProfileLanguage.profile_id);
+
+      setSelectedProfileLanguage(null);
+      setIsDeleteProfileLanguageDialogOpen(false);
+    } catch {
+      setProfileLanguageMutationError("Unable to remove language.");
+    } finally {
+      setIsDeletingProfileLanguage(false);
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -570,6 +690,20 @@ export function ProfilesPage() {
                   setSelectedWorkExperience(workExperience);
                   setWorkExperienceMutationError(null);
                   setIsDeleteWorkExperienceDialogOpen(true);
+                }}
+                onAddProfileLanguage={() => {
+                  setProfileLanguageMutationError(null);
+                  setIsAddProfileLanguageModalOpen(true);
+                }}
+                onEditProfileLanguage={(profileLanguage) => {
+                  setSelectedProfileLanguage(profileLanguage);
+                  setProfileLanguageMutationError(null);
+                  setIsEditProfileLanguageModalOpen(true);
+                }}
+                onDeleteProfileLanguage={(profileLanguage) => {
+                  setSelectedProfileLanguage(profileLanguage);
+                  setProfileLanguageMutationError(null);
+                  setIsDeleteProfileLanguageDialogOpen(true);
                 }}
               />
             ) : (
@@ -682,6 +816,46 @@ export function ProfilesPage() {
           setIsDeleteWorkExperienceDialogOpen(false);
         }}
         onConfirm={handleDeleteWorkExperience}
+      />
+      <AddProfileLanguageModal
+        languages={languages}
+        profileLanguages={profileLanguages}
+        isOpen={isAddProfileLanguageModalOpen}
+        isSaving={isSavingProfileLanguage}
+        error={profileLanguageMutationError}
+        onClose={() => {
+          setProfileLanguageMutationError(null);
+          setIsAddProfileLanguageModalOpen(false);
+        }}
+        onAdd={handleAddProfileLanguage}
+      />
+
+      <EditProfileLanguageModal
+        profileLanguage={selectedProfileLanguage}
+        language={selectedLanguage}
+        isOpen={isEditProfileLanguageModalOpen}
+        isSaving={isSavingProfileLanguage}
+        error={profileLanguageMutationError}
+        onClose={() => {
+          setSelectedProfileLanguage(null);
+          setProfileLanguageMutationError(null);
+          setIsEditProfileLanguageModalOpen(false);
+        }}
+        onSave={handleUpdateProfileLanguage}
+      />
+
+      <DeleteProfileLanguageDialog
+        profileLanguage={selectedProfileLanguage}
+        language={selectedLanguage}
+        isOpen={isDeleteProfileLanguageDialogOpen}
+        isDeleting={isDeletingProfileLanguage}
+        error={profileLanguageMutationError}
+        onClose={() => {
+          setSelectedProfileLanguage(null);
+          setProfileLanguageMutationError(null);
+          setIsDeleteProfileLanguageDialogOpen(false);
+        }}
+        onConfirm={handleDeleteProfileLanguage}
       />
     </>
   );

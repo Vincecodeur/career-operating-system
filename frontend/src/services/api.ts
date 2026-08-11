@@ -24,6 +24,16 @@ type ProfileSkillUpdatePayload = {
     self_assessment_level: string;
 };
 
+type ProfileLanguagePayload = {
+    profile_id: number;
+    language_id: number;
+    proficiency_level: string;
+};
+
+type ProfileLanguageUpdatePayload = {
+    proficiency_level: string;
+};
+
 type WorkExperiencePayload = {
     profile_id: number;
     company_name: string;
@@ -348,6 +358,76 @@ export async function getProfileLanguages(
 
     return response.json();
 }
+
+export async function createProfileLanguage(
+    payload: ProfileLanguagePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-languages`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to add profile language."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateProfileLanguage(
+    profileId: number,
+    languageId: number,
+    payload: ProfileLanguageUpdatePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-languages/${profileId}/${languageId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update profile language."
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteProfileLanguage(
+    profileId: number,
+    languageId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-languages/${profileId}/${languageId}`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to remove profile language."
+        );
+    }
+
+    return response.json();
+}
+
+
 
 export async function getCertifications() {
     const response = await fetch(

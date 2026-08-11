@@ -942,4 +942,4 @@ Validated choices:
 
 Last Commit
 
-- c06e745 - feat: complete profile language crud backend
+- 0c33a61 - docs: synchronize profile language
