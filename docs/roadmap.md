@@ -470,7 +470,7 @@ Résultat :
 ✅ 7.1.16.6 Frontend UX Design
 ✅ 7.1.16.7 Backend Domain Implementation
 ✅ 7.1.16.8 Backend Tests Implementation
-⬜ 7.1.16.9 Backend Validation
+✅ 7.1.16.9 Backend Validation
 ⬜ 7.1.16.10 Frontend Implementation
 ⬜ 7.1.16.11 Frontend Validation
 ⬜ 7.1.16.12 CV Parsing Design

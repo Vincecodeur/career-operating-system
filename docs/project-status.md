@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.9 Backend Validation
+7.1.16.10 Frontend Implementation
 
 ---
 
@@ -973,6 +973,15 @@ Completed
 - Commit technique réalisé
 - Push GitHub réalisé
 
+- Phase 7.1.16.9 Backend Validation terminée
+- Upload CV validé
+- Liste des CV validée
+- Récupération d’un CV validée
+- Gestion multi-CV validée
+- Définition du CV par défaut validée
+- Suppression de CV validée
+- Validation Swagger réalisée
+
 ---
 
 Phase In Progress
@@ -1017,4 +1026,4 @@ Validated choices:
 
 Last Commit
 
-- 4cf5193 - chore: ignore generated cv storage directory
+- 42f1bb2 - docs: synchronize cv backend implementation status

@@ -582,9 +582,11 @@ Des tests existent pour :
 - Phase 7.1.16.6 Frontend UX Design
 - Phase 7.1.16.7 Backend Domain Implementation
 - Phase 7.1.16.8 Backend Tests Implementation
+- Phase 7.1.16.9 Backend Validation
 
 ## Derniers commits importants
 
+- 42f1bb2 - docs: synchronize cv backend implementation status
 - 4cf5193 - chore: ignore generated cv storage directory
 - a91e42b - chore: ignore generated cv storage files
 - 0dcdc9f - feat: add cv management backend domain
@@ -730,27 +732,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.16.9 Backend Validation
+Phase 7.1.16.10 Frontend Implementation
 
 Objectif :
-Valider fonctionnellement le domaine CV en conditions réelles.
+Rendre les fonctionnalités CV visibles et utilisables dans le frontend.
 
 Périmètre :
 
-- validation Swagger/OpenAPI
-- upload réel d’un PDF
-- création du fichier dans storage/cvs
-- persistance PostgreSQL
-- récupération d’un CV
-- liste des CV d’un profil
-- gestion du CV par défaut
-- suppression d’un CV
+- liste des CV du profil
+- upload de CV
+- suppression de CV
+- sélection du CV par défaut
+- affichage des métadonnées
+- intégration dans ProfileDetail
 
 Critère de sortie :
 
-- validation fonctionnelle réalisée ;
-- comportement réel confirmé ;
-- prochaine étape définie.
+- fonctionnalités visibles dans le frontend ;
+- appels API validés ;
+- build frontend valide.
 
 ## Méthode de reprise
 
