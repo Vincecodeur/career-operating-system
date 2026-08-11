@@ -23,6 +23,9 @@ class ProfileLanguageCreate(BaseModel):
     proficiency_level: str
 
 
+class ProfileLanguageUpdate(BaseModel):
+    proficiency_level: str
+
 class ProfileLanguageResponse(BaseModel):
     profile_id: int
     language_id: int

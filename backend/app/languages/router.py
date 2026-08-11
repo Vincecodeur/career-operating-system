@@ -12,6 +12,7 @@ from app.languages.schemas import LanguageResponse
 from app.languages.schemas import ProfileLanguageCreate
 from app.languages.schemas import ProfileLanguageResponse
 from app.profile.models import Profile
+from app.languages.schemas import ProfileLanguageUpdate
 
 router = APIRouter(
     tags=["Languages"]
@@ -158,3 +159,61 @@ def list_languages_for_profile(
     return db.query(ProfileLanguage).filter(
         ProfileLanguage.profile_id == profile_id
     ).all()
+    
+    
+@router.put(
+    "/profile-languages/{profile_id}/{language_id}",
+    response_model=ProfileLanguageResponse,
+)
+def update_profile_language(
+    profile_id: int,
+    language_id: int,
+    profile_language_update: ProfileLanguageUpdate,
+    db: Session = Depends(get_db),
+):
+    profile_language = db.query(ProfileLanguage).filter(
+        ProfileLanguage.profile_id == profile_id,
+        ProfileLanguage.language_id == language_id,
+    ).first()
+
+    if profile_language is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile language not found.",
+        )
+
+    profile_language.proficiency_level = (
+        profile_language_update.proficiency_level
+    )
+
+    db.commit()
+    db.refresh(profile_language)
+
+    return profile_language
+
+
+@router.delete(
+    "/profile-languages/{profile_id}/{language_id}",
+)
+def delete_profile_language(
+    profile_id: int,
+    language_id: int,
+    db: Session = Depends(get_db),
+):
+    profile_language = db.query(ProfileLanguage).filter(
+        ProfileLanguage.profile_id == profile_id,
+        ProfileLanguage.language_id == language_id,
+    ).first()
+
+    if profile_language is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile language not found.",
+        )
+
+    db.delete(profile_language)
+    db.commit()
+
+    return {
+        "message": "Profile language deleted successfully."
+    }
