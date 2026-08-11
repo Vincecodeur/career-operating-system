@@ -395,6 +395,10 @@ Implémenté :
 - updateProfileCertification
 - deleteProfileCertification
 - Frontend ProfileCertification CRUD
+- support multi-profils confirmé
+- CRUD multi-profils confirmé
+- sélection de profil frontend confirmée
+- absence de profils actifs pour les opportunités confirmée
 
 Documenté mais pas encore implémenté :
 
@@ -562,9 +566,12 @@ Des tests existent pour :
 - Phase 7.1.15.7.4 Frontend CRUD Implementation
 - Phase 7.1.15.7.5 Frontend Validation
 - Phase 7.1.15.7.6 Documentation Synchronization
+- Phase 7.1.15.8 Backend Validation terminée
 
 ## Derniers commits importants
 
+- 03c7e86 - docs: close certifications management phase
+- 4615c02 - docs: close certifications management phase
 - 005465e - feat: add frontend profile certification crud
 - 35824ec - feat: complete profile certification crud backend
 - f955978 - feat: add profile language frontend crud
@@ -704,32 +711,34 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.8.1 Backend Validation
+Phase 7.1.16.1 Repository Audit
 
 Objectif :
-Auditer l'implémentation multi-profils déjà présente dans le backend.
+Auditer l'existant autour de la gestion des CV avant toute implémentation.
 
 Pré-requis validés :
 
+- Profile Management terminé
 - Certifications Management terminé
+- Backend Validation terminée
 - Documentation synchronisée
 - Repository synchronisé
-- Working tree propre
 
 Périmètre :
 
-- backend/app/profiles
-- modèles Profile
-- endpoints Profile
-- tests Profile
-- documentation DEC associées
+- modèles CV
+- stockage des CV
+- services CV
+- API CV
+- pages frontend concernées
+- documentation existante
 
 Critère de sortie :
 
-- audit backend réalisé
-- capacités multi-profils réelles identifiées
-- écarts éventuels documentés
-- phase UX suivante cadrée
+- état réel du repository identifié
+- écarts entre roadmap et code documentés
+- périmètre CV Management confirmé
+- prochaine sous-phase définie
 
 ## Méthode de reprise
 

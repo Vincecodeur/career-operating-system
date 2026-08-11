@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.8 Multi Profile Management
+7.1.16 CV Management
 
 ---
 
 Next Planned Milestone
-Phase 7.1.15 Profile Management CRUD
+7.1.16.1 Repository Audit
 
 ---
 
@@ -942,6 +942,11 @@ Completed
 - Validation visuelle Remove Certification réalisée
 - Validation fonctionnelle complète réalisée
 
+- Phase 7.1.15.8 Backend Validation terminée
+- Audit backend multi-profils réalisé
+- Support multi-profils confirmé
+- Décision de déplacer Multi Profile Opportunity Context vers la phase 7.1.22
+
 ---
 
 Phase In Progress
@@ -956,10 +961,10 @@ Aucun
 
 ---
 
-7.1.15.8 Multi Profile Management
+7.1.16 CV Management
 
 Objectif :
-Auditer l'implémentation multi-profils existante avant toute évolution UX ou frontend.
+Construire le socle de gestion des CV du Career Operating System.
 
 ---
 
@@ -986,4 +991,4 @@ Validated choices:
 
 Last Commit
 
-- 005465e - feat: add frontend profile certification crud
+- 03c7e86 - docs: close certifications management phase

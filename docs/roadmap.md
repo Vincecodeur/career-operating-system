@@ -447,13 +447,18 @@ Sous-phases :
 ✅ 7.1.15.7.5 Frontend Validation
 ✅ 7.1.15.7.6 Documentation Synchronization
 
-⬜ 7.1.15.8 Multi Profile Management
-⬜ 7.1.15.8.1 Backend Validation
-⬜ 7.1.15.8.2 Frontend UX Design
-⬜ 7.1.15.8.3 Profile Switcher Implementation
-⬜ 7.1.15.8.4 Active Profile Management
-⬜ 7.1.15.8.5 Validation
-⬜ 7.1.15.8.6 Documentation Synchronization
+✅ 7.1.15.8 Backend Validation
+
+Objectif :
+Auditer l'implémentation multi-profils existante.
+
+Résultat :
+
+- support multi-profils confirmé ;
+- CRUD multi-profils confirmé ;
+- sélection de profils existante côté frontend ;
+- absence de notion de profils actifs pour les opportunités confirmée ;
+- décision de déplacer la fonctionnalité vers une phase dédiée Multi Profile Opportunity Context.
 
 ⬜ 7.1.16 CV Management
 ⬜ 7.1.16.1 CV Upload
@@ -500,7 +505,36 @@ Sous-phases :
 ⬜ 7.1.21.3 Default Search Strategy
 ⬜ 7.1.21.4 Saved Search Execution
 
-⬜ 7.1.22 MVP Experience Review
+⬜ 7.1.22 Multi Profile Opportunity Context
+
+Objectif :
+Plusieurs profils peuvent être activés simultanément.
+Les opportunités sont évaluées indépendamment pour chaque profil actif.
+Une opportunité peut être pertinente pour plusieurs profils actifs.
+
+Principes :
+
+- plusieurs profils peuvent être activés simultanément ;
+- un profil archivé reste distinct d'un profil activé ;
+- le matching reste calculé profil par profil ;
+- une opportunité peut être pertinente pour plusieurs profils ;
+- l'utilisateur doit comprendre quel profil explique chaque score.
+
+Sous-phases :
+
+⬜ 7.1.22.1 Product Design
+⬜ 7.1.22.2 DEC Multi Active Profiles
+⬜ 7.1.22.3 Backend Context Model
+⬜ 7.1.22.4 Backend APIs
+⬜ 7.1.22.5 Backend Tests
+⬜ 7.1.22.6 Frontend UX Design
+⬜ 7.1.22.7 Profile Activation UI
+⬜ 7.1.22.8 Multi Profile Matching
+⬜ 7.1.22.9 Multi Profile Opportunities
+⬜ 7.1.22.10 End-to-End Validation
+⬜ 7.1.22.11 Documentation Synchronization
+
+⬜ 7.1.23 MVP Experience Review
 
 Statut :
 
