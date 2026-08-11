@@ -6,17 +6,20 @@ from fastapi import File
 from fastapi import Form
 from fastapi import HTTPException
 from fastapi import UploadFile
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.cv.models import CV
+from app.cv.parsing_schemas import ParsedCVResponse
+from app.cv.parsing_service import CVParsingError
+from app.cv.parsing_service import parse_cv_file
 from app.cv.schemas import CVResponse
 from app.cv.schemas import CVUpdate
 from app.cv.service import clear_default_cv_for_profile
 from app.cv.service import delete_cv_file
 from app.cv.service import save_cv_file
 from app.profile.models import Profile
-from fastapi.responses import FileResponse
 
 
 router = APIRouter(
@@ -116,6 +119,22 @@ def list_cvs_for_profile(
     "/cvs/{cv_id}",
     response_model=CVResponse,
 )
+def get_cv(
+    cv_id: int,
+    db: Session = Depends(get_db),
+):
+    cv = db.query(CV).filter(
+        CV.id == cv_id,
+    ).first()
+
+    if cv is None:
+        raise HTTPException(
+            status_code=404,
+            detail="CV not found.",
+        )
+
+    return cv
+
 
 @router.get(
     "/cvs/{cv_id}/download",
@@ -138,22 +157,6 @@ def download_cv(
         path=cv.storage_path,
         filename=cv.original_file_name,
     )
-    
-def get_cv(
-    cv_id: int,
-    db: Session = Depends(get_db),
-):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
-
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
-
-    return cv
 
 
 @router.put(
@@ -213,6 +216,55 @@ def set_default_cv(
     db.refresh(cv)
 
     return cv
+
+
+@router.post(
+    "/cvs/{cv_id}/parse",
+    response_model=ParsedCVResponse,
+)
+def parse_cv(
+    cv_id: int,
+    db: Session = Depends(get_db),
+):
+    cv = db.query(CV).filter(
+        CV.id == cv_id,
+    ).first()
+
+    if cv is None:
+        raise HTTPException(
+            status_code=404,
+            detail="CV not found.",
+        )
+
+    cv.parsing_status = "PROCESSING"
+    db.commit()
+    db.refresh(cv)
+
+    try:
+        raw_text, parsed_data = parse_cv_file(
+            Path(cv.storage_path),
+        )
+    except CVParsingError as exc:
+        cv.parsing_status = "FAILED"
+        db.commit()
+        db.refresh(cv)
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(exc),
+        ) from exc
+
+    cv.parsing_status = "COMPLETED"
+    db.commit()
+    db.refresh(cv)
+
+    return ParsedCVResponse(
+        cv_id=cv.id,
+        parsing_status=cv.parsing_status,
+        raw_text_length=len(raw_text),
+        extracted_text_preview=raw_text[:500],
+        parsed_data=parsed_data,
+    )
 
 
 @router.delete(
