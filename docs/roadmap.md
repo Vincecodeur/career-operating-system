@@ -471,8 +471,9 @@ Résultat :
 ✅ 7.1.16.7 Backend Domain Implementation
 ✅ 7.1.16.8 Backend Tests Implementation
 ✅ 7.1.16.9 Backend Validation
-⬜ 7.1.16.10 Frontend Implementation
-⬜ 7.1.16.11 Frontend Validation
+✅ 7.1.16.10 Frontend Implementation
+✅ 7.1.16.11 Frontend Validation
+⬜ 7.1.16.12 CV Parsing Design
 ⬜ 7.1.16.12 CV Parsing Design
 ⬜ 7.1.16.13 CV Parsing Implementation
 ⬜ 7.1.16.14 Profile Enrichment

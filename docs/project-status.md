@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.10 Frontend Implementation
+7.1.16.12 CV Parsing Design
 
 ---
 
@@ -982,6 +982,25 @@ Completed
 - Suppression de CV validée
 - Validation Swagger réalisée
 
+- Phase 7.1.16.10 Frontend Implementation terminée
+- UploadCvModal créé
+- DeleteCvDialog créé
+- API CV frontend implémentée
+- Upload CV frontend implémenté
+- Delete CV frontend implémenté
+- Set Default CV frontend implémenté
+- Download CV frontend implémenté
+- Validation visuelle réalisée
+- Build frontend validé
+
+- Phase 7.1.16.11 Frontend Validation terminée
+- Upload CV validé dans l'interface
+- Affichage CV validé
+- Gestion multi-CV validée
+- Set Default validé
+- Delete validé
+- Download validé
+
 ---
 
 Phase In Progress
@@ -1026,4 +1045,4 @@ Validated choices:
 
 Last Commit
 
-- 42f1bb2 - docs: synchronize cv backend implementation status
+- a923afc - feat: complete cv management frontend

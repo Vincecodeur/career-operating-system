@@ -267,6 +267,7 @@ Implémenté :
 - CV Service
 - CV Storage
 - Profile ↔ CV Relationship
+- CV Download Endpoint
 
 Partiellement implémenté :
 
@@ -405,6 +406,13 @@ Implémenté :
 - CRUD multi-profils confirmé
 - sélection de profil frontend confirmée
 - absence de profils actifs pour les opportunités confirmée
+- CV Management Frontend
+- CV Upload
+- CV Delete
+- CV Default Selection
+- CV Download
+- UploadCvModal
+- DeleteCvDialog
 
 Documenté mais pas encore implémenté :
 
@@ -583,9 +591,12 @@ Des tests existent pour :
 - Phase 7.1.16.7 Backend Domain Implementation
 - Phase 7.1.16.8 Backend Tests Implementation
 - Phase 7.1.16.9 Backend Validation
+- Phase 7.1.16.10 Frontend Implementation
+- Phase 7.1.16.11 Frontend Validation
 
 ## Derniers commits importants
 
+- a923afc - feat: complete cv management frontend
 - 42f1bb2 - docs: synchronize cv backend implementation status
 - 4cf5193 - chore: ignore generated cv storage directory
 - a91e42b - chore: ignore generated cv storage files
@@ -732,25 +743,27 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.16.10 Frontend Implementation
+Phase suivante recommandée
+
+Phase 7.1.16.12 CV Parsing Design
 
 Objectif :
-Rendre les fonctionnalités CV visibles et utilisables dans le frontend.
+Définir la stratégie d’analyse automatique des CV uploadés.
 
 Périmètre :
 
-- liste des CV du profil
-- upload de CV
-- suppression de CV
-- sélection du CV par défaut
-- affichage des métadonnées
-- intégration dans ProfileDetail
+- extraction texte
+- formats supportés
+- stratégie PDF / DOCX
+- mapping vers Profile
+- enrichissement contrôlé
+- validation humaine
 
 Critère de sortie :
 
-- fonctionnalités visibles dans le frontend ;
-- appels API validés ;
-- build frontend valide.
+- design validé ;
+- architecture définie ;
+- aucun code produit.
 
 ## Méthode de reprise
 
