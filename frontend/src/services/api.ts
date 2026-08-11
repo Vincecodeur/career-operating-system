@@ -53,6 +53,20 @@ type WorkExperienceUpdatePayload = {
     description: string;
 };
 
+type ProfileCertificationPayload = {
+    profile_id: number;
+    certification_id: number;
+    obtained_date: string | null;
+    expiration_date: string | null;
+    credential_id: string | null;
+};
+
+type ProfileCertificationUpdatePayload = {
+    obtained_date: string | null;
+    expiration_date: string | null;
+    credential_id: string | null;
+};
+
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -514,6 +528,76 @@ export async function getApplications() {
     if (!response.ok) {
         throw new Error(
             "Unable to load applications."
+        );
+    }
+
+    return response.json();
+}
+
+
+
+export async function createProfileCertification(
+    payload: ProfileCertificationPayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-certifications`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to add profile certification."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateProfileCertification(
+    profileId: number,
+    certificationId: number,
+    payload: ProfileCertificationUpdatePayload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-certifications/${profileId}/${certificationId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update profile certification."
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteProfileCertification(
+    profileId: number,
+    certificationId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-certifications/${profileId}/${certificationId}`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to remove profile certification."
         );
     }
 

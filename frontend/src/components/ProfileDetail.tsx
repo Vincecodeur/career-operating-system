@@ -97,6 +97,14 @@ type Props = {
   onAddProfileLanguage: () => void;
   onEditProfileLanguage: (profileLanguage: ProfileLanguage) => void;
   onDeleteProfileLanguage: (profileLanguage: ProfileLanguage) => void;
+
+  onAddProfileCertification: () => void;
+  onEditProfileCertification: (
+    profileCertification: ProfileCertification,
+  ) => void;
+  onDeleteProfileCertification: (
+    profileCertification: ProfileCertification,
+  ) => void;
 };
 
 function formatDate(value: string | null) {
@@ -128,6 +136,9 @@ export function ProfileDetail({
   onAddProfileLanguage,
   onEditProfileLanguage,
   onDeleteProfileLanguage,
+  onAddProfileCertification,
+  onEditProfileCertification,
+  onDeleteProfileCertification,
 }: Props) {
   const skillById = new Map(skills.map((skill) => [skill.id, skill]));
 
@@ -452,9 +463,16 @@ export function ProfileDetail({
       </div>
 
       <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
-        <h3 className="mb-4 text-lg font-semibold text-white">
-          Certifications
-        </h3>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-lg font-semibold text-white">Certifications</h3>
+
+          <button
+            type="button"
+            onClick={onAddProfileCertification}
+            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+            Add Certification
+          </button>
+        </div>
 
         {profileCertifications.length === 0 ? (
           <p className="text-slate-400">No certifications available.</p>
@@ -469,20 +487,57 @@ export function ProfileDetail({
                 <div
                   key={profileCertification.certification_id}
                   className="rounded-md border border-slate-800 bg-slate-900 p-3">
-                  <p className="font-medium text-white">
-                    {certification?.name ??
-                      `Certification ${profileCertification.certification_id}`}
-                  </p>
+                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <p className="font-medium text-white">
+                        {certification?.name ??
+                          `Certification ${profileCertification.certification_id}`}
+                      </p>
 
-                  <p className="mt-1 text-sm text-slate-400">
-                    {certification?.issuing_organization ?? "Unknown issuer"}
-                  </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        {certification?.issuing_organization ??
+                          "Unknown issuer"}
+                      </p>
 
-                  {profileCertification.credential_id && (
-                    <p className="mt-1 text-xs text-slate-500">
-                      Credential: {profileCertification.credential_id}
-                    </p>
-                  )}
+                      {profileCertification.obtained_date && (
+                        <p className="mt-1 text-xs text-slate-500">
+                          Obtained: {profileCertification.obtained_date}
+                        </p>
+                      )}
+
+                      {profileCertification.expiration_date && (
+                        <p className="mt-1 text-xs text-slate-500">
+                          Expires: {profileCertification.expiration_date}
+                        </p>
+                      )}
+
+                      {profileCertification.credential_id && (
+                        <p className="mt-1 text-xs text-slate-500">
+                          Credential: {profileCertification.credential_id}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onEditProfileCertification(profileCertification)
+                        }
+                        className="rounded-md border border-slate-600 px-3 py-1 text-sm text-slate-300 hover:bg-slate-800">
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onDeleteProfileCertification(profileCertification)
+                        }
+                        className="rounded-md border border-red-700 px-3 py-1 text-sm text-red-300 hover:bg-red-950">
+                        Remove
+                      </button>
+                    </div>
+                  </div>
                 </div>
               );
             })}

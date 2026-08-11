@@ -22,6 +22,12 @@ import { DeleteProfileLanguageDialog } from "../components/DeleteProfileLanguage
 import { EditProfileLanguageModal } from "../components/EditProfileLanguageModal";
 import type { EditProfileLanguageFormValues } from "../components/EditProfileLanguageModal";
 
+import { AddProfileCertificationModal } from "../components/AddProfileCertificationModal";
+import type { AddProfileCertificationFormValues } from "../components/AddProfileCertificationModal";
+import { EditProfileCertificationModal } from "../components/EditProfileCertificationModal";
+import type { EditProfileCertificationFormValues } from "../components/EditProfileCertificationModal";
+import { DeleteProfileCertificationDialog } from "../components/DeleteProfileCertificationDialog";
+
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
 import { PageHeader } from "../components/ui/PageHeader";
@@ -46,6 +52,9 @@ import {
   createProfileLanguage,
   updateProfileLanguage,
   deleteProfileLanguage,
+  createProfileCertification,
+  updateProfileCertification,
+  deleteProfileCertification,
 } from "../services/api";
 
 type Profile = {
@@ -202,6 +211,17 @@ export function ProfilesPage() {
           (language) => language.id === selectedProfileLanguage.language_id,
         ) ?? null);
 
+  const [selectedProfileCertification, setSelectedProfileCertification] =
+    useState<ProfileCertification | null>(null);
+
+  const selectedCertification =
+    selectedProfileCertification === null
+      ? null
+      : (certifications.find(
+          (certification) =>
+            certification.id === selectedProfileCertification.certification_id,
+        ) ?? null);
+
   const [isAddProfileLanguageModalOpen, setIsAddProfileLanguageModalOpen] =
     useState(false);
 
@@ -220,6 +240,32 @@ export function ProfilesPage() {
 
   const [profileLanguageMutationError, setProfileLanguageMutationError] =
     useState<string | null>(null);
+
+  const [
+    isAddProfileCertificationModalOpen,
+    setIsAddProfileCertificationModalOpen,
+  ] = useState(false);
+
+  const [
+    isEditProfileCertificationModalOpen,
+    setIsEditProfileCertificationModalOpen,
+  ] = useState(false);
+
+  const [
+    isDeleteProfileCertificationDialogOpen,
+    setIsDeleteProfileCertificationDialogOpen,
+  ] = useState(false);
+
+  const [isSavingProfileCertification, setIsSavingProfileCertification] =
+    useState(false);
+
+  const [isDeletingProfileCertification, setIsDeletingProfileCertification] =
+    useState(false);
+
+  const [
+    profileCertificationMutationError,
+    setProfileCertificationMutationError,
+  ] = useState<string | null>(null);
 
   async function reloadSelectedProfileDetails(profileId: number) {
     const [
@@ -613,6 +659,114 @@ export function ProfilesPage() {
     }
   }
 
+  async function handleAddProfileCertification(
+    values: AddProfileCertificationFormValues,
+  ) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingProfileCertification(true);
+    setProfileCertificationMutationError(null);
+
+    try {
+      await createProfileCertification({
+        profile_id: selectedProfile.id,
+        certification_id: values.certification_id,
+        obtained_date:
+          values.obtained_date && values.obtained_date.length > 0
+            ? values.obtained_date
+            : null,
+        expiration_date:
+          values.expiration_date && values.expiration_date.length > 0
+            ? values.expiration_date
+            : null,
+        credential_id:
+          values.credential_id && values.credential_id.length > 0
+            ? values.credential_id
+            : null,
+      });
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setIsAddProfileCertificationModalOpen(false);
+    } catch {
+      setProfileCertificationMutationError("Unable to add certification.");
+    } finally {
+      setIsSavingProfileCertification(false);
+    }
+  }
+
+  async function handleUpdateProfileCertification(
+    values: EditProfileCertificationFormValues,
+  ) {
+    if (!selectedProfileCertification) {
+      return;
+    }
+
+    setIsSavingProfileCertification(true);
+    setProfileCertificationMutationError(null);
+
+    try {
+      await updateProfileCertification(
+        selectedProfileCertification.profile_id,
+        selectedProfileCertification.certification_id,
+        {
+          obtained_date:
+            values.obtained_date && values.obtained_date.length > 0
+              ? values.obtained_date
+              : null,
+          expiration_date:
+            values.expiration_date && values.expiration_date.length > 0
+              ? values.expiration_date
+              : null,
+          credential_id:
+            values.credential_id && values.credential_id.length > 0
+              ? values.credential_id
+              : null,
+        },
+      );
+
+      await reloadSelectedProfileDetails(
+        selectedProfileCertification.profile_id,
+      );
+
+      setSelectedProfileCertification(null);
+      setIsEditProfileCertificationModalOpen(false);
+    } catch {
+      setProfileCertificationMutationError("Unable to update certification.");
+    } finally {
+      setIsSavingProfileCertification(false);
+    }
+  }
+
+  async function handleDeleteProfileCertification() {
+    if (!selectedProfileCertification) {
+      return;
+    }
+
+    setIsDeletingProfileCertification(true);
+    setProfileCertificationMutationError(null);
+
+    try {
+      await deleteProfileCertification(
+        selectedProfileCertification.profile_id,
+        selectedProfileCertification.certification_id,
+      );
+
+      await reloadSelectedProfileDetails(
+        selectedProfileCertification.profile_id,
+      );
+
+      setSelectedProfileCertification(null);
+      setIsDeleteProfileCertificationDialogOpen(false);
+    } catch {
+      setProfileCertificationMutationError("Unable to remove certification.");
+    } finally {
+      setIsDeletingProfileCertification(false);
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -704,6 +858,20 @@ export function ProfilesPage() {
                   setSelectedProfileLanguage(profileLanguage);
                   setProfileLanguageMutationError(null);
                   setIsDeleteProfileLanguageDialogOpen(true);
+                }}
+                onAddProfileCertification={() => {
+                  setProfileCertificationMutationError(null);
+                  setIsAddProfileCertificationModalOpen(true);
+                }}
+                onEditProfileCertification={(profileCertification) => {
+                  setSelectedProfileCertification(profileCertification);
+                  setProfileCertificationMutationError(null);
+                  setIsEditProfileCertificationModalOpen(true);
+                }}
+                onDeleteProfileCertification={(profileCertification) => {
+                  setSelectedProfileCertification(profileCertification);
+                  setProfileCertificationMutationError(null);
+                  setIsDeleteProfileCertificationDialogOpen(true);
                 }}
               />
             ) : (
@@ -856,6 +1024,47 @@ export function ProfilesPage() {
           setIsDeleteProfileLanguageDialogOpen(false);
         }}
         onConfirm={handleDeleteProfileLanguage}
+      />
+
+      <AddProfileCertificationModal
+        certifications={certifications}
+        profileCertifications={profileCertifications}
+        isOpen={isAddProfileCertificationModalOpen}
+        isSaving={isSavingProfileCertification}
+        error={profileCertificationMutationError}
+        onClose={() => {
+          setProfileCertificationMutationError(null);
+          setIsAddProfileCertificationModalOpen(false);
+        }}
+        onAdd={handleAddProfileCertification}
+      />
+
+      <EditProfileCertificationModal
+        profileCertification={selectedProfileCertification}
+        certification={selectedCertification}
+        isOpen={isEditProfileCertificationModalOpen}
+        isSaving={isSavingProfileCertification}
+        error={profileCertificationMutationError}
+        onClose={() => {
+          setSelectedProfileCertification(null);
+          setProfileCertificationMutationError(null);
+          setIsEditProfileCertificationModalOpen(false);
+        }}
+        onSave={handleUpdateProfileCertification}
+      />
+
+      <DeleteProfileCertificationDialog
+        profileCertification={selectedProfileCertification}
+        certification={selectedCertification}
+        isOpen={isDeleteProfileCertificationDialogOpen}
+        isDeleting={isDeletingProfileCertification}
+        error={profileCertificationMutationError}
+        onClose={() => {
+          setSelectedProfileCertification(null);
+          setProfileCertificationMutationError(null);
+          setIsDeleteProfileCertificationDialogOpen(false);
+        }}
+        onConfirm={handleDeleteProfileCertification}
       />
     </>
   );
