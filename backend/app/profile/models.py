@@ -6,6 +6,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from app.core.database import Base
 
@@ -79,4 +80,10 @@ class Profile(Base):
         DateTime,
         default=datetime.utcnow,
         onupdate=datetime.utcnow
+    )
+    
+    cvs = relationship(
+    "CV",
+    back_populates="profile",
+    cascade="all, delete-orphan",
     )

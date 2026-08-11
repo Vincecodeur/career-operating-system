@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+
 DATABASE_URL = (
     "postgresql+psycopg://career_os_user:CHANGE_ME_LATER@localhost:5432/career_os"
 )
@@ -41,6 +42,7 @@ from app.jobs.job_offer_skill_models import JobOfferSkill
 from app.jobs.job_source_models import JobSource
 from app.jobs.job_offer_source_models import JobOfferSource
 from app.auth.models import User
+from app.cv.models import CV
 
 
 def create_tables():

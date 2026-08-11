@@ -11,6 +11,7 @@ from app.auth.router import router as auth_router
 from app.certifications.router import router as certifications_router
 from app.core.database import create_tables
 from app.core.database import engine
+from app.cv.router import router as cv_router
 from app.experience.router import router as experience_router
 from app.jobs.job_offer_skill_router import (
     router as job_offer_skill_router,
@@ -62,6 +63,7 @@ app.include_router(profile_skill_router)
 app.include_router(experience_router)
 app.include_router(languages_router)
 app.include_router(certifications_router)
+app.include_router(cv_router)
 app.include_router(jobs_router)
 app.include_router(job_offer_skill_router)
 app.include_router(matching_router)
