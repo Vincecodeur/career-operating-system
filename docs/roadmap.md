@@ -461,12 +461,25 @@ Résultat :
 - décision de déplacer la fonctionnalité vers une phase dédiée Multi Profile Opportunity Context.
 
 ⬜ 7.1.16 CV Management
-⬜ 7.1.16.1 CV Upload
-⬜ 7.1.16.2 CV Library
-⬜ 7.1.16.3 CV Parsing
-⬜ 7.1.16.4 Profile Enrichment
+
+✅ 7.1.16.1 Repository Audit
+✅ 7.1.16.2 CV Management Design
+✅ 7.1.16.3 Backend Data Model Design
+✅ 7.1.16.4 Backend API Design
+✅ 7.1.16.5 Backend Tests Design
+✅ 7.1.16.6 Frontend UX Design
+⬜ 7.1.16.7 Backend Domain Implementation
+⬜ 7.1.16.8 Backend Tests Implementation
+⬜ 7.1.16.9 Backend Validation
+⬜ 7.1.16.10 Frontend Implementation
+⬜ 7.1.16.11 Frontend Validation
+⬜ 7.1.16.12 CV Parsing Design
+⬜ 7.1.16.13 CV Parsing Implementation
+⬜ 7.1.16.14 Profile Enrichment
+⬜ 7.1.16.15 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow
+
 ⬜ 7.1.17.1 Application Status Model
 ⬜ 7.1.17.2 Application Status Visualization
 ⬜ 7.1.17.3 Application Status Update

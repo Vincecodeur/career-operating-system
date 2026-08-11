@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.1 Repository Audit
+7.1.16.7 Backend Domain Implementation
 
 ---
 
@@ -947,6 +947,13 @@ Completed
 - Support multi-profils confirmé
 - Décision de déplacer Multi Profile Opportunity Context vers la phase 7.1.22
 
+- Phase 7.1.16.1 Repository Audit terminée
+- Phase 7.1.16.2 CV Management Design terminée
+- Phase 7.1.16.3 Backend Data Model Design terminée
+- Phase 7.1.16.4 Backend API Design terminée
+- Phase 7.1.16.5 Backend Tests Design terminée
+- Phase 7.1.16.6 Frontend UX Design terminée
+
 ---
 
 Phase In Progress
@@ -991,4 +998,4 @@ Validated choices:
 
 Last Commit
 
-- 03c7e86 - docs: close certifications management phase
+- 4bc24c5 - docs: align roadmap after multi profile review

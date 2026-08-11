@@ -567,9 +567,16 @@ Des tests existent pour :
 - Phase 7.1.15.7.5 Frontend Validation
 - Phase 7.1.15.7.6 Documentation Synchronization
 - Phase 7.1.15.8 Backend Validation terminée
+- Phase 7.1.16.1 Repository Audit
+- Phase 7.1.16.2 CV Management Design
+- Phase 7.1.16.3 Backend Data Model Design
+- Phase 7.1.16.4 Backend API Design
+- Phase 7.1.16.5 Backend Tests Design
+- Phase 7.1.16.6 Frontend UX Design
 
 ## Derniers commits importants
 
+- 4bc24c5 - docs: align roadmap after multi profile review
 - 03c7e86 - docs: close certifications management phase
 - 4615c02 - docs: close certifications management phase
 - 005465e - feat: add frontend profile certification crud
@@ -711,34 +718,36 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.16.1 Repository Audit
+Phase 7.1.16.7 Backend Domain Implementation
 
 Objectif :
-Auditer l'existant autour de la gestion des CV avant toute implémentation.
+Implémenter le domaine CV dans le backend conformément au design validé.
 
-Pré-requis validés :
+Décisions déjà validées :
 
-- Profile Management terminé
-- Certifications Management terminé
-- Backend Validation terminée
-- Documentation synchronisée
-- Repository synchronisé
+- un profil peut posséder plusieurs CV ;
+- un seul CV par défaut par profil ;
+- le profil reste la source de vérité ;
+- le CV est une source documentaire ;
+- le parsing est optionnel ;
+- l’enrichissement du profil est explicite et manuel.
 
 Périmètre :
 
-- modèles CV
-- stockage des CV
-- services CV
-- API CV
-- pages frontend concernées
-- documentation existante
+- modèle CV
+- schémas Pydantic
+- router CV
+- service CV
+- stockage des fichiers
+- relation Profile ↔ CV
 
 Critère de sortie :
 
-- état réel du repository identifié
-- écarts entre roadmap et code documentés
-- périmètre CV Management confirmé
-- prochaine sous-phase définie
+- domaine CV implémenté ;
+- migration créée ;
+- API conforme au design ;
+- build backend valide ;
+- prochaine étape définie.
 
 ## Méthode de reprise
 
