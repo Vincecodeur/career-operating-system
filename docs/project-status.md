@@ -923,6 +923,25 @@ Completed
 - APIs frontend identifiées
 - Composants frontend identifiés
 
+- Phase 7.1.15.7.4 Frontend CRUD Implementation terminée
+- frontend/src/components/AddProfileCertificationModal.tsx créé
+- frontend/src/components/EditProfileCertificationModal.tsx créé
+- frontend/src/components/DeleteProfileCertificationDialog.tsx créé
+- createProfileCertification API implémenté
+- updateProfileCertification API implémenté
+- deleteProfileCertification API implémenté
+- ProfileDetail.tsx enrichi avec CRUD ProfileCertification
+- ProfilesPage.tsx enrichi avec CRUD ProfileCertification
+- Build frontend validé
+- Commit technique 005465e créé
+- Push GitHub réalisé
+
+- Phase 7.1.15.7.5 Frontend Validation terminée
+- Validation visuelle Add Certification réalisée
+- Validation visuelle Edit Certification réalisée
+- Validation visuelle Remove Certification réalisée
+- Validation fonctionnelle complète réalisée
+
 ---
 
 Phase In Progress
@@ -940,18 +959,7 @@ Aucun
 Phase 7.1.15.7 Certifications Management
 
 Objectif :
-Implémenter le frontend CRUD du domaine ProfileCertification.
-
-Périmètre :
-
-- AddProfileCertificationModal
-- EditProfileCertificationModal
-- DeleteProfileCertificationDialog
-- createProfileCertification
-- updateProfileCertification
-- deleteProfileCertification
-- intégration ProfileDetail
-- intégration ProfilesPage
+Synchroniser la documentation après validation complète du CRUD ProfileCertification.
 
 ---
 
@@ -978,4 +986,4 @@ Validated choices:
 
 Last Commit
 
-- 35824ec - feat: complete profile certification crud backend
+- 005465e - feat: add frontend profile certification crud
