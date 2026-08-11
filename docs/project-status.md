@@ -857,6 +857,27 @@ Completed
 - Validation visuelle Remove Work Experience réalisée
 - Validation fonctionnelle complète réalisée
 
+- Phase 7.1.15.6.1 Backend CRUD Completion terminée
+- ProfileLanguageUpdate schema créé
+- PUT /profile-languages/{profile_id}/{language_id} implémenté
+- DELETE /profile-languages/{profile_id}/{language_id} implémenté
+- Commit technique c06e745 créé
+- Push GitHub réalisé
+
+- Phase 7.1.15.6.2 Backend CRUD Validation terminée
+- tests/test_profile_languages.py créé
+- 7 tests CRUD ProfileLanguage passants
+- 158 tests backend passants
+- Validation fonctionnelle CRUD ProfileLanguage réalisée
+
+- Phase 7.1.15.6.3 Frontend CRUD Design terminée
+- UX Add Language définie
+- UX Edit Language définie
+- UX Remove Language définie
+- Modal strategy validée
+- APIs frontend identifiées
+- Composants frontend identifiés
+
 ---
 
 Phase In Progress
@@ -883,15 +904,18 @@ Pré-requis :
 - Repository synchronisé
 
 Prochaine étape active :
-7.1.15.6.1 Backend CRUD Completion
+7.1.15.6.4 Frontend CRUD Implementation
 
 Périmètre :
 
-- audit du domaine ProfileLanguage
-- revue OpenAPI
-- stratégie Update/Delete
-- analyse des clés composites
-- validation des impacts frontend
+- AddProfileLanguageModal
+- EditProfileLanguageModal
+- DeleteProfileLanguageDialog
+- createProfileLanguage
+- updateProfileLanguage
+- deleteProfileLanguage
+- intégration ProfileDetail
+- intégration ProfilesPage
 
 ---
 
@@ -918,4 +942,4 @@ Validated choices:
 
 Last Commit
 
-- 93afcae - feat: add frontend work experience crud
+- c06e745 - feat: complete profile language crud backend

@@ -253,6 +253,10 @@ Implémenté :
 - WorkExperience Update
 - WorkExperience Delete
 - WorkExperience CRUD Completion
+- ProfileLanguageUpdate
+- ProfileLanguage Update
+- ProfileLanguage Delete
+- ProfileLanguage CRUD Completion
 
 Partiellement implémenté :
 
@@ -424,6 +428,7 @@ Des tests existent pour :
 - mock ai provider
 - profile skills
 - work experiences
+- profile languages
 
 ## Phases terminées
 
@@ -527,6 +532,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- c06e745 - feat: complete profile language crud backend
 - 93afcae - feat: add frontend work experience crud
 - da0635b - test: add work experience crud coverage
 - ca1ce1b - feat: complete work experience crud backend
@@ -661,30 +667,27 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase suivante recommandée
-
-Phase 7.1.15.6.1 Backend CRUD Completion
+Phase 7.1.15.6.4 Frontend CRUD Implementation
 
 Objectif :
-Ajouter le CRUD Update/Delete pour ProfileLanguage.
+Implémenter le CRUD frontend ProfileLanguage.
 
 Pré-requis validés :
 
-- WorkExperience CRUD backend terminé
-- WorkExperience CRUD frontend terminé
-- Validation frontend réalisée
-- Commit technique réalisé
+- Backend CRUD ProfileLanguage terminé
+- Validation backend réalisée
+- Tests CRUD ProfileLanguage passants
+- Design frontend validé
 - Repository synchronisé
 
 Périmètre :
 
-- audit du domaine ProfileLanguage
-- analyse OpenAPI
-- stratégie Update/Delete
-- revue des clés composites
-- validation impacts frontend
-
-Aucun développement pendant cette phase.
+- AddProfileLanguageModal
+- EditProfileLanguageModal
+- DeleteProfileLanguageDialog
+- API client ProfileLanguage
+- Intégration ProfileDetail
+- Intégration ProfilesPage
 
 ## Méthode de reprise
 
