@@ -10,6 +10,7 @@ from app.certifications.schemas import CertificationCreate
 from app.certifications.schemas import CertificationResponse
 from app.certifications.schemas import ProfileCertificationCreate
 from app.certifications.schemas import ProfileCertificationResponse
+from app.certifications.schemas import ProfileCertificationUpdate
 from app.core.database import get_db
 from app.profile.models import Profile
 
@@ -161,3 +162,71 @@ def list_certifications_for_profile(
     return db.query(ProfileCertification).filter(
         ProfileCertification.profile_id == profile_id
     ).all()
+    
+    
+@router.put(
+    "/profile-certifications/{profile_id}/{certification_id}",
+    response_model=ProfileCertificationResponse,
+)
+def update_profile_certification(
+    profile_id: int,
+    certification_id: int,
+    profile_certification_update: ProfileCertificationUpdate,
+    db: Session = Depends(get_db),
+):
+    profile_certification = db.query(
+        ProfileCertification
+    ).filter(
+        ProfileCertification.profile_id == profile_id,
+        ProfileCertification.certification_id == certification_id,
+    ).first()
+
+    if profile_certification is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile certification not found.",
+        )
+
+    profile_certification.obtained_date = (
+        profile_certification_update.obtained_date
+    )
+    profile_certification.expiration_date = (
+        profile_certification_update.expiration_date
+    )
+    profile_certification.credential_id = (
+        profile_certification_update.credential_id
+    )
+
+    db.commit()
+    db.refresh(profile_certification)
+
+    return profile_certification
+
+@router.delete(
+    "/profile-certifications/{profile_id}/{certification_id}",
+)
+def delete_profile_certification(
+    profile_id: int,
+    certification_id: int,
+    db: Session = Depends(get_db),
+):
+    profile_certification = db.query(
+        ProfileCertification
+    ).filter(
+        ProfileCertification.profile_id == profile_id,
+        ProfileCertification.certification_id == certification_id,
+    ).first()
+
+    if profile_certification is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile certification not found.",
+        )
+
+    db.delete(profile_certification)
+
+    db.commit()
+
+    return {
+        "message": "Profile certification deleted successfully."
+    }

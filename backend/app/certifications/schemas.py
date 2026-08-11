@@ -27,6 +27,11 @@ class ProfileCertificationCreate(BaseModel):
     expiration_date: date | None = None
     credential_id: str | None = None
 
+class ProfileCertificationUpdate(BaseModel):
+    obtained_date: date | None = None
+    expiration_date: date | None = None
+    credential_id: str | None = None
+
 
 class ProfileCertificationResponse(BaseModel):
     profile_id: int
