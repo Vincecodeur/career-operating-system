@@ -561,6 +561,7 @@ Des tests existent pour :
 - Phase 7.1.15.7.3 Frontend CRUD Design
 - Phase 7.1.15.7.4 Frontend CRUD Implementation
 - Phase 7.1.15.7.5 Frontend Validation
+- Phase 7.1.15.7.6 Documentation Synchronization
 
 ## Derniers commits importants
 
@@ -703,35 +704,32 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.7.6 Documentation Synchronization
+Phase 7.1.15.8.1 Backend Validation
 
 Objectif :
-Clôturer la phase Certifications Management et synchroniser la documentation projet.
+Auditer l'implémentation multi-profils déjà présente dans le backend.
 
 Pré-requis validés :
 
-- Backend CRUD ProfileCertification terminé
-- Validation Swagger réalisée
-- Tests CRUD ProfileCertification passants
-- Frontend CRUD ProfileCertification implémenté
-- Validation UI Add Certification réalisée
-- Validation UI Edit Certification réalisée
-- Validation UI Remove Certification réalisée
+- Certifications Management terminé
+- Documentation synchronisée
 - Repository synchronisé
+- Working tree propre
 
 Périmètre :
 
-- roadmap.md
-- project-status.md
-- handoff-prompt.md
+- backend/app/profiles
+- modèles Profile
+- endpoints Profile
+- tests Profile
+- documentation DEC associées
 
 Critère de sortie :
 
-- documentation synchronisée
-- commit documentaire réalisé
-- push réalisé
-- git status propre
-- prochaine étape définie
+- audit backend réalisé
+- capacités multi-profils réelles identifiées
+- écarts éventuels documentés
+- phase UX suivante cadrée
 
 ## Méthode de reprise
 

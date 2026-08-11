@@ -24,7 +24,7 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.15.7 Certifications Management
+7.1.15.8 Multi Profile Management
 
 ---
 
@@ -956,10 +956,10 @@ Aucun
 
 ---
 
-Phase 7.1.15.7 Certifications Management
+7.1.15.8 Multi Profile Management
 
 Objectif :
-Synchroniser la documentation après validation complète du CRUD ProfileCertification.
+Auditer l'implémentation multi-profils existante avant toute évolution UX ou frontend.
 
 ---
 
