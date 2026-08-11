@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.7 Backend Domain Implementation
+7.1.16.9 Backend Validation
 
 ---
 
@@ -954,6 +954,25 @@ Completed
 - Phase 7.1.16.5 Backend Tests Design terminée
 - Phase 7.1.16.6 Frontend UX Design terminée
 
+- Phase 7.1.16.7 Backend Domain Implementation terminée
+- CV Model créé
+- CV Schemas créés
+- CV Router créé
+- CV Service créé
+- Storage CV implémenté
+- Relation Profile ↔ CV implémentée
+- python-multipart ajouté
+- Commit technique CV réalisé
+- Push GitHub réalisé
+
+- Phase 7.1.16.8 Backend Tests Implementation terminée
+- backend/tests/test_cvs.py créé
+- 12 tests CV ajoutés
+- Validation pytest réalisée
+- 178 tests passants
+- Commit technique réalisé
+- Push GitHub réalisé
+
 ---
 
 Phase In Progress
@@ -998,4 +1017,4 @@ Validated choices:
 
 Last Commit
 
-- 4bc24c5 - docs: align roadmap after multi profile review
+- 4cf5193 - chore: ignore generated cv storage directory

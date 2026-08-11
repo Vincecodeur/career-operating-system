@@ -23,5 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# Generated CV files
-backend/storage/cvs/

@@ -261,6 +261,12 @@ Implémenté :
 - ProfileCertification Update
 - ProfileCertification Delete
 - ProfileCertification CRUD Completion
+- CV Model
+- CV Schemas
+- CV Router
+- CV Service
+- CV Storage
+- Profile ↔ CV Relationship
 
 Partiellement implémenté :
 
@@ -452,6 +458,7 @@ Des tests existent pour :
 - work experiences
 - profile languages
 - profile certifications
+- cvs
 
 ## Phases terminées
 
@@ -573,9 +580,14 @@ Des tests existent pour :
 - Phase 7.1.16.4 Backend API Design
 - Phase 7.1.16.5 Backend Tests Design
 - Phase 7.1.16.6 Frontend UX Design
+- Phase 7.1.16.7 Backend Domain Implementation
+- Phase 7.1.16.8 Backend Tests Implementation
 
 ## Derniers commits importants
 
+- 4cf5193 - chore: ignore generated cv storage directory
+- a91e42b - chore: ignore generated cv storage files
+- 0dcdc9f - feat: add cv management backend domain
 - 4bc24c5 - docs: align roadmap after multi profile review
 - 03c7e86 - docs: close certifications management phase
 - 4615c02 - docs: close certifications management phase
@@ -718,35 +730,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.16.7 Backend Domain Implementation
+Phase 7.1.16.9 Backend Validation
 
 Objectif :
-Implémenter le domaine CV dans le backend conformément au design validé.
-
-Décisions déjà validées :
-
-- un profil peut posséder plusieurs CV ;
-- un seul CV par défaut par profil ;
-- le profil reste la source de vérité ;
-- le CV est une source documentaire ;
-- le parsing est optionnel ;
-- l’enrichissement du profil est explicite et manuel.
+Valider fonctionnellement le domaine CV en conditions réelles.
 
 Périmètre :
 
-- modèle CV
-- schémas Pydantic
-- router CV
-- service CV
-- stockage des fichiers
-- relation Profile ↔ CV
+- validation Swagger/OpenAPI
+- upload réel d’un PDF
+- création du fichier dans storage/cvs
+- persistance PostgreSQL
+- récupération d’un CV
+- liste des CV d’un profil
+- gestion du CV par défaut
+- suppression d’un CV
 
 Critère de sortie :
 
-- domaine CV implémenté ;
-- migration créée ;
-- API conforme au design ;
-- build backend valide ;
+- validation fonctionnelle réalisée ;
+- comportement réel confirmé ;
 - prochaine étape définie.
 
 ## Méthode de reprise
