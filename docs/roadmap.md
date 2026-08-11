@@ -439,9 +439,9 @@ Sous-phases :
 ✅ 7.1.15.6.6 Documentation Synchronization
 
 ⬜ 7.1.15.7 Certifications Management
-⬜ 7.1.15.7.1 Backend CRUD Completion
-⬜ 7.1.15.7.2 Backend CRUD Validation
-⬜ 7.1.15.7.3 Frontend CRUD Design
+✅ 7.1.15.7.1 Backend CRUD Completion
+✅ 7.1.15.7.2 Backend CRUD Validation
+✅ 7.1.15.7.3 Frontend CRUD Design
 ⬜ 7.1.15.7.4 Frontend CRUD Implementation
 ⬜ 7.1.15.7.5 Frontend Validation
 ⬜ 7.1.15.7.6 Documentation Synchronization

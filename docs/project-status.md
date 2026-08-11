@@ -900,6 +900,29 @@ Completed
 
 - Phase 7.1.15.6.6 Documentation Synchronization terminée
 
+- Phase 7.1.15.7.1 Backend CRUD Completion terminée
+- ProfileCertificationUpdate schema créé
+- PUT /profile-certifications/{profile_id}/{certification_id} implémenté
+- DELETE /profile-certifications/{profile_id}/{certification_id} implémenté
+- backend/tests/test_profile_certifications.py créé
+- 8 tests CRUD ProfileCertification ajoutés
+- Validation pytest réalisée
+- 166 tests backend passants
+- Commit technique 35824ec créé
+- Push GitHub réalisé
+
+- Phase 7.1.15.7.2 Backend CRUD Validation terminée
+- Validation Swagger ProfileCertification réalisée
+- Validation fonctionnelle CRUD ProfileCertification réalisée
+
+- Phase 7.1.15.7.3 Frontend CRUD Design terminée
+- UX Add Certification définie
+- UX Edit Certification définie
+- UX Remove Certification définie
+- Modal strategy validée
+- APIs frontend identifiées
+- Composants frontend identifiés
+
 ---
 
 Phase In Progress
@@ -917,17 +940,18 @@ Aucun
 Phase 7.1.15.7 Certifications Management
 
 Objectif :
-Compléter le CRUD du domaine ProfileCertification.
+Implémenter le frontend CRUD du domaine ProfileCertification.
 
 Périmètre :
 
-- audit du domaine ProfileCertification
-- revue du modèle ProfileCertification
-- revue des schémas ProfileCertification
-- revue des routes FastAPI existantes
-- stratégie Update/Delete
-- analyse de la clé composite profile_id + certification_id
-- validation des tests existants
+- AddProfileCertificationModal
+- EditProfileCertificationModal
+- DeleteProfileCertificationDialog
+- createProfileCertification
+- updateProfileCertification
+- deleteProfileCertification
+- intégration ProfileDetail
+- intégration ProfilesPage
 
 ---
 
@@ -954,4 +978,4 @@ Validated choices:
 
 Last Commit
 
-- f955978 - feat: add profile language frontend crud
+- 35824ec - feat: complete profile certification crud backend

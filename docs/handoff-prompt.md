@@ -257,6 +257,10 @@ Implémenté :
 - ProfileLanguage Update
 - ProfileLanguage Delete
 - ProfileLanguage CRUD Completion
+- ProfileCertificationUpdate
+- ProfileCertification Update
+- ProfileCertification Delete
+- ProfileCertification CRUD Completion
 
 Partiellement implémenté :
 
@@ -436,6 +440,7 @@ Des tests existent pour :
 - profile skills
 - work experiences
 - profile languages
+- profile certifications
 
 ## Phases terminées
 
@@ -544,9 +549,13 @@ Des tests existent pour :
 - Phase 7.1.15.6.4 Frontend CRUD Implementation
 - Phase 7.1.15.6.5 Frontend Validation
 - Phase 7.1.15.6.6 Documentation Synchronization
+- Phase 7.1.15.7.1 Backend CRUD Completion
+- Phase 7.1.15.7.2 Backend CRUD Validation
+- Phase 7.1.15.7.3 Frontend CRUD Design
 
 ## Derniers commits importants
 
+- 35824ec - feat: complete profile certification crud backend
 - f955978 - feat: add profile language frontend crud
 - 0c33a61 - docs: synchronize profile language
 - c06e745 - feat: complete profile language crud backend
@@ -684,28 +693,29 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.15.7.1 Backend CRUD Completion
+Phase 7.1.15.7.4 Frontend CRUD Implementation
 
 Objectif :
-Compléter le CRUD backend du domaine ProfileCertification.
+Implémenter le CRUD frontend du domaine ProfileCertification.
 
 Pré-requis validés :
 
-- Backend CRUD ProfileLanguage terminé
-- Validation backend réalisée
-- Tests CRUD ProfileLanguage passants
+- Backend CRUD ProfileCertification terminé
+- Validation Swagger réalisée
+- Tests CRUD ProfileCertification passants
 - Design frontend validé
 - Repository synchronisé
 
 Périmètre :
 
-- audit du domaine ProfileCertification
-- revue du modèle ProfileCertification
-- revue des schémas ProfileCertification
-- revue des routes FastAPI existantes
-- stratégie Update/Delete
-- analyse de la clé composite profile_id + certification_id
-- validation des tests existants
+- AddProfileCertificationModal
+- EditProfileCertificationModal
+- DeleteProfileCertificationDialog
+- createProfileCertification
+- updateProfileCertification
+- deleteProfileCertification
+- intégration ProfileDetail
+- intégration ProfilesPage
 
 ## Méthode de reprise
 
