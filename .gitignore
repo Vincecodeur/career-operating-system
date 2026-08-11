@@ -36,3 +36,6 @@ build/
 # Misc
 
 *.log
+
+# Generated CV files
+backend/storage/cvs/
