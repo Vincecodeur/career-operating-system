@@ -137,8 +137,8 @@ export function UploadCvModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-      <div className="w-full max-w-2xl rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-xl">
-        <div className="mb-6">
+      <div className="w-full max-w-5xl max-h-[90vh] rounded-lg border border-slate-700 bg-slate-900 shadow-xl flex flex-col">
+        <div className="flex-1 overflow-y-auto p-6">
           <h2 className="text-2xl font-bold text-white">
             Update Profile From CV
           </h2>
@@ -146,76 +146,77 @@ export function UploadCvModal({
           <p className="mt-2 text-sm text-slate-400">
             Upload a CV and start the profile enrichment workflow.
           </p>
-        </div>
 
-        <WizardProgress currentStep={step} />
+          <WizardProgress currentStep={step} />
 
-        {(error || localError) && (
-          <div className="mb-4 rounded-md border border-red-800 bg-red-950 p-3 text-sm text-red-300">
-            {localError ?? error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {step === "upload" && (
-            <UploadCvWizardStep1
-              selectedFile={selectedFile}
-              language={language}
-              versionLabel={versionLabel}
-              isDefault={isDefault}
-              isSaving={isSaving || isAnalyzing}
-              onFileChange={setSelectedFile}
-              onLanguageChange={setLanguage}
-              onVersionLabelChange={setVersionLabel}
-              onIsDefaultChange={setIsDefault}
-            />
+          {(error || localError) && (
+            <div className="mb-4 rounded-md border border-red-800 bg-red-950 p-3 text-sm text-red-300">
+              {localError ?? error}
+            </div>
           )}
 
-          {step === "analysis" && (
-            <UploadCvWizardStep2
-              skillsFound={skillsFound}
-              experiencesFound={experiencesFound}
-              languagesFound={languagesFound}
-              certificationsFound={certificationsFound}
-              conflictCount={conflictCount}
-            />
-          )}
-          {step === "review" && (
-            <UploadCvWizardStep3 proposals={enrichmentProposals} />
-          )}
-
-          <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSaving || isAnalyzing}
-              className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50">
-              {step === "upload" ? "Cancel" : "Close"}
-            </button>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {step === "upload" && (
+              <UploadCvWizardStep1
+                selectedFile={selectedFile}
+                language={language}
+                versionLabel={versionLabel}
+                isDefault={isDefault}
+                isSaving={isSaving || isAnalyzing}
+                onFileChange={setSelectedFile}
+                onLanguageChange={setLanguage}
+                onVersionLabelChange={setVersionLabel}
+                onIsDefaultChange={setIsDefault}
+              />
+            )}
 
             {step === "analysis" && (
-              <button
-                type="button"
-                onClick={() => setStep("review")}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">
-                Review Suggestions
-              </button>
+              <UploadCvWizardStep2
+                skillsFound={skillsFound}
+                experiencesFound={experiencesFound}
+                languagesFound={languagesFound}
+                certificationsFound={certificationsFound}
+                conflictCount={conflictCount}
+              />
             )}
 
-            {step === "upload" && (
-              <button
-                type="submit"
-                disabled={isSaving || isAnalyzing}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
-                {isAnalyzing
-                  ? "Analyzing..."
-                  : isSaving
-                    ? "Uploading..."
-                    : "Upload and Analyze"}
-              </button>
+            {step === "review" && (
+              <UploadCvWizardStep3 proposals={enrichmentProposals} />
             )}
-          </div>
-        </form>
+
+            <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={isSaving || isAnalyzing}
+                className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50">
+                {step === "upload" ? "Cancel" : "Close"}
+              </button>
+
+              {step === "analysis" && (
+                <button
+                  type="button"
+                  onClick={() => setStep("review")}
+                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+                  Review Suggestions
+                </button>
+              )}
+
+              {step === "upload" && (
+                <button
+                  type="submit"
+                  disabled={isSaving || isAnalyzing}
+                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
+                  {isAnalyzing
+                    ? "Analyzing..."
+                    : isSaving
+                      ? "Uploading..."
+                      : "Upload and Analyze"}
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
