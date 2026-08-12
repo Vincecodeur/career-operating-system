@@ -813,8 +813,6 @@ export function ProfilesPage() {
 
       await reloadSelectedProfileDetails(selectedProfile.id);
 
-      setIsUploadCvModalOpen(false);
-
       return cv;
     } catch {
       setCvMutationError("Unable to upload CV.");

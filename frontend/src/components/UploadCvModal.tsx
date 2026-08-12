@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { WizardProgress } from "./cv-wizard/WizardProgress";
+
 import { UploadCvWizardStep1 } from "./cv-wizard/UploadCvWizardStep1";
-import type { Cv } from "../services/api";
+import { UploadCvWizardStep2 } from "./cv-wizard/UploadCvWizardStep2";
+import { WizardProgress } from "./cv-wizard/WizardProgress";
+
+import type { Cv, ProfileEnrichmentProposal } from "../services/api";
+import { generateProfileEnrichment } from "../services/api";
 
 export type UploadCvFormValues = {
   file: File;
@@ -20,6 +24,18 @@ type Props = {
   onUpload: (values: UploadCvFormValues) => Promise<Cv>;
 };
 
+function countProposalsByType(
+  proposals: ProfileEnrichmentProposal[],
+  proposalType: string,
+) {
+  return proposals.filter((proposal) => proposal.proposal_type === proposalType)
+    .length;
+}
+
+function countConflicts(proposals: ProfileEnrichmentProposal[]) {
+  return proposals.filter((proposal) => proposal.conflict_detected).length;
+}
+
 export function UploadCvModal({
   isOpen,
   isSaving,
@@ -27,6 +43,8 @@ export function UploadCvModal({
   onClose,
   onUpload,
 }: Props) {
+  const [step, setStep] = useState<WizardStep>("upload");
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [language, setLanguage] = useState("");
@@ -35,7 +53,11 @@ export function UploadCvModal({
 
   const [localError, setLocalError] = useState<string | null>(null);
 
-  const [step, setStep] = useState<WizardStep>("upload");
+  const [enrichmentProposals, setEnrichmentProposals] = useState<
+    ProfileEnrichmentProposal[]
+  >([]);
+
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -48,6 +70,8 @@ export function UploadCvModal({
     setVersionLabel("");
     setIsDefault(false);
     setLocalError(null);
+    setEnrichmentProposals([]);
+    setIsAnalyzing(false);
   }, [isOpen]);
 
   if (!isOpen) {
@@ -63,14 +87,50 @@ export function UploadCvModal({
     }
 
     setLocalError(null);
+    setIsAnalyzing(true);
 
-    await onUpload({
-      file: selectedFile,
-      language,
-      versionLabel,
-      isDefault,
-    });
+    let uploadedCv: Cv;
+
+    try {
+      uploadedCv = await onUpload({
+        file: selectedFile,
+        language,
+        versionLabel,
+        isDefault,
+      });
+    } catch {
+      setLocalError("Unable to upload CV.");
+      setIsAnalyzing(false);
+      return;
+    }
+
+    try {
+      const proposals = await generateProfileEnrichment(uploadedCv.id);
+
+      setEnrichmentProposals(proposals);
+      setStep("analysis");
+    } catch {
+      setLocalError("CV uploaded, but analysis could not be completed.");
+    } finally {
+      setIsAnalyzing(false);
+    }
   }
+
+  const skillsFound = countProposalsByType(enrichmentProposals, "SKILL");
+
+  const experiencesFound = countProposalsByType(
+    enrichmentProposals,
+    "EXPERIENCE",
+  );
+
+  const languagesFound = countProposalsByType(enrichmentProposals, "LANGUAGE");
+
+  const certificationsFound = countProposalsByType(
+    enrichmentProposals,
+    "CERTIFICATION",
+  );
+
+  const conflictCount = countConflicts(enrichmentProposals);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
@@ -94,33 +154,51 @@ export function UploadCvModal({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <UploadCvWizardStep1
-            selectedFile={selectedFile}
-            language={language}
-            versionLabel={versionLabel}
-            isDefault={isDefault}
-            isSaving={isSaving}
-            onFileChange={setSelectedFile}
-            onLanguageChange={setLanguage}
-            onVersionLabelChange={setVersionLabel}
-            onIsDefaultChange={setIsDefault}
-          />
+          {step === "upload" && (
+            <UploadCvWizardStep1
+              selectedFile={selectedFile}
+              language={language}
+              versionLabel={versionLabel}
+              isDefault={isDefault}
+              isSaving={isSaving || isAnalyzing}
+              onFileChange={setSelectedFile}
+              onLanguageChange={setLanguage}
+              onVersionLabelChange={setVersionLabel}
+              onIsDefaultChange={setIsDefault}
+            />
+          )}
+
+          {step === "analysis" && (
+            <UploadCvWizardStep2
+              skillsFound={skillsFound}
+              experiencesFound={experiencesFound}
+              languagesFound={languagesFound}
+              certificationsFound={certificationsFound}
+              conflictCount={conflictCount}
+            />
+          )}
 
           <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
             <button
               type="button"
               onClick={onClose}
-              disabled={isSaving}
+              disabled={isSaving || isAnalyzing}
               className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50">
-              Cancel
+              {step === "upload" ? "Cancel" : "Close"}
             </button>
 
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
-              {isSaving ? "Uploading..." : "Upload CV"}
-            </button>
+            {step === "upload" && (
+              <button
+                type="submit"
+                disabled={isSaving || isAnalyzing}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
+                {isAnalyzing
+                  ? "Analyzing..."
+                  : isSaving
+                    ? "Uploading..."
+                    : "Upload and Analyze"}
+              </button>
+            )}
           </div>
         </form>
       </div>
