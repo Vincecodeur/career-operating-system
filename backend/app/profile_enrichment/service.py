@@ -745,16 +745,17 @@ def accept_certification_proposal(
 
 def accept_experience_proposal(
     proposal: ProfileEnrichmentProposal,
+    value_to_apply: str,
     db: Session,
 ) -> None:
     work_experience = WorkExperience(
         profile_id=proposal.profile_id,
         company_name=DEFAULT_EXPERIENCE_COMPANY,
-        job_title=proposal.proposed_value[:255],
+        job_title=value_to_apply[:255],
         start_date=DEFAULT_EXPERIENCE_START_DATE,
         end_date=None,
         is_current_position=False,
-        description=proposal.proposed_value,
+        description=value_to_apply,
     )
 
     db.add(work_experience)
@@ -762,6 +763,7 @@ def accept_experience_proposal(
 
 def accept_proposal(
     proposal_id: int,
+    proposed_value_override: str | None,
     db: Session,
 ) -> ProfileEnrichmentProposal:
     proposal = get_proposal_or_404(
@@ -772,6 +774,11 @@ def accept_proposal(
     ensure_pending_proposal(
         proposal,
     )
+    value_to_apply = (
+    proposed_value_override
+    if proposed_value_override
+    else proposal.proposed_value
+)
 
     if proposal.proposal_type == ProfileEnrichmentProposalType.PROFILE_FIELD.value:
         accept_profile_field_proposal(
@@ -796,6 +803,7 @@ def accept_proposal(
     elif proposal.proposal_type == ProfileEnrichmentProposalType.EXPERIENCE.value:
         accept_experience_proposal(
             proposal,
+            value_to_apply,
             db,
         )
     else:

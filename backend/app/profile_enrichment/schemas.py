@@ -3,6 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+class AcceptProposalRequest(BaseModel):
+    proposed_value_override: str | None = None
 class ProfileEnrichmentProposalResponse(BaseModel):
     id: int
     profile_id: int
@@ -24,3 +26,4 @@ class ProfileEnrichmentProposalResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+    

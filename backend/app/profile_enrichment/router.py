@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.profile_enrichment.schemas import (
+    AcceptProposalRequest,
     ProfileEnrichmentProposalResponse,
 )
 from app.profile_enrichment.service import accept_proposal
@@ -51,11 +52,19 @@ def get_profile_enrichment_proposals(
 )
 def accept_profile_enrichment_proposal(
     proposal_id: int,
+    payload: AcceptProposalRequest | None = None,
     db: Session = Depends(get_db),
 ):
+    proposed_value_override = (
+        payload.proposed_value_override
+        if payload is not None
+        else None
+    )
+
     return accept_proposal(
-        proposal_id,
-        db,
+        proposal_id=proposal_id,
+        proposed_value_override=proposed_value_override,
+        db=db,
     )
 
 
