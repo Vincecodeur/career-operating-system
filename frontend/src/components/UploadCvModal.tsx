@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { WizardProgress } from "./cv-wizard/WizardProgress";
 import { UploadCvWizardStep1 } from "./cv-wizard/UploadCvWizardStep1";
+import type { Cv } from "../services/api";
 
 export type UploadCvFormValues = {
   file: File;
@@ -16,7 +17,7 @@ type Props = {
   isSaving: boolean;
   error: string | null;
   onClose: () => void;
-  onUpload: (values: UploadCvFormValues) => Promise<void>;
+  onUpload: (values: UploadCvFormValues) => Promise<Cv>;
 };
 
 export function UploadCvModal({

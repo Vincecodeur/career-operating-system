@@ -794,16 +794,16 @@ export function ProfilesPage() {
     }
   }
 
-  async function handleUploadCv(values: UploadCvFormValues) {
+  async function handleUploadCv(values: UploadCvFormValues): Promise<Cv> {
     if (!selectedProfile) {
-      return;
+      throw new Error("No profile selected.");
     }
 
     setIsSavingCv(true);
     setCvMutationError(null);
 
     try {
-      await uploadCv(
+      const cv = await uploadCv(
         selectedProfile.id,
         values.file,
         values.language,
@@ -814,8 +814,12 @@ export function ProfilesPage() {
       await reloadSelectedProfileDetails(selectedProfile.id);
 
       setIsUploadCvModalOpen(false);
+
+      return cv;
     } catch {
       setCvMutationError("Unable to upload CV.");
+
+      throw new Error("Unable to upload CV.");
     } finally {
       setIsSavingCv(false);
     }
