@@ -473,6 +473,7 @@ Des tests existent pour :
 - profile languages
 - profile certifications
 - cvs
+- profile enrichment
 
 ## Phases terminées
 
@@ -614,9 +615,11 @@ Des tests existent pour :
 - Phase 7.1.16.14.5 Enrichment Workflow Design terminée
 - Phase 7.1.16.14.6 Backend Technical Design
 - Phase 7.1.16.14.7 Backend Implementation
+- Phase 7.1.16.14.8 Backend Tests
 
 ## Derniers commits importants
 
+- cccd778 - test: add profile enrichment backend coverage
 - ee679cc - feat : profile-enrichment-design implementation
 - 0528f74 - feat: CV parsing service implementation
 - a923afc - feat: complete cv management frontend
@@ -766,26 +769,25 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.14.8 Backend Tests
+7.1.16.14.9 Backend Validation
 
 Objectif :
-Valider le backend Profile Enrichment via des tests automatisés.
+Valider fonctionnellement le domaine Profile Enrichment.
 
 Périmètre :
 
-- tests de génération de propositions
-- tests de conflits
-- tests d'acceptation
-- tests de rejet
-- tests de réutilisation des référentiels
-- tests API
-- validation de non-régression
+- validation Swagger
+- validation génération de propositions
+- validation acceptation
+- validation rejet
+- validation réutilisation des référentiels
+- validation non-régression
 
 Critère de sortie :
 
-- tous les tests Profile Enrichment passants
-- validation pytest complète
-- couverture minimale du domaine Enrichment validée
+- comportement conforme au design
+- validation fonctionnelle réalisée
+- aucune anomalie bloquante
 
 ## Méthode de reprise
 

@@ -490,7 +490,7 @@ Résultat :
 ✅ 7.1.16.14.5 Enrichment Workflow Design
 ✅ 7.1.16.14.6 Backend Technical Design
 ✅ 7.1.16.14.7 Backend Implementation
-⬜ 7.1.16.14.8 Backend Tests
+✅ 7.1.16.14.8 Backend Tests
 ⬜ 7.1.16.14.9 Backend Validation
 ⬜ 7.1.16.14.10 Frontend UX Design
 ⬜ 7.1.16.14.11 Frontend Implementation

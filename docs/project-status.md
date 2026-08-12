@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.14.8 Backend Tests
+7.1.16.14.9 Backend Validation
 
 ---
 
@@ -1036,6 +1036,21 @@ Phase 7.1.16.14.7 Backend Implementation terminée
 - validation pytest réalisée
 - 182 tests passants
 
+Phase 7.1.16.14.8 Backend Tests terminée
+
+- backend/tests/test_profile_enrichment.py créé
+- couverture Profile Enrichment ajoutée
+- tests génération de propositions validés
+- tests acceptation validés
+- tests rejet validés
+- tests non-régression validés
+- validation pytest réalisée
+- 199 tests passants
+- Commit technique cccd778 créé
+- Push GitHub réalisé
+- Repository synchronisé avec origin/main
+- Working tree clean validé
+
 ---
 
 Phase In Progress
@@ -1068,20 +1083,17 @@ Principes :
 
 Last Decision
 
-Profile Enrichment backend foundation implemented and validated.
+Profile Enrichment backend tests implemented and validated.
 
 Validated choices:
 
-- profile remains the source of truth;
-- CVs are external observation sources;
-- human validation is mandatory;
-- repository reuse is required whenever possible;
-- enrichment is proposal-based;
-- automatic profile updates are prohibited;
-- automatic repository creation is prohibited.
+- Profile Enrichment proposals are covered by automated tests;
+- generation, listing, acceptance and rejection are covered;
+- Experience proposal acceptance remains allowed for MVP UX consistency;
+- full backend non-regression is validated with 199 passing tests.
 
 ---
 
 Last Commit
 
-- ee679cc - feat : profile-enrichment-design implementation
+- cccd778 - test: add profile enrichment backend coverage
