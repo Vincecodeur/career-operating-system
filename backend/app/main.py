@@ -23,6 +23,7 @@ from app.matching.router import router as matching_router
 from app.profile.profile_skill_router import router as profile_skill_router
 from app.profile.router import router as profile_router
 from app.skills.router import router as skills_router
+from app.certifications.router import router as certifications_router
 
 
 discovery_scheduler = DiscoveryScheduler()
