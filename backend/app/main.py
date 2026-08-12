@@ -12,6 +12,7 @@ from app.certifications.router import router as certifications_router
 from app.core.database import create_tables
 from app.core.database import engine
 from app.cv.router import router as cv_router
+from app.profile_enrichment.router import router as profile_enrichment_router
 from app.experience.router import router as experience_router
 from app.jobs.job_offer_skill_router import (
     router as job_offer_skill_router,
@@ -21,6 +22,7 @@ from app.jobs.scheduler import DiscoveryScheduler
 from app.languages.router import router as languages_router
 from app.matching.router import router as matching_router
 from app.profile.profile_skill_router import router as profile_skill_router
+
 from app.profile.router import router as profile_router
 from app.skills.router import router as skills_router
 from app.certifications.router import router as certifications_router
@@ -65,6 +67,7 @@ app.include_router(experience_router)
 app.include_router(languages_router)
 app.include_router(certifications_router)
 app.include_router(cv_router)
+app.include_router(profile_enrichment_router)
 app.include_router(jobs_router)
 app.include_router(job_offer_skill_router)
 app.include_router(matching_router)
