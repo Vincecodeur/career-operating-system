@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { UploadCvWizardStep1 } from "./cv-wizard/UploadCvWizardStep1";
 import { UploadCvWizardStep2 } from "./cv-wizard/UploadCvWizardStep2";
+import { UploadCvWizardStep3 } from "./cv-wizard/UploadCvWizardStep3";
 import { WizardProgress } from "./cv-wizard/WizardProgress";
 
 import type { Cv, ProfileEnrichmentProposal } from "../services/api";
@@ -177,6 +178,7 @@ export function UploadCvModal({
               conflictCount={conflictCount}
             />
           )}
+          {step === "review" && <UploadCvWizardStep3 />}
 
           <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
             <button
@@ -186,6 +188,15 @@ export function UploadCvModal({
               className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50">
               {step === "upload" ? "Cancel" : "Close"}
             </button>
+
+            {step === "analysis" && (
+              <button
+                type="button"
+                onClick={() => setStep("review")}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+                Review Suggestions
+              </button>
+            )}
 
             {step === "upload" && (
               <button
