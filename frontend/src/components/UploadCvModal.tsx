@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { UploadCvWizardStep1 } from "./cv-wizard/UploadCvWizardStep1";
 import { UploadCvWizardStep2 } from "./cv-wizard/UploadCvWizardStep2";
 import { UploadCvWizardStep3 } from "./cv-wizard/UploadCvWizardStep3";
+import { UploadCvWizardStep4 } from "./cv-wizard/UploadCvWizardStep4";
 import { WizardProgress } from "./cv-wizard/WizardProgress";
 
 import type { Cv, ProfileEnrichmentProposal } from "../services/api";
@@ -37,6 +38,16 @@ function countConflicts(proposals: ProfileEnrichmentProposal[]) {
   return proposals.filter((proposal) => proposal.conflict_detected).length;
 }
 
+function buildInitialEditedExperienceValues(
+  proposals: ProfileEnrichmentProposal[],
+) {
+  return Object.fromEntries(
+    proposals
+      .filter((proposal) => proposal.proposal_type === "EXPERIENCE")
+      .map((proposal) => [proposal.id, proposal.proposed_value]),
+  );
+}
+
 export function UploadCvModal({
   isOpen,
   isSaving,
@@ -58,6 +69,12 @@ export function UploadCvModal({
     ProfileEnrichmentProposal[]
   >([]);
 
+  const [selectedProposalIds, setSelectedProposalIds] = useState<number[]>([]);
+
+  const [editedExperienceValues, setEditedExperienceValues] = useState<
+    Record<number, string>
+  >({});
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
@@ -72,6 +89,8 @@ export function UploadCvModal({
     setIsDefault(false);
     setLocalError(null);
     setEnrichmentProposals([]);
+    setSelectedProposalIds([]);
+    setEditedExperienceValues({});
     setIsAnalyzing(false);
   }, [isOpen]);
 
@@ -111,6 +130,8 @@ export function UploadCvModal({
       console.log("ENRICHMENT_PROPOSALS", proposals);
 
       setEnrichmentProposals(proposals);
+      setSelectedProposalIds(proposals.map((proposal) => proposal.id));
+      setEditedExperienceValues(buildInitialEditedExperienceValues(proposals));
       setStep("analysis");
     } catch {
       setLocalError("CV uploaded, but analysis could not be completed.");
@@ -134,6 +155,23 @@ export function UploadCvModal({
   );
 
   const conflictCount = countConflicts(enrichmentProposals);
+
+  function toggleProposal(proposalId: number) {
+    setSelectedProposalIds((currentIds) => {
+      if (currentIds.includes(proposalId)) {
+        return currentIds.filter((id) => id !== proposalId);
+      }
+
+      return [...currentIds, proposalId];
+    });
+  }
+
+  function updateExperienceValue(proposalId: number, value: string) {
+    setEditedExperienceValues((currentValues) => ({
+      ...currentValues,
+      [proposalId]: value,
+    }));
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
@@ -181,7 +219,20 @@ export function UploadCvModal({
             )}
 
             {step === "review" && (
-              <UploadCvWizardStep3 proposals={enrichmentProposals} />
+              <UploadCvWizardStep3
+                proposals={enrichmentProposals}
+                selectedProposalIds={selectedProposalIds}
+                editedExperienceValues={editedExperienceValues}
+                onToggleProposal={toggleProposal}
+                onExperienceValueChange={updateExperienceValue}
+              />
+            )}
+            {step === "summary" && (
+              <UploadCvWizardStep4
+                proposals={enrichmentProposals}
+                selectedProposalIds={selectedProposalIds}
+                editedExperienceValues={editedExperienceValues}
+              />
             )}
 
             <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
@@ -199,6 +250,14 @@ export function UploadCvModal({
                   onClick={() => setStep("review")}
                   className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">
                   Review Suggestions
+                </button>
+              )}
+              {step === "review" && (
+                <button
+                  type="button"
+                  onClick={() => setStep("summary")}
+                  className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500">
+                  Continue to Summary
                 </button>
               )}
 

@@ -1,9 +1,11 @@
-import { useState } from "react";
-
 import type { ProfileEnrichmentProposal } from "../../services/api";
 
 type Props = {
   proposals: ProfileEnrichmentProposal[];
+  selectedProposalIds: number[];
+  editedExperienceValues: Record<number, string>;
+  onToggleProposal: (proposalId: number) => void;
+  onExperienceValueChange: (proposalId: number, value: string) => void;
 };
 
 function filterProposalsByType(
@@ -79,7 +81,9 @@ function renderSimpleProposalList(
 
 function renderExperienceList(
   proposals: ProfileEnrichmentProposal[],
+  selectedProposalIds: number[],
   editedExperienceValues: Record<number, string>,
+  onToggle: (proposalId: number) => void,
   onChange: (proposalId: number, value: string) => void,
 ) {
   if (proposals.length === 0) {
@@ -92,36 +96,62 @@ function renderExperienceList(
         <div
           key={proposal.id}
           className="rounded-md border border-slate-800 bg-slate-900 p-4">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-              <div>
-                <p className="font-medium text-white">
-                  {getProposedValue(proposal)}
-                </p>
+          <div className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={selectedProposalIds.includes(proposal.id)}
+              onChange={() => onToggle(proposal.id)}
+              className="mt-1"
+            />
 
-                <p className="mt-1 text-xs text-slate-500">
-                  Source: {proposal.source_field}
-                </p>
+            <div className="flex-1">
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <p className="font-medium text-white">
+                      {getProposedValue(proposal)}
+                    </p>
+
+                    <p className="mt-1 text-xs text-slate-500">
+                      Source: {proposal.source_field}
+                    </p>
+                  </div>
+
+                  {proposal.conflict_detected && (
+                    <span className="w-fit rounded bg-amber-950 px-2 py-1 text-xs font-semibold text-amber-300">
+                      Conflict
+                    </span>
+                  )}
+                </div>
+
+                <div className="rounded-md border border-slate-800 bg-slate-950 p-3">
+                  <p className="text-xs uppercase text-slate-500">
+                    Extracted Value
+                  </p>
+
+                  <div className="mt-2 rounded-md border border-slate-800 bg-slate-900 p-3 text-sm text-slate-400">
+                    {proposal.proposed_value}
+                  </div>
+                </div>
+
+                <div className="rounded-md border border-slate-800 bg-slate-950 p-3">
+                  <p className="text-xs uppercase text-slate-500">
+                    Editable Value
+                  </p>
+
+                  <textarea
+                    value={
+                      editedExperienceValues[proposal.id] ??
+                      proposal.proposed_value
+                    }
+                    onChange={(event) =>
+                      onChange(proposal.id, event.target.value)
+                    }
+                    rows={10}
+                    className="mt-2 w-full rounded-md border border-slate-700 bg-slate-900 p-3 text-sm text-slate-300"
+                  />
+                </div>
               </div>
-
-              {proposal.conflict_detected && (
-                <span className="w-fit rounded bg-amber-950 px-2 py-1 text-xs font-semibold text-amber-300">
-                  Conflict
-                </span>
-              )}
-            </div>
-
-            <div className="rounded-md border border-slate-800 bg-slate-950 p-3">
-              <p className="text-xs uppercase text-slate-500">Proposed Value</p>
-
-              <textarea
-                value={
-                  editedExperienceValues[proposal.id] ?? proposal.proposed_value
-                }
-                onChange={(event) => onChange(proposal.id, event.target.value)}
-                rows={10}
-                className="mt-2 w-full rounded-md border border-slate-700 bg-slate-900 p-3 text-sm text-slate-300"
-              />
             </div>
           </div>
         </div>
@@ -130,7 +160,13 @@ function renderExperienceList(
   );
 }
 
-export function UploadCvWizardStep3({ proposals }: Props) {
+export function UploadCvWizardStep3({
+  proposals,
+  selectedProposalIds,
+  editedExperienceValues,
+  onToggleProposal,
+  onExperienceValueChange,
+}: Props) {
   const skillProposals = filterProposalsByType(proposals, "SKILL");
 
   const experienceProposals = filterProposalsByType(proposals, "EXPERIENCE");
@@ -146,41 +182,9 @@ export function UploadCvWizardStep3({ proposals }: Props) {
     (proposal) => proposal.conflict_detected,
   ).length;
 
-  const [selectedProposalIds, setSelectedProposalIds] = useState<number[]>(
-    proposals.map((proposal) => proposal.id),
-  );
-
-  const [editedExperienceValues, setEditedExperienceValues] = useState<
-    Record<number, string>
-  >(
-    Object.fromEntries(
-      experienceProposals.map((proposal) => [
-        proposal.id,
-        proposal.proposed_value,
-      ]),
-    ),
-  );
-
-  function updateExperienceValue(proposalId: number, value: string) {
-    setEditedExperienceValues((current) => ({
-      ...current,
-      [proposalId]: value,
-    }));
-  }
-
   const selectedCount = selectedProposalIds.length;
 
   const excludedCount = proposals.length - selectedCount;
-
-  function toggleProposal(proposalId: number) {
-    setSelectedProposalIds((currentIds) => {
-      if (currentIds.includes(proposalId)) {
-        return currentIds.filter((id) => id !== proposalId);
-      }
-
-      return [...currentIds, proposalId];
-    });
-  }
 
   return (
     <div className="rounded-lg border border-slate-700 bg-slate-950 p-6">
@@ -195,7 +199,7 @@ export function UploadCvWizardStep3({ proposals }: Props) {
       <div className="mt-6 rounded-md border border-slate-800 bg-slate-900 p-4">
         <h4 className="font-semibold text-white">Import Summary</h4>
 
-        <div className="mt-3 grid gap-2 md:grid-cols-5">
+        <div className="mt-3 grid gap-2 md:grid-cols-4">
           <p>Total: {proposals.length}</p>
           <p>Selected: {selectedCount}</p>
           <p>Excluded: {excludedCount}</p>
@@ -208,11 +212,12 @@ export function UploadCvWizardStep3({ proposals }: Props) {
           <h4 className="mb-3 text-lg font-semibold text-white">
             Skills ({skillProposals.length})
           </h4>
+
           {renderSimpleProposalList(
             skillProposals,
             "Skills",
             selectedProposalIds,
-            toggleProposal,
+            onToggleProposal,
           )}
         </section>
 
@@ -223,8 +228,10 @@ export function UploadCvWizardStep3({ proposals }: Props) {
 
           {renderExperienceList(
             experienceProposals,
+            selectedProposalIds,
             editedExperienceValues,
-            updateExperienceValue,
+            onToggleProposal,
+            onExperienceValueChange,
           )}
         </section>
 
@@ -237,7 +244,7 @@ export function UploadCvWizardStep3({ proposals }: Props) {
             languageProposals,
             "Languages",
             selectedProposalIds,
-            toggleProposal,
+            onToggleProposal,
           )}
         </section>
 
@@ -250,7 +257,7 @@ export function UploadCvWizardStep3({ proposals }: Props) {
             certificationProposals,
             "Certifications",
             selectedProposalIds,
-            toggleProposal,
+            onToggleProposal,
           )}
         </section>
       </div>
