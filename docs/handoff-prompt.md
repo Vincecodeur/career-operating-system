@@ -616,9 +616,12 @@ Des tests existent pour :
 - Phase 7.1.16.14.6 Backend Technical Design
 - Phase 7.1.16.14.7 Backend Implementation
 - Phase 7.1.16.14.8 Backend Tests
+- Phase 7.1.16.14.9 Backend Validation
 
 ## Derniers commits importants
 
+- 0d79f1b - fix: support long enrichment proposal values
+- 5022005 - fix: support long enrichment proposal values
 - cccd778 - test: add profile enrichment backend coverage
 - ee679cc - feat : profile-enrichment-design implementation
 - 0528f74 - feat: CV parsing service implementation
@@ -769,25 +772,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.14.9 Backend Validation
+7.1.16.14.10 Frontend UX Design
 
-Objectif :
-Valider fonctionnellement le domaine Profile Enrichment.
+Définir l'expérience utilisateur Profile Enrichment.
 
 Périmètre :
 
-- validation Swagger
-- validation génération de propositions
-- validation acceptation
-- validation rejet
-- validation réutilisation des référentiels
-- validation non-régression
+- visualisation des propositions
+- workflow d'acceptation
+- workflow de rejet
+- conflits visibles
+- indicateurs de confiance
+- expérience multi-cv
+- intégration dans ProfileDetail
 
 Critère de sortie :
 
-- comportement conforme au design
-- validation fonctionnelle réalisée
-- aucune anomalie bloquante
+- UX validée
+- wireframes validés
+- composants identifiés
+- APIs backend mappées
 
 ## Méthode de reprise
 

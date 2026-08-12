@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.14.9 Backend Validation
+7.1.16.14.10 Frontend UX Design
 
 ---
 
@@ -1051,6 +1051,30 @@ Phase 7.1.16.14.8 Backend Tests terminée
 - Repository synchronisé avec origin/main
 - Working tree clean validé
 
+Phase 7.1.16.14.9 Backend Validation terminée
+
+- Validation Swagger réalisée
+- Parsing PDF réel validé
+- Génération des propositions validée
+- Acceptation validée
+- Rejet validé
+- Réutilisation des référentiels validée
+- Validation non-régression réalisée
+- 199 tests passants
+- Bug réel découvert pendant validation :
+  normalized_value limité par VARCHAR(500)
+- Correction appliquée :
+  String(500) -> Text
+- Migration PostgreSQL réalisée
+- POST /cvs/{id}/enrichment/generate validé
+- POST /enrichment/{id}/accept validé
+- POST /enrichment/{id}/reject validé
+- Commit technique 5022005 créé
+- Commit technique 0d79f1b créé
+- Push GitHub réalisé
+- Repository synchronisé avec origin/main
+- Working tree clean validé
+
 ---
 
 Phase In Progress
@@ -1083,17 +1107,19 @@ Principes :
 
 Last Decision
 
-Profile Enrichment backend tests implemented and validated.
+Profile Enrichment backend validation completed.
 
 Validated choices:
 
-- Profile Enrichment proposals are covered by automated tests;
-- generation, listing, acceptance and rejection are covered;
-- Experience proposal acceptance remains allowed for MVP UX consistency;
-- full backend non-regression is validated with 199 passing tests.
+- human validation workflow confirmed;
+- proposal generation validated on real CV;
+- acceptance workflow validated;
+- rejection workflow validated;
+- database model updated to support long normalized values;
+- backend domain considered ready for frontend design.
 
 ---
 
 Last Commit
 
-- cccd778 - test: add profile enrichment backend coverage
+- 0d79f1b - fix: support long enrichment proposal values
