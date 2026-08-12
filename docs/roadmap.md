@@ -460,7 +460,7 @@ Résultat :
 - absence de notion de profils actifs pour les opportunités confirmée ;
 - décision de déplacer la fonctionnalité vers une phase dédiée Multi Profile Opportunity Context.
 
-⬜ 7.1.16 CV Management
+⬜ 7.1.16 CV Intelligence
 
 ✅ 7.1.16.1 Repository Audit
 ✅ 7.1.16.2 CV Management Design
@@ -481,7 +481,21 @@ Résultat :
 ✅ 7.1.16.13.4 DOCX Support
 ✅ 7.1.16.13.5 Parsing Tests
 ✅ 7.1.16.13.6 Backend Validation
+
 ⬜ 7.1.16.14 Profile Enrichment
+✅ 7.1.16.14.1 Product Design
+✅ 7.1.16.14.2 Reference Data Governance
+✅ 7.1.16.14.3 Repository Resolution Strategy
+✅ 7.1.16.14.4 Conflict Management Design
+✅ 7.1.16.14.5 Enrichment Workflow Design
+✅ 7.1.16.14.6 Backend Technical Design
+✅ 7.1.16.14.7 Backend Implementation
+⬜ 7.1.16.14.8 Backend Tests
+⬜ 7.1.16.14.9 Backend Validation
+⬜ 7.1.16.14.10 Frontend UX Design
+⬜ 7.1.16.14.11 Frontend Implementation
+⬜ 7.1.16.14.12 Frontend Validation
+
 ⬜ 7.1.16.15 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow

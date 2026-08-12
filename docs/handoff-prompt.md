@@ -74,6 +74,7 @@ Avant toute réponse, lire et croiser :
 - docs/decisions.md
 - docs/ai-context.md
 - docs/handoff-prompt.md
+- tous les documents mentionnés comme terminés dans la phase courante
 
 ## Objectif du projet
 
@@ -606,9 +607,17 @@ Des tests existent pour :
 - Phase 7.1.16.13.4 DOCX Support
 - Phase 7.1.16.13.5 Parsing Tests
 - Phase 7.1.16.13.6 Backend Validation
+- Phase 7.1.16.14.1 Product Design terminée
+- Phase 7.1.16.14.2 Reference Data Governance terminée
+- Phase 7.1.16.14.3 Repository Resolution Strategy terminée
+- Phase 7.1.16.14.4 Conflict Management Design terminée
+- Phase 7.1.16.14.5 Enrichment Workflow Design terminée
+- Phase 7.1.16.14.6 Backend Technical Design
+- Phase 7.1.16.14.7 Backend Implementation
 
 ## Derniers commits importants
 
+- ee679cc - feat : profile-enrichment-design implementation
 - 0528f74 - feat: CV parsing service implementation
 - a923afc - feat: complete cv management frontend
 - 42f1bb2 - docs: synchronize cv backend implementation status
@@ -757,27 +766,35 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-Phase 7.1.16.14 Profile Enrichment
+7.1.16.14.8 Backend Tests
 
 Objectif :
-Définir la stratégie d’analyse automatique des CV uploadés.
+Valider le backend Profile Enrichment via des tests automatisés.
 
 Périmètre :
 
-- extraction texte
-- formats supportés
-- stratégie PDF / DOCX
-- mapping vers Profile
-- enrichissement contrôlé
-- validation humaine
+- tests de génération de propositions
+- tests de conflits
+- tests d'acceptation
+- tests de rejet
+- tests de réutilisation des référentiels
+- tests API
+- validation de non-régression
 
 Critère de sortie :
 
-- design validé ;
-- architecture définie ;
-- aucun code produit.
+- tous les tests Profile Enrichment passants
+- validation pytest complète
+- couverture minimale du domaine Enrichment validée
 
 ## Méthode de reprise
+
+Avant toute implémentation :
+
+- vérifier que la phase précédente est terminée ;
+- vérifier que la phase courante dispose d'un document de design ;
+- réaliser un audit du code réel concerné par la phase ;
+- ne jamais produire de code à partir de la documentation seule.
 
 Au démarrage d'un nouveau thread :
 

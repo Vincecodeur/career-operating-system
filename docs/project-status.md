@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.16 CV Management
+7.1.16 Profile Enrichment
 
 ---
 
 Next Planned Milestone
-7.1.16.14 Profile Enrichment
+7.1.16.14.8 Backend Tests
 
 ---
 
@@ -1017,6 +1017,25 @@ Completed
 - Repository synchronisé avec origin/main
 - Working tree clean validé
 
+Phase 7.1.16.14.1 Product Design terminée
+Phase 7.1.16.14.2 Reference Data Governance terminée
+Phase 7.1.16.14.3 Repository Resolution Strategy terminée
+Phase 7.1.16.14.4 Conflict Management Design terminée
+Phase 7.1.16.14.5 Enrichment Workflow Design terminée
+
+Phase 7.1.16.14.6 Backend Technical Design terminée
+
+Phase 7.1.16.14.7 Backend Implementation terminée
+
+- package profile_enrichment créé
+- ProfileEnrichmentProposal créé
+- router Profile Enrichment créé
+- service Profile Enrichment créé
+- endpoints Profile Enrichment créés
+- validation compileall réalisée
+- validation pytest réalisée
+- 182 tests passants
+
 ---
 
 Phase In Progress
@@ -1031,34 +1050,38 @@ Aucun
 
 ---
 
-7.1.16 CV Management
+7.1.16 Profile Enrichment
 
 Objectif :
-Construire le socle de gestion des CV du Career Operating System.
+Définir et implémenter un mécanisme d'enrichissement contrôlé du profil candidat à partir des données extraites des CV.
+
+Principes :
+
+- le profil structuré reste la source de vérité ;
+- le CV est une source d'observation ;
+- aucune mise à jour automatique du profil ;
+- validation humaine obligatoire ;
+- réutilisation prioritaire des référentiels ;
+- traçabilité complète des propositions d'enrichissement.
 
 ---
 
 Last Decision
 
-Frontend Structure Plan validated.
+Profile Enrichment backend foundation implemented and validated.
 
 Validated choices:
 
-- authentication from MVP;
-- single manually created user account;
-- JWT access token and refresh token;
-- protected routes;
-- Zustand;
-- TanStack Query;
-- React Hook Form;
-- Zod;
-- shadcn/ui;
-- Tailwind CSS;
-- Lucide Icons;
-- multilingual-ready frontend with English first and French post-MVP.
+- profile remains the source of truth;
+- CVs are external observation sources;
+- human validation is mandatory;
+- repository reuse is required whenever possible;
+- enrichment is proposal-based;
+- automatic profile updates are prohibited;
+- automatic repository creation is prohibited.
 
 ---
 
 Last Commit
 
-- 0528f74 - feat: CV parsing service implementation
+- ee679cc - feat : profile-enrichment-design implementation

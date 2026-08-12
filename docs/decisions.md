@@ -835,3 +835,53 @@ Plan B :
 LinkedIn.
 
 La stratégie retenue est API First.
+
+#### DEC-051
+
+Reference Data Governance
+
+Les référentiels Skills, Languages et Certifications
+sont les sources officielles de vocabulaire du système.
+
+Toute donnée issue d'un CV doit être résolue
+vers une entrée existante du référentiel lorsque cela est possible.
+
+La création d'une nouvelle entrée de référentiel
+est exceptionnelle et nécessite l'absence de correspondance
+ainsi qu'une validation explicite de l'utilisateur.
+
+#### DEC-052
+
+Repository Resolution Strategy
+
+Les référentiels Skills, Languages et Certifications
+utilisent une stratégie de résolution standardisée.
+
+Ordre de recherche :
+
+1. Exact Match
+2. Normalized Match
+3. Alias Match
+
+Aucune stratégie de fuzzy matching n'est utilisée dans le MVP.
+
+Une donnée issue d'un CV est d'abord comparée
+au référentiel existant.
+
+Si une correspondance est trouvée,
+le système réutilise l'entrée existante.
+
+Si aucune correspondance n'est trouvée,
+une proposition de création peut être présentée
+à l'utilisateur.
+
+Toute création d'une nouvelle entrée
+de référentiel nécessite une validation explicite.
+
+Objectifs :
+
+- préserver la qualité des référentiels ;
+- éviter les doublons ;
+- garantir un vocabulaire cohérent ;
+- améliorer la qualité du matching ;
+- simplifier la gouvernance des données.
