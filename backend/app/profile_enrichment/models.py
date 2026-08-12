@@ -63,9 +63,8 @@ class ProfileEnrichmentProposal(Base):
     )
 
     normalized_value: Mapped[str] = mapped_column(
-        String(500),
+        Text,
         nullable=False,
-        index=True,
     )
 
     current_profile_value: Mapped[str | None] = mapped_column(
