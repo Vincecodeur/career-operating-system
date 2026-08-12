@@ -261,6 +261,26 @@ export function UploadCvModal({
                 </button>
               )}
 
+              {step === "summary" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setStep("review")}
+                    className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
+                    Back to Review
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      console.log("APPLY_CHANGES");
+                    }}
+                    className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500">
+                    Apply Changes
+                  </button>
+                </>
+              )}
+
               {step === "upload" && (
                 <button
                   type="submit"

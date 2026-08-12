@@ -39,6 +39,13 @@ export function UploadCvWizardStep4({
   );
 
   const excludedCount = proposals.length - selectedProposals.length;
+  const excludedProposals = proposals.filter(
+    (proposal) => !selectedProposalIds.includes(proposal.id),
+  );
+
+  const conflictProposals = selectedProposals.filter(
+    (proposal) => proposal.conflict_detected,
+  );
 
   return (
     <div className="rounded-lg border border-slate-700 bg-slate-950 p-6">
@@ -92,6 +99,28 @@ export function UploadCvWizardStep4({
 
         <section>
           <h4 className="mb-3 text-lg font-semibold text-white">
+            Excluded Items ({excludedProposals.length})
+          </h4>
+
+          {excludedProposals.length === 0 ? (
+            <div className="rounded-md border border-slate-800 bg-slate-900 p-3">
+              No excluded items.
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {excludedProposals.map((proposal) => (
+                <div
+                  key={proposal.id}
+                  className="rounded-md border border-red-900 bg-red-950/30 p-3">
+                  {proposal.proposed_value}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section>
+          <h4 className="mb-3 text-lg font-semibold text-white">
             Edited Experiences
           </h4>
 
@@ -115,6 +144,43 @@ export function UploadCvWizardStep4({
               </div>
             ))}
           </div>
+        </section>
+
+        <section>
+          <h4 className="mb-3 text-lg font-semibold text-white">
+            Conflicts ({conflictProposals.length})
+          </h4>
+
+          {conflictProposals.length === 0 ? (
+            <div className="rounded-md border border-slate-800 bg-slate-900 p-3">
+              No conflicts detected.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {conflictProposals.map((proposal) => (
+                <div
+                  key={proposal.id}
+                  className="rounded-md border border-amber-900 bg-amber-950/30 p-4">
+                  <p className="font-medium text-white">
+                    {proposal.proposed_value}
+                  </p>
+
+                  <p className="mt-2 text-sm text-amber-300">
+                    Conflict detected
+                  </p>
+
+                  {proposal.current_profile_value && (
+                    <div className="mt-3 text-sm text-slate-300">
+                      Current value:
+                      <div className="mt-1 rounded border border-slate-800 bg-slate-950 p-2">
+                        {proposal.current_profile_value}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         <section>
