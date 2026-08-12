@@ -87,6 +87,26 @@ type CvUpdatePayload = {
     language: string | null;
     version_label: string | null;
 };
+
+export type ProfileEnrichmentProposal = {
+    id: number;
+    profile_id: number;
+    cv_id: number;
+    proposal_type: string;
+    status: string;
+    source_field: string;
+    target_field: string;
+    observed_value: string;
+    normalized_value: string;
+    current_profile_value: string | null;
+    proposed_value: string;
+    reference_id: number | null;
+    conflict_detected: boolean;
+    rejection_reason: string | null;
+    created_at: string;
+    validated_at: string | null;
+};
+
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -619,6 +639,79 @@ export function getCvDownloadUrl(
     cvId: number,
 ) {
     return `${API_BASE_URL}/cvs/${cvId}/download`;
+}
+
+export async function getProfileEnrichmentProposals(
+    profileId: number,
+): Promise<ProfileEnrichmentProposal[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/enrichment`,
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load enrichment proposals.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function generateProfileEnrichment(
+    cvId: number,
+): Promise<ProfileEnrichmentProposal[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/cvs/${cvId}/enrichment/generate`,
+        {
+            method: "POST",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to generate enrichment proposals.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function acceptProfileEnrichment(
+    proposalId: number,
+): Promise<ProfileEnrichmentProposal> {
+    const response = await fetch(
+        `${API_BASE_URL}/enrichment/${proposalId}/accept`,
+        {
+            method: "POST",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to accept enrichment proposal.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function rejectProfileEnrichment(
+    proposalId: number,
+): Promise<ProfileEnrichmentProposal> {
+    const response = await fetch(
+        `${API_BASE_URL}/enrichment/${proposalId}/reject`,
+        {
+            method: "POST",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to reject enrichment proposal.",
+        );
+    }
+
+    return response.json();
 }
 
 
