@@ -108,6 +108,8 @@ export function UploadCvModal({
     try {
       const proposals = await generateProfileEnrichment(uploadedCv.id);
 
+      console.log("ENRICHMENT_PROPOSALS", proposals);
+
       setEnrichmentProposals(proposals);
       setStep("analysis");
     } catch {
@@ -178,7 +180,9 @@ export function UploadCvModal({
               conflictCount={conflictCount}
             />
           )}
-          {step === "review" && <UploadCvWizardStep3 />}
+          {step === "review" && (
+            <UploadCvWizardStep3 proposals={enrichmentProposals} />
+          )}
 
           <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
             <button
