@@ -492,11 +492,11 @@ Résultat :
 ✅ 7.1.16.14.7 Backend Implementation
 ✅ 7.1.16.14.8 Backend Tests
 ✅ 7.1.16.14.9 Backend Validation
-⬜ 7.1.16.14.10 Frontend UX Design
-⬜ 7.1.16.14.11 Frontend Implementation
-⬜ 7.1.16.14.12 Frontend Validation
-
+✅ 7.1.16.14.10 Frontend UX Design
+✅ 7.1.16.14.11 Frontend Implementation
+✅ 7.1.16.14.12 Frontend Validation
 ⬜ 7.1.16.15 Documentation Synchronization
+⬜ 7.1.16.16 Skill Catalog Mapping Design
 
 ⬜ 7.1.17 Application Workflow
 

@@ -419,6 +419,11 @@ Implémenté :
 - CV Download
 - UploadCvModal
 - DeleteCvDialog
+- UploadCvWizard Step 1 Upload
+- UploadCvWizard Step 2 Analysis
+- UploadCvWizard Step 3 Review & Edit
+- UploadCvWizard Step 4 Summary
+- Profile Enrichment Frontend Workflow
 
 Documenté mais pas encore implémenté :
 
@@ -617,9 +622,14 @@ Des tests existent pour :
 - Phase 7.1.16.14.7 Backend Implementation
 - Phase 7.1.16.14.8 Backend Tests
 - Phase 7.1.16.14.9 Backend Validation
+- Phase 7.1.16.14.10 Frontend UX Design
+- Phase 7.1.16.14.11 Frontend Implementation
+- Phase 7.1.16.14.12 Frontend Validation
 
 ## Derniers commits importants
 
+- 23da381 - feat(cv): finalize profile enrichment workflow
+- 382cda7 - feat(cv): finalize profile enrichment workflow
 - 0d79f1b - fix: support long enrichment proposal values
 - 5022005 - fix: support long enrichment proposal values
 - cccd778 - test: add profile enrichment backend coverage
@@ -772,26 +782,19 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.14.10 Frontend UX Design
+7.1.16.16 Skill Catalog Mapping Design
 
-Définir l'expérience utilisateur Profile Enrichment.
+Objectif :
+Définir comment mapper une skill détectée dans un CV vers une skill existante du catalogue, sans créer automatiquement de données non gouvernées.
 
 Périmètre :
 
-- visualisation des propositions
-- workflow d'acceptation
-- workflow de rejet
-- conflits visibles
-- indicateurs de confiance
-- expérience multi-cv
-- intégration dans ProfileDetail
-
-Critère de sortie :
-
-- UX validée
-- wireframes validés
-- composants identifiés
-- APIs backend mappées
+- affichage des skills non cataloguées ;
+- mapping vers une skill existante ;
+- non-création automatique des skills ;
+- conservation de la gouvernance du référentiel ;
+- stratégie UX pour les propositions ignorées ;
+- impacts backend et frontend.
 
 ## Méthode de reprise
 

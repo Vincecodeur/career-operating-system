@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.16 Profile Enrichment
+7.1.16.15 Documentation Synchronization
 
 ---
 
 Next Planned Milestone
-7.1.16.14.10 Frontend UX Design
+7.1.16.16 Skill Catalog Mapping Design
 
 ---
 
@@ -1075,6 +1075,20 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - Repository synchronisé avec origin/main
 - Working tree clean validé
 
+- Profile Enrichment Frontend UX validée
+- UploadCvWizard Step 1 Upload implémenté
+- UploadCvWizard Step 2 Analysis implémenté
+- UploadCvWizard Step 3 Review & Edit implémenté
+- UploadCvWizard Step 4 Summary implémenté
+- Résolution des conflits frontend implémentée
+- proposed_value_override connecté au frontend
+- Apply Changes connecté aux endpoints accept/reject
+- Refresh du profil après application validé
+- Skills inconnues du catalogue décochées par défaut
+- Badge "Not present in skill catalog" ajouté
+- Protection du catalogue Skills validée
+- Workflow complet Upload → Analysis → Review → Summary → Apply validé
+
 ---
 
 Phase In Progress
@@ -1089,7 +1103,7 @@ Aucun
 
 ---
 
-7.1.16 Profile Enrichment
+7.1.16.15 Documentation Synchronization
 
 Objectif :
 Définir et implémenter un mécanisme d'enrichissement contrôlé du profil candidat à partir des données extraites des CV.
@@ -1107,19 +1121,22 @@ Principes :
 
 Last Decision
 
-Profile Enrichment backend validation completed.
+Profile Enrichment frontend workflow completed.
 
 Validated choices:
 
-- human validation workflow confirmed;
-- proposal generation validated on real CV;
-- acceptance workflow validated;
-- rejection workflow validated;
-- database model updated to support long normalized values;
-- backend domain considered ready for frontend design.
+- human validation workflow confirmed end-to-end;
+- frontend wizard confirmed;
+- conflict resolution UI confirmed;
+- proposed_value_override confirmed;
+- apply workflow confirmed;
+- profile refresh confirmed;
+- unknown skills are not automatically created;
+- unknown skills are unselected by default;
+- skill catalog remains governed and protected.
 
 ---
 
 Last Commit
 
-- 0d79f1b - fix: support long enrichment proposal values
+- 23da381 - feat(cv): finalize profile enrichment workflow

@@ -341,7 +341,7 @@ Les niveaux recommandés sont :
 
 ---
 
-### DEC-025
+## DEC-025
 
 Le projet utilise un catalogue central de certifications.
 
@@ -362,7 +362,7 @@ ProfileCertification permet de gérer :
 
 ---
 
-### DEC-026
+## DEC-026
 
 Les offres d'emploi sont stockées dans une entité JobOffer.
 
@@ -376,7 +376,7 @@ Le modèle JobOffer V1 doit rester minimal et contenir uniquement les informatio
 
 ---
 
-### DEC-027
+## DEC-027
 
 Le projet utilise Pytest comme framework de tests automatisés.
 
@@ -386,7 +386,7 @@ Chaque nouveau domaine métier important devra progressivement être couvert par
 
 ---
 
-### DEC-028
+## DEC-028
 
 Les compétences requises par une offre sont stockées dans une relation dédiée JobOfferSkill.
 
@@ -398,7 +398,7 @@ Les compétences d'une offre ne sont pas stockées sous forme de texte libre afi
 
 ---
 
-### DEC-029
+## DEC-029
 
 Le Matching Engine V1 compare uniquement les compétences du profil candidat et les compétences requises par une offre d'emploi.
 
@@ -410,7 +410,7 @@ L'objectif est de valider le flux métier complet avant l'introduction de règle
 
 ---
 
-### DEC-030
+## DEC-030
 
 Le Frontend MVP adopte une approche Dashboard First.
 
@@ -428,7 +428,7 @@ Le backend reste la source unique de vérité.
 
 ---
 
-### DEC-031
+## DEC-031
 
 Le Dashboard MVP affiche en priorité :
 
@@ -443,7 +443,7 @@ Le Dashboard constitue une couche de visualisation.
 
 ---
 
-### DEC-032
+## DEC-032
 
 La Matching View affiche exclusivement les résultats
 calculés par le backend.
@@ -456,7 +456,7 @@ sont entièrement produits par l'API backend.
 
 ---
 
-#### DEC-033
+## DEC-033
 
 Opportunity Ranking
 
@@ -476,7 +476,7 @@ Les offres sont triées par score décroissant.
 
 ---
 
-### DEC-034
+## DEC-034
 
 Application Tracker
 
@@ -505,7 +505,7 @@ Aucune synchronisation avec LinkedIn, Indeed ou d'autres plateformes n'est prév
 
 Le système conserve l'historique courant de la candidature afin d'aider à piloter la recherche d'emploi.
 
-### DEC-035
+## DEC-035
 
 Profile Structured Source Of Truth
 
@@ -523,7 +523,7 @@ Ces sources servent uniquement à enrichir le profil.
 
 Toutes les analyses, comparaisons et recommandations utilisent exclusivement le profil structuré enregistré dans le système.
 
-### DEC-036
+## DEC-036
 
 Opportunity Discovery As Core MVP Capability
 
@@ -553,7 +553,7 @@ Decision Support
 ↓
 Application Tracker
 
-### DEC-037
+## DEC-037
 
 API First Job Discovery Strategy
 
@@ -573,7 +573,7 @@ Les offres collectées conservent toujours :
 - leur URL d'origine ;
 - leur date de collecte.
 
-### DEC-038
+## DEC-038
 
 LinkedIn MVP Target Source
 
@@ -587,7 +587,7 @@ Le MVP ne dépend pas exclusivement de LinkedIn.
 
 Le système doit être capable de fonctionner avec plusieurs sources d'opportunités.
 
-### DEC-039
+## DEC-039
 
 Explainable Opportunity Scoring
 
@@ -604,7 +604,7 @@ Le système doit pouvoir expliquer :
 
 Aucun score opaque n'est autorisé.
 
-### DEC-040
+## DEC-040
 
 UX First Frontend Strategy
 
@@ -620,7 +620,7 @@ Avant toute évolution majeure du frontend :
 
 Le refactoring frontend intervient uniquement après validation de ces éléments.
 
-### DEC-041
+## DEC-041
 
 Standardized Job Evaluation Rules
 
@@ -658,7 +658,7 @@ Gestion des offres expirées :
 
 L'utilisateur peut filtrer l'affichage des offres archivées.
 
-### DEC-042
+## DEC-042
 
 Frontend Technical Stack
 
@@ -679,7 +679,7 @@ TanStack Query est responsable des données serveur, du cache, des états loadin
 
 Cette combinaison est retenue pour conserver une architecture simple, moderne et maintenable.
 
-#### DEC-043
+## DEC-043
 
 Authentication From MVP
 
@@ -706,7 +706,7 @@ L'architecture doit rester compatible avec :
 - SSO Google ;
 - autres fournisseurs d'identité futurs.
 
-### DEC-044
+## DEC-044
 
 Multilingual Ready Frontend
 
@@ -724,7 +724,7 @@ Aucune chaîne d'interface ne doit être hardcodée dans les composants React.
 
 Toutes les chaînes UI doivent être externalisées afin de préparer l'internationalisation sans refactoring majeur.
 
-#### DEC-045
+## DEC-045
 
 Design System Strategy
 
@@ -758,7 +758,7 @@ Objectif :
 
 Permettre un rebranding futur sans refactoring majeur du frontend.
 
-#### DEC-046
+## DEC-046
 
 Frontend UX Scope Before Implementation
 
@@ -777,7 +777,7 @@ Le développement frontend de Phase 5.8 doit s'appuyer sur ces documents et ne p
 
 ---
 
-#### DEC-047
+## DEC-047
 
 Connector Pattern
 
@@ -795,7 +795,7 @@ Permettre l'ajout de nouvelles sources sans modifier la logique métier.
 
 ---
 
-#### DEC-048
+## DEC-048
 
 Offer As Primary Discovery Entity
 
@@ -807,7 +807,7 @@ Une même offre peut être associée à plusieurs sources.
 
 ---
 
-#### DEC-049
+## DEC-049
 
 Job Discovery Pipeline
 
@@ -825,7 +825,7 @@ Aucune offre ne peut contourner l'étape de normalisation.
 
 ---
 
-#### DEC-050
+## DEC-050
 
 France Travail First External Source
 
@@ -836,7 +836,7 @@ LinkedIn.
 
 La stratégie retenue est API First.
 
-#### DEC-051
+## DEC-051
 
 Reference Data Governance
 
@@ -850,7 +850,7 @@ La création d'une nouvelle entrée de référentiel
 est exceptionnelle et nécessite l'absence de correspondance
 ainsi qu'une validation explicite de l'utilisateur.
 
-#### DEC-052
+## DEC-052
 
 Repository Resolution Strategy
 
@@ -885,3 +885,12 @@ Objectifs :
 - garantir un vocabulaire cohérent ;
 - améliorer la qualité du matching ;
 - simplifier la gouvernance des données.
+
+## DEC-053
+
+Les skills inconnues ne sont pas créées automatiquement.
+
+skills.category est obligatoire côté modèle de données.
+Le système ne peut pas inventer une catégorie fiable.
+Le profil structuré reste la source de vérité.
+Le catalogue de skills doit rester gouverné.
