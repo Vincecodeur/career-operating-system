@@ -107,6 +107,10 @@ export type ProfileEnrichmentProposal = {
     validated_at: string | null;
 };
 
+type AcceptProfileEnrichmentPayload = {
+    proposed_value_override?: string | null;
+};
+
 export async function getProfiles() {
     const response = await fetch(
         `${API_BASE_URL}/profiles`
@@ -678,11 +682,28 @@ export async function generateProfileEnrichment(
 
 export async function acceptProfileEnrichment(
     proposalId: number,
+    proposedValueOverride?: string,
 ): Promise<ProfileEnrichmentProposal> {
+    const payload: AcceptProfileEnrichmentPayload | undefined =
+        proposedValueOverride
+            ? {
+                  proposed_value_override:
+                      proposedValueOverride,
+              }
+            : undefined;
+
     const response = await fetch(
         `${API_BASE_URL}/enrichment/${proposalId}/accept`,
         {
             method: "POST",
+            ...(payload
+                ? {
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(payload),
+                  }
+                : {}),
         },
     );
 

@@ -794,6 +794,16 @@ export function ProfilesPage() {
     }
   }
 
+  async function handleCvEnrichmentApplied() {
+    if (!selectedProfile) {
+      return;
+    }
+
+    await reloadSelectedProfileDetails(selectedProfile.id);
+
+    setIsUploadCvModalOpen(false);
+  }
+
   async function handleUploadCv(values: UploadCvFormValues): Promise<Cv> {
     if (!selectedProfile) {
       throw new Error("No profile selected.");
@@ -1173,6 +1183,7 @@ export function ProfilesPage() {
           setCvMutationError(null);
           setIsUploadCvModalOpen(false);
         }}
+        onApplied={handleCvEnrichmentApplied}
         onUpload={handleUploadCv}
       />
       <DeleteCvDialog
