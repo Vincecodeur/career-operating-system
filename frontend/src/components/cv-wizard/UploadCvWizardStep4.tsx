@@ -32,6 +32,8 @@ export function UploadCvWizardStep4({
   proposals,
   selectedProposalIds,
   editedExperienceValues,
+  conflictResolutions,
+  onConflictResolutionChange,
 }: Props) {
   const selectedProposals = filterSelected(proposals, selectedProposalIds);
 
@@ -185,6 +187,71 @@ export function UploadCvWizardStep4({
                   {proposal.current_profile_value && (
                     <div className="mt-3 text-sm text-slate-300">
                       Current value:
+                      <div className="mt-4 space-y-3">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            checked={
+                              (conflictResolutions[proposal.id]?.mode ??
+                                "current") === "current"
+                            }
+                            onChange={() =>
+                              onConflictResolutionChange(proposal.id, "current")
+                            }
+                          />
+                          <span>Keep current value</span>
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            checked={
+                              conflictResolutions[proposal.id]?.mode ===
+                              "proposed"
+                            }
+                            onChange={() =>
+                              onConflictResolutionChange(
+                                proposal.id,
+                                "proposed",
+                              )
+                            }
+                          />
+                          <span>Use CV value: {proposal.proposed_value}</span>
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            checked={
+                              conflictResolutions[proposal.id]?.mode ===
+                              "custom"
+                            }
+                            onChange={() =>
+                              onConflictResolutionChange(proposal.id, "custom")
+                            }
+                          />
+                          <span>Custom value</span>
+                        </label>
+
+                        {conflictResolutions[proposal.id]?.mode ===
+                          "custom" && (
+                          <input
+                            type="text"
+                            value={
+                              conflictResolutions[proposal.id]?.customValue ??
+                              ""
+                            }
+                            onChange={(event) =>
+                              onConflictResolutionChange(
+                                proposal.id,
+                                "custom",
+                                event.target.value,
+                              )
+                            }
+                            className="w-full rounded border border-slate-700 bg-slate-900 p-2"
+                          />
+                        )}
+                      </div>
                       <div className="mt-1 rounded border border-slate-800 bg-slate-950 p-2">
                         {proposal.current_profile_value}
                       </div>

@@ -60,6 +60,12 @@ function renderSimpleProposalList(
                     {getProposedValue(proposal)}
                   </p>
 
+                  {proposal.proposal_type === "SKILL" &&
+                    proposal.reference_id === null && (
+                      <div className="mt-1 text-xs text-amber-400">
+                        Not present in skill catalog
+                      </div>
+                    )}
                   <p className="mt-1 text-xs text-slate-500">
                     Source: {proposal.source_field}
                   </p>
@@ -131,6 +137,12 @@ function renderExperienceList(
 
                   <div className="mt-2 rounded-md border border-slate-800 bg-slate-900 p-3 text-sm text-slate-400">
                     {proposal.proposed_value}
+                    {proposal.proposal_type === "SKILL" &&
+                      proposal.reference_id === null && (
+                        <div className="mt-1 text-xs text-amber-400">
+                          Not present in skill catalog
+                        </div>
+                      )}
                   </div>
                 </div>
 

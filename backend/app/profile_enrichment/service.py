@@ -657,12 +657,13 @@ def accept_skill_proposal(
         )
 
     if skill is None:
-        skill = Skill(
-            name=proposal.proposed_value,
-            category=None,
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Skill not found in catalog. "
+                "Create or map the skill before accepting the proposal."
+            ),
         )
-        db.add(skill)
-        db.flush()
 
     proposal.reference_id = skill.id
 

@@ -7,7 +7,11 @@ import { UploadCvWizardStep4 } from "./cv-wizard/UploadCvWizardStep4";
 import { WizardProgress } from "./cv-wizard/WizardProgress";
 
 import type { Cv, ProfileEnrichmentProposal } from "../services/api";
-import { generateProfileEnrichment } from "../services/api";
+import {
+  acceptProfileEnrichment,
+  generateProfileEnrichment,
+  rejectProfileEnrichment,
+} from "../services/api";
 
 export type UploadCvFormValues = {
   file: File;
@@ -23,6 +27,7 @@ type Props = {
   isSaving: boolean;
   error: string | null;
   onClose: () => void;
+  onApplied: () => Promise<void>;
   onUpload: (values: UploadCvFormValues) => Promise<Cv>;
 };
 
@@ -53,6 +58,7 @@ export function UploadCvModal({
   isSaving,
   error,
   onClose,
+  onApplied,
   onUpload,
 }: Props) {
   const [step, setStep] = useState<WizardStep>("upload");
@@ -86,6 +92,7 @@ export function UploadCvModal({
   >({});
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -102,6 +109,7 @@ export function UploadCvModal({
     setSelectedProposalIds([]);
     setEditedExperienceValues({});
     setIsAnalyzing(false);
+    setIsApplying(false);
   }, [isOpen]);
 
   if (!isOpen) {
@@ -140,7 +148,22 @@ export function UploadCvModal({
       console.log("ENRICHMENT_PROPOSALS", proposals);
 
       setEnrichmentProposals(proposals);
-      setSelectedProposalIds(proposals.map((proposal) => proposal.id));
+
+      setSelectedProposalIds(
+        proposals
+          .filter((proposal) => {
+            if (
+              proposal.proposal_type === "SKILL" &&
+              proposal.reference_id === null
+            ) {
+              return false;
+            }
+
+            return true;
+          })
+          .map((proposal) => proposal.id),
+      );
+
       setEditedExperienceValues(buildInitialEditedExperienceValues(proposals));
       setStep("analysis");
     } catch {
@@ -195,6 +218,84 @@ export function UploadCvModal({
         customValue: customValue ?? current[proposalId]?.customValue ?? "",
       },
     }));
+  }
+
+  function getProposalOverride(proposal: ProfileEnrichmentProposal) {
+    if (proposal.proposal_type !== "EXPERIENCE") {
+      return undefined;
+    }
+
+    const editedValue = editedExperienceValues[proposal.id];
+
+    if (!editedValue) {
+      return undefined;
+    }
+
+    if (editedValue === proposal.proposed_value) {
+      return undefined;
+    }
+
+    return editedValue;
+  }
+
+  function getConflictOverride(proposal: ProfileEnrichmentProposal) {
+    const resolution = conflictResolutions[proposal.id];
+
+    if (!resolution) {
+      return undefined;
+    }
+
+    if (resolution.mode === "current") {
+      return proposal.current_profile_value ?? undefined;
+    }
+
+    if (resolution.mode === "proposed") {
+      return proposal.proposed_value;
+    }
+
+    if (resolution.mode === "custom") {
+      return resolution.customValue.trim().length > 0
+        ? resolution.customValue
+        : undefined;
+    }
+
+    return undefined;
+  }
+
+  async function handleApplyChanges() {
+    setLocalError(null);
+    setIsApplying(true);
+
+    const selectedProposalIdSet = new Set(selectedProposalIds);
+
+    try {
+      const results = await Promise.allSettled(
+        enrichmentProposals.map((proposal) => {
+          if (selectedProposalIdSet.has(proposal.id)) {
+            const override = proposal.conflict_detected
+              ? getConflictOverride(proposal)
+              : getProposalOverride(proposal);
+
+            return acceptProfileEnrichment(proposal.id, override);
+          }
+
+          return rejectProfileEnrichment(proposal.id);
+        }),
+      );
+
+      const failed = results.filter((result) => result.status === "rejected");
+
+      if (failed.length > 0) {
+        setLocalError(
+          `${failed.length} proposal(s) could not be applied. ` +
+            `Most likely because some skills are not present in the catalog.`,
+        );
+      }
+
+      await onApplied();
+    } finally {
+      setIsApplying(false);
+    }
   }
 
   return (
@@ -265,7 +366,7 @@ export function UploadCvModal({
               <button
                 type="button"
                 onClick={onClose}
-                disabled={isSaving || isAnalyzing}
+                disabled={isSaving || isAnalyzing || isApplying}
                 className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50">
                 {step === "upload" ? "Cancel" : "Close"}
               </button>
@@ -298,11 +399,10 @@ export function UploadCvModal({
 
                   <button
                     type="button"
-                    onClick={() => {
-                      console.log("APPLY_CHANGES");
-                    }}
-                    className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500">
-                    Apply Changes
+                    onClick={handleApplyChanges}
+                    disabled={isApplying}
+                    className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500 disabled:opacity-50">
+                    {isApplying ? "Applying..." : "Apply Changes"}
                   </button>
                 </>
               )}
