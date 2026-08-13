@@ -75,6 +75,16 @@ export function UploadCvModal({
     Record<number, string>
   >({});
 
+  const [conflictResolutions, setConflictResolutions] = useState<
+    Record<
+      number,
+      {
+        mode: "current" | "proposed" | "custom";
+        customValue: string;
+      }
+    >
+  >({});
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
@@ -173,6 +183,20 @@ export function UploadCvModal({
     }));
   }
 
+  function updateConflictResolution(
+    proposalId: number,
+    mode: "current" | "proposed" | "custom",
+    customValue?: string,
+  ) {
+    setConflictResolutions((current) => ({
+      ...current,
+      [proposalId]: {
+        mode,
+        customValue: customValue ?? current[proposalId]?.customValue ?? "",
+      },
+    }));
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
       <div className="w-full max-w-5xl max-h-[90vh] rounded-lg border border-slate-700 bg-slate-900 shadow-xl flex flex-col">
@@ -232,6 +256,8 @@ export function UploadCvModal({
                 proposals={enrichmentProposals}
                 selectedProposalIds={selectedProposalIds}
                 editedExperienceValues={editedExperienceValues}
+                conflictResolutions={conflictResolutions}
+                onConflictResolutionChange={updateConflictResolution}
               />
             )}
 

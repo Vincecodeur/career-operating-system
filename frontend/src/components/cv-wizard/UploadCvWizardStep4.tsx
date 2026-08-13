@@ -4,6 +4,19 @@ type Props = {
   proposals: ProfileEnrichmentProposal[];
   selectedProposalIds: number[];
   editedExperienceValues: Record<number, string>;
+  conflictResolutions: Record<
+    number,
+    {
+      mode: "current" | "proposed" | "custom";
+      customValue: string;
+    }
+  >;
+
+  onConflictResolutionChange: (
+    proposalId: number,
+    mode: "current" | "proposed" | "custom",
+    customValue?: string,
+  ) => void;
 };
 
 function filterSelected(

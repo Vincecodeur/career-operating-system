@@ -611,6 +611,7 @@ def list_proposals_for_profile(
 
 def accept_profile_field_proposal(
     proposal: ProfileEnrichmentProposal,
+    value_to_apply: str,
     db: Session,
 ) -> None:
     profile = get_profile_or_404(
@@ -619,11 +620,11 @@ def accept_profile_field_proposal(
     )
 
     if proposal.target_field == "full_name":
-        profile.full_name = proposal.proposed_value
+        profile.full_name = value_to_apply
         return
 
     if proposal.target_field == "current_title":
-        profile.current_title = proposal.proposed_value
+        profile.current_title = value_to_apply
         return
 
     raise HTTPException(
@@ -636,21 +637,34 @@ def accept_skill_proposal(
     proposal: ProfileEnrichmentProposal,
     db: Session,
 ) -> None:
-    if proposal.reference_id is None:
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot accept unresolved skill proposal.",
-        )
+    skill: Skill | None = None
 
-    skill = db.query(Skill).filter(
-        Skill.id == proposal.reference_id,
-    ).first()
+    if proposal.reference_id is not None:
+        skill = db.query(Skill).filter(
+            Skill.id == proposal.reference_id,
+        ).first()
+
+        if skill is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Skill not found.",
+            )
 
     if skill is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Skill not found.",
+        skill = find_skill_by_name(
+            proposal.proposed_value,
+            db,
         )
+
+    if skill is None:
+        skill = Skill(
+            name=proposal.proposed_value,
+            category=None,
+        )
+        db.add(skill)
+        db.flush()
+
+    proposal.reference_id = skill.id
 
     if profile_has_skill(
         proposal.profile_id,
@@ -673,21 +687,33 @@ def accept_language_proposal(
     proposal: ProfileEnrichmentProposal,
     db: Session,
 ) -> None:
-    if proposal.reference_id is None:
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot accept unresolved language proposal.",
-        )
+    language: Language | None = None
 
-    language = db.query(Language).filter(
-        Language.id == proposal.reference_id,
-    ).first()
+    if proposal.reference_id is not None:
+        language = db.query(Language).filter(
+            Language.id == proposal.reference_id,
+        ).first()
+
+        if language is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Language not found.",
+            )
 
     if language is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Language not found.",
+        language = find_language_by_name(
+            proposal.proposed_value,
+            db,
         )
+
+    if language is None:
+        language = Language(
+            name=proposal.proposed_value,
+        )
+        db.add(language)
+        db.flush()
+
+    proposal.reference_id = language.id
 
     if profile_has_language(
         proposal.profile_id,
@@ -709,21 +735,34 @@ def accept_certification_proposal(
     proposal: ProfileEnrichmentProposal,
     db: Session,
 ) -> None:
-    if proposal.reference_id is None:
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot accept unresolved certification proposal.",
-        )
+    certification: Certification | None = None
 
-    certification = db.query(Certification).filter(
-        Certification.id == proposal.reference_id,
-    ).first()
+    if proposal.reference_id is not None:
+        certification = db.query(Certification).filter(
+            Certification.id == proposal.reference_id,
+        ).first()
+
+        if certification is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Certification not found.",
+            )
 
     if certification is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Certification not found.",
+        certification = find_certification_by_name(
+            proposal.proposed_value,
+            db,
         )
+
+    if certification is None:
+        certification = Certification(
+            name=proposal.proposed_value,
+            issuing_organization=None,
+        )
+        db.add(certification)
+        db.flush()
+
+    proposal.reference_id = certification.id
 
     if profile_has_certification(
         proposal.profile_id,
@@ -774,15 +813,17 @@ def accept_proposal(
     ensure_pending_proposal(
         proposal,
     )
+
     value_to_apply = (
-    proposed_value_override
-    if proposed_value_override
-    else proposal.proposed_value
-)
+        proposed_value_override
+        if proposed_value_override
+        else proposal.proposed_value
+    )
 
     if proposal.proposal_type == ProfileEnrichmentProposalType.PROFILE_FIELD.value:
         accept_profile_field_proposal(
             proposal,
+            value_to_apply,
             db,
         )
     elif proposal.proposal_type == ProfileEnrichmentProposalType.SKILL.value:
@@ -812,6 +853,8 @@ def accept_proposal(
             detail="Unsupported enrichment proposal type.",
         )
 
+    proposal.proposed_value = value_to_apply
+    proposal.normalized_value = normalize_value(value_to_apply)
     proposal.status = ProfileEnrichmentProposalStatus.ACCEPTED.value
     proposal.validated_at = datetime.utcnow()
 
