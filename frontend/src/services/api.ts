@@ -24,6 +24,13 @@ type ProfileSkillUpdatePayload = {
     self_assessment_level: string;
 };
 
+export type Skill = {
+    id: number;
+    name: string;
+    category: string;
+    created_at: string;
+};
+
 type ProfileLanguagePayload = {
     profile_id: number;
     language_id: number;
@@ -109,6 +116,7 @@ export type ProfileEnrichmentProposal = {
 
 type AcceptProfileEnrichmentPayload = {
     proposed_value_override?: string | null;
+    reference_id?: number | null;
 };
 
 export async function getProfiles() {
@@ -683,20 +691,27 @@ export async function generateProfileEnrichment(
 export async function acceptProfileEnrichment(
     proposalId: number,
     proposedValueOverride?: string,
+    referenceId?: number,
 ): Promise<ProfileEnrichmentProposal> {
-    const payload: AcceptProfileEnrichmentPayload | undefined =
-        proposedValueOverride
-            ? {
-                  proposed_value_override:
-                      proposedValueOverride,
-              }
-            : undefined;
+    const payload: AcceptProfileEnrichmentPayload = {};
+
+    if (proposedValueOverride) {
+        payload.proposed_value_override =
+            proposedValueOverride;
+    }
+
+    if (referenceId !== undefined) {
+        payload.reference_id = referenceId;
+    }
+
+    const hasPayload =
+        Object.keys(payload).length > 0;
 
     const response = await fetch(
         `${API_BASE_URL}/enrichment/${proposalId}/accept`,
         {
             method: "POST",
-            ...(payload
+            ...(hasPayload
                 ? {
                       headers: {
                           "Content-Type": "application/json",
@@ -715,7 +730,6 @@ export async function acceptProfileEnrichment(
 
     return response.json();
 }
-
 export async function rejectProfileEnrichment(
     proposalId: number,
 ): Promise<ProfileEnrichmentProposal> {

@@ -1,11 +1,14 @@
-import type { ProfileEnrichmentProposal } from "../../services/api";
+import type { ProfileEnrichmentProposal, Skill } from "../../services/api";
 
 type Props = {
   proposals: ProfileEnrichmentProposal[];
   selectedProposalIds: number[];
   editedExperienceValues: Record<number, string>;
+  skillsCatalog: Skill[];
+  skillMappings: Record<number, number>;
   onToggleProposal: (proposalId: number) => void;
   onExperienceValueChange: (proposalId: number, value: string) => void;
+  onSkillMappingChange: (proposalId: number, skillId: number | null) => void;
 };
 
 function filterProposalsByType(
@@ -33,7 +36,10 @@ function renderSimpleProposalList(
   proposals: ProfileEnrichmentProposal[],
   emptyLabel: string,
   selectedProposalIds: number[],
+  skillsCatalog: Skill[],
+  skillMappings: Record<number, number>,
   onToggle: (proposalId: number) => void,
+  onSkillMappingChange: (proposalId: number, skillId: number | null) => void,
 ) {
   if (proposals.length === 0) {
     return renderEmptyState(emptyLabel);
@@ -49,6 +55,11 @@ function renderSimpleProposalList(
             <input
               type="checkbox"
               checked={selectedProposalIds.includes(proposal.id)}
+              disabled={
+                proposal.proposal_type === "SKILL" &&
+                proposal.reference_id === null &&
+                !skillMappings[proposal.id]
+              }
               onChange={() => onToggle(proposal.id)}
               className="mt-1"
             />
@@ -62,8 +73,37 @@ function renderSimpleProposalList(
 
                   {proposal.proposal_type === "SKILL" &&
                     proposal.reference_id === null && (
-                      <div className="mt-1 text-xs text-amber-400">
-                        Not present in skill catalog
+                      <div className="mt-3 space-y-2">
+                        <div className="text-xs text-amber-400">
+                          Not present in skill catalog
+                        </div>
+
+                        <label className="block text-xs text-slate-400">
+                          Map to existing skill
+                        </label>
+
+                        <input
+                          type="search"
+                          list={`skill-catalog-${proposal.id}`}
+                          placeholder="Search existing skill"
+                          className="w-full rounded-md border border-slate-700 bg-slate-950 p-2 text-sm text-slate-200"
+                          onChange={(event) => {
+                            const selectedSkill = skillsCatalog.find(
+                              (skill) => skill.name === event.target.value,
+                            );
+
+                            onSkillMappingChange(
+                              proposal.id,
+                              selectedSkill?.id ?? null,
+                            );
+                          }}
+                        />
+
+                        <datalist id={`skill-catalog-${proposal.id}`}>
+                          {skillsCatalog.map((skill) => (
+                            <option key={skill.id} value={skill.name} />
+                          ))}
+                        </datalist>
                       </div>
                     )}
                   <p className="mt-1 text-xs text-slate-500">
@@ -137,12 +177,6 @@ function renderExperienceList(
 
                   <div className="mt-2 rounded-md border border-slate-800 bg-slate-900 p-3 text-sm text-slate-400">
                     {proposal.proposed_value}
-                    {proposal.proposal_type === "SKILL" &&
-                      proposal.reference_id === null && (
-                        <div className="mt-1 text-xs text-amber-400">
-                          Not present in skill catalog
-                        </div>
-                      )}
                   </div>
                 </div>
 
@@ -176,8 +210,11 @@ export function UploadCvWizardStep3({
   proposals,
   selectedProposalIds,
   editedExperienceValues,
+  skillsCatalog,
+  skillMappings,
   onToggleProposal,
   onExperienceValueChange,
+  onSkillMappingChange,
 }: Props) {
   const skillProposals = filterProposalsByType(proposals, "SKILL");
 
@@ -229,7 +266,10 @@ export function UploadCvWizardStep3({
             skillProposals,
             "Skills",
             selectedProposalIds,
+            skillsCatalog,
+            skillMappings,
             onToggleProposal,
+            onSkillMappingChange,
           )}
         </section>
 
@@ -256,7 +296,10 @@ export function UploadCvWizardStep3({
             languageProposals,
             "Languages",
             selectedProposalIds,
+            skillsCatalog,
+            skillMappings,
             onToggleProposal,
+            onSkillMappingChange,
           )}
         </section>
 
@@ -269,7 +312,10 @@ export function UploadCvWizardStep3({
             certificationProposals,
             "Certifications",
             selectedProposalIds,
+            skillsCatalog,
+            skillMappings,
             onToggleProposal,
+            onSkillMappingChange,
           )}
         </section>
       </div>

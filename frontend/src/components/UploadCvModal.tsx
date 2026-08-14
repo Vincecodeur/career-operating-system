@@ -6,10 +6,11 @@ import { UploadCvWizardStep3 } from "./cv-wizard/UploadCvWizardStep3";
 import { UploadCvWizardStep4 } from "./cv-wizard/UploadCvWizardStep4";
 import { WizardProgress } from "./cv-wizard/WizardProgress";
 
-import type { Cv, ProfileEnrichmentProposal } from "../services/api";
+import type { Cv, ProfileEnrichmentProposal, Skill } from "../services/api";
 import {
   acceptProfileEnrichment,
   generateProfileEnrichment,
+  getSkills,
   rejectProfileEnrichment,
 } from "../services/api";
 
@@ -77,6 +78,12 @@ export function UploadCvModal({
 
   const [selectedProposalIds, setSelectedProposalIds] = useState<number[]>([]);
 
+  const [skillsCatalog, setSkillsCatalog] = useState<Skill[]>([]);
+
+  const [skillMappings, setSkillMappings] = useState<Record<number, number>>(
+    {},
+  );
+
   const [editedExperienceValues, setEditedExperienceValues] = useState<
     Record<number, string>
   >({});
@@ -107,6 +114,8 @@ export function UploadCvModal({
     setLocalError(null);
     setEnrichmentProposals([]);
     setSelectedProposalIds([]);
+    setSkillsCatalog([]);
+    setSkillMappings({});
     setEditedExperienceValues({});
     setIsAnalyzing(false);
     setIsApplying(false);
@@ -143,11 +152,15 @@ export function UploadCvModal({
     }
 
     try {
-      const proposals = await generateProfileEnrichment(uploadedCv.id);
+      const [proposals, skills] = await Promise.all([
+        generateProfileEnrichment(uploadedCv.id),
+        getSkills(),
+      ]);
 
       console.log("ENRICHMENT_PROPOSALS", proposals);
 
       setEnrichmentProposals(proposals);
+      setSkillsCatalog(skills);
 
       setSelectedProposalIds(
         proposals
@@ -190,9 +203,21 @@ export function UploadCvModal({
   const conflictCount = countConflicts(enrichmentProposals);
 
   function toggleProposal(proposalId: number) {
+    const proposal = enrichmentProposals.find(
+      (currentProposal) => currentProposal.id === proposalId,
+    );
+
     setSelectedProposalIds((currentIds) => {
       if (currentIds.includes(proposalId)) {
         return currentIds.filter((id) => id !== proposalId);
+      }
+
+      if (
+        proposal?.proposal_type === "SKILL" &&
+        proposal.reference_id === null &&
+        !skillMappings[proposalId]
+      ) {
+        return currentIds;
       }
 
       return [...currentIds, proposalId];
@@ -218,6 +243,34 @@ export function UploadCvModal({
         customValue: customValue ?? current[proposalId]?.customValue ?? "",
       },
     }));
+  }
+
+  function updateSkillMapping(proposalId: number, skillId: number | null) {
+    setSkillMappings((currentMappings) => {
+      const nextMappings = {
+        ...currentMappings,
+      };
+
+      if (skillId === null) {
+        delete nextMappings[proposalId];
+      } else {
+        nextMappings[proposalId] = skillId;
+      }
+
+      return nextMappings;
+    });
+
+    setSelectedProposalIds((currentIds) => {
+      if (skillId === null) {
+        return currentIds.filter((id) => id !== proposalId);
+      }
+
+      if (currentIds.includes(proposalId)) {
+        return currentIds;
+      }
+
+      return [...currentIds, proposalId];
+    });
   }
 
   function getProposalOverride(proposal: ProfileEnrichmentProposal) {
@@ -262,6 +315,18 @@ export function UploadCvModal({
     return undefined;
   }
 
+  function getSkillReferenceId(proposal: ProfileEnrichmentProposal) {
+    if (proposal.proposal_type !== "SKILL") {
+      return undefined;
+    }
+
+    if (proposal.reference_id !== null) {
+      return undefined;
+    }
+
+    return skillMappings[proposal.id];
+  }
+
   async function handleApplyChanges() {
     setLocalError(null);
     setIsApplying(true);
@@ -276,7 +341,9 @@ export function UploadCvModal({
               ? getConflictOverride(proposal)
               : getProposalOverride(proposal);
 
-            return acceptProfileEnrichment(proposal.id, override);
+            const referenceId = getSkillReferenceId(proposal);
+
+            return acceptProfileEnrichment(proposal.id, override, referenceId);
           }
 
           return rejectProfileEnrichment(proposal.id);
@@ -348,8 +415,11 @@ export function UploadCvModal({
                 proposals={enrichmentProposals}
                 selectedProposalIds={selectedProposalIds}
                 editedExperienceValues={editedExperienceValues}
+                skillsCatalog={skillsCatalog}
+                skillMappings={skillMappings}
                 onToggleProposal={toggleProposal}
                 onExperienceValueChange={updateExperienceValue}
+                onSkillMappingChange={updateSkillMapping}
               />
             )}
             {step === "summary" && (
