@@ -505,7 +505,7 @@ Sous-phases :
 ✅ 7.1.16.16.4 Work Mode Catalog Design
 ✅ 7.1.16.16.5 Contract Type Catalog Design
 ✅ 7.1.16.16.6 Preference Options Design
-⬜ 7.1.16.17 Reference Data Catalog Implementation
+✅ 7.1.16.17 Reference Data Catalog Implementation
 
 Objectif :
 Implémenter les référentiels contrôlés définis pendant la phase de design et les rendre utilisables par le profil candidat, l'enrichissement CV, les préférences, le matching et les filtres.
@@ -517,9 +517,9 @@ Implémenter les référentiels contrôlés définis pendant la phase de design 
 ✅ 7.1.16.17.5 Backend APIs
 ✅ 7.1.16.17.6 Backend Tests
 ✅ 7.1.16.17.7 Backend Validation
-⬜ 7.1.16.17.8 Frontend Integration
-⬜ 7.1.16.17.9 Frontend Validation
-⬜ 7.1.16.17.10 Documentation Synchronization
+✅ 7.1.16.17.8 Frontend Integration
+✅ 7.1.16.17.9 Frontend Validation
+✅ 7.1.16.17.10 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow
 ⬜ 7.1.17.1 Application Status Model

@@ -438,6 +438,13 @@ Implémenté :
 - Proposed Value Override
 - Catalog Protection UX
 - Unmapped Skill Review
+- Reference Data Frontend Integration
+- WorkMode catalog frontend consumption
+- Countries catalog frontend consumption
+- Remote Preference controlled dropdown
+- Preferred Countries multi-select dropdown
+- React Select integration
+- Preferred Countries Option A storage
 
 Documenté mais pas encore implémenté :
 
@@ -647,9 +654,21 @@ Des tests existent pour :
 - Phase 7.1.16.16.4 Work Mode Catalog Design
 - Phase 7.1.16.16.5 Contract Type Catalog Design
 - Phase 7.1.16.16.6 Preference Options Design
+- Phase 7.1.16.17.1 Repository Audit
+- Phase 7.1.16.17.2 Backend Models
+- Phase 7.1.16.17.3 Database Schema Update
+- Phase 7.1.16.17.4 Seed Data
+- Phase 7.1.16.17.5 Backend APIs
+- Phase 7.1.16.17.6 Backend Tests
+- Phase 7.1.16.17.7 Backend Validation
+- Phase 7.1.16.17.8 Frontend Integration
+- Phase 7.1.16.17.9 Frontend Validation
+- Phase 7.1.16.17.10 Documentation Synchronization
 
 ## Derniers commits importants
 
+- d9c0179 - feat: integrate reference data in profile forms
+- 55b28d0 - docs: synchronize reference data backend validation
 - a91a7df - test: add reference data api coverage
 - 30c2c0f - docs: synchronize reference data catalog api status
 - 8b9d79a - feat: add reference data seed loader
@@ -823,26 +842,15 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.17.8 Frontend Integration
+7.1.17 Application Workflow
 
 Objectif :
 
-Consommer les catalogues de référence dans le frontend.
+Implémenter le workflow applicatif permettant de mieux suivre l'état des candidatures.
 
-Périmètre :
+Première sous-phase :
 
-- Countries catalog
-- WorkModes catalog
-- ContractTypes catalog
-
-Utilisation cible :
-
-- Profile Preferences
-- CV Enrichment
-- Search Filters
-- Matching Inputs
-
-Les valeurs libres doivent être progressivement remplacées par les référentiels contrôlés.
+7.1.17.1 Application Status Model
 
 ## Méthode de reprise
 

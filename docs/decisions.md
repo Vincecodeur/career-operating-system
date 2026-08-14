@@ -956,3 +956,32 @@ Motivations :
 - améliorer la qualité du matching ;
 - améliorer l'enrichissement CV ;
 - préparer les futurs modules d'analyse.
+
+#### DEC-057
+
+Preferred Countries Frontend Multi-Select Option A
+
+Le champ Preferred Countries utilise temporairement une stratégie Option A.
+
+Le frontend expose un multi-select dropdown basé sur le Country Catalog.
+
+Le backend conserve le champ existant preferred_countries sous forme de string.
+
+Format temporaire retenu :
+
+FR,BE,NL
+
+Cette approche permet :
+
+- une meilleure expérience utilisateur ;
+- la sélection de plusieurs pays ;
+- l'utilisation immédiate du Country Catalog ;
+- aucune migration base de données ;
+- aucune nouvelle API backend ;
+- aucune modification du modèle Profile.
+
+Une future Option B pourra remplacer ce stockage par une relation normalisée dédiée :
+
+profile_preferred_countries
+
+Cette évolution est explicitement reportée à une phase ultérieure de normalisation du modèle.

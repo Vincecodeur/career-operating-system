@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.16.17 Reference Data Catalog Implementation
+7.1.17 Application Workflow
 
 ---
 
 Next Planned Milestone
-7.1.16.17.8 Frontend Integration
+7.1.17.1 Application Status Model
 
 ---
 
@@ -1166,6 +1166,28 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - Work Modes validé (3)
 - Contract Types validé (6)
 
+- Phase 7.1.16.17.8 Frontend Integration terminée
+- getWorkModes ajouté au client API frontend
+- getCountries ajouté au client API frontend
+- ReferenceDataItem ajouté au client API frontend
+- WorkMode catalog consommé dans ProfilesPage
+- Countries catalog consommé dans ProfilesPage
+- Remote Preference remplacé par un dropdown contrôlé basé sur WorkMode
+- Preferred Countries remplacé par un multi-select dropdown basé sur Countries
+- react-select installé
+- @types/react-select installé
+- Stockage temporaire Preferred Countries conservé sous forme string
+- Format de stockage retenu pour l'Option A : FR,BE,NL
+- Aucune modification backend réalisée pour Preferred Countries
+- Option B reportée à une future normalisation avec table de relation dédiée
+
+- Phase 7.1.16.17.9 Frontend Validation terminée
+- Build frontend validé
+- Validation UI New Profile réalisée
+- Validation UI Edit Profile réalisée
+- Multi-sélection Countries validée visuellement
+- Remote Preference validée visuellement
+
 ---
 
 Phase In Progress
@@ -1238,4 +1260,4 @@ Reference data becomes a prerequisite for future:
 
 Last Commit
 
-- a91a7df - test: add reference data api coverage
+- d9c0179 - feat: integrate reference data in profile forms
