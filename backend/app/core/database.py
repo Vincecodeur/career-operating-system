@@ -43,6 +43,9 @@ from app.jobs.job_source_models import JobSource
 from app.jobs.job_offer_source_models import JobOfferSource
 from app.auth.models import User
 from app.cv.models import CV
+from app.reference_data.models import Country
+from app.reference_data.models import WorkMode
+from app.reference_data.models import ContractType
 
 
 def create_tables():
