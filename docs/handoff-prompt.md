@@ -628,6 +628,10 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- aa44437 - feat(cv): map unknown skills to existing catalog entries
+- 7c3abf3 - docs : skill-catalog-mapping design and decision
+- 1cf897d - feat(cv): support skill mapping during enrichment accept
+- 73fa003 - feat(cv): finalize profile enrichment workflow
 - 23da381 - feat(cv): finalize profile enrichment workflow
 - 382cda7 - feat(cv): finalize profile enrichment workflow
 - 0d79f1b - fix: support long enrichment proposal values
@@ -782,19 +786,22 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.16 Skill Catalog Mapping Design
+7.1.16.16 Reference Data Catalog Design
 
 Objectif :
-Définir comment mapper une skill détectée dans un CV vers une skill existante du catalogue, sans créer automatiquement de données non gouvernées.
+Définir les référentiels contrôlés utilisés par le profil candidat, l'enrichissement CV, les préférences de recherche, le filtrage des opportunités et le matching.
 
 Périmètre :
 
-- affichage des skills non cataloguées ;
-- mapping vers une skill existante ;
-- non-création automatique des skills ;
-- conservation de la gouvernance du référentiel ;
-- stratégie UX pour les propositions ignorées ;
-- impacts backend et frontend.
+- skill catalog mapping ;
+- language catalog normalization ;
+- country catalog normalization ;
+- work mode catalog ;
+- contract type catalog ;
+- preference options ;
+- stratégie UX des champs contrôlés ;
+- impacts backend et frontend ;
+- règles de création, modification et gouvernance des référentiels.
 
 ## Méthode de reprise
 

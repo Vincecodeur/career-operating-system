@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.16 Skill Catalog Mapping Design
+7.1.16.16 Reference Data Catalog Design
 
 ---
 
@@ -1121,22 +1121,16 @@ Principes :
 
 Last Decision
 
-Profile Enrichment frontend workflow completed.
-
+Reference Data Catalog added to roadmap.
 Validated choices:
 
-- human validation workflow confirmed end-to-end;
-- frontend wizard confirmed;
-- conflict resolution UI confirmed;
-- proposed_value_override confirmed;
-- apply workflow confirmed;
-- profile refresh confirmed;
-- unknown skills are not automatically created;
-- unknown skills are unselected by default;
-- skill catalog remains governed and protected.
+- stable option fields should use controlled reference data where relevant;
+- languages, countries, work modes, contract types and preference options are candidates for predefined catalogs;
+- skill catalog mapping remains included but becomes part of a broader reference data design phase;
+- reference data must support CV enrichment, search preferences, opportunity filtering and matching quality.
 
 ---
 
 Last Commit
 
-- 23da381 - feat(cv): finalize profile enrichment workflow
+- aa44437 - feat(cv): map unknown skills to existing catalog entries

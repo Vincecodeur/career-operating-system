@@ -496,7 +496,26 @@ Résultat :
 ✅ 7.1.16.14.11 Frontend Implementation
 ✅ 7.1.16.14.12 Frontend Validation
 ⬜ 7.1.16.15 Documentation Synchronization
-⬜ 7.1.16.16 Skill Catalog Mapping Design
+⬜ 7.1.16.16 Reference Data Catalog Design
+
+Objectif :
+Définir les référentiels contrôlés utilisés par le profil candidat, l'enrichissement CV, les préférences de recherche et le matching.
+
+Principes :
+
+- les valeurs stables doivent être normalisées ;
+- les champs de type liste doivent réutiliser des référentiels existants ;
+- les données issues du CV doivent être résolues vers un référentiel lorsque cela est possible ;
+- aucune donnée de référence ne doit être créée automatiquement sans validation ;
+- les formulaires frontend doivent progressivement utiliser des sélecteurs contrôlés plutôt que du texte libre lorsque le domaine est fermé.
+
+Sous-phases :
+⬜ 7.1.16.16.1 Skill Catalog Mapping Design
+⬜ 7.1.16.16.2 Language Catalog Normalization Design
+⬜ 7.1.16.16.3 Country Catalog Normalization Design
+⬜ 7.1.16.16.4 Work Mode Catalog Design
+⬜ 7.1.16.16.5 Contract Type Catalog Design
+⬜ 7.1.16.16.6 Preference Options Design
 
 ⬜ 7.1.17 Application Workflow
 

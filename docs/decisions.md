@@ -903,3 +903,32 @@ avec filtrage côté frontend.
 Le MVP peut charger l'ensemble du catalogue puis filtrer en mémoire.
 
 Aucune recherche serveur n'est introduite dans cette phase.
+
+### DEC-055
+
+Reference Data Catalog
+
+Le projet utilise un catalogue de données de référence pour les valeurs stables et réutilisables du système.
+
+Les référentiels cibles incluent :
+
+- Skills ;
+- Languages ;
+- Certifications ;
+- Countries ;
+- Work Modes ;
+- Contract Types ;
+- Preference Options.
+
+Objectif :
+
+- garantir la cohérence des données ;
+- éviter les doublons ;
+- éviter les variations d'écriture ;
+- fiabiliser le matching ;
+- simplifier les filtres ;
+- améliorer la qualité de l'enrichissement CV.
+
+Les champs fermés ou fortement normalisables doivent utiliser des listes contrôlées plutôt que du texte libre.
+
+Aucune nouvelle valeur de référence ne doit être créée automatiquement sans validation explicite de l'utilisateur lorsque cette valeur impacte le matching, les filtres ou les préférences.

@@ -200,3 +200,28 @@ Le système considère comme source de vérité carrière :
 - l'historique des candidatures.
 
 Toutes les fonctionnalités IA doivent s'appuyer sur cette base avant de produire des recommandations.
+
+---
+
+### Reference Data Catalog
+
+Le système s'appuie sur des référentiels contrôlés afin de garantir la qualité des données utilisées par les profils, les préférences, le matching et l'analyse des opportunités.
+
+Les référentiels cibles incluent notamment :
+
+- les langues ;
+- les pays ;
+- les modes de travail ;
+- les types de contrat ;
+- les préférences de localisation ;
+- les compétences ;
+- les certifications.
+
+Objectifs :
+
+- éviter les doublons ;
+- éviter les variations d'écriture ;
+- améliorer la fiabilité du matching ;
+- faciliter les filtres d'opportunités ;
+- fiabiliser l'enrichissement à partir des CV ;
+- préparer les futures analyses du marché.
