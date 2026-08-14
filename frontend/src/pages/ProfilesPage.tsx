@@ -65,6 +65,8 @@ import {
   uploadCv,
   deleteCv,
   setDefaultCv,
+  getWorkModes,
+  getCountries,
 } from "../services/api";
 
 type Profile = {
@@ -139,6 +141,12 @@ type Certification = {
   created_at: string;
 };
 
+type ReferenceDataItem = {
+  id: number;
+  code: string;
+  name: string;
+};
+
 export function ProfilesPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
@@ -154,7 +162,8 @@ export function ProfilesPage() {
     ProfileCertification[]
   >([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
-
+  const [workModes, setWorkModes] = useState<ReferenceDataItem[]>([]);
+  const [countries, setCountries] = useState<ReferenceDataItem[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(true);
   const [loadingDetails, setLoadingDetails] = useState(false);
 
@@ -301,6 +310,8 @@ export function ProfilesPage() {
       profileCertificationsData,
       certificationsData,
       cvsData,
+      workModesData,
+      countriesData,
     ] = await Promise.all([
       getProfileSkills(profileId),
       getSkills(),
@@ -310,6 +321,8 @@ export function ProfilesPage() {
       getProfileCertifications(profileId),
       getCertifications(),
       getProfileCvs(profileId),
+      getWorkModes(),
+      getCountries(),
     ]);
 
     setProfileSkills(profileSkillsData);
@@ -319,6 +332,8 @@ export function ProfilesPage() {
     setLanguages(languagesData);
     setProfileCertifications(profileCertificationsData);
     setCertifications(certificationsData);
+    setWorkModes(workModesData);
+    setCountries(countriesData);
     setCvs(cvsData);
   }
 
@@ -998,6 +1013,8 @@ export function ProfilesPage() {
         error={profileMutationError}
         onClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateProfile}
+        workModes={workModes}
+        countries={countries}
       />
 
       <EditProfileModal
@@ -1007,6 +1024,8 @@ export function ProfilesPage() {
         error={profileMutationError}
         onClose={() => setIsEditModalOpen(false)}
         onSave={handleUpdateProfile}
+        workModes={workModes}
+        countries={countries}
       />
 
       <DeleteProfileDialog

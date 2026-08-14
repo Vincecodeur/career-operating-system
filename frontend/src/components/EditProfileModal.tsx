@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import Select from "react-select";
+import type { MultiValue } from "react-select";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,6 +38,11 @@ const profileSchema = z.object({
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;
 
+type CountryOption = {
+  value: string;
+  label: string;
+};
+
 type Props = {
   profile: Profile | null;
   isOpen: boolean;
@@ -43,6 +50,18 @@ type Props = {
   error: string | null;
   onClose: () => void;
   onSave: (values: ProfileFormValues) => Promise<void>;
+
+  workModes: {
+    id: number;
+    code: string;
+    name: string;
+  }[];
+
+  countries: {
+    id: number;
+    code: string;
+    name: string;
+  }[];
 };
 
 export function EditProfileModal({
@@ -52,8 +71,11 @@ export function EditProfileModal({
   error,
   onClose,
   onSave,
+  workModes,
+  countries,
 }: Props) {
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -93,6 +115,28 @@ export function EditProfileModal({
 
   if (!isOpen || !profile) {
     return null;
+  }
+
+  const countryOptions: CountryOption[] = countries.map((country) => ({
+    value: country.code,
+    label: country.name,
+  }));
+
+  function getSelectedCountryOptions(value: string): CountryOption[] {
+    const selectedCodes = value
+      .split(",")
+      .map((code) => code.trim())
+      .filter((code) => code.length > 0);
+
+    return countryOptions.filter((option) =>
+      selectedCodes.includes(option.value),
+    );
+  }
+
+  function serializeCountryOptions(
+    selectedOptions: MultiValue<CountryOption>,
+  ): string {
+    return selectedOptions.map((option) => option.value).join(",");
   }
 
   return (
@@ -208,10 +252,17 @@ export function EditProfileModal({
                 Remote Preference
               </label>
 
-              <input
+              <select
                 {...register("remote_preference")}
-                className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-blue-500"
-              />
+                className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-blue-500">
+                <option value="">Select work mode</option>
+
+                {workModes.map((workMode) => (
+                  <option key={workMode.id} value={workMode.code}>
+                    {workMode.name}
+                  </option>
+                ))}
+              </select>
 
               {errors.remote_preference && (
                 <p className="mt-1 text-xs text-red-400">
@@ -260,9 +311,22 @@ export function EditProfileModal({
               Preferred Countries
             </label>
 
-            <input
-              {...register("preferred_countries")}
-              className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-blue-500"
+            <Controller
+              name="preferred_countries"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  isMulti
+                  options={countryOptions}
+                  value={getSelectedCountryOptions(field.value)}
+                  onChange={(selectedOptions) => {
+                    field.onChange(serializeCountryOptions(selectedOptions));
+                  }}
+                  onBlur={field.onBlur}
+                  placeholder="Select countries"
+                  className="text-slate-900"
+                />
+              )}
             />
 
             {errors.preferred_countries && (

@@ -31,6 +31,12 @@ export type Skill = {
     created_at: string;
 };
 
+export type ReferenceDataItem = {
+    id: number;
+    code: string;
+    name: string;
+};
+
 type ProfileLanguagePayload = {
     profile_id: number;
     language_id: number;
@@ -118,6 +124,34 @@ type AcceptProfileEnrichmentPayload = {
     proposed_value_override?: string | null;
     reference_id?: number | null;
 };
+
+export async function getWorkModes(): Promise<ReferenceDataItem[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/reference-data/work-modes`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load work modes."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getCountries(): Promise<ReferenceDataItem[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/reference-data/countries`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load countries."
+        );
+    }
+
+    return response.json();
+}
 
 export async function getProfiles() {
     const response = await fetch(
