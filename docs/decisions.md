@@ -894,3 +894,12 @@ skills.category est obligatoire côté modèle de données.
 Le système ne peut pas inventer une catégorie fiable.
 Le profil structuré reste la source de vérité.
 Le catalogue de skills doit rester gouverné.
+
+## DEC-054 Skill Mapping UX
+
+Le composant de sélection utilisera un champ de recherche
+avec filtrage côté frontend.
+
+Le MVP peut charger l'ensemble du catalogue puis filtrer en mémoire.
+
+Aucune recherche serveur n'est introduite dans cette phase.
