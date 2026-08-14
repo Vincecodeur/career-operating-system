@@ -804,6 +804,7 @@ def accept_experience_proposal(
 def accept_proposal(
     proposal_id: int,
     proposed_value_override: str | None,
+    reference_id: int | None,
     db: Session,
 ) -> ProfileEnrichmentProposal:
     proposal = get_proposal_or_404(
@@ -814,6 +815,25 @@ def accept_proposal(
     ensure_pending_proposal(
         proposal,
     )
+
+    if reference_id is not None:
+        if proposal.proposal_type != ProfileEnrichmentProposalType.SKILL.value:
+            raise HTTPException(
+                status_code=400,
+                detail="reference_id can only be used for skill enrichment proposals.",
+            )
+
+        skill = db.query(Skill).filter(
+            Skill.id == reference_id,
+        ).first()
+
+        if skill is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Mapped skill not found.",
+            )
+
+        proposal.reference_id = reference_id
 
     value_to_apply = (
         proposed_value_override

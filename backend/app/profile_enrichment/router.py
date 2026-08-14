@@ -61,9 +61,16 @@ def accept_profile_enrichment_proposal(
         else None
     )
 
+    reference_id = (
+        payload.reference_id
+        if payload is not None
+        else None
+    )
+
     return accept_proposal(
         proposal_id=proposal_id,
         proposed_value_override=proposed_value_override,
+        reference_id=reference_id,
         db=db,
     )
 

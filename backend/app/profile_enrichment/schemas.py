@@ -5,6 +5,9 @@ from pydantic import BaseModel
 
 class AcceptProposalRequest(BaseModel):
     proposed_value_override: str | None = None
+    reference_id: int | None = None
+    
+    
 class ProfileEnrichmentProposalResponse(BaseModel):
     id: int
     profile_id: int
