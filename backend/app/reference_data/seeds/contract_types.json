@@ -1,0 +1,26 @@
+[
+  {
+    "code": "PERMANENT",
+    "name": "Permanent"
+  },
+  {
+    "code": "FIXED_TERM",
+    "name": "Fixed-Term"
+  },
+  {
+    "code": "FREELANCE",
+    "name": "Freelance"
+  },
+  {
+    "code": "CONTRACTOR",
+    "name": "Contractor"
+  },
+  {
+    "code": "INTERNSHIP",
+    "name": "Internship"
+  },
+  {
+    "code": "APPRENTICESHIP",
+    "name": "Apprenticeship"
+  }
+]

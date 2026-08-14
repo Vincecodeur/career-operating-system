@@ -1,0 +1,14 @@
+[
+  {
+    "code": "REMOTE",
+    "name": "Remote"
+  },
+  {
+    "code": "HYBRID",
+    "name": "Hybrid"
+  },
+  {
+    "code": "ONSITE",
+    "name": "On-site"
+  }
+]

@@ -11,6 +11,8 @@ from app.auth.router import router as auth_router
 from app.certifications.router import router as certifications_router
 from app.core.database import create_tables
 from app.core.database import engine
+from app.core.database import SessionLocal
+from app.reference_data.seed_loader import seed_reference_data
 from app.cv.router import router as cv_router
 from app.profile_enrichment.router import router as profile_enrichment_router
 from app.experience.router import router as experience_router
@@ -28,6 +30,7 @@ from app.skills.router import router as skills_router
 from app.certifications.router import router as certifications_router
 
 
+
 discovery_scheduler = DiscoveryScheduler()
 
 
@@ -36,6 +39,14 @@ async def lifespan(
     app: FastAPI,
 ):
     create_tables()
+
+    db = SessionLocal()
+
+    try:
+        seed_reference_data(db)
+    finally:
+        db.close()
+
     discovery_scheduler.start()
 
     try:
