@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.17.6 Backend Tests
+7.1.16.17.8 Frontend Integration
 
 ---
 
@@ -1148,6 +1148,24 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - WorkMode catalog opérationnel
 - ContractType catalog opérationnel
 
+- Phase 7.1.16.17.6 Backend Tests terminée
+- backend/tests/test_reference_data.py créé
+- Tests Countries API ajoutés
+- Tests Work Modes API ajoutés
+- Tests Contract Types API ajoutés
+- Validation pytest réalisée
+- 6 tests Reference Data passants
+- 205 tests backend passants
+
+- Phase 7.1.16.17.7 Backend Validation terminée
+- Validation PostgreSQL réalisée
+- Validation Seed Data réalisée
+- Validation APIs réalisée
+- Validation non-régression réalisée
+- Countries validé (10)
+- Work Modes validé (3)
+- Contract Types validé (6)
+
 ---
 
 Phase In Progress
@@ -1220,4 +1238,4 @@ Reference data becomes a prerequisite for future:
 
 Last Commit
 
-- fd59521 - feat: add reference data api
+- a91a7df - test: add reference data api coverage

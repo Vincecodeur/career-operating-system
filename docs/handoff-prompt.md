@@ -650,6 +650,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- a91a7df - test: add reference data api coverage
+- 30c2c0f - docs: synchronize reference data catalog api status
 - 8b9d79a - feat: add reference data seed loader
 - fd59521 - feat: add reference data api
 - f06b889 - fix: fix cv parsing docx et pdf
@@ -821,19 +823,26 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.17.6 Backend Tests
+7.1.16.17.8 Frontend Integration
 
 Objectif :
 
-Valider le Reference Data Catalog par des tests automatisés.
+Consommer les catalogues de référence dans le frontend.
 
 Périmètre :
 
-- Country API
-- WorkMode API
-- ContractType API
-- Seed validation
-- Non-regression validation
+- Countries catalog
+- WorkModes catalog
+- ContractTypes catalog
+
+Utilisation cible :
+
+- Profile Preferences
+- CV Enrichment
+- Search Filters
+- Matching Inputs
+
+Les valeurs libres doivent être progressivement remplacées par les référentiels contrôlés.
 
 ## Méthode de reprise
 

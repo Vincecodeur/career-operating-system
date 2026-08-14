@@ -515,8 +515,8 @@ Implémenter les référentiels contrôlés définis pendant la phase de design 
 ✅ 7.1.16.17.3 Database Schema Update
 ✅ 7.1.16.17.4 Seed Data
 ✅ 7.1.16.17.5 Backend APIs
-⬜ 7.1.16.17.6 Backend Tests
-⬜ 7.1.16.17.7 Backend Validation
+✅ 7.1.16.17.6 Backend Tests
+✅ 7.1.16.17.7 Backend Validation
 ⬜ 7.1.16.17.8 Frontend Integration
 ⬜ 7.1.16.17.9 Frontend Validation
 ⬜ 7.1.16.17.10 Documentation Synchronization
