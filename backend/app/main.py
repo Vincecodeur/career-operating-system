@@ -22,6 +22,9 @@ from app.jobs.job_offer_skill_router import (
 from app.jobs.router import router as jobs_router
 from app.jobs.scheduler import DiscoveryScheduler
 from app.languages.router import router as languages_router
+from app.reference_data.router import (
+    router as reference_data_router,
+)
 from app.matching.router import router as matching_router
 from app.profile.profile_skill_router import router as profile_skill_router
 
@@ -84,6 +87,7 @@ app.include_router(job_offer_skill_router)
 app.include_router(matching_router)
 app.include_router(applications_router)
 app.include_router(auth_router)
+app.include_router(reference_data_router)
 
 
 @app.get("/health")
