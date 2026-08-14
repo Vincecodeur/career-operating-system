@@ -274,6 +274,14 @@ Implémenté :
 - PDF Text Extraction
 - DOCX Text Extraction
 - Structured CV Parsing
+- Profile Enrichment Domain
+- Profile Enrichment Proposals
+- Profile Enrichment Acceptance Workflow
+- Profile Enrichment Rejection Workflow
+- Skill Catalog Mapping
+- Controlled Reference Data Governance
+- Repository Resolution Strategy
+- Conflict Resolution Workflow
 
 Partiellement implémenté :
 
@@ -424,6 +432,12 @@ Implémenté :
 - UploadCvWizard Step 3 Review & Edit
 - UploadCvWizard Step 4 Summary
 - Profile Enrichment Frontend Workflow
+- Skill Mapping Workflow
+- Conflict Resolution Workflow
+- Editable Enrichment Proposals
+- Proposed Value Override
+- Catalog Protection UX
+- Unmapped Skill Review
 
 Documenté mais pas encore implémenté :
 
@@ -625,9 +639,19 @@ Des tests existent pour :
 - Phase 7.1.16.14.10 Frontend UX Design
 - Phase 7.1.16.14.11 Frontend Implementation
 - Phase 7.1.16.14.12 Frontend Validation
+- Phase 7.1.16.15 Documentation Synchronization
+- Phase 7.1.16.16 Reference Data Catalog Design
+- Phase 7.1.16.16.1 Skill Catalog Mapping Design
+- Phase 7.1.16.16.2 Language Catalog Normalization Design
+- Phase 7.1.16.16.3 Country Catalog Normalization Design
+- Phase 7.1.16.16.4 Work Mode Catalog Design
+- Phase 7.1.16.16.5 Contract Type Catalog Design
+- Phase 7.1.16.16.6 Preference Options Design
 
 ## Derniers commits importants
 
+- f06b889 - fix: fix cv parsing docx et pdf
+- f1acd03 - docs: add reference data catalog roadmap
 - aa44437 - feat(cv): map unknown skills to existing catalog entries
 - 7c3abf3 - docs : skill-catalog-mapping design and decision
 - 1cf897d - feat(cv): support skill mapping during enrichment accept
@@ -786,22 +810,30 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.16 Reference Data Catalog Design
+7.1.16.17 Reference Data Catalog Implementation
 
 Objectif :
-Définir les référentiels contrôlés utilisés par le profil candidat, l'enrichissement CV, les préférences de recherche, le filtrage des opportunités et le matching.
 
-Périmètre :
+Implémenter les référentiels contrôlés définis pendant les phases de design.
 
-- skill catalog mapping ;
-- language catalog normalization ;
-- country catalog normalization ;
-- work mode catalog ;
-- contract type catalog ;
-- preference options ;
-- stratégie UX des champs contrôlés ;
-- impacts backend et frontend ;
-- règles de création, modification et gouvernance des référentiels.
+Périmètre MVP :
+
+- Country
+- WorkMode
+- ContractType
+
+Sous-phases :
+
+- Repository Audit
+- Backend Models
+- Database Migration
+- Seed Data
+- Backend APIs
+- Backend Tests
+- Backend Validation
+- Frontend Integration
+- Frontend Validation
+- Documentation Synchronization
 
 ## Méthode de reprise
 

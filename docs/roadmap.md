@@ -495,30 +495,45 @@ Résultat :
 ✅ 7.1.16.14.10 Frontend UX Design
 ✅ 7.1.16.14.11 Frontend Implementation
 ✅ 7.1.16.14.12 Frontend Validation
-⬜ 7.1.16.15 Documentation Synchronization
-⬜ 7.1.16.16 Reference Data Catalog Design
-
-Objectif :
-Définir les référentiels contrôlés utilisés par le profil candidat, l'enrichissement CV, les préférences de recherche et le matching.
-
-Principes :
-
-- les valeurs stables doivent être normalisées ;
-- les champs de type liste doivent réutiliser des référentiels existants ;
-- les données issues du CV doivent être résolues vers un référentiel lorsque cela est possible ;
-- aucune donnée de référence ne doit être créée automatiquement sans validation ;
-- les formulaires frontend doivent progressivement utiliser des sélecteurs contrôlés plutôt que du texte libre lorsque le domaine est fermé.
+✅ 7.1.16.15 Documentation Synchronization
+✅ 7.1.16.16 Reference Data Catalog Design
 
 Sous-phases :
-⬜ 7.1.16.16.1 Skill Catalog Mapping Design
-⬜ 7.1.16.16.2 Language Catalog Normalization Design
-⬜ 7.1.16.16.3 Country Catalog Normalization Design
-⬜ 7.1.16.16.4 Work Mode Catalog Design
-⬜ 7.1.16.16.5 Contract Type Catalog Design
-⬜ 7.1.16.16.6 Preference Options Design
+✅ 7.1.16.16.1 Skill Catalog Mapping Design
+✅ 7.1.16.16.2 Language Catalog Normalization Design
+✅ 7.1.16.16.3 Country Catalog Normalization Design
+✅ 7.1.16.16.4 Work Mode Catalog Design
+✅ 7.1.16.16.5 Contract Type Catalog Design
+✅ 7.1.16.16.6 Preference Options Design
+⬜ 7.1.16.17 Reference Data Catalog Implementation
+
+Objectif :
+Implémenter les référentiels contrôlés définis pendant la phase de design et les rendre utilisables par le profil candidat, l'enrichissement CV, les préférences, le matching et les filtres.
+
+Sous-phases :
+
+⬜ 7.1.16.17.1 Repository Audit
+⬜ 7.1.16.17.2 Backend Models
+
+- Country
+- WorkMode
+- ContractType
+
+⬜ 7.1.16.17.3 Database Migration
+⬜ 7.1.16.17.4 Seed Data
+
+- countries
+- work modes
+- contract types
+
+⬜ 7.1.16.17.5 Backend APIs
+⬜ 7.1.16.17.6 Backend Tests
+⬜ 7.1.16.17.7 Backend Validation
+⬜ 7.1.16.17.8 Frontend Integration
+⬜ 7.1.16.17.9 Frontend Validation
+⬜ 7.1.16.17.10 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow
-
 ⬜ 7.1.17.1 Application Status Model
 ⬜ 7.1.17.2 Application Status Visualization
 ⬜ 7.1.17.3 Application Status Update
@@ -545,6 +560,7 @@ Sous-phases :
 ⬜ 7.1.19.6 Default CV Selection
 ⬜ 7.1.19.7 Application Workflow Settings
 ⬜ 7.1.19.8 Opportunity Discovery Preferences
+
 ⬜ 7.1.20 Profile Completeness
 ⬜ 7.1.20.1 Completeness Scoring
 ⬜ 7.1.20.2 Missing Information Detection

@@ -932,3 +932,25 @@ Objectif :
 Les champs fermés ou fortement normalisables doivent utiliser des listes contrôlées plutôt que du texte libre.
 
 Aucune nouvelle valeur de référence ne doit être créée automatiquement sans validation explicite de l'utilisateur lorsque cette valeur impacte le matching, les filtres ou les préférences.
+
+### DEC-056
+
+Reference Data Implementation Before Application Workflow
+
+La phase Reference Data Catalog Design a été validée.
+
+L'implémentation des référentiels est réalisée avant la phase Application Workflow.
+
+Les premiers référentiels implémentés sont :
+
+- Country
+- WorkMode
+- ContractType
+
+Motivations :
+
+- éviter le refactoring des préférences ;
+- éviter le refactoring des filtres ;
+- améliorer la qualité du matching ;
+- améliorer l'enrichissement CV ;
+- préparer les futurs modules d'analyse.

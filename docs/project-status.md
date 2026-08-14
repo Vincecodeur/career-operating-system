@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.16.15 Documentation Synchronization
+7.1.16.17 Reference Data Catalog Implementation
 
 ---
 
 Next Planned Milestone
-7.1.16.16 Reference Data Catalog Design
+7.1.16.17.1 Repository Audit
 
 ---
 
@@ -1089,6 +1089,28 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - Protection du catalogue Skills validée
 - Workflow complet Upload → Analysis → Review → Summary → Apply validé
 
+- Phase 7.1.16.15 Documentation Synchronization terminée
+
+- Roadmap synchronisée
+- Project Status synchronisé
+- Handoff Prompt synchronisé
+
+- Phase 7.1.16.16 Reference Data Catalog Design terminée
+
+- Skill Catalog Mapping Design documenté
+- Language Catalog Design documenté
+- Country Catalog Design documenté
+- Work Mode Catalog Design documenté
+- Contract Type Catalog Design documenté
+- Preference Options Design documenté
+
+- Reference Data Catalog ajouté à la vision produit
+- DEC-055 Reference Data Catalog créée
+- DEC-056 Reference Data Implementation Before Application Workflow créée
+
+- Nouvelle phase créée :
+  7.1.16.17 Reference Data Catalog Implementation
+
 ---
 
 Phase In Progress
@@ -1103,19 +1125,28 @@ Aucun
 
 ---
 
-7.1.16.15 Documentation Synchronization
+Phase 7.1.16.17 Reference Data Catalog Implementation
 
 Objectif :
-Définir et implémenter un mécanisme d'enrichissement contrôlé du profil candidat à partir des données extraites des CV.
+
+Implémenter les référentiels contrôlés définis pendant
+la phase de design.
+
+Scope MVP :
+
+- Country
+- WorkMode
+- ContractType
 
 Principes :
 
-- le profil structuré reste la source de vérité ;
-- le CV est une source d'observation ;
-- aucune mise à jour automatique du profil ;
-- validation humaine obligatoire ;
-- réutilisation prioritaire des référentiels ;
-- traçabilité complète des propositions d'enrichissement.
+- référentiels contrôlés ;
+- normalisation des données ;
+- réutilisation par les profils ;
+- réutilisation par les préférences ;
+- réutilisation par le matching ;
+- réutilisation par les filtres ;
+- stockage des données de référence dans Git via seed data.
 
 ---
 
@@ -1129,8 +1160,27 @@ Validated choices:
 - skill catalog mapping remains included but becomes part of a broader reference data design phase;
 - reference data must support CV enrichment, search preferences, opportunity filtering and matching quality.
 
+Reference Data Catalog Design completed.
+
+Implementation phase approved.
+
+Reference Data Catalog must be implemented before Application Workflow.
+
+Initial implementation scope:
+
+- Country
+- WorkMode
+- ContractType
+
+Reference data becomes a prerequisite for future:
+
+- preferences
+- opportunity filters
+- matching improvements
+- profile enrichment
+
 ---
 
 Last Commit
 
-- aa44437 - feat(cv): map unknown skills to existing catalog entries
+- f1acd03 - docs: add reference data catalog roadmap
