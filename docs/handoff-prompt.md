@@ -650,6 +650,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 8b9d79a - feat: add reference data seed loader
+- fd59521 - feat: add reference data api
 - f06b889 - fix: fix cv parsing docx et pdf
 - f1acd03 - docs: add reference data catalog roadmap
 - aa44437 - feat(cv): map unknown skills to existing catalog entries
@@ -806,34 +808,32 @@ Respecter notamment :
 - DEC-042 : Frontend Technical Stack
 - DEC-043 : Authentication From MVP
 - DEC-044 : Multilingual Ready Frontend
-- DEC-045 : Design System Strategy
+- DEC-045 :
+- DEC-046 :
+- DEC-047 :
+- DEC-048 :
+- DEC-049 :
+- DEC-050 :
+- DEC-051 :
+- DEC-052 :
+- DEC-053 :
+- DEC-054 :
 
 ### Phase suivante recommandée
 
-7.1.16.17 Reference Data Catalog Implementation
+7.1.16.17.6 Backend Tests
 
 Objectif :
 
-Implémenter les référentiels contrôlés définis pendant les phases de design.
+Valider le Reference Data Catalog par des tests automatisés.
 
-Périmètre MVP :
+Périmètre :
 
-- Country
-- WorkMode
-- ContractType
-
-Sous-phases :
-
-- Repository Audit
-- Backend Models
-- Database Migration
-- Seed Data
-- Backend APIs
-- Backend Tests
-- Backend Validation
-- Frontend Integration
-- Frontend Validation
-- Documentation Synchronization
+- Country API
+- WorkMode API
+- ContractType API
+- Seed validation
+- Non-regression validation
 
 ## Méthode de reprise
 

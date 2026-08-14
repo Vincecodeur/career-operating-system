@@ -29,7 +29,7 @@ Current Phase
 ---
 
 Next Planned Milestone
-7.1.16.17.1 Repository Audit
+7.1.16.17.6 Backend Tests
 
 ---
 
@@ -1111,6 +1111,43 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - Nouvelle phase créée :
   7.1.16.17 Reference Data Catalog Implementation
 
+- Phase 7.1.16.17.1 Repository Audit terminée
+- Phase 7.1.16.17.2 Backend Models terminée
+- package reference_data créé
+- Country model créé
+- WorkMode model créé
+- ContractType model créé
+- CountryResponse créé
+- WorkModeResponse créé
+- ContractTypeResponse créé
+- Tables countries créées
+- Tables work_modes créées
+- Tables contract_types créées
+- Validation PostgreSQL réalisée
+
+- Phase 7.1.16.17.3 Database Schema Update terminée
+- create_tables validé
+- Base.metadata validé
+- Import registration validée
+
+- Phase 7.1.16.17.4 Seed Data terminée
+- countries.json créé
+- work_modes.json créé
+- contract_types.json créé
+- seed_loader.py créé
+- chargement automatique au démarrage implémenté
+- validation PostgreSQL réalisée
+
+- Phase 7.1.16.17.5 Backend APIs terminée
+- GET /reference-data/countries créé
+- GET /reference-data/work-modes créé
+- GET /reference-data/contract-types créé
+- Validation API réalisée
+
+- Country catalog opérationnel
+- WorkMode catalog opérationnel
+- ContractType catalog opérationnel
+
 ---
 
 Phase In Progress
@@ -1183,4 +1220,4 @@ Reference data becomes a prerequisite for future:
 
 Last Commit
 
-- f1acd03 - docs: add reference data catalog roadmap
+- fd59521 - feat: add reference data api

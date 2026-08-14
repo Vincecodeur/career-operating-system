@@ -510,23 +510,11 @@ Sous-phases :
 Objectif :
 Implémenter les référentiels contrôlés définis pendant la phase de design et les rendre utilisables par le profil candidat, l'enrichissement CV, les préférences, le matching et les filtres.
 
-Sous-phases :
-
-⬜ 7.1.16.17.1 Repository Audit
-⬜ 7.1.16.17.2 Backend Models
-
-- Country
-- WorkMode
-- ContractType
-
-⬜ 7.1.16.17.3 Database Migration
-⬜ 7.1.16.17.4 Seed Data
-
-- countries
-- work modes
-- contract types
-
-⬜ 7.1.16.17.5 Backend APIs
+✅ 7.1.16.17.1 Repository Audit
+✅ 7.1.16.17.2 Backend Models
+✅ 7.1.16.17.3 Database Schema Update
+✅ 7.1.16.17.4 Seed Data
+✅ 7.1.16.17.5 Backend APIs
 ⬜ 7.1.16.17.6 Backend Tests
 ⬜ 7.1.16.17.7 Backend Validation
 ⬜ 7.1.16.17.8 Frontend Integration

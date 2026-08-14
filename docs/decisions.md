@@ -895,7 +895,9 @@ Le système ne peut pas inventer une catégorie fiable.
 Le profil structuré reste la source de vérité.
 Le catalogue de skills doit rester gouverné.
 
-## DEC-054 Skill Mapping UX
+## DEC-054
+
+Skill Mapping UX
 
 Le composant de sélection utilisera un champ de recherche
 avec filtrage côté frontend.
