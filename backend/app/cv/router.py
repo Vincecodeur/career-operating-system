@@ -20,7 +20,9 @@ from app.cv.service import clear_default_cv_for_profile
 from app.cv.service import delete_cv_file
 from app.cv.service import save_cv_file
 from app.profile.models import Profile
-
+from app.profile_enrichment.models import (
+    ProfileEnrichmentProposal,
+)
 
 router = APIRouter(
     tags=["CVs"],
@@ -286,6 +288,16 @@ def delete_cv(
         )
 
     deleted_cv = cv
+
+    db.query(
+        ProfileEnrichmentProposal,
+    ).filter(
+        ProfileEnrichmentProposal.cv_id == cv.id,
+    ).delete(
+        synchronize_session=False,
+    )
+
+
 
     db.delete(cv)
     db.commit()

@@ -118,6 +118,10 @@ def parse_cv_text(
                 "core skills",
                 "competencies",
                 "key skills",
+                "compétences",
+                "competences",
+                "compétences clés",
+                "competences cles",
             ],
         ),
         languages=extract_list_section(
@@ -125,6 +129,8 @@ def parse_cv_text(
             section_names=[
                 "languages",
                 "language",
+                "langues",
+                "langue",
             ],
         ),
         certifications=extract_list_section(
@@ -257,6 +263,10 @@ def extract_experiences(
             "work experience",
             "professional experience",
             "employment history",
+            "expérience",
+            "expériences",
+            "experience professionnelle",
+            "expériences professionnelles",
         ],
     )
 
@@ -392,7 +402,21 @@ def is_section_heading(
         "employment history",
         "education",
         "projects",
-    }
+        "compétences",
+        "competences",
+        "compétences clés",
+        "competences cles",
+        "langues",
+        "langue",
+        "expérience",
+        "expériences",
+        "experience professionnelle",
+        "expériences professionnelles",
+        "formation",
+        "formations",
+        "outils",
+        "outils & logiciels",
+            }
 
     if normalized in known_headings:
         return True
