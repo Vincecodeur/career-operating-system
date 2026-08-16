@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17 Application Workflow
+7.1.16.19 Soft Skills UX Completion
 
 ---
 
 Next Planned Milestone
-7.1.17.1 Application Status Model
+7.1.16.19.1 Repository Audit
 
 ---
 
@@ -1188,6 +1188,28 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - Multi-sélection Countries validée visuellement
 - Remote Preference validée visuellement
 
+- Phase 7.1.16.18 Soft Skills MVP terminée
+- DEC-058 implémentée
+- Backend ProfileSoftSkill créé
+- profile_soft_skills table créée
+- contrainte UNIQUE(profile_id, name) validée
+- CRUD Soft Skills MVP implémenté
+- backend/tests/test_profile_soft_skills.py créé
+- 10 tests Soft Skills passants
+- Validation PostgreSQL réalisée
+- Validation API réalisée
+- Frontend Soft Skills intégré
+- AddProfileSoftSkillModal.tsx créé
+- DeleteProfileSoftSkillDialog.tsx créé
+- séparation Hard Skills / Soft Skills réalisée
+- Build frontend validé
+- Validation fonctionnelle réalisée
+- Commit technique frontend 2ad3927 créé
+- Commit technique backend cad5cc0 créé
+- Push GitHub réalisé
+- Repository synchronisé avec origin/main
+- Working tree clean validé
+
 ---
 
 Phase In Progress
@@ -1202,62 +1224,40 @@ Aucun
 
 ---
 
-Phase 7.1.16.17 Reference Data Catalog Implementation
+Phase 7.1.17 Application Workflow
 
 Objectif :
-
-Implémenter les référentiels contrôlés définis pendant
-la phase de design.
-
-Scope MVP :
-
-- Country
-- WorkMode
-- ContractType
-
-Principes :
-
-- référentiels contrôlés ;
-- normalisation des données ;
-- réutilisation par les profils ;
-- réutilisation par les préférences ;
-- réutilisation par le matching ;
-- réutilisation par les filtres ;
-- stockage des données de référence dans Git via seed data.
+Implémenter le workflow de candidature complet et le suivi de l'avancement des candidatures.
 
 ---
 
 Last Decision
 
-Reference Data Catalog added to roadmap.
-Validated choices:
+DEC-058 Soft Skills MVP validée.
 
-- stable option fields should use controlled reference data where relevant;
-- languages, countries, work modes, contract types and preference options are candidates for predefined catalogs;
-- skill catalog mapping remains included but becomes part of a broader reference data design phase;
-- reference data must support CV enrichment, search preferences, opportunity filtering and matching quality.
+Séparation définitive des compétences :
 
-Reference Data Catalog Design completed.
+- Hard Skills :
+  - gouvernées par catalogue ;
+  - utilisées pour le matching ;
+  - utilisées pour l'enrichissement ;
+  - utilisées pour le scoring.
 
-Implementation phase approved.
+- Soft Skills :
+  - ajout manuel ;
+  - texte libre ;
+  - non utilisées dans le matching MVP ;
+  - non utilisées dans le scoring MVP.
 
-Reference Data Catalog must be implemented before Application Workflow.
+Constat post-validation :
 
-Initial implementation scope:
-
-- Country
-- WorkMode
-- ContractType
-
-Reference data becomes a prerequisite for future:
-
-- preferences
-- opportunity filters
-- matching improvements
-- profile enrichment
+- la séparation Hard Skills / Soft Skills est opérationnelle dans les profils ;
+- la séparation n'est pas encore propagée au workflow CV ;
+- une phase corrective UX dédiée sera réalisée avant 7.1.17.
 
 ---
 
 Last Commit
 
-- d9c0179 - feat: integrate reference data in profile forms
+- cad5cc0 - feat: add soft skills backend integration
+- 2ad3927 - feat: add soft skills frontend integration

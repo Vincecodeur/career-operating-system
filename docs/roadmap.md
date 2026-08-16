@@ -507,9 +507,6 @@ Sous-phases :
 ✅ 7.1.16.16.6 Preference Options Design
 ✅ 7.1.16.17 Reference Data Catalog Implementation
 
-Objectif :
-Implémenter les référentiels contrôlés définis pendant la phase de design et les rendre utilisables par le profil candidat, l'enrichissement CV, les préférences, le matching et les filtres.
-
 ✅ 7.1.16.17.1 Repository Audit
 ✅ 7.1.16.17.2 Backend Models
 ✅ 7.1.16.17.3 Database Schema Update
@@ -520,6 +517,31 @@ Implémenter les référentiels contrôlés définis pendant la phase de design 
 ✅ 7.1.16.17.8 Frontend Integration
 ✅ 7.1.16.17.9 Frontend Validation
 ✅ 7.1.16.17.10 Documentation Synchronization
+
+✅ 7.1.16.18 Soft Skills MVP
+
+✅ 7.1.16.18.1 Product Design
+✅ 7.1.16.18.2 Backend Models
+✅ 7.1.16.18.3 Database Schema
+✅ 7.1.16.18.4 APIs
+✅ 7.1.16.18.5 Frontend Integration
+✅ 7.1.16.18.6 Validation
+✅ 7.1.16.18.7 Documentation Synchronization
+
+⬜ 7.1.16.19 Soft Skills UX Completion
+
+Objectif :
+Propager la séparation Hard Skills / Soft Skills à l'ensemble du workflow CV afin d'assurer une expérience cohérente.
+
+Sous-phases :
+
+⬜ 7.1.16.19.1 Repository Audit
+⬜ 7.1.16.19.2 CV Analysis Design
+⬜ 7.1.16.19.3 Wizard UX Design
+⬜ 7.1.16.19.4 Backend Adjustments
+⬜ 7.1.16.19.5 Frontend Implementation
+⬜ 7.1.16.19.6 Functional Validation
+⬜ 7.1.16.19.7 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow
 ⬜ 7.1.17.1 Application Status Model

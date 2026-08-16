@@ -250,6 +250,8 @@ Implémenté :
 - ProfileSkill Update
 - ProfileSkill Delete
 - ProfileSkill CRUD Completion
+- ProfileSoftSkill
+- Soft Skills MVP
 - WorkExperienceUpdate
 - WorkExperience Update
 - WorkExperience Delete
@@ -395,6 +397,11 @@ Implémenté :
 - updateProfileSkill
 - deleteProfileSkill
 - Frontend ProfileSkill CRUD
+- AddProfileSoftSkillModal
+- DeleteProfileSoftSkillDialog
+- Soft Skills Visualization
+- Hard Skills / Soft Skills Separation
+- Frontend Soft Skills MVP
 - AddWorkExperienceModal
 - EditWorkExperienceModal
 - DeleteWorkExperienceDialog
@@ -664,9 +671,12 @@ Des tests existent pour :
 - Phase 7.1.16.17.8 Frontend Integration
 - Phase 7.1.16.17.9 Frontend Validation
 - Phase 7.1.16.17.10 Documentation Synchronization
+- Phase 7.1.16.18 Soft Skills MVP
 
 ## Derniers commits importants
 
+- cad5cc0 - feat: add soft skills backend integration
+- 2ad3927 - feat: add soft skills frontend integration
 - d9c0179 - feat: integrate reference data in profile forms
 - 55b28d0 - docs: synchronize reference data backend validation
 - a91a7df - test: add reference data api coverage
@@ -842,15 +852,19 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.17 Application Workflow
+7.1.16.19 Soft Skills UX Completion
 
 Objectif :
+Finaliser la propagation de DEC-058 à l'ensemble du workflow CV.
 
-Implémenter le workflow applicatif permettant de mieux suivre l'état des candidatures.
+Problèmes constatés :
+
+- les Hard Skills et Soft Skills ne sont pas séparées dans l'analyse CV ;
+- les Hard Skills et Soft Skills ne sont pas gérées dans UploadCvWizard ;
+- l'expérience utilisateur n'est pas cohérente entre Profile et CV Analysis.
 
 Première sous-phase :
-
-7.1.17.1 Application Status Model
+7.1.16.19.1 Repository Audit
 
 ## Méthode de reprise
 
