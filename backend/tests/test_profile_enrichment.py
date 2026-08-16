@@ -83,6 +83,16 @@ def create_test_skill(
 
     return response.json()
 
+def get_profile_soft_skills(
+    profile_id: int,
+):
+    response = client.get(
+        f"/profiles/{profile_id}/soft-skills"
+    )
+
+    assert response.status_code == 200
+
+    return response.json()
 
 def create_test_language(
     name: str | None = None,
@@ -246,7 +256,7 @@ def test_generate_cv_enrichment_proposals(
     }
 
     assert "PROFILE_FIELD" in proposal_types
-    assert "SKILL" in proposal_types
+    assert "HARD_SKILL" in proposal_types
     assert "LANGUAGE" in proposal_types
     assert "CERTIFICATION" in proposal_types
     assert "EXPERIENCE" in proposal_types
@@ -576,10 +586,10 @@ def test_accept_skill_proposal(
     proposals = response.json()
 
     skill_proposal = next(
-        proposal
-        for proposal in proposals
-        if proposal["proposal_type"] == "SKILL"
-    )
+    proposal
+    for proposal in proposals
+    if proposal["proposal_type"] == "HARD_SKILL"
+)
 
     accept_response = client.post(
         f"/enrichment/{skill_proposal['id']}/accept"
@@ -792,7 +802,7 @@ def test_cannot_accept_already_processed_proposal(
     proposal = next(
         proposal
         for proposal in proposals
-        if proposal["proposal_type"] == "SKILL"
+        if proposal["proposal_type"] == "HARD_SKILL"
     )
 
     first_response = client.post(
@@ -806,3 +816,163 @@ def test_cannot_accept_already_processed_proposal(
     )
 
     assert second_response.status_code == 400
+    
+    
+def test_generate_soft_skill_proposal_for_skill_not_in_catalog(
+    monkeypatch,
+):
+    profile = create_test_profile()
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    language = create_test_language()
+    certification = create_test_certification()
+
+    soft_skill_name = f"Leadership_{uuid4()}"
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=soft_skill_name,
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert response.status_code == 200
+
+    proposals = response.json()
+
+    soft_skill_proposals = [
+        proposal
+        for proposal in proposals
+        if proposal["proposal_type"] == "SOFT_SKILL"
+    ]
+
+    assert len(soft_skill_proposals) == 1
+    assert soft_skill_proposals[0]["proposed_value"] == soft_skill_name
+    
+
+def test_accept_soft_skill_proposal_creates_profile_soft_skill(
+    monkeypatch,
+):
+    profile = create_test_profile()
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    language = create_test_language()
+    certification = create_test_certification()
+
+    soft_skill_name = f"Communication_{uuid4()}"
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=soft_skill_name,
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    generate_response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert generate_response.status_code == 200
+
+    proposals = generate_response.json()
+
+    soft_skill_proposal = next(
+        proposal
+        for proposal in proposals
+        if proposal["proposal_type"] == "SOFT_SKILL"
+    )
+
+    accept_response = client.post(
+        f"/enrichment/{soft_skill_proposal['id']}/accept"
+    )
+
+    assert accept_response.status_code == 200
+
+    accepted_proposal = accept_response.json()
+
+    assert accepted_proposal["status"] == "ACCEPTED"
+
+    soft_skills = get_profile_soft_skills(
+        profile["id"],
+    )
+
+    soft_skill_names = {
+        soft_skill["name"]
+        for soft_skill in soft_skills
+    }
+
+    assert soft_skill_name in soft_skill_names
+    
+def test_accept_hard_skill_proposal_creates_profile_skill(
+    monkeypatch,
+):
+    profile = create_test_profile()
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    skill = create_test_skill()
+    language = create_test_language()
+    certification = create_test_certification()
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=skill["name"],
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    generate_response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert generate_response.status_code == 200
+
+    proposals = generate_response.json()
+
+    hard_skill_proposal = next(
+        proposal
+        for proposal in proposals
+        if proposal["proposal_type"] == "HARD_SKILL"
+    )
+
+    accept_response = client.post(
+        f"/enrichment/{hard_skill_proposal['id']}/accept"
+    )
+
+    assert accept_response.status_code == 200
+
+    profile_skills_response = client.get(
+        f"/profiles/{profile['id']}/skills"
+    )
+
+    assert profile_skills_response.status_code == 200
+
+    profile_skills = profile_skills_response.json()
+
+    profile_skill_ids = {
+        profile_skill["skill_id"]
+        for profile_skill in profile_skills
+    }
+
+    assert skill["id"] in profile_skill_ids

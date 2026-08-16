@@ -17,6 +17,7 @@ from app.languages.models import Language
 from app.languages.models import ProfileLanguage
 from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
+from app.profile.profile_soft_skill_models import ProfileSoftSkill
 from app.profile_enrichment.enums import ProfileEnrichmentProposalStatus
 from app.profile_enrichment.enums import ProfileEnrichmentProposalType
 from app.profile_enrichment.models import ProfileEnrichmentProposal
@@ -216,6 +217,26 @@ def profile_has_skill(
     return profile_skill is not None
 
 
+def profile_has_soft_skill(
+    profile_id: int,
+    soft_skill_name: str,
+    db: Session,
+) -> bool:
+    normalized_name = normalize_value(
+        soft_skill_name,
+    )
+
+    existing_soft_skills = db.query(ProfileSoftSkill).filter(
+        ProfileSoftSkill.profile_id == profile_id,
+    ).all()
+
+    for existing_soft_skill in existing_soft_skills:
+        if normalize_value(existing_soft_skill.name) == normalized_name:
+            return True
+
+    return False
+
+
 def profile_has_language(
     profile_id: int,
     language_id: int,
@@ -359,29 +380,52 @@ def generate_skill_proposals(
             db,
         )
 
-        if skill is not None and profile_has_skill(
-            profile.id,
-            skill.id,
-            db,
-        ):
-            continue
+        if skill is not None:
+            if profile_has_skill(
+                profile.id,
+                skill.id,
+                db,
+            ):
+                continue
+
+            proposal_type = (
+                ProfileEnrichmentProposalType.HARD_SKILL
+            )
+            target_field = "profile_skill"
+            reference_id = skill.id
+
+        else:
+            if profile_has_soft_skill(
+                profile.id,
+                skill_name,
+                db,
+            ):
+                continue
+
+            proposal_type = (
+                ProfileEnrichmentProposalType.SOFT_SKILL
+            )
+            target_field = "profile_soft_skill"
+            reference_id = None
 
         proposal = create_proposal_if_missing(
             profile_id=profile.id,
             cv_id=cv.id,
-            proposal_type=ProfileEnrichmentProposalType.SKILL,
+            proposal_type=proposal_type,
             source_field="skills",
-            target_field="profile_skill",
+            target_field=target_field,
             observed_value=skill_name,
             proposed_value=skill_name,
             current_profile_value=None,
-            reference_id=skill.id if skill is not None else None,
+            reference_id=reference_id,
             conflict_detected=False,
             db=db,
         )
 
         if proposal is not None:
-            proposals.append(proposal)
+            proposals.append(
+                proposal,
+            )
 
     return proposals
 
@@ -683,6 +727,33 @@ def accept_skill_proposal(
 
     db.add(profile_skill)
 
+def accept_soft_skill_proposal(
+    proposal: ProfileEnrichmentProposal,
+    db: Session,
+) -> None:
+    soft_skill_name = proposal.proposed_value.strip()
+
+    if not soft_skill_name:
+        raise HTTPException(
+            status_code=400,
+            detail="Soft skill name is required.",
+        )
+
+    if profile_has_soft_skill(
+        proposal.profile_id,
+        soft_skill_name,
+        db,
+    ):
+        return
+
+    profile_soft_skill = ProfileSoftSkill(
+        profile_id=proposal.profile_id,
+        name=soft_skill_name,
+    )
+
+    db.add(profile_soft_skill)
+
+
 
 def accept_language_proposal(
     proposal: ProfileEnrichmentProposal,
@@ -817,10 +888,16 @@ def accept_proposal(
     )
 
     if reference_id is not None:
-        if proposal.proposal_type != ProfileEnrichmentProposalType.SKILL.value:
+        if proposal.proposal_type not in [
+            ProfileEnrichmentProposalType.SKILL.value,
+            ProfileEnrichmentProposalType.HARD_SKILL.value,
+        ]:
             raise HTTPException(
                 status_code=400,
-                detail="reference_id can only be used for skill enrichment proposals.",
+                detail=(
+                    "reference_id can only be used for hard skill "
+                    "enrichment proposals."
+                ),
             )
 
         skill = db.query(Skill).filter(
@@ -847,8 +924,16 @@ def accept_proposal(
             value_to_apply,
             db,
         )
-    elif proposal.proposal_type == ProfileEnrichmentProposalType.SKILL.value:
+    elif proposal.proposal_type in [
+        ProfileEnrichmentProposalType.SKILL.value,
+        ProfileEnrichmentProposalType.HARD_SKILL.value,
+    ]:
         accept_skill_proposal(
+            proposal,
+            db,
+        )
+    elif proposal.proposal_type == ProfileEnrichmentProposalType.SOFT_SKILL.value:
+        accept_soft_skill_proposal(
             proposal,
             db,
         )
