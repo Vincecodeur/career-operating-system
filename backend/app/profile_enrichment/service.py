@@ -18,6 +18,8 @@ from app.languages.models import ProfileLanguage
 from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
 from app.profile.profile_soft_skill_models import ProfileSoftSkill
+from app.profile_enrichment.soft_skill_dictionary import is_ignored_skill_value
+from app.profile_enrichment.soft_skill_dictionary import is_soft_skill_name
 from app.profile_enrichment.enums import ProfileEnrichmentProposalStatus
 from app.profile_enrichment.enums import ProfileEnrichmentProposalType
 from app.profile_enrichment.models import ProfileEnrichmentProposal
@@ -375,6 +377,11 @@ def generate_skill_proposals(
     proposals: list[ProfileEnrichmentProposal] = []
 
     for skill_name in parsed_data.skills:
+        if is_ignored_skill_value(
+            skill_name,
+        ):
+            continue
+
         skill = find_skill_by_name(
             skill_name,
             db,
@@ -394,7 +401,9 @@ def generate_skill_proposals(
             target_field = "profile_skill"
             reference_id = skill.id
 
-        else:
+        elif is_soft_skill_name(
+            skill_name,
+        ):
             if profile_has_soft_skill(
                 profile.id,
                 skill_name,
@@ -406,6 +415,13 @@ def generate_skill_proposals(
                 ProfileEnrichmentProposalType.SOFT_SKILL
             )
             target_field = "profile_soft_skill"
+            reference_id = None
+
+        else:
+            proposal_type = (
+                ProfileEnrichmentProposalType.HARD_SKILL
+            )
+            target_field = "profile_skill"
             reference_id = None
 
         proposal = create_proposal_if_missing(

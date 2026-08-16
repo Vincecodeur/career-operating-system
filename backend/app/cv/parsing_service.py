@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from app.cv.parsing_schemas import ParsedCVData
@@ -331,37 +332,114 @@ def looks_like_experience_header(
 def split_list_line(
     line: str,
 ) -> list[str]:
-    separators = [
-        ",",
-        ";",
-        "|",
-        "•",
-        "·",
+    expanded_values = expand_parenthetical_values(
+        line,
+    )
+
+    split_values: list[str] = []
+
+    for value in expanded_values:
+        split_values.extend(
+            split_compound_skill_value(
+                value,
+            ),
+        )
+
+    return split_values
+
+def expand_parenthetical_values(
+    value: str,
+) -> list[str]:
+    if "(" in value and ")" in value:
+        parenthetical_values = re.findall(
+            r"\(([^()]*)\)",
+            value,
+        )
+
+        base_value = re.sub(
+            r"\([^()]*\)",
+            " ",
+            value,
+        )
+
+        return [
+            base_value,
+            *parenthetical_values,
+        ]
+
+    if "(" in value and ")" not in value:
+        return value.replace(
+            "(",
+            ",",
+        ).split(",")
+
+    if ")" in value and "(" not in value:
+        return [
+            value.replace(
+                ")",
+                "",
+            ),
+        ]
+
+    return [
+        value,
     ]
 
-    values = [line]
 
-    for separator in separators:
-        updated_values: list[str] = []
+def split_compound_skill_value(
+    value: str,
+) -> list[str]:
+    normalized_value = value
 
-        for value in values:
-            updated_values.extend(value.split(separator))
+    normalized_value = normalized_value.replace(
+        " and ",
+        ",",
+    )
+    normalized_value = normalized_value.replace(
+        " & ",
+        ",",
+    )
+    normalized_value = normalized_value.replace(
+        " / ",
+        ",",
+    )
+    normalized_value = normalized_value.replace(
+        "â€¢",
+        ",",
+    )
+    normalized_value = normalized_value.replace(
+        "Â·",
+        ",",
+    )
 
-        values = updated_values
+    if normalized_value.strip().startswith("&"):
+        normalized_value = normalized_value.strip()[1:]
 
-    return values
-
+    return re.split(
+        r"[,;|]",
+        normalized_value,
+    )
 
 def clean_list_value(
     value: str,
 ) -> str:
-    return (
-        value.strip()
+    cleaned_value = " ".join(
+        value.strip().split(),
+    )
+
+    cleaned_value = (
+        cleaned_value
         .strip("-")
-        .strip("•")
-        .strip("·")
+        .strip("&")
+        .strip("/")
+        .strip("â€¢")
+        .strip("Â·")
+        .strip("(")
+        .strip(")")
         .strip()
     )
+
+    return cleaned_value
 
 
 def normalize_heading(

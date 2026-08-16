@@ -90,3 +90,26 @@ def test_extract_text_from_cv_rejects_missing_file(
         extract_text_from_cv(missing_file)
 
     assert "CV file does not exist" in str(exc_info.value)
+    
+def clean_list_value(
+    value: str,
+) -> str:
+    cleaned_value = " ".join(
+        value.strip().split(),
+    )
+
+    cleaned_value = (
+        cleaned_value
+        .strip("-")
+        .strip("&")
+        .strip("/")
+        .strip("â€¢")
+        .strip("Â·")
+        .strip("(")
+        .strip(")")
+        .strip()
+    )
+
+    return cleaned_value
+
+

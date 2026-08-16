@@ -829,7 +829,7 @@ def test_generate_soft_skill_proposal_for_skill_not_in_catalog(
     language = create_test_language()
     certification = create_test_certification()
 
-    soft_skill_name = f"Leadership_{uuid4()}"
+    soft_skill_name = "Leadership"
 
     parsed_data = build_parsed_cv_data(
         skill_name=soft_skill_name,
@@ -871,7 +871,7 @@ def test_accept_soft_skill_proposal_creates_profile_soft_skill(
     language = create_test_language()
     certification = create_test_certification()
 
-    soft_skill_name = f"Communication_{uuid4()}"
+    soft_skill_name = "Communication"
 
     parsed_data = build_parsed_cv_data(
         skill_name=soft_skill_name,
@@ -976,3 +976,47 @@ def test_accept_hard_skill_proposal_creates_profile_skill(
     }
 
     assert skill["id"] in profile_skill_ids
+    
+    
+def test_generate_hard_skill_proposal_for_unknown_non_soft_skill(
+    monkeypatch,
+):
+    profile = create_test_profile()
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    language = create_test_language()
+    certification = create_test_certification()
+
+    unknown_hard_skill_name = f"Technical_Platform_{uuid4()}"
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=unknown_hard_skill_name,
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert response.status_code == 200
+
+    proposals = response.json()
+
+    hard_skill_proposals = [
+        proposal
+        for proposal in proposals
+        if proposal["proposal_type"] == "HARD_SKILL"
+    ]
+
+    assert len(hard_skill_proposals) == 1
+    assert hard_skill_proposals[0]["proposed_value"] == unknown_hard_skill_name
+    assert hard_skill_proposals[0]["reference_id"] is None
+    assert hard_skill_proposals[0]["target_field"] == "profile_skill"
