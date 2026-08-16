@@ -1,5 +1,6 @@
 type Props = {
-  skillsFound: number;
+  hardSkillsFound: number;
+  softSkillsFound: number;
   experiencesFound: number;
   languagesFound: number;
   certificationsFound: number;
@@ -7,7 +8,8 @@ type Props = {
 };
 
 export function UploadCvWizardStep2({
-  skillsFound,
+  hardSkillsFound,
+  softSkillsFound,
   experiencesFound,
   languagesFound,
   certificationsFound,
@@ -21,9 +23,18 @@ export function UploadCvWizardStep2({
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-md border border-slate-800 bg-slate-900 p-4">
-          <p className="text-sm text-slate-400">Skills Found</p>
+          <p className="text-sm text-slate-400">Hard Skills Found</p>
 
-          <p className="mt-2 text-2xl font-bold text-white">{skillsFound}</p>
+          <p className="mt-2 text-2xl font-bold text-white">
+            {hardSkillsFound}
+          </p>
+        </div>
+        <div className="rounded-md border border-slate-800 bg-slate-900 p-4">
+          <p className="text-sm text-slate-400">Soft Skills Found</p>
+
+          <p className="mt-2 text-2xl font-bold text-white">
+            {softSkillsFound}
+          </p>
         </div>
 
         <div className="rounded-md border border-slate-800 bg-slate-900 p-4">

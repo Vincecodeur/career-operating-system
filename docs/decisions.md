@@ -1150,3 +1150,927 @@ Cette approche permet :
 - d'éviter la maintenance d'un référentiel de Soft Skills
 - de préparer de futures fonctionnalités IA sans refactoring majeur
 - de séparer clairement compétences techniques et compétences comportementales
+
+# DEC-059 - Automatic Hard Skill / Soft Skill Detection During CV Enrichment
+
+Date: 2026-08-16
+
+Status: Accepted
+
+## Context
+
+The Upload CV workflow extracts skills from uploaded CVs and generates enrichment proposals before importing data into a profile.
+
+The Career Operating System domain model already distinguishes:
+
+- ProfileSkill
+- ProfileSoftSkill
+
+Before this decision, all detected skills were treated identically and imported through the ProfileSkill workflow.
+
+This prevented the platform from distinguishing technical competencies from behavioural competencies.
+
+A classification layer is therefore required between CV parsing and profile enrichment.
+
+---
+
+## Decision
+
+The CV parser remains unchanged.
+
+ParsedCVData continues to expose:
+
+skills[]
+
+The parser is responsible for extraction only.
+
+The enrichment layer is responsible for classification.
+
+Two new proposal types are introduced:
+
+- HARD_SKILL
+- SOFT_SKILL
+
+Classification occurs during enrichment proposal generation.
+
+---
+
+## Architecture
+
+CV
+↓
+Parsing
+↓
+skills[]
+↓
+Enrichment Classification
+↓
+HARD_SKILL or SOFT_SKILL
+↓
+Review & Validation
+↓
+Profile Import
+
+Parsing remains independent from enrichment business rules.
+
+---
+
+## Classification Strategy
+
+The enrichment engine evaluates every detected skill.
+
+### Rule 1
+
+If the detected skill matches an existing skill in the Skill Catalog:
+
+→ HARD_SKILL
+
+Examples:
+
+- React
+- Python
+- GraphQL
+- Docker
+
+---
+
+### Rule 2
+
+If the detected skill matches a known Soft Skill Dictionary entry:
+
+→ SOFT_SKILL
+
+Examples:
+
+- Leadership
+- Communication
+- Teamwork
+- Adaptability
+- Negotiation
+- Mentoring
+- Problem Solving
+
+---
+
+### Rule 3
+
+If no match is found:
+
+→ HARD_SKILL
+
+The system intentionally defaults to HARD_SKILL.
+
+This avoids incorrectly filling the Soft Skills section with technical competencies that are simply absent from the catalog.
+
+---
+
+## Rationale For Defaulting To HARD_SKILL
+
+Real-world CVs frequently contain:
+
+- Tools
+- Frameworks
+- Technical Concepts
+- Platforms
+- Methodologies
+
+that may not yet exist in the Skill Catalog.
+
+Examples:
+
+- Power Platform
+- API REST
+- GraphQL
+- Power BI
+- JIRA
+- Confluence
+- Git
+- Excel
+- CI/CD
+- Kubernetes
+
+These items are much more likely to represent technical competencies than behavioural competencies.
+
+For this reason:
+
+Unknown Skill
+→ HARD_SKILL
+
+is preferred over:
+
+Unknown Skill
+→ SOFT_SKILL
+
+---
+
+## Skill Catalog Dependency
+
+The Skill Catalog improves classification quality.
+
+However, classification accuracy must not rely exclusively on catalog completeness.
+
+The system must continue operating correctly when:
+
+- skills are missing from the catalog
+- new technologies emerge
+- customer-specific skills appear in CVs
+
+---
+
+## Import Behaviour
+
+HARD_SKILL proposals are imported into:
+
+ProfileSkill
+
+SOFT_SKILL proposals are imported into:
+
+ProfileSoftSkill
+
+---
+
+## Frontend Behaviour
+
+Step 2 - Analysis
+
+Display:
+
+- Hard Skills Found
+- Soft Skills Found
+
+Step 3 - Review & Edit
+
+Display separate sections:
+
+- Hard Skills
+- Soft Skills
+
+The classification shown at this stage is the result of the enrichment engine.
+
+---
+
+## Backward Compatibility
+
+Legacy proposal type:
+
+SKILL
+
+remains supported during migration.
+
+For display purposes:
+
+# SKILL
+
+HARD_SKILL
+
+until all historical data has been migrated.
+
+---
+
+## Known Limitations
+
+The enrichment engine may receive compound values from CV parsing.
+
+Examples:
+
+API REST & GraphQL
+
+instead of:
+
+- API REST
+- GraphQL
+
+Such compound values may reduce matching accuracy.
+
+Skill normalization and splitting are considered a separate concern from classification.
+
+---
+
+## Future Improvements
+
+Potential future enhancements:
+
+- Skill normalization engine
+- Compound skill splitting
+- Soft Skill Dictionary enrichment
+- AI-based classification
+- Confidence scoring
+- User classification override
+
+User classification override is defined in DEC-060.
+
+---
+
+## Related Decisions
+
+DEC-058
+Hard Skills and Soft Skills are stored separately in the domain model.
+
+DEC-059
+Automatic classification of detected skills.
+
+DEC-060
+User can override the detected classification during CV enrichment review.
+
+# DEC-060 - Editable Skill Classification During CV Enrichment
+
+Date: 2026-08-16
+
+Status: Accepted
+
+## Context
+
+DEC-059 introduced automatic classification of skills detected during CV enrichment:
+
+- HARD_SKILL = skill recognized as a technical skill
+- SOFT_SKILL = skill recognized as a behavioural skill
+
+During functional validation, the Upload CV Wizard successfully separated Hard Skills and Soft Skills.
+
+However, testing on real CVs showed that the automatic classification is not always accurate.
+
+Examples observed:
+
+- API REST & GraphQL classified as Soft Skill
+- Power Platform classified as Soft Skill
+- Other technical competencies not present in the Skill Catalog incorrectly classified as Soft Skill
+
+The classification engine must therefore be considered as a suggestion, not as a source of truth.
+
+The user must remain able to correct the classification before importing data into the profile.
+
+---
+
+## Decision
+
+The CV enrichment engine remains responsible for proposing an initial classification.
+
+Each detected skill shall have:
+
+- Detected Classification
+- Selected Classification
+
+Initially:
+
+Selected Classification = Detected Classification
+
+The user may modify the classification inside Upload CV Wizard Step 3 before applying changes.
+
+The selected classification becomes the source of truth during the import process.
+
+---
+
+## User Experience
+
+For every detected skill:
+
+Example:
+
+API REST & GraphQL
+
+Classification detected:
+[ Hard Skill ▼ ]
+
+or
+
+Leadership
+
+Classification detected:
+[ Soft Skill ▼ ]
+
+The dropdown allows:
+
+- Hard Skill
+- Soft Skill
+
+No additional categories are introduced in MVP.
+
+---
+
+## Import Behaviour
+
+When Apply Changes is executed:
+
+If Selected Classification = Hard Skill
+
+→ Import into ProfileSkill
+
+If Selected Classification = Soft Skill
+
+→ Import into ProfileSoftSkill
+
+The original engine classification is ignored once the user has made a selection.
+
+The user choice always takes precedence.
+
+---
+
+## UI Rules
+
+The dropdown is visible for all detected skills.
+
+For Hard Skills:
+
+- Skill catalog mapping remains available when required.
+
+For Soft Skills:
+
+- Skill catalog mapping is hidden.
+
+If a user changes:
+
+Hard Skill → Soft Skill
+
+Any pending skill mapping becomes unnecessary and is ignored.
+
+If a user changes:
+
+Soft Skill → Hard Skill
+
+The UI must require a valid skill catalog mapping before allowing import.
+
+---
+
+## Rationale
+
+Benefits:
+
+- Preserves automatic classification.
+- Keeps the workflow fast.
+- Allows correction of classification errors.
+- Prevents incorrect profile enrichment.
+- Avoids dependence on a perfect classification engine.
+- Gives full control to the user.
+
+The enrichment engine provides recommendations.
+
+The user remains the final authority.
+
+---
+
+## Consequences
+
+Frontend:
+
+- UploadCvWizardStep3 must support editable classification.
+- Classification dropdown must be introduced.
+- Dynamic display of skill mapping section based on current selection.
+
+Backend:
+
+- Accept enrichment flow must support user-selected classification.
+- Final import destination is determined by Selected Classification.
+
+Data Governance:
+
+- User validation overrides automatic detection.
+- Classification errors can be corrected during enrichment without modifying the source CV.
+
+---
+
+## Future Considerations
+
+Future versions may improve automatic classification using:
+
+- Soft Skill Dictionary
+- Skill Taxonomy
+- AI Classification
+- Confidence Scores
+
+These improvements do not replace user validation.
+
+User validation remains authoritative.
+
+# DEC-061 - Skill Normalization And Compound Skill Splitting
+
+Date: 2026-08-16
+
+Status: Accepted
+
+## Context
+
+Real-world validation of the CV Enrichment workflow revealed that many detected skills are extracted as compound expressions rather than individual competencies.
+
+Examples observed:
+
+- API REST & GraphQL
+- Power Platform (PowerApps, Power Automate)
+- Excel (Pivot Tables, VBA, PowerQuery)
+- JIRA & Confluence
+- Software testing (UAT, Sanity, Regression)
+- Cross-functional collaboration
+
+The enrichment engine currently treats these expressions as single skills.
+
+This has several negative consequences:
+
+- Lower Skill Catalog matching rate
+- Reduced Hard Skill detection accuracy
+- Reduced matching quality
+- Duplicate or fragmented profile data
+- Increased manual corrections during CV review
+
+The platform requires a normalization layer capable of splitting compound skills into atomic skills before enrichment classification.
+
+---
+
+## Decision
+
+A new Skill Normalization layer is introduced between CV Parsing and Enrichment Classification.
+
+The responsibility of this layer is to transform compound skill expressions into normalized atomic skills.
+
+This normalization occurs before:
+
+- Skill Catalog Matching
+- Hard Skill / Soft Skill Classification
+- Profile Enrichment Proposal Creation
+
+---
+
+## Architecture
+
+Previous flow:
+
+CV
+↓
+Parsing
+↓
+skills[]
+↓
+Classification
+↓
+Enrichment Proposals
+
+New flow:
+
+CV
+↓
+Parsing
+↓
+skills[]
+↓
+Skill Normalization
+↓
+normalized_skills[]
+↓
+Classification
+↓
+Enrichment Proposals
+
+---
+
+## Goals
+
+The normalization layer must:
+
+- Split compound skills
+- Remove formatting artifacts
+- Remove wrapping characters
+- Remove invalid separators
+- Standardize whitespace
+- Improve catalog matching
+- Improve classification quality
+
+The normalization layer must not:
+
+- Change skill meaning
+- Translate skills
+- Remove valid skills
+- Reclassify skills
+
+Classification remains the responsibility of DEC-059.
+
+---
+
+## Normalization Rules
+
+### Rule 1 - Separator Splitting
+
+The system must split skills using common separators.
+
+Supported separators:
+
+- &
+- /
+- ,
+- ;
+- |
+- and
+
+Example:
+
+Input:
+
+API REST & GraphQL
+
+Output:
+
+- API REST
+- GraphQL
+
+Example:
+
+JIRA & Confluence
+
+Output:
+
+- JIRA
+- Confluence
+
+---
+
+### Rule 2 - Parenthesis Expansion
+
+Skills contained in parenthesis must be extracted independently.
+
+Example:
+
+Power Platform (PowerApps, Power Automate)
+
+Output:
+
+- Power Platform
+- PowerApps
+- Power Automate
+
+Example:
+
+Excel (Pivot Tables, VBA, PowerQuery)
+
+Output:
+
+- Excel
+- Pivot Tables
+- VBA
+- PowerQuery
+
+---
+
+### Rule 3 - Trim Invalid Characters
+
+The system must remove leading and trailing artefacts.
+
+Examples:
+
+Input:
+
+Power Automate)
+
+Output:
+
+Power Automate
+
+Input:
+
+& Confluence
+
+Output:
+
+Confluence
+
+Input:
+
+(React
+
+Output:
+
+React
+
+---
+
+### Rule 4 - Whitespace Normalization
+
+Multiple spaces become a single space.
+
+Examples:
+
+Input:
+
+API REST
+
+Output:
+
+API REST
+
+Input:
+
+Power BI
+
+Output:
+
+Power BI
+
+---
+
+### Rule 5 - Duplicate Removal
+
+Duplicates must be removed after normalization.
+
+Example:
+
+Input:
+
+- React
+- React
+- React
+
+Output:
+
+- React
+
+---
+
+### Rule 6 - Empty Entry Removal
+
+Empty fragments are discarded.
+
+Example:
+
+Input:
+
+JIRA &
+
+Output:
+
+- JIRA
+
+---
+
+## Normalization Examples
+
+Example 1
+
+Input:
+
+API REST & GraphQL
+
+Output:
+
+- API REST
+- GraphQL
+
+---
+
+Example 2
+
+Input:
+
+Power Platform (PowerApps, Power Automate)
+
+Output:
+
+- Power Platform
+- PowerApps
+- Power Automate
+
+---
+
+Example 3
+
+Input:
+
+Excel (Pivot Tables, VBA, PowerQuery)
+
+Output:
+
+- Excel
+- Pivot Tables
+- VBA
+- PowerQuery
+
+---
+
+Example 4
+
+Input:
+
+JIRA & Confluence
+
+Output:
+
+- JIRA
+- Confluence
+
+---
+
+Example 5
+
+Input:
+
+Software Testing (UAT, Sanity, Regression)
+
+Output:
+
+- Software Testing
+- UAT
+- Sanity
+- Regression
+
+---
+
+## Classification Interaction
+
+DEC-061 executes before DEC-059.
+
+Example:
+
+Input:
+
+API REST & GraphQL
+
+Normalization:
+
+- API REST
+- GraphQL
+
+Classification:
+
+API REST
+→ HARD_SKILL
+
+GraphQL
+→ HARD_SKILL
+
+instead of:
+
+API REST & GraphQL
+→ single proposal
+
+---
+
+Example:
+
+Input:
+
+JIRA & Confluence
+
+Normalization:
+
+- JIRA
+- Confluence
+
+Classification:
+
+JIRA
+→ HARD_SKILL
+
+Confluence
+→ HARD_SKILL
+
+---
+
+## Catalog Matching Benefits
+
+Without normalization:
+
+API REST & GraphQL
+
+Catalog Match:
+
+❌ Not Found
+
+Result:
+
+Single proposal
+
+---
+
+With normalization:
+
+API REST
+GraphQL
+
+Catalog Match:
+
+✅ API REST
+✅ GraphQL
+
+Result:
+
+Two independent proposals
+
+---
+
+## User Experience Impact
+
+Step 2 - Analysis
+
+Users see a more accurate count of skills.
+
+---
+
+Step 3 - Review & Edit
+
+Users review:
+
+API REST
+GraphQL
+
+instead of:
+
+API REST & GraphQL
+
+This reduces manual corrections and increases catalog mapping success.
+
+---
+
+## Data Quality Benefits
+
+Benefits:
+
+- Better catalog coverage
+- Better hard skill recognition
+- More precise matching
+- Cleaner profiles
+- Better analytics
+- Better AI recommendations
+- Reduced user corrections
+
+---
+
+## Out Of Scope
+
+DEC-061 does not introduce:
+
+- AI-based normalization
+- Synonym detection
+- Skill taxonomy mapping
+- Skill hierarchy management
+- Skill translation
+
+Examples:
+
+JavaScript → JS
+
+ReactJS → React
+
+NodeJS → Node.js
+
+are not handled by DEC-061.
+
+Those concerns belong to future normalization improvements.
+
+---
+
+## Related Decisions
+
+DEC-058
+Hard Skills and Soft Skills are stored separately.
+
+DEC-059
+Automatic Hard Skill / Soft Skill classification.
+
+DEC-060
+User can override detected classification.
+
+DEC-061
+Normalize and split compound skills before classification.
+
+Execution order:
+
+DEC-061
+↓
+DEC-059
+↓
+DEC-060

@@ -6,9 +6,15 @@ type Props = {
   editedExperienceValues: Record<number, string>;
   skillsCatalog: Skill[];
   skillMappings: Record<number, number>;
+  skillClassifications: Record<number, "HARD_SKILL" | "SOFT_SKILL">;
+
   onToggleProposal: (proposalId: number) => void;
   onExperienceValueChange: (proposalId: number, value: string) => void;
   onSkillMappingChange: (proposalId: number, skillId: number | null) => void;
+  onSkillClassificationChange: (
+    proposalId: number,
+    classification: "HARD_SKILL" | "SOFT_SKILL",
+  ) => void;
 };
 
 function filterProposalsByType(
@@ -38,7 +44,12 @@ function renderSimpleProposalList(
   selectedProposalIds: number[],
   skillsCatalog: Skill[],
   skillMappings: Record<number, number>,
+  skillClassifications: Record<number, "HARD_SKILL" | "SOFT_SKILL">,
   onToggle: (proposalId: number) => void,
+  onSkillClassificationChange: (
+    proposalId: number,
+    classification: "HARD_SKILL" | "SOFT_SKILL",
+  ) => void,
   onSkillMappingChange: (proposalId: number, skillId: number | null) => void,
 ) {
   if (proposals.length === 0) {
@@ -70,6 +81,35 @@ function renderSimpleProposalList(
                   <p className="font-medium text-white">
                     {getProposedValue(proposal)}
                   </p>
+
+                  {(proposal.proposal_type === "HARD_SKILL" ||
+                    proposal.proposal_type === "SOFT_SKILL" ||
+                    proposal.proposal_type === "SKILL") && (
+                    <div className="mt-3">
+                      <label className="block text-xs text-slate-400">
+                        Classification detected
+                      </label>
+
+                      <select
+                        value={
+                          skillClassifications[proposal.id] ??
+                          (proposal.proposal_type === "SOFT_SKILL"
+                            ? "SOFT_SKILL"
+                            : "HARD_SKILL")
+                        }
+                        onChange={(event) =>
+                          onSkillClassificationChange(
+                            proposal.id,
+                            event.target.value as "HARD_SKILL" | "SOFT_SKILL",
+                          )
+                        }
+                        className="mt-1 rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-200">
+                        <option value="HARD_SKILL">Hard Skill</option>
+
+                        <option value="SOFT_SKILL">Soft Skill</option>
+                      </select>
+                    </div>
+                  )}
 
                   {proposal.proposal_type === "SKILL" &&
                     proposal.reference_id === null && (
@@ -212,11 +252,21 @@ export function UploadCvWizardStep3({
   editedExperienceValues,
   skillsCatalog,
   skillMappings,
+  skillClassifications,
   onToggleProposal,
   onExperienceValueChange,
   onSkillMappingChange,
+  onSkillClassificationChange,
 }: Props) {
-  const skillProposals = filterProposalsByType(proposals, "SKILL");
+  const hardSkillProposals = proposals.filter(
+    (proposal) =>
+      proposal.proposal_type === "HARD_SKILL" ||
+      proposal.proposal_type === "SKILL",
+  );
+
+  const softSkillProposals = proposals.filter(
+    (proposal) => proposal.proposal_type === "SOFT_SKILL",
+  );
 
   const experienceProposals = filterProposalsByType(proposals, "EXPERIENCE");
 
@@ -259,16 +309,35 @@ export function UploadCvWizardStep3({
       <div className="mt-8 space-y-8">
         <section>
           <h4 className="mb-3 text-lg font-semibold text-white">
-            Skills ({skillProposals.length})
+            Hard Skills ({hardSkillProposals.length})
           </h4>
 
           {renderSimpleProposalList(
-            skillProposals,
-            "Skills",
+            hardSkillProposals,
+            "Hard Skills",
             selectedProposalIds,
             skillsCatalog,
             skillMappings,
+            skillClassifications,
             onToggleProposal,
+            onSkillClassificationChange,
+            onSkillMappingChange,
+          )}
+        </section>
+        <section>
+          <h4 className="mb-3 text-lg font-semibold text-white">
+            Soft Skills ({softSkillProposals.length})
+          </h4>
+
+          {renderSimpleProposalList(
+            softSkillProposals,
+            "Soft Skills",
+            selectedProposalIds,
+            skillsCatalog,
+            skillMappings,
+            skillClassifications,
+            onToggleProposal,
+            onSkillClassificationChange,
             onSkillMappingChange,
           )}
         </section>
@@ -298,7 +367,9 @@ export function UploadCvWizardStep3({
             selectedProposalIds,
             skillsCatalog,
             skillMappings,
+            skillClassifications,
             onToggleProposal,
+            onSkillClassificationChange,
             onSkillMappingChange,
           )}
         </section>
@@ -314,7 +385,9 @@ export function UploadCvWizardStep3({
             selectedProposalIds,
             skillsCatalog,
             skillMappings,
+            skillClassifications,
             onToggleProposal,
+            onSkillClassificationChange,
             onSkillMappingChange,
           )}
         </section>

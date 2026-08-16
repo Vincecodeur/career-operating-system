@@ -84,6 +84,10 @@ export function UploadCvModal({
     {},
   );
 
+  const [skillClassifications, setSkillClassifications] = useState<
+    Record<number, "HARD_SKILL" | "SOFT_SKILL">
+  >({});
+
   const [editedExperienceValues, setEditedExperienceValues] = useState<
     Record<number, string>
   >({});
@@ -116,6 +120,7 @@ export function UploadCvModal({
     setSelectedProposalIds([]);
     setSkillsCatalog([]);
     setSkillMappings({});
+    setSkillClassifications({});
     setEditedExperienceValues({});
     setIsAnalyzing(false);
     setIsApplying(false);
@@ -162,11 +167,29 @@ export function UploadCvModal({
       setEnrichmentProposals(proposals);
       setSkillsCatalog(skills);
 
+      setSkillClassifications(
+        Object.fromEntries(
+          proposals
+            .filter(
+              (proposal) =>
+                proposal.proposal_type === "HARD_SKILL" ||
+                proposal.proposal_type === "SOFT_SKILL" ||
+                proposal.proposal_type === "SKILL",
+            )
+            .map((proposal) => [
+              proposal.id,
+              proposal.proposal_type === "SOFT_SKILL"
+                ? "SOFT_SKILL"
+                : "HARD_SKILL",
+            ]),
+        ),
+      );
+
       setSelectedProposalIds(
         proposals
           .filter((proposal) => {
             if (
-              proposal.proposal_type === "SKILL" &&
+              proposal.proposal_type === "HARD_SKILL" &&
               proposal.reference_id === null
             ) {
               return false;
@@ -186,7 +209,14 @@ export function UploadCvModal({
     }
   }
 
-  const skillsFound = countProposalsByType(enrichmentProposals, "SKILL");
+  const hardSkillsFound =
+    countProposalsByType(enrichmentProposals, "HARD_SKILL") +
+    countProposalsByType(enrichmentProposals, "SKILL");
+
+  const softSkillsFound = countProposalsByType(
+    enrichmentProposals,
+    "SOFT_SKILL",
+  );
 
   const experiencesFound = countProposalsByType(
     enrichmentProposals,
@@ -213,7 +243,7 @@ export function UploadCvModal({
       }
 
       if (
-        proposal?.proposal_type === "SKILL" &&
+        proposal?.proposal_type === "HARD_SKILL" &&
         proposal.reference_id === null &&
         !skillMappings[proposalId]
       ) {
@@ -242,6 +272,16 @@ export function UploadCvModal({
         mode,
         customValue: customValue ?? current[proposalId]?.customValue ?? "",
       },
+    }));
+  }
+
+  function updateSkillClassification(
+    proposalId: number,
+    classification: "HARD_SKILL" | "SOFT_SKILL",
+  ) {
+    setSkillClassifications((current) => ({
+      ...current,
+      [proposalId]: classification,
     }));
   }
 
@@ -316,7 +356,10 @@ export function UploadCvModal({
   }
 
   function getSkillReferenceId(proposal: ProfileEnrichmentProposal) {
-    if (proposal.proposal_type !== "SKILL") {
+    if (
+      proposal.proposal_type !== "SKILL" &&
+      proposal.proposal_type !== "HARD_SKILL"
+    ) {
       return undefined;
     }
 
@@ -402,7 +445,8 @@ export function UploadCvModal({
 
             {step === "analysis" && (
               <UploadCvWizardStep2
-                skillsFound={skillsFound}
+                hardSkillsFound={hardSkillsFound}
+                softSkillsFound={softSkillsFound}
                 experiencesFound={experiencesFound}
                 languagesFound={languagesFound}
                 certificationsFound={certificationsFound}
@@ -417,9 +461,11 @@ export function UploadCvModal({
                 editedExperienceValues={editedExperienceValues}
                 skillsCatalog={skillsCatalog}
                 skillMappings={skillMappings}
+                skillClassifications={skillClassifications}
                 onToggleProposal={toggleProposal}
                 onExperienceValueChange={updateExperienceValue}
                 onSkillMappingChange={updateSkillMapping}
+                onSkillClassificationChange={updateSkillClassification}
               />
             )}
             {step === "summary" && (
