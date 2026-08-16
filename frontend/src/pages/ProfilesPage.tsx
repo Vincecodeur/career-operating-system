@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 import { AddProfileSkillModal } from "../components/AddProfileSkillModal";
 import type { AddProfileSkillFormValues } from "../components/AddProfileSkillModal";
+import { AddProfileSoftSkillModal } from "../components/AddProfileSoftSkillModal";
+import type { AddProfileSoftSkillFormValues } from "../components/AddProfileSoftSkillModal";
+import { DeleteProfileSoftSkillDialog } from "../components/DeleteProfileSoftSkillDialog";
 import { AddWorkExperienceModal } from "../components/AddWorkExperienceModal";
 import type { AddWorkExperienceFormValues } from "../components/AddWorkExperienceModal";
 import { CreateProfileModal } from "../components/CreateProfileModal";
@@ -32,7 +35,7 @@ import { UploadCvModal } from "../components/UploadCvModal";
 import type { UploadCvFormValues } from "../components/UploadCvModal";
 import { DeleteCvDialog } from "../components/DeleteCvDialog";
 
-import type { Cv } from "../services/api";
+import type { Cv, ProfileSoftSkill } from "../services/api";
 
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
@@ -40,13 +43,16 @@ import { PageHeader } from "../components/ui/PageHeader";
 import {
   createProfile,
   createProfileSkill,
+  createProfileSoftSkill,
   deleteProfile,
   deleteProfileSkill,
+  deleteProfileSoftSkill,
   getCertifications,
   getLanguages,
   getProfileCertifications,
   getProfileLanguages,
   getProfileSkills,
+  getProfileSoftSkills,
   getProfileWorkExperiences,
   getProfiles,
   getSkills,
@@ -152,6 +158,9 @@ export function ProfilesPage() {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   const [profileSkills, setProfileSkills] = useState<ProfileSkill[]>([]);
+  const [profileSoftSkills, setProfileSoftSkills] = useState<
+    ProfileSoftSkill[]
+  >([]);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([]);
   const [profileLanguages, setProfileLanguages] = useState<ProfileLanguage[]>(
@@ -179,6 +188,15 @@ export function ProfilesPage() {
     useState(false);
   const [isDeleteProfileSkillDialogOpen, setIsDeleteProfileSkillDialogOpen] =
     useState(false);
+
+  const [isAddProfileSoftSkillModalOpen, setIsAddProfileSoftSkillModalOpen] =
+    useState(false);
+
+  const [
+    isDeleteProfileSoftSkillDialogOpen,
+    setIsDeleteProfileSoftSkillDialogOpen,
+  ] = useState(false);
+
   const [isAddWorkExperienceModalOpen, setIsAddWorkExperienceModalOpen] =
     useState(false);
 
@@ -191,6 +209,9 @@ export function ProfilesPage() {
   ] = useState(false);
   const [selectedProfileSkill, setSelectedProfileSkill] =
     useState<ProfileSkill | null>(null);
+  const [selectedProfileSoftSkill, setSelectedProfileSoftSkill] =
+    useState<ProfileSoftSkill | null>(null);
+
   const [selectedWorkExperience, setSelectedWorkExperience] =
     useState<WorkExperience | null>(null);
   const [isCreatingProfile, setIsCreatingProfile] = useState(false);
@@ -198,6 +219,11 @@ export function ProfilesPage() {
   const [isDeletingProfile, setIsDeletingProfile] = useState(false);
 
   const [isSavingProfileSkill, setIsSavingProfileSkill] = useState(false);
+  const [isSavingProfileSoftSkill, setIsSavingProfileSoftSkill] =
+    useState(false);
+
+  const [isDeletingProfileSoftSkill, setIsDeletingProfileSoftSkill] =
+    useState(false);
   const [isDeletingProfileSkill, setIsDeletingProfileSkill] = useState(false);
   const [isSavingWorkExperience, setIsSavingWorkExperience] = useState(false);
 
@@ -210,6 +236,9 @@ export function ProfilesPage() {
   const [profileSkillMutationError, setProfileSkillMutationError] = useState<
     string | null
   >(null);
+
+  const [profileSoftSkillMutationError, setProfileSoftSkillMutationError] =
+    useState<string | null>(null);
 
   const [workExperienceMutationError, setWorkExperienceMutationError] =
     useState<string | null>(null);
@@ -303,6 +332,7 @@ export function ProfilesPage() {
   async function reloadSelectedProfileDetails(profileId: number) {
     const [
       profileSkillsData,
+      profileSoftSkillsData,
       skillsData,
       workExperiencesData,
       profileLanguagesData,
@@ -314,6 +344,7 @@ export function ProfilesPage() {
       countriesData,
     ] = await Promise.all([
       getProfileSkills(profileId),
+      getProfileSoftSkills(profileId),
       getSkills(),
       getProfileWorkExperiences(profileId),
       getProfileLanguages(profileId),
@@ -326,6 +357,7 @@ export function ProfilesPage() {
     ]);
 
     setProfileSkills(profileSkillsData);
+    setProfileSoftSkills(profileSoftSkillsData);
     setSkills(skillsData);
     setWorkExperiences(workExperiencesData);
     setProfileLanguages(profileLanguagesData);
@@ -530,6 +562,54 @@ export function ProfilesPage() {
       setProfileSkillMutationError("Unable to remove skill.");
     } finally {
       setIsDeletingProfileSkill(false);
+    }
+  }
+
+  async function handleAddProfileSoftSkill(
+    values: AddProfileSoftSkillFormValues,
+  ) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setIsSavingProfileSoftSkill(true);
+    setProfileSoftSkillMutationError(null);
+
+    try {
+      await createProfileSoftSkill({
+        profile_id: selectedProfile.id,
+        name: values.name,
+      });
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setIsAddProfileSoftSkillModalOpen(false);
+    } catch {
+      setProfileSoftSkillMutationError("Unable to add soft skill.");
+    } finally {
+      setIsSavingProfileSoftSkill(false);
+    }
+  }
+
+  async function handleDeleteProfileSoftSkill() {
+    if (!selectedProfile || !selectedProfileSoftSkill) {
+      return;
+    }
+
+    setIsDeletingProfileSoftSkill(true);
+    setProfileSoftSkillMutationError(null);
+
+    try {
+      await deleteProfileSoftSkill(selectedProfileSoftSkill.id);
+
+      await reloadSelectedProfileDetails(selectedProfile.id);
+
+      setSelectedProfileSoftSkill(null);
+      setIsDeleteProfileSoftSkillDialogOpen(false);
+    } catch {
+      setProfileSoftSkillMutationError("Unable to remove soft skill.");
+    } finally {
+      setIsDeletingProfileSoftSkill(false);
     }
   }
 
@@ -895,11 +975,8 @@ export function ProfilesPage() {
           New Profile
         </button>
       </div>
-
       {loadingProfiles && <p className="text-slate-400">Loading profiles...</p>}
-
       {error && <p className="text-red-500">{error}</p>}
-
       {!loadingProfiles && !error && (
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="max-h-[calc(100vh-220px)] overflow-y-auto pr-2">
@@ -916,6 +993,7 @@ export function ProfilesPage() {
                 profile={selectedProfile}
                 profileSkills={profileSkills}
                 skills={skills}
+                profileSoftSkills={profileSoftSkills}
                 workExperiences={workExperiences}
                 profileLanguages={profileLanguages}
                 languages={languages}
@@ -943,6 +1021,15 @@ export function ProfilesPage() {
                   setSelectedProfileSkill(profileSkill);
                   setProfileSkillMutationError(null);
                   setIsDeleteProfileSkillDialogOpen(true);
+                }}
+                onAddProfileSoftSkill={() => {
+                  setProfileSoftSkillMutationError(null);
+                  setIsAddProfileSoftSkillModalOpen(true);
+                }}
+                onDeleteProfileSoftSkill={(softSkill) => {
+                  setSelectedProfileSoftSkill(softSkill);
+                  setProfileSoftSkillMutationError(null);
+                  setIsDeleteProfileSoftSkillDialogOpen(true);
                 }}
                 onAddWorkExperience={() => {
                   setWorkExperienceMutationError(null);
@@ -1006,7 +1093,6 @@ export function ProfilesPage() {
           </div>
         </div>
       )}
-
       <CreateProfileModal
         isOpen={isCreateModalOpen}
         isSaving={isCreatingProfile}
@@ -1016,7 +1102,6 @@ export function ProfilesPage() {
         workModes={workModes}
         countries={countries}
       />
-
       <EditProfileModal
         profile={selectedProfile}
         isOpen={isEditModalOpen}
@@ -1027,7 +1112,6 @@ export function ProfilesPage() {
         workModes={workModes}
         countries={countries}
       />
-
       <DeleteProfileDialog
         profile={selectedProfile}
         isOpen={isDeleteDialogOpen}
@@ -1036,7 +1120,6 @@ export function ProfilesPage() {
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleArchiveProfile}
       />
-
       <AddProfileSkillModal
         skills={skills}
         profileSkills={profileSkills}
@@ -1049,7 +1132,6 @@ export function ProfilesPage() {
         }}
         onAdd={handleAddProfileSkill}
       />
-
       <EditProfileSkillModal
         profileSkill={selectedProfileSkill}
         skill={selectedSkill}
@@ -1063,7 +1145,6 @@ export function ProfilesPage() {
         }}
         onSave={handleUpdateProfileSkill}
       />
-
       <DeleteProfileSkillDialog
         profileSkill={selectedProfileSkill}
         skill={selectedSkill}
@@ -1077,6 +1158,28 @@ export function ProfilesPage() {
         }}
         onConfirm={handleDeleteProfileSkill}
       />
+      <AddProfileSoftSkillModal
+        isOpen={isAddProfileSoftSkillModalOpen}
+        isSaving={isSavingProfileSoftSkill}
+        error={profileSoftSkillMutationError}
+        onClose={() => {
+          setProfileSoftSkillMutationError(null);
+          setIsAddProfileSoftSkillModalOpen(false);
+        }}
+        onAdd={handleAddProfileSoftSkill}
+      />
+      <DeleteProfileSoftSkillDialog
+        softSkill={selectedProfileSoftSkill}
+        isOpen={isDeleteProfileSoftSkillDialogOpen}
+        isDeleting={isDeletingProfileSoftSkill}
+        error={profileSoftSkillMutationError}
+        onClose={() => {
+          setSelectedProfileSoftSkill(null);
+          setProfileSoftSkillMutationError(null);
+          setIsDeleteProfileSoftSkillDialogOpen(false);
+        }}
+        onConfirm={handleDeleteProfileSoftSkill}
+      />
       <AddWorkExperienceModal
         isOpen={isAddWorkExperienceModalOpen}
         isSaving={isSavingWorkExperience}
@@ -1087,7 +1190,6 @@ export function ProfilesPage() {
         }}
         onAdd={handleAddWorkExperience}
       />
-
       <EditWorkExperienceModal
         workExperience={selectedWorkExperience}
         isOpen={isEditWorkExperienceModalOpen}
@@ -1100,7 +1202,6 @@ export function ProfilesPage() {
         }}
         onSave={handleUpdateWorkExperience}
       />
-
       <DeleteWorkExperienceDialog
         workExperience={selectedWorkExperience}
         isOpen={isDeleteWorkExperienceDialogOpen}
@@ -1125,7 +1226,6 @@ export function ProfilesPage() {
         }}
         onAdd={handleAddProfileLanguage}
       />
-
       <EditProfileLanguageModal
         profileLanguage={selectedProfileLanguage}
         language={selectedLanguage}
@@ -1139,7 +1239,6 @@ export function ProfilesPage() {
         }}
         onSave={handleUpdateProfileLanguage}
       />
-
       <DeleteProfileLanguageDialog
         profileLanguage={selectedProfileLanguage}
         language={selectedLanguage}
@@ -1153,7 +1252,6 @@ export function ProfilesPage() {
         }}
         onConfirm={handleDeleteProfileLanguage}
       />
-
       <AddProfileCertificationModal
         certifications={certifications}
         profileCertifications={profileCertifications}
@@ -1166,7 +1264,6 @@ export function ProfilesPage() {
         }}
         onAdd={handleAddProfileCertification}
       />
-
       <EditProfileCertificationModal
         profileCertification={selectedProfileCertification}
         certification={selectedCertification}
@@ -1180,7 +1277,6 @@ export function ProfilesPage() {
         }}
         onSave={handleUpdateProfileCertification}
       />
-
       <DeleteProfileCertificationDialog
         profileCertification={selectedProfileCertification}
         certification={selectedCertification}

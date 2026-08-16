@@ -24,10 +24,21 @@ type ProfileSkillUpdatePayload = {
     self_assessment_level: string;
 };
 
+type ProfileSoftSkillPayload = {
+    profile_id: number;
+    name: string;
+};
+
 export type Skill = {
     id: number;
     name: string;
     category: string;
+    created_at: string;
+};
+export type ProfileSoftSkill = {
+    id: number;
+    profile_id: number;
+    name: string;
     created_at: string;
 };
 
@@ -332,6 +343,65 @@ export async function deleteProfileSkill(
 
     return response.json();
 }
+
+export async function getProfileSoftSkills(
+    profileId: number,
+): Promise<ProfileSoftSkill[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/soft-skills`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile soft skills."
+        );
+    }
+
+    return response.json();
+}
+
+export async function createProfileSoftSkill(
+    payload: ProfileSoftSkillPayload,
+): Promise<ProfileSoftSkill> {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-soft-skills`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to add profile soft skill."
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteProfileSoftSkill(
+    softSkillId: number,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/profile-soft-skills/${softSkillId}`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to remove profile soft skill."
+        );
+    }
+
+    return response.json();
+}
+
 
 export async function getSkills() {
     const response = await fetch(

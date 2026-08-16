@@ -1,5 +1,5 @@
 import { Card } from "./ui/Card";
-import type { Cv } from "../services/api";
+import type { Cv, ProfileSoftSkill } from "../services/api";
 import { getCvDownloadUrl } from "../services/api";
 
 type Profile = {
@@ -78,6 +78,7 @@ type Props = {
   profile: Profile;
   profileSkills: ProfileSkill[];
   skills: Skill[];
+  profileSoftSkills: ProfileSoftSkill[];
   workExperiences: WorkExperience[];
   profileLanguages: ProfileLanguage[];
   languages: Language[];
@@ -92,6 +93,9 @@ type Props = {
   onAddProfileSkill: () => void;
   onEditProfileSkill: (profileSkill: ProfileSkill) => void;
   onDeleteProfileSkill: (profileSkill: ProfileSkill) => void;
+
+  onAddProfileSoftSkill: () => void;
+  onDeleteProfileSoftSkill: (softSkill: ProfileSoftSkill) => void;
 
   onAddWorkExperience: () => void;
   onEditWorkExperience: (workExperience: WorkExperience) => void;
@@ -136,6 +140,7 @@ function formatFileSize(fileSizeBytes: number) {
 export function ProfileDetail({
   profile,
   profileSkills,
+  profileSoftSkills,
   skills,
   workExperiences,
   profileLanguages,
@@ -149,6 +154,8 @@ export function ProfileDetail({
   onAddProfileSkill,
   onEditProfileSkill,
   onDeleteProfileSkill,
+  onAddProfileSoftSkill,
+  onDeleteProfileSoftSkill,
   onAddWorkExperience,
   onEditWorkExperience,
   onDeleteWorkExperience,
@@ -381,65 +388,120 @@ export function ProfileDetail({
         )}
       </div>
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold text-white">Skills</h3>
+        <h3 className="mb-6 text-lg font-semibold text-white">Skills</h3>
 
-          <button
-            type="button"
-            onClick={onAddProfileSkill}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">
-            Add Skill
-          </button>
-        </div>
+        <div className="mb-8">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h4 className="text-base font-semibold text-white">
+                Hard Skills
+              </h4>
 
-        {profileSkills.length === 0 ? (
-          <p className="text-slate-400">No skills available.</p>
-        ) : (
-          <div className="space-y-3">
-            {profileSkills.map((profileSkill) => {
-              const skill = skillById.get(profileSkill.skill_id);
+              <p className="mt-1 text-sm text-slate-400">
+                Technical skills used for matching and profile enrichment.
+              </p>
+            </div>
 
-              return (
-                <div
-                  key={profileSkill.skill_id}
-                  className="rounded-md border border-slate-800 bg-slate-900 p-4">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                    <div>
-                      <p className="font-semibold text-white">
-                        {skill?.name ?? `Skill ${profileSkill.skill_id}`}
-                      </p>
+            <button
+              type="button"
+              onClick={onAddProfileSkill}
+              className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+              Add Hard Skill
+            </button>
+          </div>
 
-                      <p className="mt-1 text-sm text-slate-400">
-                        {skill?.category ?? "No category"}
-                      </p>
+          {profileSkills.length === 0 ? (
+            <p className="text-slate-400">No hard skills available.</p>
+          ) : (
+            <div className="space-y-3">
+              {profileSkills.map((profileSkill) => {
+                const skill = skillById.get(profileSkill.skill_id);
 
-                      <p className="mt-2 text-sm text-slate-300">
-                        {profileSkill.years_of_experience ?? 0} years -{" "}
-                        {profileSkill.self_assessment_level ?? "No level"}
-                      </p>
-                    </div>
+                return (
+                  <div
+                    key={profileSkill.skill_id}
+                    className="rounded-md border border-slate-800 bg-slate-900 p-4">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <p className="font-semibold text-white">
+                          {skill?.name ?? `Skill ${profileSkill.skill_id}`}
+                        </p>
 
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => onEditProfileSkill(profileSkill)}
-                        className="rounded-md border border-slate-600 px-3 py-1 text-sm text-slate-300 hover:bg-slate-800">
-                        Edit
-                      </button>
+                        <p className="mt-1 text-sm text-slate-400">
+                          {skill?.category ?? "No category"}
+                        </p>
 
-                      <button
-                        type="button"
-                        onClick={() => onDeleteProfileSkill(profileSkill)}
-                        className="rounded-md border border-red-700 px-3 py-1 text-sm text-red-300 hover:bg-red-950">
-                        Remove
-                      </button>
+                        <p className="mt-2 text-sm text-slate-300">
+                          {profileSkill.years_of_experience ?? 0} years -{" "}
+                          {profileSkill.self_assessment_level ?? "No level"}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => onEditProfileSkill(profileSkill)}
+                          className="rounded-md border border-slate-600 px-3 py-1 text-sm text-slate-300 hover:bg-slate-800">
+                          Edit
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => onDeleteProfileSkill(profileSkill)}
+                          className="rounded-md border border-red-700 px-3 py-1 text-sm text-red-300 hover:bg-red-950">
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="border-t border-slate-800 pt-6">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h4 className="text-base font-semibold text-white">
+                Soft Skills
+              </h4>
+
+              <p className="mt-1 text-sm text-slate-400">
+                Manual behavioral skills. Not used for matching in the MVP.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onAddProfileSoftSkill}
+              className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500">
+              Add Soft Skill
+            </button>
           </div>
-        )}
+
+          {profileSoftSkills.length === 0 ? (
+            <p className="text-slate-400">No soft skills available.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {profileSoftSkills.map((softSkill) => (
+                <div
+                  key={softSkill.id}
+                  className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200">
+                  <span>{softSkill.name}</span>
+
+                  <button
+                    type="button"
+                    onClick={() => onDeleteProfileSoftSkill(softSkill)}
+                    className="text-red-300 hover:text-red-200"
+                    aria-label={`Remove ${softSkill.name}`}>
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
