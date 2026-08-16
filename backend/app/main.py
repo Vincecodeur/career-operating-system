@@ -27,6 +27,9 @@ from app.reference_data.router import (
 )
 from app.matching.router import router as matching_router
 from app.profile.profile_skill_router import router as profile_skill_router
+from app.profile.profile_soft_skill_router import (
+    router as profile_soft_skill_router,
+)
 
 from app.profile.router import router as profile_router
 from app.skills.router import router as skills_router
@@ -76,6 +79,7 @@ app.add_middleware(
 
 app.include_router(profile_router)
 app.include_router(skills_router)
+app.include_router(profile_soft_skill_router)
 app.include_router(profile_skill_router)
 app.include_router(experience_router)
 app.include_router(languages_router)

@@ -906,7 +906,7 @@ Le MVP peut charger l'ensemble du catalogue puis filtrer en mémoire.
 
 Aucune recherche serveur n'est introduite dans cette phase.
 
-### DEC-055
+## DEC-055
 
 Reference Data Catalog
 
@@ -935,7 +935,7 @@ Les champs fermés ou fortement normalisables doivent utiliser des listes contr�
 
 Aucune nouvelle valeur de référence ne doit être créée automatiquement sans validation explicite de l'utilisateur lorsque cette valeur impacte le matching, les filtres ou les préférences.
 
-### DEC-056
+## DEC-056
 
 Reference Data Implementation Before Application Workflow
 
@@ -957,7 +957,7 @@ Motivations :
 - améliorer l'enrichissement CV ;
 - préparer les futurs modules d'analyse.
 
-#### DEC-057
+## DEC-057
 
 Preferred Countries Frontend Multi-Select Option A
 
@@ -985,3 +985,168 @@ Une future Option B pourra remplacer ce stockage par une relation normalisée d�
 profile_preferred_countries
 
 Cette évolution est explicitement reportée à une phase ultérieure de normalisation du modèle.
+
+## DEC-058 - Soft Skills MVP
+
+### Contexte
+
+Le Career Operating System distingue désormais deux catégories de compétences :
+
+- Hard Skills
+- Soft Skills
+
+Les Hard Skills sont utilisées pour :
+
+- le matching
+- le scoring
+- l'analyse des écarts (gap analysis)
+- l'enrichissement de profil
+- le CV Enrichment
+
+Les Soft Skills ont une finalité différente :
+
+- représentation du profil professionnel
+- mise en valeur du candidat
+- futur enrichissement IA
+
+Elles ne sont pas utilisées dans les mécanismes métier du MVP.
+
+---
+
+### Décision
+
+Les Hard Skills et les Soft Skills sont séparées dans le modèle fonctionnel.
+
+#### Hard Skills
+
+Les Hard Skills restent intégrées au système existant :
+
+- catalogue gouverné
+- référentiel centralisé
+- gestion des compétences normalisées
+- matching
+- scoring
+- CV Enrichment
+
+Architecture conservée :
+
+Profile
+→ ProfileSkill
+→ Skill
+
+#### Soft Skills
+
+Les Soft Skills sont gérées séparément.
+
+Elles ne reposent sur aucun catalogue central dans le MVP.
+
+Chaque utilisateur peut ajouter manuellement ses propres Soft Skills.
+
+Exemples :
+
+- Leadership
+- Communication
+- Negotiation
+- Problem Solving
+- Stakeholder Management
+
+Les Soft Skills :
+
+- ne sont pas utilisées dans le matching
+- ne sont pas utilisées dans le scoring
+- ne sont pas extraites automatiquement des CV
+- ne sont pas pilotées par l'IA
+- ne sont pas gouvernées par un référentiel
+
+---
+
+### Modèle de données MVP
+
+Table :
+
+profile_soft_skills
+
+Structure :
+
+- id
+- profile_id
+- name
+- created_at
+
+Règles :
+
+- une Soft Skill appartient à un profil
+- le même libellé peut exister sur plusieurs profils
+- une même Soft Skill ne peut exister qu'une seule fois pour un profil donné
+
+Contrainte :
+
+UNIQUE(profile_id, name)
+
+---
+
+### Expérience utilisateur
+
+La section "Skills" du profil devient un conteneur.
+
+Elle est séparée en deux sections distinctes :
+
+Hard Skills
+
+- compétences techniques
+- catalogue gouverné
+- matching
+
+Soft Skills
+
+- compétences comportementales
+- ajout manuel
+- texte libre
+
+Exemple :
+
+Skills
+
+## Hard Skills
+
+Python
+FastAPI
+PostgreSQL
+React
+
+## Soft Skills
+
+Leadership
+Communication
+Negotiation
+
+---
+
+### Hors périmètre MVP
+
+Les éléments suivants sont explicitement reportés :
+
+- extraction IA des Soft Skills
+- normalisation des Soft Skills
+- catalogue de Soft Skills
+- gouvernance des Soft Skills
+- scoring basé sur les Soft Skills
+- matching basé sur les Soft Skills
+- suggestions automatiques de Soft Skills
+- analyse comportementale
+
+---
+
+### Conséquences
+
+Le système conserve :
+
+- un catalogue gouverné pour les Hard Skills
+- une gestion libre et simple des Soft Skills
+
+Cette approche permet :
+
+- de limiter la complexité du MVP
+- d'éviter la maintenance d'un référentiel de Soft Skills
+- de préparer de futures fonctionnalités IA sans refactoring majeur
+- de séparer clairement compétences techniques et compétences comportementales

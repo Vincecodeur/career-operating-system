@@ -46,6 +46,7 @@ from app.cv.models import CV
 from app.reference_data.models import Country
 from app.reference_data.models import WorkMode
 from app.reference_data.models import ContractType
+from app.profile.profile_soft_skill_models import ProfileSoftSkill
 
 
 def create_tables():
