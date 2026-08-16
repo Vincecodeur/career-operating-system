@@ -544,11 +544,52 @@ Sous-phases :
 ✅ 7.1.16.19.7 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow
-⬜ 7.1.17.1 Application Status Model
-⬜ 7.1.17.2 Application Status Visualization
-⬜ 7.1.17.3 Application Status Update
-⬜ 7.1.17.4 Application Notes
-⬜ 7.1.17.5 Application Timeline
+
+Objectif :
+Transformer le tracker de candidatures existant en véritable
+workflow métier de pilotage des candidatures.
+
+Le système doit permettre :
+
+- créer une candidature ;
+- lier une candidature à une opportunité ;
+- associer une candidature à un profil ;
+- suivre son cycle de vie ;
+- conserver les notes ;
+- conserver l'historique ;
+- conserver les dates clés ;
+- conserver la source ;
+- mesurer les résultats ;
+- préparer le support multi-profils.
+
+Sous-phases :
+
+⬜ 7.1.17.1 Repository Audit
+
+⬜ 7.1.17.2 Product Design
+⬜ 7.1.17.2.1 Application Lifecycle
+⬜ 7.1.17.2.2 Status Definitions
+⬜ 7.1.17.2.3 Notes Strategy
+⬜ 7.1.17.2.4 Timeline Strategy
+⬜ 7.1.17.2.5 Source Tracking Strategy
+⬜ DEC-063 Application Workflow Lifecycle
+
+⬜ 7.1.17.3 Backend Design
+⬜ 7.1.17.3.1 Data Model
+⬜ 7.1.17.3.2 API Design
+⬜ 7.1.17.3.3 Status Transition Rules
+⬜ 7.1.17.3.4 Metrics Design
+⬜ 7.1.17.4 Backend Implementation
+⬜ 7.1.17.5 Backend Tests
+⬜ 7.1.17.6 Backend Validation
+⬜ 7.1.17.7 Frontend Design
+⬜ 7.1.17.8 Frontend Implementation
+⬜ 7.1.17.9 Frontend Validation
+⬜ 7.1.17.10 Opportunity → Application Conversion Design
+⬜ 7.1.17.11 Opportunity → Application Conversion Implementation
+⬜ 7.1.17.12 Application Metrics
+⬜ 7.1.17.13 End-to-End Validation
+⬜ 7.1.17.14 Documentation Synchronization
 
 ⬜ 7.1.18 Opportunities Search & Filters
 ⬜ 7.1.18.1 Keyword Search
@@ -608,9 +649,36 @@ Sous-phases :
 ⬜ 7.1.22.6 Frontend UX Design
 ⬜ 7.1.22.7 Profile Activation UI
 ⬜ 7.1.22.8 Multi Profile Matching
+
 ⬜ 7.1.22.9 Multi Profile Opportunities
-⬜ 7.1.22.10 End-to-End Validation
-⬜ 7.1.22.11 Documentation Synchronization
+
+⬜ 7.1.22.10 Application Profile Attribution
+
+Objectif :
+Une candidature conserve le profil utilisé
+lors de sa création.
+
+⬜ 7.1.22.11 Application Creation From Selected Profile
+
+Objectif :
+Une opportunité peut être pertinente pour plusieurs profils.
+Une candidature est créée pour un profil unique.
+
+Exemple :
+
+Opportunity
+↓
+Product Manager : 92 %
+Solution Architect : 58 %
+Technical Partnerships Manager : 41 %
+↓
+Create Application As Product Manager
+
+⬜ 7.1.22.12 Multi Profile Validation
+
+⬜ 7.1.22.13 End-to-End Validation
+
+⬜ 7.1.22.14 Documentation Synchronization
 
 ⬜ 7.1.23 MVP Experience Review
 

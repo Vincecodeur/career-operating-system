@@ -884,7 +884,7 @@ Dernière validation connue :
 
 Première sous-phase :
 
-7.1.17.1 Application Status Model
+7.1.17.1 Repository Audit
 
 ## Méthode de reprise
 
