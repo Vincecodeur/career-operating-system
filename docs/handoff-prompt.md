@@ -854,8 +854,6 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-#### Phase suivante recommandée
-
 7.1.17 Application Workflow
 
 Contexte :
@@ -884,7 +882,7 @@ Dernière validation connue :
 
 Première sous-phase :
 
-7.1.17.1 Repository Audit
+7.1.17.4.1 Application Model Evolution
 
 ## Méthode de reprise
 

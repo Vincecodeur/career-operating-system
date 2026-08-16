@@ -2837,29 +2837,21 @@ The following features are not included:
 
 ---
 
-## Future Evolution
+### Future Evolution
 
-### DEC-063 - Selective Bulk Processing
+#### Future Decision - Selective Bulk Processing
 
 Potential actions:
 
 - Accept All Hard Skills
-
 - Accept All Soft Skills
-
 - Accept All Languages
-
 - Accept All Certifications
-
 - Accept All Experiences
-
 - Reject All Hard Skills
-
 - Reject All Soft Skills
 
-Not included in DEC-062.
-
----
+## Not included in DEC-062.
 
 ## Related Decisions
 
@@ -2912,3 +2904,501 @@ DEC-062 Bulk Processing
 Profile Enriched
 
 ```
+
+## DEC-063 - Application Workflow Lifecycle
+
+Date: 2026-08-16
+
+Status: Accepted
+
+### Context
+
+The current Application domain is a simple application registry.
+
+The existing Application model stores:
+
+- profile_id
+
+- job_offer_id
+
+- status
+
+- created_at
+
+- updated_at
+
+The current API supports:
+
+- application creation
+
+- application listing
+
+- application detail retrieval
+
+The system does not yet support:
+
+- controlled lifecycle transitions
+
+- application notes
+
+- application timeline
+
+- source tracking
+
+- application metrics
+
+- structured workflow history
+
+The MVP now requires the Application domain to represent a real application workflow, not just a stored relationship between a profile and a job offer.
+
+---
+
+### Decision
+
+An Application represents a real job application.
+
+An Application must not represent:
+
+- an opportunity under consideration
+
+- a job offer saved for later
+
+- an offer not yet applied to
+
+Those cases belong to the Opportunity domain.
+
+Therefore, the Application lifecycle does not include:
+
+- Draft
+
+- Not Applied
+
+The legacy status `Not Applied` is removed from the target workflow.
+
+---
+
+### Application Lifecycle
+
+Supported statuses:
+
+- Applied
+
+- Phone Screen
+
+- Interview
+
+- Offer
+
+- Accepted
+
+- Rejected
+
+- Withdrawn
+
+---
+
+### Status Definitions
+
+#### Applied
+
+The user has applied to the job.
+
+This is the first valid status of an Application.
+
+#### Phone Screen
+
+The user has entered an initial recruiter screening step.
+
+This may represent:
+
+- recruiter call
+
+- HR screening
+
+- first qualification call
+
+#### Interview
+
+The user is engaged in the interview process.
+
+For the MVP, all interview types are grouped under this status.
+
+The MVP does not distinguish between:
+
+- HR interview
+
+- technical interview
+
+- manager interview
+
+- final interview
+
+#### Offer
+
+The user has received an offer.
+
+The process is not yet completed.
+
+#### Accepted
+
+The user has accepted the offer.
+
+This is a terminal status.
+
+#### Rejected
+
+The company has rejected the application.
+
+This is a terminal status.
+
+#### Withdrawn
+
+The user has voluntarily withdrawn the application.
+
+Examples:
+
+- another offer accepted
+
+- salary mismatch
+
+- location mismatch
+
+- role no longer relevant
+
+- personal decision
+
+This is a terminal status.
+
+---
+
+### Status Transition Rules
+
+Allowed transitions:
+
+```text
+
+Applied
+
+├── Phone Screen
+
+├── Rejected
+
+└── Withdrawn
+
+
+
+Phone Screen
+
+├── Interview
+
+├── Rejected
+
+└── Withdrawn
+
+
+
+Interview
+
+├── Offer
+
+├── Rejected
+
+└── Withdrawn
+
+
+
+Offer
+
+├── Accepted
+
+├── Rejected
+
+└── Withdrawn
+
+```
+
+Terminal statuses:
+
+- Accepted
+
+- Rejected
+
+- Withdrawn
+
+No transition is allowed after a terminal status.
+
+Examples of forbidden transitions:
+
+```text
+
+Accepted -> Interview
+
+Accepted -> Offer
+
+Rejected -> Interview
+
+Withdrawn -> Applied
+
+```
+
+---
+
+### Notes Strategy
+
+An Application contains a single free-form notes field.
+
+Field:
+
+```text
+
+notes
+
+```
+
+Type:
+
+```text
+
+TEXT
+
+```
+
+Purpose:
+
+- recruiter feedback
+
+- interview preparation
+
+- salary details
+
+- follow-up actions
+
+- personal observations
+
+- application context
+
+The MVP does not include note history.
+
+The MVP does not include a separate ApplicationNote table.
+
+---
+
+### Timeline Strategy
+
+The system introduces an ApplicationEvent entity.
+
+ApplicationEvent records structured workflow events.
+
+Supported event types:
+
+- APPLICATION_CREATED
+
+- STATUS_CHANGED
+
+The MVP does not include:
+
+- NOTE_ADDED
+
+- INTERVIEW_SCHEDULED
+
+- EMAIL_SENT
+
+- REMINDER_CREATED
+
+- CALENDAR_EVENT
+
+Notes remain free-form user content.
+
+Timeline remains structured workflow history.
+
+---
+
+### ApplicationEvent Model
+
+ApplicationEvent contains:
+
+- id
+
+- application_id
+
+- event_type
+
+- old_value
+
+- new_value
+
+- event_date
+
+- created_at
+
+`old_value` and `new_value` are used to make status changes explicit.
+
+Example:
+
+```text
+
+STATUS_CHANGED
+
+old_value = Applied
+
+new_value = Interview
+
+```
+
+This allows the timeline to display:
+
+```text
+
+Applied -> Interview
+
+```
+
+instead of a generic status change event.
+
+---
+
+### Source Tracking Strategy
+
+An Application contains a source type.
+
+Field:
+
+```text
+
+source_type
+
+```
+
+Allowed values:
+
+- OPPORTUNITY
+
+- MANUAL
+
+- REFERRAL
+
+- EXTERNAL
+
+If an Application is created from a JobOffer, the JobOffer remains the source of detailed opportunity information.
+
+The Application only stores the high-level source type.
+
+---
+
+### Metrics Compatibility
+
+The lifecycle supports future MVP metrics:
+
+- Total Applications
+
+- Active Applications
+
+- Applied
+
+- Phone Screens
+
+- Interviews
+
+- Offers
+
+- Accepted
+
+- Rejected
+
+- Withdrawn
+
+- Interview Rate
+
+- Offer Rate
+
+- Success Rate
+
+Metrics must be calculated from Application records.
+
+Metrics are not stored as persisted counters.
+
+---
+
+### Multi Profile Compatibility
+
+Applications remain linked to:
+
+```text
+
+profile_id
+
+```
+
+This supports future phase:
+
+```text
+
+7.1.22 Application Profile Attribution
+
+```
+
+The Application keeps the profile used when the application is created.
+
+No major refactoring should be required for the future multi-profile opportunity context.
+
+---
+
+### Out Of Scope
+
+DEC-063 does not include:
+
+- automatic profile recommendation
+
+- CV adaptation per profile
+
+- email synchronization
+
+- calendar synchronization
+
+- interview reminders
+
+- recruiter CRM
+
+- automatic follow-up reminders
+
+- AI application coaching
+
+- advanced source performance analytics
+
+These topics belong to future phases or the post-MVP backlog.
+
+---
+
+### Consequences
+
+The Application domain evolves from a simple registry to a workflow-oriented domain.
+
+The system keeps a clear boundary:
+
+```text
+
+Opportunity
+
+= job offer under consideration
+
+
+
+Application
+
+= real application submitted or actively tracked
+
+```
+
+This avoids mixing opportunity exploration with real application tracking.
+
+---
+
+### Related Decisions
+
+DEC-034 introduced the initial Application Tracker concept.
+
+DEC-036 positioned Opportunity Discovery as a core MVP capability.
+
+DEC-063 replaces the legacy Application statuses from DEC-034 with a clearer workflow lifecycle.
+
+DEC-063 prepares the future phase 7.1.22 Multi Profile Opportunity Context.

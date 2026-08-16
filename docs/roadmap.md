@@ -564,21 +564,21 @@ Le système doit permettre :
 
 Sous-phases :
 
-⬜ 7.1.17.1 Repository Audit
+✅ 7.1.17.1 Repository Audit
+✅ 7.1.17.2 Product Design
+✅ 7.1.17.2.1 Application Lifecycle
+✅ 7.1.17.2.2 Status Definitions
+✅ 7.1.17.2.3 Notes Strategy
+✅ 7.1.17.2.4 Timeline Strategy
+✅ 7.1.17.2.5 Source Tracking Strategy
+✅ DEC-063 Application Workflow Lifecycle
 
-⬜ 7.1.17.2 Product Design
-⬜ 7.1.17.2.1 Application Lifecycle
-⬜ 7.1.17.2.2 Status Definitions
-⬜ 7.1.17.2.3 Notes Strategy
-⬜ 7.1.17.2.4 Timeline Strategy
-⬜ 7.1.17.2.5 Source Tracking Strategy
-⬜ DEC-063 Application Workflow Lifecycle
+✅ 7.1.17.3 Backend Design
+✅ 7.1.17.3.1 Data Model
+✅ 7.1.17.3.2 API Design
+✅ 7.1.17.3.3 Status Transition Rules
+✅ 7.1.17.3.4 Metrics Design
 
-⬜ 7.1.17.3 Backend Design
-⬜ 7.1.17.3.1 Data Model
-⬜ 7.1.17.3.2 API Design
-⬜ 7.1.17.3.3 Status Transition Rules
-⬜ 7.1.17.3.4 Metrics Design
 ⬜ 7.1.17.4 Backend Implementation
 ⬜ 7.1.17.5 Backend Tests
 ⬜ 7.1.17.6 Backend Validation

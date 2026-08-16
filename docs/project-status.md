@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17 Application Workflow
+7.1.17.4 Backend Implementation
 
 ---
 
 Next Planned Milestone
-7.1.17.1 Repository Audit
+7.1.17.4.1 Application Model Evolution
 
 ---
 
@@ -1223,6 +1223,11 @@ Post-MVP Planning
 - 222 tests passants validés
 - commit 581500d poussé
 
+- Phase 7.1.17.1 Repository Audit terminée
+- Phase 7.1.17.2 Product Design terminée
+- Phase 7.1.17.3 Backend Design terminée
+- DEC-063 définie
+
 ---
 
 Phase In Progress
@@ -1246,14 +1251,15 @@ Implémenter le workflow de candidature complet et le suivi de l'avancement des 
 
 Last Decision
 
-DEC-062 Bulk Proposal Processing validée.
+DEC-063 Application Workflow Lifecycle validée.
 
-Décisions récemment implémentées :
+Décisions récemment validées :
 
 - DEC-059 Automatic Hard Skill / Soft Skill Classification
 - DEC-060 User Classification Override
 - DEC-061 Skill Normalization And Compound Skill Splitting
 - DEC-062 Bulk Proposal Processing
+- DEC-063 Application Workflow Lifecycle
 
 Validation réalisée :
 
@@ -1270,8 +1276,10 @@ Résultat :
 - repository synchronisé
 - working tree clean
 
----
+Décision structurante DEC-063 :
 
-Last Commit
-
-- 581500d - refactor: improve cv parser line normalization
+- une Application représente une candidature réelle
+- Draft est exclu du lifecycle MVP
+- Not Applied est retiré du domaine Application
+- les statuts retenus sont Applied, Phone Screen, Interview, Offer, Accepted, Rejected, Withdrawn
+- ApplicationEvent conserve old_value et new_value pour les changements de statut
