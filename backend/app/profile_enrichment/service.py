@@ -24,6 +24,8 @@ from app.profile_enrichment.enums import ProfileEnrichmentProposalStatus
 from app.profile_enrichment.enums import ProfileEnrichmentProposalType
 from app.profile_enrichment.models import ProfileEnrichmentProposal
 from app.skills.models import Skill
+from app.profile_enrichment.schemas import BulkProposalRequest
+from app.profile_enrichment.schemas import BulkProposalResponse
 
 
 DEFAULT_SKILL_LEVEL = "Intermediate"
@@ -717,13 +719,13 @@ def accept_skill_proposal(
         )
 
     if skill is None:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "Skill not found in catalog. "
-                "Create or map the skill before accepting the proposal."
-            ),
+        skill = Skill(
+            name=proposal.proposed_value.strip(),
+            category="Technical",
         )
+
+        db.add(skill)
+        db.flush()
 
     proposal.reference_id = skill.id
 
@@ -1006,3 +1008,63 @@ def reject_proposal(
     db.refresh(proposal)
 
     return proposal
+
+
+def accept_all_proposals(
+    profile_id: int,
+    cv_id: int,
+    db: Session,
+) -> int:
+    proposals = (
+        db.query(ProfileEnrichmentProposal)
+        .filter(
+            ProfileEnrichmentProposal.profile_id == profile_id,
+            ProfileEnrichmentProposal.cv_id == cv_id,
+            ProfileEnrichmentProposal.status
+            == ProfileEnrichmentProposalStatus.PENDING.value,
+        )
+        .all()
+    )
+
+    processed = 0
+
+    for proposal in proposals:
+        accept_proposal(
+            proposal_id=proposal.id,
+            proposed_value_override=None,
+            reference_id=None,
+            db=db,
+        )
+
+        processed += 1
+
+    return processed
+
+
+def reject_all_proposals(
+    profile_id: int,
+    cv_id: int,
+    db: Session,
+) -> int:
+    proposals = (
+        db.query(ProfileEnrichmentProposal)
+        .filter(
+            ProfileEnrichmentProposal.profile_id == profile_id,
+            ProfileEnrichmentProposal.cv_id == cv_id,
+            ProfileEnrichmentProposal.status
+            == ProfileEnrichmentProposalStatus.PENDING.value,
+        )
+        .all()
+    )
+
+    processed = 0
+
+    for proposal in proposals:
+        reject_proposal(
+            proposal_id=proposal.id,
+            db=db,
+        )
+
+        processed += 1
+
+    return processed

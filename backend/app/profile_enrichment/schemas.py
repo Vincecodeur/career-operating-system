@@ -7,6 +7,13 @@ class AcceptProposalRequest(BaseModel):
     proposed_value_override: str | None = None
     reference_id: int | None = None
     
+class BulkProposalRequest(BaseModel):
+    profile_id: int
+    cv_id: int
+
+
+class BulkProposalResponse(BaseModel):
+    processed: int
     
 class ProfileEnrichmentProposalResponse(BaseModel):
     id: int

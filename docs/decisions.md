@@ -2074,3 +2074,841 @@ DEC-061
 DEC-059
 ↓
 DEC-060
+
+# DEC-062 - Bulk Proposal Processing
+
+Date: 2026-08-16
+
+Status: Accepted
+
+## Context
+
+The CV Enrichment workflow currently requires users to process enrichment proposals individually.
+
+Since the implementation of:
+
+- DEC-059 - Automatic Hard Skill / Soft Skill Classification
+
+- DEC-060 - User Classification Override
+
+- DEC-061 - Skill Normalization And Compound Skill Splitting
+
+the quality and quantity of generated enrichment proposals have significantly improved.
+
+Real validation performed on production-like CVs generated:
+
+- 34 Hard Skills
+
+- 8 Soft Skills
+
+- 5 Experiences
+
+- 2 Languages
+
+Total:
+
+49 proposals
+
+The current workflow forces users to manually click Accept or Reject for every proposal.
+
+This process becomes inefficient and time-consuming when importing complete CVs.
+
+The platform requires bulk actions to reduce friction and accelerate profile enrichment.
+
+---
+
+## Problem Statement
+
+Current workflow:
+
+```text
+
+Upload CV
+
+    ↓
+
+Analysis
+
+    ↓
+
+Review Suggestions
+
+    ↓
+
+Accept proposal
+
+Accept proposal
+
+Accept proposal
+
+Accept proposal
+
+Accept proposal
+
+...
+
+```
+
+Issues:
+
+- Too many manual clicks
+
+- Poor scalability
+
+- Slower profile creation
+
+- Reduced user productivity
+
+- Increased validation fatigue
+
+---
+
+## Decision
+
+The platform shall support bulk processing of enrichment proposals.
+
+Users can:
+
+- Accept all pending proposals
+
+- Reject all pending proposals
+
+Existing individual validation actions remain available.
+
+Bulk processing is optional.
+
+---
+
+## Goals
+
+The feature must:
+
+- Reduce repetitive manual actions
+
+- Accelerate CV enrichment
+
+- Improve user experience
+
+- Support large CV imports
+
+- Preserve audit history
+
+- Reuse existing business rules
+
+- Minimize implementation complexity
+
+The feature must not:
+
+- Automatically approve proposals
+
+- Skip conflict visibility
+
+- Bypass validation logic
+
+- Remove manual control
+
+- Duplicate acceptance code
+
+---
+
+## Functional Scope
+
+Supported proposal types:
+
+- PROFILE_FIELD
+
+- HARD_SKILL
+
+- SOFT_SKILL
+
+- LANGUAGE
+
+- CERTIFICATION
+
+- EXPERIENCE
+
+Supported proposal status:
+
+- PENDING
+
+Already processed proposals are ignored.
+
+---
+
+## Backend Design
+
+### Endpoint: Accept All
+
+Method:
+
+```http
+
+POST
+
+```
+
+Route:
+
+```text
+
+/enrichment/accept-all
+
+```
+
+Request:
+
+```json
+{
+  "profile_id": 151,
+
+  "cv_id": 502
+}
+```
+
+Response:
+
+```json
+{
+  "accepted": 49
+}
+```
+
+### Endpoint: Reject All
+
+Method:
+
+```http
+
+POST
+
+```
+
+Route:
+
+```text
+
+/enrichment/reject-all
+
+```
+
+Request:
+
+```json
+{
+  "profile_id": 151,
+
+  "cv_id": 502
+}
+```
+
+Response:
+
+```json
+{
+  "rejected": 49
+}
+```
+
+---
+
+## Acceptance Processing Flow
+
+```text
+
+Load pending proposals
+
+    ↓
+
+For each proposal
+
+    ↓
+
+Reuse existing accept_proposal()
+
+    ↓
+
+Apply profile update
+
+    ↓
+
+Commit transaction
+
+```
+
+Examples:
+
+```text
+
+HARD_SKILL
+
+→ create ProfileSkill
+
+
+
+SOFT_SKILL
+
+→ create ProfileSoftSkill
+
+
+
+LANGUAGE
+
+→ create ProfileLanguage
+
+
+
+CERTIFICATION
+
+→ create ProfileCertification
+
+
+
+EXPERIENCE
+
+→ create WorkExperience
+
+
+
+PROFILE_FIELD
+
+→ update Profile field
+
+```
+
+---
+
+## Rejection Processing Flow
+
+```text
+
+Load pending proposals
+
+    ↓
+
+For each proposal
+
+    ↓
+
+Reuse existing reject_proposal()
+
+    ↓
+
+Update status
+
+    ↓
+
+Commit transaction
+
+```
+
+No profile update is applied.
+
+---
+
+## Transaction Rules
+
+Bulk processing must be transactional.
+
+Expected behaviour:
+
+```text
+
+All proposals processed
+
+or
+
+None processed
+
+```
+
+No partial acceptance.
+
+No partial rejection.
+
+---
+
+## Error Handling
+
+If any proposal fails:
+
+```text
+
+Rollback transaction
+
+Return error
+
+No modification applied
+
+```
+
+Response:
+
+```json
+{
+  "success": false,
+
+  "message": "Bulk processing failed",
+
+  "processed": 0
+}
+```
+
+---
+
+## Frontend Design
+
+### Step 3 - Review Suggestions
+
+Current UI:
+
+```text
+
+Proposal
+
+
+
+[Accept]
+
+[Reject]
+
+```
+
+New UI:
+
+```text
+
+[Accept All]
+
+[Reject All]
+
+
+
+---------------------------------
+
+
+
+Proposal 1
+
+
+
+[Accept]
+
+[Reject]
+
+
+
+Proposal 2
+
+
+
+[Accept]
+
+[Reject]
+
+
+
+Proposal 3
+
+
+
+[Accept]
+
+[Reject]
+
+
+
+...
+
+```
+
+Individual actions remain available.
+
+---
+
+## Confirmation Dialog
+
+### Accept All
+
+Title:
+
+```text
+
+Accept All Suggestions
+
+```
+
+Message:
+
+```text
+
+You are about to accept all pending enrichment suggestions.
+
+
+
+49 suggestions will be applied to the profile.
+
+
+
+Do you want to continue?
+
+```
+
+Buttons:
+
+```text
+
+[Cancel]
+
+[Accept All]
+
+```
+
+### Reject All
+
+Title:
+
+```text
+
+Reject All Suggestions
+
+```
+
+Message:
+
+```text
+
+You are about to reject all pending enrichment suggestions.
+
+
+
+49 suggestions will be rejected.
+
+
+
+Do you want to continue?
+
+```
+
+Buttons:
+
+```text
+
+[Cancel]
+
+[Reject All]
+
+```
+
+---
+
+## Summary Screen
+
+Successful acceptance:
+
+```text
+
+49 Suggestions Accepted
+
+
+
+34 Hard Skills
+
+8 Soft Skills
+
+5 Experiences
+
+2 Languages
+
+
+
+Profile successfully enriched.
+
+```
+
+Successful rejection:
+
+```text
+
+49 Suggestions Rejected
+
+
+
+No profile data has been updated.
+
+```
+
+---
+
+## Conflict Handling
+
+Existing conflict detection remains unchanged.
+
+Example:
+
+```text
+
+Current Value:
+
+Technical Partnerships Manager
+
+
+
+Proposed Value:
+
+Technical Partnership & Integration Manager
+
+```
+
+Conflict remains visible.
+
+Bulk acceptance does not bypass conflict detection.
+
+Users still see conflict information before launching bulk processing.
+
+---
+
+## Auditability
+
+Accepted proposals:
+
+```text
+
+Status = ACCEPTED
+
+
+
+ValidatedAt populated
+
+
+
+History preserved
+
+```
+
+Rejected proposals:
+
+```text
+
+Status = REJECTED
+
+
+
+ValidatedAt populated
+
+
+
+History preserved
+
+```
+
+No proposal is deleted.
+
+---
+
+## Security
+
+Bulk processing can only affect:
+
+- The selected profile
+
+- The selected CV
+
+Cross-profile processing is forbidden.
+
+Cross-CV processing is forbidden.
+
+---
+
+## Performance
+
+Expected volume:
+
+```text
+
+10 to 100 proposals
+
+```
+
+Observed real-world volume:
+
+```text
+
+49 proposals
+
+```
+
+Current expected workload is small enough to be processed in a single transaction.
+
+No batching optimization is required for MVP.
+
+---
+
+## UX Benefits
+
+Before:
+
+```text
+
+49 clicks required
+
+```
+
+After:
+
+```text
+
+1 click required
+
+```
+
+Benefits:
+
+- Faster onboarding
+
+- Faster CV imports
+
+- Better user satisfaction
+
+- Reduced review fatigue
+
+- Increased adoption
+
+---
+
+## Success Criteria
+
+Scenario:
+
+```text
+
+Upload CV
+
+    ↓
+
+Analysis
+
+    ↓
+
+Review Suggestions
+
+    ↓
+
+Accept All
+
+    ↓
+
+Profile Updated
+
+    ↓
+
+Summary
+
+```
+
+Expected Results:
+
+- All pending proposals accepted
+
+- No duplicate records
+
+- No validation error
+
+- No missing profile records
+
+- Existing individual actions still work
+
+- Proposal history preserved
+
+---
+
+## Out Of Scope
+
+The following features are not included:
+
+- Auto acceptance during upload
+
+- AI confidence scoring
+
+- Automatic validation thresholds
+
+- Scheduled acceptance
+
+- User-specific acceptance rules
+
+---
+
+## Future Evolution
+
+### DEC-063 - Selective Bulk Processing
+
+Potential actions:
+
+- Accept All Hard Skills
+
+- Accept All Soft Skills
+
+- Accept All Languages
+
+- Accept All Certifications
+
+- Accept All Experiences
+
+- Reject All Hard Skills
+
+- Reject All Soft Skills
+
+Not included in DEC-062.
+
+---
+
+## Related Decisions
+
+### DEC-058
+
+Hard Skills and Soft Skills stored separately.
+
+### DEC-059
+
+Automatic Hard Skill / Soft Skill Classification.
+
+### DEC-060
+
+User Classification Override.
+
+### DEC-061
+
+Skill Normalization And Compound Skill Splitting.
+
+### DEC-062
+
+Bulk Proposal Processing.
+
+---
+
+## Workflow
+
+```text
+
+CV Upload
+
+    ↓
+
+DEC-061 Skill Normalization
+
+    ↓
+
+DEC-059 Classification
+
+    ↓
+
+DEC-060 User Review & Override
+
+    ↓
+
+DEC-062 Bulk Processing
+
+    ↓
+
+Profile Enriched
+
+```

@@ -370,6 +370,14 @@ export function UploadCvModal({
     return skillMappings[proposal.id];
   }
 
+  function handleSelectAllProposals() {
+    setSelectedProposalIds(enrichmentProposals.map((proposal) => proposal.id));
+  }
+
+  function handleUnselectAllProposals() {
+    setSelectedProposalIds([]);
+  }
+
   async function handleApplyChanges() {
     setLocalError(null);
     setIsApplying(true);
@@ -496,12 +504,28 @@ export function UploadCvModal({
                 </button>
               )}
               {step === "review" && (
-                <button
-                  type="button"
-                  onClick={() => setStep("summary")}
-                  className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500">
-                  Continue to Summary
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={handleUnselectAllProposals}
+                    className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
+                    Unselect All
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSelectAllProposals}
+                    className="rounded-md bg-slate-700 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-600">
+                    Select All
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setStep("summary")}
+                    className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500">
+                    Continue to Summary
+                  </button>
+                </>
               )}
 
               {step === "summary" && (

@@ -1020,3 +1020,174 @@ def test_generate_hard_skill_proposal_for_unknown_non_soft_skill(
     assert hard_skill_proposals[0]["proposed_value"] == unknown_hard_skill_name
     assert hard_skill_proposals[0]["reference_id"] is None
     assert hard_skill_proposals[0]["target_field"] == "profile_skill"
+    
+    
+def test_accept_all_proposals(
+    monkeypatch,
+):
+    profile = create_test_profile()
+
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    skill = create_test_skill()
+
+    language = create_test_language()
+
+    certification = create_test_certification()
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=skill["name"],
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    generate_response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert generate_response.status_code == 200
+
+    response = client.post(
+        "/enrichment/accept-all",
+        json={
+            "profile_id": profile["id"],
+            "cv_id": cv["id"],
+        },
+    )
+
+    assert response.status_code == 200
+
+    result = response.json()
+
+    assert result["processed"] > 0
+    
+
+def test_reject_all_proposals(
+    monkeypatch,
+):
+    profile = create_test_profile()
+
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    skill = create_test_skill()
+
+    language = create_test_language()
+
+    certification = create_test_certification()
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=skill["name"],
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    generate_response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert generate_response.status_code == 200
+
+    response = client.post(
+        "/enrichment/reject-all",
+        json={
+            "profile_id": profile["id"],
+            "cv_id": cv["id"],
+        },
+    )
+
+    assert response.status_code == 200
+
+    result = response.json()
+
+    assert result["processed"] > 0
+    
+    
+def test_accept_unknown_hard_skill_creates_catalog_skill(
+    monkeypatch,
+):
+    profile = create_test_profile()
+
+    cv = create_test_cv(
+        profile_id=profile["id"],
+    )
+
+    language = create_test_language()
+
+    certification = create_test_certification()
+
+    unknown_hard_skill_name = "API REST"
+
+    parsed_data = build_parsed_cv_data(
+        skill_name=unknown_hard_skill_name,
+        language_name=language["name"],
+        certification_name=certification["name"],
+    )
+
+    mock_parse_cv_file(
+        monkeypatch,
+        parsed_data,
+    )
+
+    generate_response = client.post(
+        f"/cvs/{cv['id']}/enrichment/generate"
+    )
+
+    assert generate_response.status_code == 200
+
+    proposals = generate_response.json()
+
+    hard_skill_proposal = next(
+        proposal
+        for proposal in proposals
+        if proposal["proposal_type"] == "HARD_SKILL"
+    )
+
+    accept_response = client.post(
+        f"/enrichment/{hard_skill_proposal['id']}/accept"
+    )
+
+    assert accept_response.status_code == 200
+
+    skill_response = client.get(
+        "/skills"
+    )
+
+    assert skill_response.status_code == 200
+
+    created_skill = next(
+        (
+            skill
+            for skill in skill_response.json()
+            if skill["name"] == unknown_hard_skill_name
+        ),
+        None,
+    )
+
+    assert created_skill is not None
+
+    profile_skills_response = client.get(
+        f"/profiles/{profile['id']}/skills"
+    )
+
+    assert profile_skills_response.status_code == 200
+
+    profile_skills = profile_skills_response.json()
+
+    assert any(
+        profile_skill["skill_id"] == created_skill["id"]
+        for profile_skill in profile_skills
+    )

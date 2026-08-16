@@ -5,12 +5,16 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.profile_enrichment.schemas import (
     AcceptProposalRequest,
+    BulkProposalRequest,
+    BulkProposalResponse,
     ProfileEnrichmentProposalResponse,
 )
 from app.profile_enrichment.service import accept_proposal
 from app.profile_enrichment.service import generate_proposals_for_cv
 from app.profile_enrichment.service import list_proposals_for_profile
 from app.profile_enrichment.service import reject_proposal
+from app.profile_enrichment.service import accept_all_proposals
+from app.profile_enrichment.service import reject_all_proposals
 
 
 router = APIRouter(
@@ -87,3 +91,39 @@ def reject_profile_enrichment_proposal(
         proposal_id,
         db,
     )
+    
+@router.post(
+    "/enrichment/accept-all",
+    response_model=BulkProposalResponse,
+)
+def accept_all_profile_enrichment_proposals(
+    payload: BulkProposalRequest,
+    db: Session = Depends(get_db),
+):
+    processed = accept_all_proposals(
+        profile_id=payload.profile_id,
+        cv_id=payload.cv_id,
+        db=db,
+    )
+
+    return {
+        "processed": processed,
+    }
+
+@router.post(
+    "/enrichment/reject-all",
+    response_model=BulkProposalResponse,
+)
+def reject_all_profile_enrichment_proposals(
+    payload: BulkProposalRequest,
+    db: Session = Depends(get_db),
+):
+    processed = reject_all_proposals(
+        profile_id=payload.profile_id,
+        cv_id=payload.cv_id,
+        db=db,
+    )
+
+    return {
+        "processed": processed,
+    }
