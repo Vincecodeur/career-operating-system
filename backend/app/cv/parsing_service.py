@@ -212,9 +212,13 @@ def extract_list_section(
         section_names,
     )
 
+    normalized_section_lines = normalize_list_section_lines(
+        section_lines,
+    )
+
     values: list[str] = []
 
-    for line in section_lines:
+    for line in normalized_section_lines:
         split_values = split_list_line(line)
 
         for value in split_values:
@@ -224,6 +228,134 @@ def extract_list_section(
                 values.append(clean_value)
 
     return values
+
+def normalize_list_section_lines(
+    lines: list[str],
+) -> list[str]:
+    normalized_lines: list[str] = []
+
+    buffer: list[str] = []
+    parenthesis_balance = 0
+
+    for line in lines:
+        stripped_line = line.strip()
+
+        if not stripped_line:
+            continue
+
+        if not buffer:
+            buffer.append(
+                stripped_line,
+            )
+
+            parenthesis_balance = (
+                stripped_line.count("(")
+                - stripped_line.count(")")
+            )
+
+            if parenthesis_balance <= 0:
+                normalized_lines.append(
+                    buffer[0],
+                )
+                buffer: list[str] = []
+
+            continue
+
+        buffer.append(
+            stripped_line,
+        )
+
+        parenthesis_balance += (
+            stripped_line.count("(")
+            - stripped_line.count(")")
+        )
+
+        if parenthesis_balance <= 0:
+            normalized_lines.append(
+                " ".join(buffer),
+            )
+
+            buffer = []
+            parenthesis_balance = 0
+
+    if buffer:
+        normalized_lines.append(
+            " ".join(buffer),
+        )
+
+    return normalized_lines
+
+
+def merge_parenthetical_buffer(
+    values: list[str],
+) -> str:
+    if len(values) == 1:
+        return values[0]
+
+    first_value = values[0]
+    second_value = values[1]
+
+    separator = ", "
+
+    if second_value.strip().lower().startswith("tables"):
+        separator = " "
+
+    merged_value = f"{first_value}{separator}{second_value}"
+
+    if len(values) > 2:
+        merged_value = (
+            merged_value
+            + ", "
+            + ", ".join(values[2:])
+        )
+
+    return merged_value
+
+
+def merge_known_split_skill_lines(
+    lines: list[str],
+) -> list[str]:
+    merged_lines: list[str] = []
+    index = 0
+
+    while indexs():
+        current_line = lines[index].strip()
+
+        next_line = (
+            lines[index + 1].strip()
+            if index + 1 < len(lines)
+            else None
+        )
+
+        if (
+            next_line is not None
+            and current_line.lower() == "cross"
+            and next_line.lower() == "functional collaboration"
+        ):
+            merged_lines.append(
+                "Cross-functional collaboration",
+            )
+            index += 2
+            continue
+
+        if (
+            next_line is not None
+            and normalize_skill_alias(current_line) == "Low-code"
+            and next_line.lower() == "development"
+        ):
+            merged_lines.append(
+                "Low-code development",
+            )
+            index += 2
+            continue
+
+        merged_lines.append(
+            current_line,
+        )
+
+        index += 1
+
+    return merged_lines
 
 
 def extract_section_lines(
