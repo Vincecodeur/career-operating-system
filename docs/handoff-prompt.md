@@ -74,6 +74,7 @@ Avant toute réponse, lire et croiser :
 - docs/decisions.md
 - docs/ai-context.md
 - docs/handoff-prompt.md
+- docs/post-mvp-backlog.md
 - tous les documents mentionnés comme terminés dans la phase courante
 
 ## Objectif du projet
@@ -675,6 +676,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 581500d - refactor: improve cv parser line normalization
 - cad5cc0 - feat: add soft skills backend integration
 - 2ad3927 - feat: add soft skills frontend integration
 - d9c0179 - feat: integrate reference data in profile forms
@@ -852,19 +854,37 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.16.19 Soft Skills UX Completion
+#### Phase suivante recommandée
 
-Objectif :
-Finaliser la propagation de DEC-058 à l'ensemble du workflow CV.
+7.1.17 Application Workflow
 
-Problèmes constatés :
+Contexte :
 
-- les Hard Skills et Soft Skills ne sont pas séparées dans l'analyse CV ;
-- les Hard Skills et Soft Skills ne sont pas gérées dans UploadCvWizard ;
-- l'expérience utilisateur n'est pas cohérente entre Profile et CV Analysis.
+Le workflow CV Enrichment est désormais opérationnel :
+
+- DEC-059 Automatic Hard Skill / Soft Skill Classification
+- DEC-060 User Classification Override
+- DEC-061 Skill Normalization And Compound Skill Splitting
+- DEC-062 Bulk Proposal Processing
+
+Validation réalisée :
+
+- Upload CV
+- Analysis
+- Review
+- Bulk Processing
+- Apply Changes
+- Profile Enrichment
+
+Dernière validation connue :
+
+- 222/222 tests passants
+- repository synchronisé
+- working tree clean
 
 Première sous-phase :
-7.1.16.19.1 Repository Audit
+
+7.1.17.1 Application Status Model
 
 ## Méthode de reprise
 

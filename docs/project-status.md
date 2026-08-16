@@ -2,7 +2,7 @@
 
 Current Version
 
-0.0.0
+0.9.0-mvp
 
 ---
 
@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.16.19 Soft Skills UX Completion
+7.1.17 Application Workflow
 
 ---
 
 Next Planned Milestone
-7.1.16.19.1 Repository Audit
+7.1.17.1 Application Status Model
 
 ---
 
@@ -1210,6 +1210,19 @@ Phase 7.1.16.14.9 Backend Validation terminée
 - Repository synchronisé avec origin/main
 - Working tree clean validé
 
+Post-MVP Planning
+
+- docs/post-mvp-backlog.md created
+- post-MVP backlog frozen until MVP completion
+
+- DEC-059 Automatic Hard Skill / Soft Skill Classification implémentée
+- DEC-060 User Classification Override implémentée
+- DEC-061 Skill Normalization And Compound Skill Splitting implémentée
+- DEC-062 Bulk Proposal Processing implémentée
+- Validation CV réelle réalisée
+- 222 tests passants validés
+- commit 581500d poussé
+
 ---
 
 Phase In Progress
@@ -1233,31 +1246,32 @@ Implémenter le workflow de candidature complet et le suivi de l'avancement des 
 
 Last Decision
 
-DEC-058 Soft Skills MVP validée.
+DEC-062 Bulk Proposal Processing validée.
 
-Séparation définitive des compétences :
+Décisions récemment implémentées :
 
-- Hard Skills :
-  - gouvernées par catalogue ;
-  - utilisées pour le matching ;
-  - utilisées pour l'enrichissement ;
-  - utilisées pour le scoring.
+- DEC-059 Automatic Hard Skill / Soft Skill Classification
+- DEC-060 User Classification Override
+- DEC-061 Skill Normalization And Compound Skill Splitting
+- DEC-062 Bulk Proposal Processing
 
-- Soft Skills :
-  - ajout manuel ;
-  - texte libre ;
-  - non utilisées dans le matching MVP ;
-  - non utilisées dans le scoring MVP.
+Validation réalisée :
 
-Constat post-validation :
+- Upload CV
+- Analysis
+- Review
+- Apply Changes
+- Profile Enrichment
 
-- la séparation Hard Skills / Soft Skills est opérationnelle dans les profils ;
-- la séparation n'est pas encore propagée au workflow CV ;
-- une phase corrective UX dédiée sera réalisée avant 7.1.17.
+Résultat :
+
+- 222/222 tests passants
+- workflow CV validé
+- repository synchronisé
+- working tree clean
 
 ---
 
 Last Commit
 
-- cad5cc0 - feat: add soft skills backend integration
-- 2ad3927 - feat: add soft skills frontend integration
+- 581500d - refactor: improve cv parser line normalization

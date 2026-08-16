@@ -460,7 +460,7 @@ Résultat :
 - absence de notion de profils actifs pour les opportunités confirmée ;
 - décision de déplacer la fonctionnalité vers une phase dédiée Multi Profile Opportunity Context.
 
-⬜ 7.1.16 CV Intelligence
+✅ 7.1.16 CV Intelligence
 
 ✅ 7.1.16.1 Repository Audit
 ✅ 7.1.16.2 CV Management Design
@@ -482,7 +482,7 @@ Résultat :
 ✅ 7.1.16.13.5 Parsing Tests
 ✅ 7.1.16.13.6 Backend Validation
 
-⬜ 7.1.16.14 Profile Enrichment
+✅ 7.1.16.14 Profile Enrichment
 ✅ 7.1.16.14.1 Product Design
 ✅ 7.1.16.14.2 Reference Data Governance
 ✅ 7.1.16.14.3 Repository Resolution Strategy
@@ -528,20 +528,20 @@ Sous-phases :
 ✅ 7.1.16.18.6 Validation
 ✅ 7.1.16.18.7 Documentation Synchronization
 
-⬜ 7.1.16.19 Soft Skills UX Completion
+✅ 7.1.16.19 Soft Skills UX Completion
 
 Objectif :
 Propager la séparation Hard Skills / Soft Skills à l'ensemble du workflow CV afin d'assurer une expérience cohérente.
 
 Sous-phases :
 
-⬜ 7.1.16.19.1 Repository Audit
-⬜ 7.1.16.19.2 CV Analysis Design
-⬜ 7.1.16.19.3 Wizard UX Design
-⬜ 7.1.16.19.4 Backend Adjustments
-⬜ 7.1.16.19.5 Frontend Implementation
-⬜ 7.1.16.19.6 Functional Validation
-⬜ 7.1.16.19.7 Documentation Synchronization
+✅ 7.1.16.19.1 Repository Audit
+✅ 7.1.16.19.2 CV Analysis Design
+✅ 7.1.16.19.3 Wizard UX Design
+✅ 7.1.16.19.4 Backend Adjustments
+✅ 7.1.16.19.5 Frontend Implementation
+✅ 7.1.16.19.6 Functional Validation
+✅ 7.1.16.19.7 Documentation Synchronization
 
 ⬜ 7.1.17 Application Workflow
 ⬜ 7.1.17.1 Application Status Model
@@ -732,3 +732,11 @@ Sous-phases :
 
 Statut :
 Planned
+
+## Post MVP Backlog
+
+The list of validated improvements intentionally excluded from MVP scope is maintained in:
+
+- docs/post-mvp-backlog.md
+
+This backlog is frozen until MVP completion.
