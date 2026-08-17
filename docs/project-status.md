@@ -1312,3 +1312,7 @@ Décision structurante DEC-063 :
 - Not Applied est retiré du domaine Application
 - les statuts retenus sont Applied, Phone Screen, Interview, Offer, Accepted, Rejected, Withdrawn
 - ApplicationEvent conserve old_value et new_value pour les changements de statut
+
+Last Commit :
+
+- 68e4882 - docs: synchronize application workflow implementation

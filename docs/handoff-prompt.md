@@ -676,6 +676,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 68e4882 - docs: synchronize application workflow implementation
+- 308de56 - feat: add application update api
 - 581500d - refactor: improve cv parser line normalization
 - cad5cc0 - feat: add soft skills backend integration
 - 2ad3927 - feat: add soft skills frontend integration
