@@ -854,35 +854,32 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.17 Application Workflow
+Phase suivante recommandée
+
+7.1.17.4.5 Status Transition API
 
 Contexte :
 
-Le workflow CV Enrichment est désormais opérationnel :
+Les sous-phases suivantes sont terminées :
 
-- DEC-059 Automatic Hard Skill / Soft Skill Classification
-- DEC-060 User Classification Override
-- DEC-061 Skill Normalization And Compound Skill Splitting
-- DEC-062 Bulk Proposal Processing
+- 7.1.17.4.1 Application Model Evolution
+- 7.1.17.4.2 ApplicationEvent Model
+- 7.1.17.4.3 Complete Application Create API
+- 7.1.17.4.4 Application Update API
 
 Validation réalisée :
 
-- Upload CV
-- Analysis
-- Review
-- Bulk Processing
-- Apply Changes
-- Profile Enrichment
+- PostgreSQL synchronisé
+- ApplicationEvent validé
+- POST /applications validé
+- GET /applications validé
+- PUT /applications/{id} validé
+- notes persistées
+- source_type persisté
 
-Dernière validation connue :
+Prochaine sous-phase :
 
-- 222/222 tests passants
-- repository synchronisé
-- working tree clean
-
-Première sous-phase :
-
-7.1.17.4.1 Application Model Evolution
+7.1.17.4.5 Status Transition API
 
 ## Méthode de reprise
 

@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17.4 Backend Implementation
+7.1.17.4.5 Status Transition API
 
 ---
 
 Next Planned Milestone
-7.1.17.4.1 Application Model Evolution
+7.1.17.4.5 Status Transition API
 
 ---
 
@@ -1227,6 +1227,35 @@ Post-MVP Planning
 - Phase 7.1.17.2 Product Design terminée
 - Phase 7.1.17.3 Backend Design terminée
 - DEC-063 définie
+
+- Phase 7.1.17.4.1 Application Model Evolution terminée
+- notes ajouté à Application
+- source_type ajouté à Application
+- statut par défaut changé vers Applied
+- ApplicationEvent créé
+
+- Phase 7.1.17.4.2 ApplicationEvent Model terminée
+- relation Application ↔ ApplicationEvent implémentée
+- validation SQLAlchemy réalisée
+
+- Phase 7.1.17.4.3 Complete Application Create API terminée
+- POST /applications enrichi
+- persistance notes validée
+- persistance source_type validée
+
+- Phase 7.1.17.4.4 Application Update API terminée
+- ApplicationUpdate créé
+- PUT /applications/{id} créé
+- validation Swagger réalisée
+- persistance notes validée
+- persistance source_type validée
+- persistance status validée
+
+- migration PostgreSQL applications réalisée
+- colonne notes ajoutée
+- colonne source_type ajoutée
+
+- Validation fonctionnelle Application Workflow V1 réalisée
 
 ---
 

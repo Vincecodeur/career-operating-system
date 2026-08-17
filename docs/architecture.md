@@ -172,6 +172,28 @@ Suivi manuel des candidatures.
 
 Le système ne réalise aucune candidature automatique.
 
+Le domaine Applications implémente désormais un workflow de candidature.
+
+Une Application est liée à :
+
+- un profil ;
+- une offre d’emploi.
+
+Une Application contient :
+
+- status ;
+- notes ;
+- source_type.
+
+Le système conserve également un historique structuré via ApplicationEvent.
+
+ApplicationEvent permet notamment de tracer :
+
+- APPLICATION_CREATED ;
+- STATUS_CHANGED.
+
+L’objectif est de fournir un suivi complet du cycle de vie d’une candidature.
+
 ### Market Intelligence
 
 Analyse future du marché.

@@ -579,7 +579,15 @@ Sous-phases :
 ✅ 7.1.17.3.3 Status Transition Rules
 ✅ 7.1.17.3.4 Metrics Design
 
-⬜ 7.1.17.4 Backend Implementation
+✅ 7.1.17.4 Backend Implementation
+
+✅ 7.1.17.4.1 Application Model Evolution
+✅ 7.1.17.4.2 ApplicationEvent Model
+✅ 7.1.17.4.3 Complete Application Create API
+✅ 7.1.17.4.4 Application Update API
+⬜ 7.1.17.4.5 Status Transition API
+⬜ 7.1.17.4.6 Timeline API
+
 ⬜ 7.1.17.5 Backend Tests
 ⬜ 7.1.17.6 Backend Validation
 ⬜ 7.1.17.7 Frontend Design
