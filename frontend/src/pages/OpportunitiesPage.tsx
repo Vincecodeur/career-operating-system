@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import { AIExplanationCard } from "../components/AIExplanationCard";
 import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
-import { getJobOffers } from "../services/api";
-import { getMatching } from "../services/api";
+import {
+  getApplications,
+  getJobOffers,
+  getMatching,
+  getProfiles,
+  createApplication,
+} from "../services/api";
 import { MatchingResult } from "../components/MatchingResult";
 
 type JobOffer = {
@@ -54,13 +59,34 @@ type MatchingData = {
   ai_explanation?: AIExplanation | null;
 };
 
+type ApplicationSummary = {
+  id: number;
+  profile_id: number;
+  job_offer_id: number;
+  status: string;
+  source_type: string;
+};
+
 export function OpportunitiesPage() {
   const [offers, setOffers] = useState<JobOffer[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<JobOffer | null>(null);
   const [matching, setMatching] = useState<MatchingData | null>(null);
+  const [applications, setApplications] = useState<ApplicationSummary[]>([]);
+  const [profiles, setProfiles] = useState<any[]>([]);
+  const [selectedProfileId, setSelectedProfileId] = useState<number | null>(
+    null,
+  );
+
+  const [creatingApplication, setCreatingApplication] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [matchingLoading, setMatchingLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const selectedJobOfferId = (location.state as { jobOfferId?: number } | null)
+    ?.jobOfferId;
 
   useEffect(() => {
     async function loadOffers() {
@@ -70,7 +96,12 @@ export function OpportunitiesPage() {
         setOffers(data);
 
         if (data.length > 0) {
-          setSelectedOffer(data[0]);
+          const preselectedOffer =
+            selectedJobOfferId !== undefined
+              ? data.find((offer: JobOffer) => offer.id === selectedJobOfferId)
+              : null;
+
+          setSelectedOffer(preselectedOffer ?? data[0]);
         }
       } catch {
         setError("Unable to load opportunities.");
@@ -80,6 +111,22 @@ export function OpportunitiesPage() {
     }
 
     loadOffers();
+  }, [selectedJobOfferId]);
+
+  useEffect(() => {
+    async function loadApplications() {
+      try {
+        const data = await getApplications();
+
+        const applicationList = Array.isArray(data) ? data : (data.value ?? []);
+
+        setApplications(applicationList);
+      } catch {
+        setApplications([]);
+      }
+    }
+
+    loadApplications();
   }, []);
 
   useEffect(() => {
@@ -103,6 +150,61 @@ export function OpportunitiesPage() {
 
     loadMatching();
   }, [selectedOffer]);
+
+  useEffect(() => {
+    async function loadProfiles() {
+      try {
+        const data = await getProfiles();
+
+        const profileList = Array.isArray(data) ? data : (data.value ?? []);
+
+        setProfiles(profileList);
+
+        if (profileList.length > 0) {
+          setSelectedProfileId(profileList[0].id);
+        }
+      } catch {
+        setProfiles([]);
+      }
+    }
+
+    loadProfiles();
+  }, []);
+
+  const relatedApplications =
+    selectedOffer === null
+      ? []
+      : applications.filter(
+          (application) => application.job_offer_id === selectedOffer.id,
+        );
+
+  async function handleCreateApplication() {
+    if (!selectedOffer || selectedProfileId === null) {
+      return;
+    }
+
+    setCreatingApplication(true);
+
+    try {
+      await createApplication({
+        profile_id: selectedProfileId,
+        job_offer_id: selectedOffer.id,
+        status: "Applied",
+        notes: null,
+        source_type: "OPPORTUNITY",
+      });
+
+      const refreshedApplications = await getApplications();
+
+      setApplications(
+        Array.isArray(refreshedApplications)
+          ? refreshedApplications
+          : (refreshedApplications.value ?? []),
+      );
+    } finally {
+      setCreatingApplication(false);
+    }
+  }
 
   return (
     <>
@@ -148,9 +250,36 @@ export function OpportunitiesPage() {
           <div className="sticky top-6 self-start lg:col-span-2">
             {selectedOffer ? (
               <Card>
-                <h2 className="mb-6 text-3xl font-bold text-white">
-                  {selectedOffer.title}
-                </h2>
+                <div className="mb-6 flex items-center justify-between">
+                  <h2 className="text-3xl font-bold text-white">
+                    {selectedOffer.title}
+                  </h2>
+
+                  <div className="flex items-center gap-3">
+                    <select
+                      value={selectedProfileId ?? ""}
+                      onChange={(event) =>
+                        setSelectedProfileId(Number(event.target.value))
+                      }
+                      className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+                      {profiles.map((profile) => (
+                        <option key={profile.id} value={profile.id}>
+                          {profile.full_name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <button
+                      type="button"
+                      disabled={creatingApplication}
+                      onClick={handleCreateApplication}
+                      className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500">
+                      {creatingApplication
+                        ? "Creating..."
+                        : "Create Application"}
+                    </button>
+                  </div>
+                </div>
 
                 <div className="mb-8 grid grid-cols-2 gap-4 text-sm text-slate-400">
                   <div>
@@ -189,7 +318,58 @@ export function OpportunitiesPage() {
                     </a>
                   </div>
                 )}
+                <div className="mb-8 border-t border-slate-700 pt-6">
+                  <h3 className="mb-4 text-lg font-semibold text-white">
+                    Applications ({relatedApplications.length})
+                  </h3>
 
+                  {relatedApplications.length === 0 ? (
+                    <p className="text-slate-400">
+                      No applications linked to this opportunity.
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {relatedApplications.map((application) => (
+                        <div
+                          key={application.id}
+                          className="rounded-lg border border-slate-700 p-4">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium text-white">
+                                Application #{application.id}
+                              </p>
+
+                              <p className="text-sm text-slate-400">
+                                Profile {application.profile_id}
+                              </p>
+
+                              <p className="text-sm text-slate-400">
+                                {application.status}
+                              </p>
+
+                              <p className="text-sm text-slate-500">
+                                {application.source_type}
+                              </p>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                navigate("/applications", {
+                                  state: {
+                                    applicationId: application.id,
+                                  },
+                                })
+                              }
+                              className="rounded-md border border-blue-500 px-3 py-1 text-sm text-blue-300 hover:bg-blue-500/10">
+                              Open Application
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="mb-8">
                   <h3 className="mb-3 text-lg font-semibold text-white">
                     Description

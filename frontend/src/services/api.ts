@@ -1,5 +1,25 @@
 const API_BASE_URL = "http://127.0.0.1:8000";
 
+async function getApiErrorMessage(
+    response: Response,
+    fallbackMessage: string,
+): Promise<string> {
+    try {
+        const data = await response.json();
+
+        if (
+            data &&
+            typeof data.detail === "string"
+        ) {
+            return data.detail;
+        }
+
+        return fallbackMessage;
+    } catch {
+        return fallbackMessage;
+    }
+}
+
 type ProfilePayload = {
     profile_name: string;
     full_name: string;
@@ -901,6 +921,26 @@ export async function getRankedJobOffers(
     return response.json();
 }
 
+export type Application = {
+    id: number;
+    profile_id: number;
+    job_offer_id: number;
+    status: string;
+    notes: string | null;
+    source_type: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type ApplicationEvent = {
+    id: number;
+    application_id: number;
+    event_type: string;
+    old_value: string | null;
+    new_value: string | null;
+    event_date: string;
+};
+
 export async function getApplications() {
     const response = await fetch(
         `${API_BASE_URL}/applications`
@@ -915,7 +955,116 @@ export async function getApplications() {
     return response.json();
 }
 
+export async function getApplicationTimeline(
+    applicationId: number,
+): Promise<ApplicationEvent[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/applications/${applicationId}/timeline`
+    );
 
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load application timeline."
+        );
+    }
+
+    return response.json();
+}
+
+export type ApplicationUpdatePayload = {
+    status: string;
+    notes: string | null;
+    source_type: string;
+};
+
+export type ApplicationStatusTransitionPayload = {
+    status: string;
+};
+
+export type ApplicationCreatePayload = {
+    profile_id: number;
+    job_offer_id: number;
+    status: string;
+    notes: string | null;
+    source_type: string;
+};
+
+export async function createApplication(
+    payload: ApplicationCreatePayload,
+): Promise<Application> {
+    const response = await fetch(
+        `${API_BASE_URL}/applications`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to create application.",
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateApplication(
+    applicationId: number,
+    payload: ApplicationUpdatePayload,
+): Promise<Application> {
+    const response = await fetch(
+        `${API_BASE_URL}/applications/${applicationId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            await getApiErrorMessage(
+                response,
+                "Unable to update application.",
+            ),
+        );
+    }
+
+    return response.json();
+}
+
+export async function changeApplicationStatus(
+    applicationId: number,
+    payload: ApplicationStatusTransitionPayload,
+): Promise<Application> {
+    const response = await fetch(
+        `${API_BASE_URL}/applications/${applicationId}/status`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            await getApiErrorMessage(
+                response,
+                "Unable to change application status.",
+            ),
+        );
+    }
+
+    return response.json();
+}
 
 export async function createProfileCertification(
     payload: ProfileCertificationPayload,

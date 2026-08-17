@@ -18,7 +18,7 @@ import { EditProfileSkillModal } from "../components/EditProfileSkillModal";
 import type { EditProfileSkillFormValues } from "../components/EditProfileSkillModal";
 import { EditWorkExperienceModal } from "../components/EditWorkExperienceModal";
 import type { EditWorkExperienceFormValues } from "../components/EditWorkExperienceModal";
-
+import { useLocation } from "react-router-dom";
 import { AddProfileLanguageModal } from "../components/AddProfileLanguageModal";
 import type { AddProfileLanguageFormValues } from "../components/AddProfileLanguageModal";
 import { DeleteProfileLanguageDialog } from "../components/DeleteProfileLanguageDialog";
@@ -35,7 +35,7 @@ import { UploadCvModal } from "../components/UploadCvModal";
 import type { UploadCvFormValues } from "../components/UploadCvModal";
 import { DeleteCvDialog } from "../components/DeleteCvDialog";
 
-import type { Cv, ProfileSoftSkill } from "../services/api";
+import type { Cv, ProfileSoftSkill, Application } from "../services/api";
 
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
@@ -54,6 +54,7 @@ import {
   getProfileSkills,
   getProfileSoftSkills,
   getProfileWorkExperiences,
+  getApplications,
   getProfiles,
   getSkills,
   updateProfile,
@@ -156,6 +157,7 @@ type ReferenceDataItem = {
 export function ProfilesPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
 
   const [profileSkills, setProfileSkills] = useState<ProfileSkill[]>([]);
   const [profileSoftSkills, setProfileSoftSkills] = useState<
@@ -175,6 +177,11 @@ export function ProfilesPage() {
   const [countries, setCountries] = useState<ReferenceDataItem[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(true);
   const [loadingDetails, setLoadingDetails] = useState(false);
+
+  const location = useLocation();
+
+  const selectedProfileId = (location.state as { profileId?: number } | null)
+    ?.profileId;
 
   const [error, setError] = useState<string | null>(null);
 
@@ -342,6 +349,7 @@ export function ProfilesPage() {
       cvsData,
       workModesData,
       countriesData,
+      applicationsData,
     ] = await Promise.all([
       getProfileSkills(profileId),
       getProfileSoftSkills(profileId),
@@ -354,6 +362,7 @@ export function ProfilesPage() {
       getProfileCvs(profileId),
       getWorkModes(),
       getCountries(),
+      getApplications(),
     ]);
 
     setProfileSkills(profileSkillsData);
@@ -367,6 +376,11 @@ export function ProfilesPage() {
     setWorkModes(workModesData);
     setCountries(countriesData);
     setCvs(cvsData);
+    setApplications(
+      Array.isArray(applicationsData)
+        ? applicationsData
+        : (applicationsData.value ?? []),
+    );
   }
 
   useEffect(() => {
@@ -381,7 +395,14 @@ export function ProfilesPage() {
         setProfiles(activeProfiles);
 
         if (activeProfiles.length > 0) {
-          setSelectedProfile(activeProfiles[0]);
+          const preselectedProfile =
+            selectedProfileId !== undefined
+              ? activeProfiles.find(
+                  (profile: Profile) => profile.id === selectedProfileId,
+                )
+              : null;
+
+          setSelectedProfile(preselectedProfile ?? activeProfiles[0]);
         }
       } catch {
         setError("Unable to load profiles.");
@@ -391,7 +412,7 @@ export function ProfilesPage() {
     }
 
     loadProfiles();
-  }, []);
+  }, [selectedProfileId]);
 
   useEffect(() => {
     async function loadDetails() {
@@ -991,6 +1012,7 @@ export function ProfilesPage() {
             {selectedProfile ? (
               <ProfileDetail
                 profile={selectedProfile}
+                applications={applications}
                 profileSkills={profileSkills}
                 skills={skills}
                 profileSoftSkills={profileSoftSkills}

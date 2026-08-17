@@ -1,6 +1,7 @@
 import { Card } from "./ui/Card";
 import type { Cv, ProfileSoftSkill } from "../services/api";
 import { getCvDownloadUrl } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 type Profile = {
   id: number;
@@ -74,8 +75,17 @@ type Certification = {
   created_at: string;
 };
 
+type Application = {
+  id: number;
+  profile_id: number;
+  job_offer_id: number;
+  status: string;
+  source_type: string;
+};
+
 type Props = {
   profile: Profile;
+  applications: Application[];
   profileSkills: ProfileSkill[];
   skills: Skill[];
   profileSoftSkills: ProfileSoftSkill[];
@@ -139,6 +149,7 @@ function formatFileSize(fileSizeBytes: number) {
 
 export function ProfileDetail({
   profile,
+  applications,
   profileSkills,
   profileSoftSkills,
   skills,
@@ -177,6 +188,11 @@ export function ProfileDetail({
 
   const certificationById = new Map(
     certifications.map((certification) => [certification.id, certification]),
+  );
+  const navigate = useNavigate();
+
+  const relatedApplications = applications.filter(
+    (application: Application) => application.profile_id === profile.id,
   );
 
   if (loading) {
@@ -306,6 +322,68 @@ export function ProfileDetail({
             <p>{profile.is_active ? "Active" : "Inactive"}</p>
           </div>
         </div>
+      </div>
+      <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-semibold text-white">Applications</h3>
+
+            <p className="mt-1 text-sm text-slate-400">
+              Applications linked to this profile.
+            </p>
+          </div>
+
+          <span className="rounded-full bg-blue-500/10 px-3 py-1 text-sm font-medium text-blue-300">
+            {relatedApplications.length}
+          </span>
+        </div>
+
+        {relatedApplications.length === 0 ? (
+          <p className="text-slate-400">
+            No applications linked to this profile.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {relatedApplications.map((application: Application) => (
+              <div
+                key={application.id}
+                className="rounded-md border border-slate-800 bg-slate-900 p-4">
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <p className="font-semibold text-white">
+                      Application #{application.id}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-400">
+                      Job Offer {application.job_offer_id}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-300">
+                      Status: {application.status}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      Source: {application.source_type}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate("/applications", {
+                        state: {
+                          applicationId: application.id,
+                        },
+                      })
+                    }
+                    className="rounded-md border border-blue-500 px-3 py-1 text-sm text-blue-300 hover:bg-blue-500/10">
+                    Open Application
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
         <div className="mb-4 flex items-center justify-between gap-3">
