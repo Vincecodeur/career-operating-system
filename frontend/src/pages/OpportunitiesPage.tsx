@@ -79,6 +79,7 @@ export function OpportunitiesPage() {
 
   const [creatingApplication, setCreatingApplication] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [matchingLoading, setMatchingLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -171,6 +172,21 @@ export function OpportunitiesPage() {
     loadProfiles();
   }, []);
 
+  const filteredOffers = offers.filter((offer) => {
+    const search = searchTerm.toLowerCase().trim();
+
+    if (!search) {
+      return true;
+    }
+
+    return (
+      offer.title?.toLowerCase().includes(search) ||
+      offer.company_name?.toLowerCase().includes(search) ||
+      offer.location?.toLowerCase().includes(search) ||
+      offer.description?.toLowerCase().includes(search)
+    );
+  });
+
   const relatedApplications =
     selectedOffer === null
       ? []
@@ -212,9 +228,18 @@ export function OpportunitiesPage() {
         title="Opportunities"
         description="Explore and analyze opportunities."
       />
+      <div className="mb-6">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+          placeholder="Search opportunities..."
+          className="w-full rounded-md border border-slate-700 bg-slate-950 px-4 py-2 text-white outline-none focus:border-blue-500"
+        />
+      </div>
 
       <p className="mb-6 text-sm text-slate-400">
-        {offers.length} opportunities found
+        {filteredOffers.length} opportunities found
       </p>
 
       {loading && <p className="text-slate-400">Loading opportunities...</p>}
@@ -224,27 +249,35 @@ export function OpportunitiesPage() {
       {!loading && !error && (
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="max-h-[calc(100vh-220px)] space-y-3 overflow-y-auto pr-2">
-            {offers.map((offer) => (
-              <button
-                key={offer.id}
-                type="button"
-                onClick={() => setSelectedOffer(offer)}
-                className={`block w-full rounded-lg text-left transition-all ${
-                  selectedOffer?.id === offer.id
-                    ? "border-2 border-blue-500 bg-slate-800 shadow-lg shadow-blue-500/20"
-                    : ""
-                }`}>
-                <Card>
-                  <h3 className="font-medium text-white">{offer.title}</h3>
+            {filteredOffers.length === 0 ? (
+              <Card>
+                <p className="text-slate-400">
+                  No opportunities match your search.
+                </p>
+              </Card>
+            ) : (
+              filteredOffers.map((offer) => (
+                <button
+                  key={offer.id}
+                  type="button"
+                  onClick={() => setSelectedOffer(offer)}
+                  className={`block w-full rounded-lg text-left transition-all ${
+                    selectedOffer?.id === offer.id
+                      ? "border-2 border-blue-500 bg-slate-800 shadow-lg shadow-blue-500/20"
+                      : ""
+                  }`}>
+                  <Card>
+                    <h3 className="font-medium text-white">{offer.title}</h3>
 
-                  <p className="text-sm text-slate-300">
-                    {offer.company_name ?? "Unknown company"}
-                  </p>
+                    <p className="text-sm text-slate-300">
+                      {offer.company_name ?? "Unknown company"}
+                    </p>
 
-                  <p className="text-xs text-slate-500">{offer.location}</p>
-                </Card>
-              </button>
-            ))}
+                    <p className="text-xs text-slate-500">{offer.location}</p>
+                  </Card>
+                </button>
+              ))
+            )}
           </div>
 
           <div className="sticky top-6 self-start lg:col-span-2">

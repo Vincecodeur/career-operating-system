@@ -25,10 +25,10 @@ Phase 7.1 MVP Experience Completion
 
 Current Phase
 
-## 7.1.18 Opportunities Search & Filters
+7.1.18 Opportunities Search & Decision Cockpit
 
 Next Planned Milestone
-7.1.18 Opportunities Search & Filters
+7.1.18.1 Keyword Search
 
 ---
 
@@ -1329,12 +1329,6 @@ Post-MVP Planning
 
 ---
 
-Phase In Progress
-
-- Phase 7.1 MVP Experience Completion
-
----
-
 Blocked
 
 Aucun
@@ -1343,7 +1337,7 @@ Aucun
 
 Phase In Progress
 
-Phase 7.1.18 Opportunities Search & Filters
+7.1.18.1 Keyword Search
 
 ---
 

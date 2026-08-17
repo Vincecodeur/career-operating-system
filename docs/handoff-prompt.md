@@ -903,14 +903,9 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.18 Opportunities Search & Filters
+7.1.18 Opportunities Search & Decision Cockpit
 
 Contexte :
-
-Les sous-phases suivantes sont terminées :
-
-✅ 7.1.17.5 Backend Tests
-✅ 7.1.17.6 Backend Validation
 
 Validation réalisée :
 
