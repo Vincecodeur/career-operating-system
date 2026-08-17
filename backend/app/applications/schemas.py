@@ -18,11 +18,26 @@ class ApplicationUpdate(BaseModel):
     status: str
     notes: str | None = None
     source_type: str = "MANUAL"
+    
+class ApplicationStatusTransition(BaseModel):
+    status: str
 
 class ApplicationResponse(ApplicationBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
+    class Config:
+        from_attributes = True
+        
+        
+class ApplicationEventResponse(BaseModel):
+    id: int
+    application_id: int
+    event_type: str
+    old_value: str | None = None
+    new_value: str | None = None
+    event_date: datetime
 
     class Config:
         from_attributes = True
