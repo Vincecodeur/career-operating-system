@@ -7,7 +7,7 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
@@ -47,6 +47,12 @@ class Application(Base):
         default="MANUAL"
     )
 
+    events = relationship(
+        "ApplicationEvent",
+        back_populates="application",
+        cascade="all, delete-orphan"
+    )
+    
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow

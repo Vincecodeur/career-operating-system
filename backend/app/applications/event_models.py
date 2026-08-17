@@ -6,7 +6,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
@@ -17,6 +17,11 @@ class ApplicationEvent(Base):
         Integer,
         primary_key=True,
         index=True
+    )
+    
+    application = relationship(
+    "Application",
+    back_populates="events"
     )
 
     application_id: Mapped[int] = mapped_column(
