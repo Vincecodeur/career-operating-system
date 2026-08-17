@@ -14,6 +14,10 @@ class ApplicationBase(BaseModel):
 class ApplicationCreate(ApplicationBase):
     pass
 
+class ApplicationUpdate(BaseModel):
+    status: str
+    notes: str | None = None
+    source_type: str = "MANUAL"
 
 class ApplicationResponse(ApplicationBase):
     id: int

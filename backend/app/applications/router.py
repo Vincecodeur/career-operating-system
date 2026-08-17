@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.applications.models import Application
 from app.applications.schemas import ApplicationCreate
+from app.applications.schemas import ApplicationUpdate
 from app.applications.schemas import ApplicationResponse
 from app.core.database import get_db
 
@@ -67,5 +68,34 @@ def get_application(
             status_code=404,
             detail="Application not found."
         )
+
+    return application
+
+
+@router.put(
+    "/{application_id}",
+    response_model=ApplicationResponse
+)
+def update_application(
+    application_id: int,
+    application_update: ApplicationUpdate,
+    db: Session = Depends(get_db)
+):
+    application = db.query(Application).filter(
+        Application.id == application_id
+    ).first()
+
+    if application is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found."
+        )
+
+    application.status = application_update.status
+    application.notes = application_update.notes
+    application.source_type = application_update.source_type
+
+    db.commit()
+    db.refresh(application)
 
     return application
