@@ -453,6 +453,13 @@ Implémenté :
 - Preferred Countries multi-select dropdown
 - React Select integration
 - Preferred Countries Option A storage
+- Application Workflow Frontend
+- Application Timeline
+- Application Status Workflow
+- Application Source Tracking
+- Create Application from Opportunity
+- Profile ↔ Application Navigation
+- Opportunity ↔ Application Navigation
 
 Documenté mais pas encore implémenté :
 
@@ -676,6 +683,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 32faf25 - feat(applications): complete profile-opportunity navigation and application creation workflow
 - f24e426 - test: add application workflow coverage
 - 632f6ef - docs: synchronize application workflow backend implementation
 - 96f8356 - feat: add application timeline api

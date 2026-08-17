@@ -385,3 +385,21 @@ Pas de CQRS.
 Pas d'Event Sourcing.
 
 Pas de complexité prématurée.
+
+---
+
+Frontend navigation supports:
+
+Profile
+↔ Applications
+
+Opportunity
+↔ Applications
+
+Applications
+↔ Profile
+
+Applications
+↔ Opportunity
+
+Applications may be created directly from Opportunities.

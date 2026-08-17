@@ -3432,3 +3432,59 @@ The Application Workflow MVP frontend uses:
 Career Operating System is a career management platform, not an ATS.
 
 The selected design provides a better balance between usability, simplicity and future Dashboard Evolution.
+
+## DEC-065 - Opportunity To Application Conversion
+
+Date: 2026-08-17
+Status: Accepted
+
+### Context
+
+Users can evaluate Job Offers from OpportunitiesPage.
+
+A workflow was required to create a tracked Application directly from an Opportunity.
+
+### Decision
+
+An Opportunity can create an Application.
+
+The user selects:
+
+- Profile
+- Opportunity
+
+The system creates:
+
+Application
+→ profile_id
+→ job_offer_id
+→ status = Applied
+→ source_type = OPPORTUNITY
+
+### Navigation Rules
+
+The following navigation paths are supported:
+
+Profile
+↔ Application
+
+Opportunity
+↔ Application
+
+### Rationale
+
+This reflects the natural user workflow:
+
+Opportunity
+↓
+Apply
+↓
+Application Tracking
+
+instead of creating applications separately.
+
+### Consequences
+
+The Application domain becomes the operational tracking layer.
+
+The Opportunity domain remains the discovery layer.
