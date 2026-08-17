@@ -4,6 +4,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
@@ -32,7 +33,18 @@ class Application(Base):
     status: Mapped[str] = mapped_column(
         String(50),
         nullable=False,
-        default="Not Applied"
+        default="Applied"
+    )
+
+    notes: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True
+    )
+
+    source_type: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="MANUAL"
     )
 
     created_at: Mapped[datetime] = mapped_column(

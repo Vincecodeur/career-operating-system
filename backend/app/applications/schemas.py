@@ -6,7 +6,9 @@ from pydantic import BaseModel
 class ApplicationBase(BaseModel):
     profile_id: int
     job_offer_id: int
-    status: str = "Not Applied"
+    status: str = "Applied"
+    notes: str | None = None
+    source_type: str = "MANUAL"
 
 
 class ApplicationCreate(ApplicationBase):
