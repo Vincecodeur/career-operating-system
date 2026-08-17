@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17.4.5 Status Transition API
+7.1.17.5 Backend Tests
 
 ---
 
 Next Planned Milestone
-7.1.17.4.5 Status Transition API
+7.1.17.5 Backend Tests
 
 ---
 
@@ -1257,6 +1257,19 @@ Post-MVP Planning
 
 - Validation fonctionnelle Application Workflow V1 réalisée
 
+- Phase 7.1.17.4.5 Status Transition API terminée
+- endpoint POST /applications/{id}/status créé
+- validation des transitions métier implémentée
+- ApplicationEvent STATUS_CHANGED créé automatiquement
+- validation Swagger réalisée
+- validation PostgreSQL réalisée
+
+- Phase 7.1.17.4.6 Timeline API terminée
+- endpoint GET /applications/{id}/timeline créé
+- récupération ApplicationEvent implémentée
+- historique candidature exposé via API
+- validation Swagger réalisée
+
 ---
 
 Phase In Progress
@@ -1315,4 +1328,4 @@ Décision structurante DEC-063 :
 
 Last Commit :
 
-- 68e4882 - docs: synchronize application workflow implementation
+- 96f8356 - feat: add application timeline api
