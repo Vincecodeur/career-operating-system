@@ -588,8 +588,9 @@ Sous-phases :
 ✅ 7.1.17.4.5 Status Transition API
 ✅ 7.1.17.4.6 Timeline API
 
-⬜ 7.1.17.5 Backend Tests
-⬜ 7.1.17.6 Backend Validation
+✅ 7.1.17.5 Backend Tests
+✅ 7.1.17.6 Backend Validation
+
 ⬜ 7.1.17.7 Frontend Design
 ⬜ 7.1.17.8 Frontend Implementation
 ⬜ 7.1.17.9 Frontend Validation

@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17.5 Backend Tests
+7.1.17.7 Frontend Design
 
 ---
 
 Next Planned Milestone
-7.1.17.5 Backend Tests
+7.1.17.7 Frontend Design
 
 ---
 
@@ -1270,6 +1270,22 @@ Post-MVP Planning
 - historique candidature exposé via API
 - validation Swagger réalisée
 
+- Phase 7.1.17.5 Backend Tests terminée
+- couverture Application Workflow étendue
+- tests Update API ajoutés
+- tests Status Transition API ajoutés
+- tests Timeline API ajoutés
+- validation pytest réalisée
+- 228 tests passants
+
+- Phase 7.1.17.6 Backend Validation terminée
+- validation Swagger réalisée
+- validation PostgreSQL réalisée
+- validation audit trail réalisée
+- validation transition invalide réalisée
+- validation timeline réalisée
+  `
+
 ---
 
 Phase In Progress
@@ -1326,6 +1342,8 @@ Décision structurante DEC-063 :
 - les statuts retenus sont Applied, Phone Screen, Interview, Offer, Accepted, Rejected, Withdrawn
 - ApplicationEvent conserve old_value et new_value pour les changements de statut
 
-Last Commit :
+Last Commits :
 
+- f24e426 - test: add application workflow coverage
+- 632f6ef - docs: synchronize application workflow backend implementation
 - 96f8356 - feat: add application timeline api

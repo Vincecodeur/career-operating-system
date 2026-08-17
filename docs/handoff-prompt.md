@@ -676,6 +676,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- f24e426 - test: add application workflow coverage
+- 632f6ef - docs: synchronize application workflow backend implementation
 - 96f8356 - feat: add application timeline api
 - f58cf4d - docs: synchronize status transition api
 - 27f9ece - feat: add application status transition api
@@ -859,36 +861,27 @@ Respecter notamment :
 
 ### Phase suivante recommandée
 
-7.1.17.5 Backend Tests
+7.1.17.7 Frontend Design
 
 Contexte :
 
 Les sous-phases suivantes sont terminées :
 
-- 7.1.17.4.1 Application Model Evolution
-- 7.1.17.4.2 ApplicationEvent Model
-- 7.1.17.4.3 Complete Application Create API
-- 7.1.17.4.4 Application Update API
-- 7.1.17.4.5 Status Transition API
-- 7.1.17.4.6 Timeline API
+✅ 7.1.17.5 Backend Tests
+✅ 7.1.17.6 Backend Validation
 
 Validation réalisée :
 
-- PostgreSQL synchronisé
-- ApplicationEvent validé
-- POST /applications validé
-- GET /applications validé
-- PUT /applications/{id} validé
-- POST /applications/{id}/status validé
-- GET /applications/{id}/timeline validé
-- notes persistées
-- source_type persisté
-- timeline validée
-- audit trail validé
+- test: add application workflow coverage
+- 228/228 tests passants
+- validation Swagger complète
+- validation PostgreSQL complète
+- validation timeline
+- validation audit trail
 
 Prochaine sous-phase :
 
-7.1.17.5 Backend Tests
+7.1.17.7 Frontend Design
 
 ## Méthode de reprise
 
