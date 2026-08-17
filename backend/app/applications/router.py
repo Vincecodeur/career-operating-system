@@ -24,9 +24,11 @@ def create_application(
     db: Session = Depends(get_db)
 ):
     new_application = Application(
-        profile_id=application.profile_id,
-        job_offer_id=application.job_offer_id,
-        status=application.status
+    profile_id=application.profile_id,
+    job_offer_id=application.job_offer_id,
+    status=application.status,
+    notes=application.notes,
+    source_type=application.source_type
     )
 
     db.add(new_application)
