@@ -591,14 +591,32 @@ Sous-phases :
 ✅ 7.1.17.5 Backend Tests
 ✅ 7.1.17.6 Backend Validation
 
-⬜ 7.1.17.7 Frontend Design
-⬜ 7.1.17.8 Frontend Implementation
-⬜ 7.1.17.9 Frontend Validation
-⬜ 7.1.17.10 Opportunity → Application Conversion Design
-⬜ 7.1.17.11 Opportunity → Application Conversion Implementation
-⬜ 7.1.17.12 Application Metrics
-⬜ 7.1.17.13 End-to-End Validation
-⬜ 7.1.17.14 Documentation Synchronization
+✅ 7.1.17.7 Frontend Design
+
+Objectif :
+Définir l'expérience utilisateur du workflow de candidature avant toute implémentation React.
+
+Décision UX retenue :
+
+- KPI Cards
+- Application Cards
+- Detail Panel
+- Status Workflow
+- Notes Section
+- Timeline Section
+- Source Tracking
+
+Livrable :
+
+- docs/application-workflow-frontend-design.md
+
+  ⬜ 7.1.17.8 Frontend Implementation
+  ⬜ 7.1.17.9 Frontend Validation
+  ⬜ 7.1.17.10 Opportunity → Application Conversion Design
+  ⬜ 7.1.17.11 Opportunity → Application Conversion Implementation
+  ⬜ 7.1.17.12 Application Metrics
+  ⬜ 7.1.17.13 End-to-End Validation
+  ⬜ 7.1.17.14 Documentation Synchronization
 
 ⬜ 7.1.18 Opportunities Search & Filters
 ⬜ 7.1.18.1 Keyword Search

@@ -3402,3 +3402,33 @@ DEC-036 positioned Opportunity Discovery as a core MVP capability.
 DEC-063 replaces the legacy Application statuses from DEC-034 with a clearer workflow lifecycle.
 
 DEC-063 prepares the future phase 7.1.22 Multi Profile Opportunity Context.
+
+## DEC-064 - Application Workflow Frontend UX
+
+Date: 2026-08-17
+
+Status: Accepted
+
+### Decision
+
+The Application Workflow MVP frontend uses:
+
+- KPI Cards
+- Application Cards
+- Application Detail Panel
+- Status Workflow
+- Notes Section
+- Timeline Section
+- Source Tracking
+
+### Rejected For MVP
+
+- Kanban
+- Drag and Drop
+- CRM Table
+
+### Rationale
+
+Career Operating System is a career management platform, not an ATS.
+
+The selected design provides a better balance between usability, simplicity and future Dashboard Evolution.

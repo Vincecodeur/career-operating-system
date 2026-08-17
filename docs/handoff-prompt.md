@@ -859,9 +859,36 @@ Respecter notamment :
 - DEC-053 :
 - DEC-054 :
 
+Décision UX validée :
+
+Applications Page
+
+↓
+
+KPI Cards
+
+↓
+
+Application Cards
+
+-
+
+Application Detail Panel
+
+Le MVP inclut :
+
+- KPI Cards
+- Application Cards
+- Status Workflow
+- Notes
+- Timeline
+- Source Tracking
+
+Le Kanban est explicitement reporté après le MVP.
+
 ### Phase suivante recommandée
 
-7.1.17.7 Frontend Design
+7.1.17.8 Frontend Implementation
 
 Contexte :
 
@@ -881,7 +908,7 @@ Validation réalisée :
 
 Prochaine sous-phase :
 
-7.1.17.7 Frontend Design
+7.1.17.8 Frontend Implementation
 
 ## Méthode de reprise
 

@@ -24,12 +24,12 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17.7 Frontend Design
+7.1.17.8 Frontend Implementation
 
 ---
 
 Next Planned Milestone
-7.1.17.7 Frontend Design
+7.1.17.8 Frontend Implementation
 
 ---
 
@@ -1284,7 +1284,15 @@ Post-MVP Planning
 - validation audit trail réalisée
 - validation transition invalide réalisée
 - validation timeline réalisée
-  `
+
+- Phase 7.1.17.7 Frontend Design terminée
+- UX retenue : Cards + Detail Panel
+- KPI Cards définies
+- Application Cards définies
+- Detail Panel défini
+- Workflow Visualization définie
+- Timeline UX définie
+- docs/application-workflow-frontend-design.md créé
 
 ---
 
@@ -1308,8 +1316,7 @@ Implémenter le workflow de candidature complet et le suivi de l'avancement des 
 ---
 
 Last Decision
-
-DEC-063 Application Workflow Lifecycle validée.
+DEC-064 - Application Workflow Frontend UX
 
 Décisions récemment validées :
 
@@ -1318,6 +1325,7 @@ Décisions récemment validées :
 - DEC-061 Skill Normalization And Compound Skill Splitting
 - DEC-062 Bulk Proposal Processing
 - DEC-063 Application Workflow Lifecycle
+- DEC-064 Application Workflow Frontend UX
 
 Validation réalisée :
 
