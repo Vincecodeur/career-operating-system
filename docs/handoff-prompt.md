@@ -460,6 +460,12 @@ Implémenté :
 - Create Application from Opportunity
 - Profile ↔ Application Navigation
 - Opportunity ↔ Application Navigation
+- Create Manual Application
+- Rejected KPI
+- Withdrawn KPI
+- Timeline Default Event
+- Application Confirmation Dialog
+- Application Metrics Visualization
 
 Documenté mais pas encore implémenté :
 
@@ -683,6 +689,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 1cbeeb3 - feat(applications): finalize application page workflow interactions
 - 32faf25 - feat(applications): complete profile-opportunity navigation and application creation workflow
 - f24e426 - test: add application workflow coverage
 - 632f6ef - docs: synchronize application workflow backend implementation
@@ -896,7 +903,7 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.17.8 Frontend Implementation
+7.1.18 Opportunities Search & Filters
 
 Contexte :
 
@@ -916,7 +923,7 @@ Validation réalisée :
 
 Prochaine sous-phase :
 
-7.1.17.8 Frontend Implementation
+7.1.18.1 Keyword Search
 
 ## Méthode de reprise
 

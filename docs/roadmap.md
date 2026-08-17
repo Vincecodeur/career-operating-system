@@ -395,7 +395,7 @@ Sous-phases :
 ✅ 7.1.13.5 Profile Management Visualization Implementation
 ✅ 7.1.14 Applications Visualization
 
-⬜ 7.1.15 Profile Management CRUD
+✅ 7.1.15 Profile Management CRUD
 
 ✅ 7.1.15.1 Repository Audit
 
@@ -543,7 +543,7 @@ Sous-phases :
 ✅ 7.1.16.19.6 Functional Validation
 ✅ 7.1.16.19.7 Documentation Synchronization
 
-⬜ 7.1.17 Application Workflow
+✅ 7.1.17 Application Workflow
 
 Objectif :
 Transformer le tracker de candidatures existant en véritable
@@ -629,11 +629,11 @@ Livrable :
 - Open Application preselection
 - Build frontend validé
 
-  ⬜ 7.1.17.10 Opportunity → Application Conversion Design
-  ⬜ 7.1.17.11 Opportunity → Application Conversion Implementation
-  ⬜ 7.1.17.12 Application Metrics
-  ⬜ 7.1.17.13 End-to-End Validation
-  ⬜ 7.1.17.14 Documentation Synchronization
+✅ 7.1.17.10 Opportunity → Application Conversion Design
+✅ 7.1.17.11 Opportunity → Application Conversion Implementation
+✅ 7.1.17.12 Application Metrics
+✅ 7.1.17.13 End-to-End Validation
+✅ 7.1.17.14 Documentation Synchronization
 
 ⬜ 7.1.18 Opportunities Search & Filters
 ⬜ 7.1.18.1 Keyword Search

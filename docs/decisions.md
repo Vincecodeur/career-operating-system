@@ -988,7 +988,7 @@ Cette évolution est explicitement reportée à une phase ultérieure de normali
 
 ## DEC-058 - Soft Skills MVP
 
-### Contexte
+## Contexte
 
 Le Career Operating System distingue désormais deux catégories de compétences :
 
@@ -1013,11 +1013,11 @@ Elles ne sont pas utilisées dans les mécanismes métier du MVP.
 
 ---
 
-### Décision
+## Décision
 
 Les Hard Skills et les Soft Skills sont séparées dans le modèle fonctionnel.
 
-#### Hard Skills
+### Hard Skills
 
 Les Hard Skills restent intégrées au système existant :
 
@@ -1034,7 +1034,7 @@ Profile
 → ProfileSkill
 → Skill
 
-#### Soft Skills
+### Soft Skills
 
 Les Soft Skills sont gérées séparément.
 
@@ -1060,7 +1060,7 @@ Les Soft Skills :
 
 ---
 
-### Modèle de données MVP
+## Modèle de données MVP
 
 Table :
 
@@ -1085,7 +1085,7 @@ UNIQUE(profile_id, name)
 
 ---
 
-### Expérience utilisateur
+## Expérience utilisateur
 
 La section "Skills" du profil devient un conteneur.
 
@@ -1122,7 +1122,7 @@ Negotiation
 
 ---
 
-### Hors périmètre MVP
+## Hors périmètre MVP
 
 Les éléments suivants sont explicitement reportés :
 
@@ -1137,7 +1137,7 @@ Les éléments suivants sont explicitement reportés :
 
 ---
 
-### Conséquences
+## Conséquences
 
 Le système conserve :
 
@@ -1219,7 +1219,7 @@ Parsing remains independent from enrichment business rules.
 
 The enrichment engine evaluates every detected skill.
 
-### Rule 1
+## Rule 1
 
 If the detected skill matches an existing skill in the Skill Catalog:
 
@@ -1234,7 +1234,7 @@ Examples:
 
 ---
 
-### Rule 2
+## Rule 2
 
 If the detected skill matches a known Soft Skill Dictionary entry:
 
@@ -1252,7 +1252,7 @@ Examples:
 
 ---
 
-### Rule 3
+## Rule 3
 
 If no match is found:
 
@@ -1685,7 +1685,7 @@ Classification remains the responsibility of DEC-059.
 
 ## Normalization Rules
 
-### Rule 1 - Separator Splitting
+## Rule 1 - Separator Splitting
 
 The system must split skills using common separators.
 
@@ -1720,7 +1720,7 @@ Output:
 
 ---
 
-### Rule 2 - Parenthesis Expansion
+## Rule 2 - Parenthesis Expansion
 
 Skills contained in parenthesis must be extracted independently.
 
@@ -1747,7 +1747,7 @@ Output:
 
 ---
 
-### Rule 3 - Trim Invalid Characters
+## Rule 3 - Trim Invalid Characters
 
 The system must remove leading and trailing artefacts.
 
@@ -1779,7 +1779,7 @@ React
 
 ---
 
-### Rule 4 - Whitespace Normalization
+## Rule 4 - Whitespace Normalization
 
 Multiple spaces become a single space.
 
@@ -1803,7 +1803,7 @@ Power BI
 
 ---
 
-### Rule 5 - Duplicate Removal
+## Rule 5 - Duplicate Removal
 
 Duplicates must be removed after normalization.
 
@@ -1821,7 +1821,7 @@ Output:
 
 ---
 
-### Rule 6 - Empty Entry Removal
+## Rule 6 - Empty Entry Removal
 
 Empty fragments are discarded.
 
@@ -2237,7 +2237,7 @@ Already processed proposals are ignored.
 
 ## Backend Design
 
-### Endpoint: Accept All
+## Endpoint: Accept All
 
 Method:
 
@@ -2273,7 +2273,7 @@ Response:
 }
 ```
 
-### Endpoint: Reject All
+## Endpoint: Reject All
 
 Method:
 
@@ -2457,7 +2457,7 @@ Response:
 
 ## Frontend Design
 
-### Step 3 - Review Suggestions
+## Step 3 - Review Suggestions
 
 Current UI:
 
@@ -2527,7 +2527,7 @@ Individual actions remain available.
 
 ## Confirmation Dialog
 
-### Accept All
+## Accept All
 
 Title:
 
@@ -2563,7 +2563,7 @@ Buttons:
 
 ```
 
-### Reject All
+## Reject All
 
 Title:
 
@@ -2837,9 +2837,9 @@ The following features are not included:
 
 ---
 
-### Future Evolution
+## Future Evolution
 
-#### Future Decision - Selective Bulk Processing
+### Future Decision - Selective Bulk Processing
 
 Potential actions:
 
@@ -2855,23 +2855,23 @@ Potential actions:
 
 ## Related Decisions
 
-### DEC-058
+## DEC-058
 
 Hard Skills and Soft Skills stored separately.
 
-### DEC-059
+## DEC-059
 
 Automatic Hard Skill / Soft Skill Classification.
 
-### DEC-060
+## DEC-060
 
 User Classification Override.
 
-### DEC-061
+## DEC-061
 
 Skill Normalization And Compound Skill Splitting.
 
-### DEC-062
+## DEC-062
 
 Bulk Proposal Processing.
 
@@ -2911,7 +2911,7 @@ Date: 2026-08-16
 
 Status: Accepted
 
-### Context
+## Context
 
 The current Application domain is a simple application registry.
 
@@ -2953,7 +2953,7 @@ The MVP now requires the Application domain to represent a real application work
 
 ---
 
-### Decision
+## Decision
 
 An Application represents a real job application.
 
@@ -2977,7 +2977,7 @@ The legacy status `Not Applied` is removed from the target workflow.
 
 ---
 
-### Application Lifecycle
+## Application Lifecycle
 
 Supported statuses:
 
@@ -2997,15 +2997,15 @@ Supported statuses:
 
 ---
 
-### Status Definitions
+## Status Definitions
 
-#### Applied
+### Applied
 
 The user has applied to the job.
 
 This is the first valid status of an Application.
 
-#### Phone Screen
+### Phone Screen
 
 The user has entered an initial recruiter screening step.
 
@@ -3017,7 +3017,7 @@ This may represent:
 
 - first qualification call
 
-#### Interview
+### Interview
 
 The user is engaged in the interview process.
 
@@ -3033,25 +3033,25 @@ The MVP does not distinguish between:
 
 - final interview
 
-#### Offer
+### Offer
 
 The user has received an offer.
 
 The process is not yet completed.
 
-#### Accepted
+### Accepted
 
 The user has accepted the offer.
 
 This is a terminal status.
 
-#### Rejected
+### Rejected
 
 The company has rejected the application.
 
 This is a terminal status.
 
-#### Withdrawn
+### Withdrawn
 
 The user has voluntarily withdrawn the application.
 
@@ -3071,7 +3071,7 @@ This is a terminal status.
 
 ---
 
-### Status Transition Rules
+## Status Transition Rules
 
 Allowed transitions:
 
@@ -3143,7 +3143,7 @@ Withdrawn -> Applied
 
 ---
 
-### Notes Strategy
+## Notes Strategy
 
 An Application contains a single free-form notes field.
 
@@ -3183,7 +3183,7 @@ The MVP does not include a separate ApplicationNote table.
 
 ---
 
-### Timeline Strategy
+## Timeline Strategy
 
 The system introduces an ApplicationEvent entity.
 
@@ -3213,7 +3213,7 @@ Timeline remains structured workflow history.
 
 ---
 
-### ApplicationEvent Model
+## ApplicationEvent Model
 
 ApplicationEvent contains:
 
@@ -3257,7 +3257,7 @@ instead of a generic status change event.
 
 ---
 
-### Source Tracking Strategy
+## Source Tracking Strategy
 
 An Application contains a source type.
 
@@ -3285,7 +3285,7 @@ The Application only stores the high-level source type.
 
 ---
 
-### Metrics Compatibility
+## Metrics Compatibility
 
 The lifecycle supports future MVP metrics:
 
@@ -3319,7 +3319,7 @@ Metrics are not stored as persisted counters.
 
 ---
 
-### Multi Profile Compatibility
+## Multi Profile Compatibility
 
 Applications remain linked to:
 
@@ -3343,7 +3343,7 @@ No major refactoring should be required for the future multi-profile opportunity
 
 ---
 
-### Out Of Scope
+## Out Of Scope
 
 DEC-063 does not include:
 
@@ -3369,7 +3369,7 @@ These topics belong to future phases or the post-MVP backlog.
 
 ---
 
-### Consequences
+## Consequences
 
 The Application domain evolves from a simple registry to a workflow-oriented domain.
 
@@ -3393,7 +3393,7 @@ This avoids mixing opportunity exploration with real application tracking.
 
 ---
 
-### Related Decisions
+## Related Decisions
 
 DEC-034 introduced the initial Application Tracker concept.
 
@@ -3409,7 +3409,7 @@ Date: 2026-08-17
 
 Status: Accepted
 
-### Decision
+## Decision
 
 The Application Workflow MVP frontend uses:
 
@@ -3421,13 +3421,13 @@ The Application Workflow MVP frontend uses:
 - Timeline Section
 - Source Tracking
 
-### Rejected For MVP
+## Rejected For MVP
 
 - Kanban
 - Drag and Drop
 - CRM Table
 
-### Rationale
+## Rationale
 
 Career Operating System is a career management platform, not an ATS.
 
@@ -3438,13 +3438,13 @@ The selected design provides a better balance between usability, simplicity and 
 Date: 2026-08-17
 Status: Accepted
 
-### Context
+## Context
 
 Users can evaluate Job Offers from OpportunitiesPage.
 
 A workflow was required to create a tracked Application directly from an Opportunity.
 
-### Decision
+## Decision
 
 An Opportunity can create an Application.
 
@@ -3461,7 +3461,7 @@ Application
 → status = Applied
 → source_type = OPPORTUNITY
 
-### Navigation Rules
+## Navigation Rules
 
 The following navigation paths are supported:
 
@@ -3471,7 +3471,7 @@ Profile
 Opportunity
 ↔ Application
 
-### Rationale
+## Rationale
 
 This reflects the natural user workflow:
 
@@ -3483,8 +3483,27 @@ Application Tracking
 
 instead of creating applications separately.
 
-### Consequences
+## Consequences
 
 The Application domain becomes the operational tracking layer.
 
 The Opportunity domain remains the discovery layer.
+
+## DEC-066 - Application Workflow Completion
+
+Date: 2026-08-17
+
+Status: Accepted
+
+Le MVP Application Workflow inclut :
+
+- Create Application depuis Opportunity
+- Create Manual Application
+- Status Workflow
+- Timeline
+- Notes
+- Source Tracking
+- KPI Metrics
+- Profile Navigation
+- Opportunity Navigation
+- Confirmation pour les statuts terminaux

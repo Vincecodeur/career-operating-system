@@ -24,12 +24,11 @@ Phase 7.1 MVP Experience Completion
 ---
 
 Current Phase
-7.1.17.14 Documentation Synchronization
 
----
+## 7.1.18 Opportunities Search & Filters
 
 Next Planned Milestone
-7.1.17.14 Documentation Synchronization
+7.1.18 Opportunities Search & Filters
 
 ---
 
@@ -1309,6 +1308,25 @@ Post-MVP Planning
 - Commit technique 32faf25 créé
 - Push GitHub réalisé
 
+- Create Manual Application implémenté
+- KPI Rejected implémenté
+- KPI Withdrawn implémenté
+- Application Timeline enrichie
+- Application Confirmation Dialog ajouté pour Rejected
+- Application Confirmation Dialog ajouté pour Withdrawn
+- Opportunity labels normalisés (#id - titre)
+- Workflow complet validé :
+  Applied
+  → Phone Screen
+  → Interview
+  → Offer
+  → Accepted
+- Scénarios Rejected et Withdrawn validés
+- Validation visuelle complète réalisée
+- Build frontend validé
+- Commit technique 1cbeeb3 créé
+- Push GitHub réalisé
+
 ---
 
 Phase In Progress
@@ -1323,10 +1341,9 @@ Aucun
 
 ---
 
-Phase 7.1.17 Application Workflow
+Phase In Progress
 
-Objectif :
-Implémenter le workflow de candidature complet et le suivi de l'avancement des candidatures.
+Phase 7.1.18 Opportunities Search & Filters
 
 ---
 
@@ -1342,20 +1359,15 @@ Décisions récemment validées :
 - DEC-063 Application Workflow Lifecycle
 - DEC-064 Application Workflow Frontend UX
 
-Validation réalisée :
-
-- Upload CV
-- Analysis
-- Review
-- Apply Changes
-- Profile Enrichment
-
 Résultat :
 
-- 222/222 tests passants
-- workflow CV validé
-- repository synchronisé
-- working tree clean
+- Application workflow validé
+- Timeline validée
+- KPI validés
+- Create Manual Application validé
+- Rejected / Withdrawn validés
+- Commit 1cbeeb3 poussé
+- Working tree clean
 
 Décision structurante DEC-063 :
 
@@ -1367,6 +1379,4 @@ Décision structurante DEC-063 :
 
 Last Commits :
 
-- f24e426 - test: add application workflow coverage
-- 632f6ef - docs: synchronize application workflow backend implementation
-- 96f8356 - feat: add application timeline api
+- 1cbeeb3 - feat(applications): finalize application page workflow interactions

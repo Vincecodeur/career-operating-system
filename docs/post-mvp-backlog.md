@@ -275,3 +275,65 @@ Use CEFR levels in matching.
 Status: Backlog
 
 Use years of experience in matching.
+
+---
+
+## APP-001 - Human Friendly Timeline Labels
+
+Status: Backlog
+
+Replace technical event labels:
+
+APPLICATION_CREATED
+STATUS_CHANGED
+
+with user-friendly labels:
+
+Application Created
+Status Changed
+
+without changing backend event types.
+
+---
+
+## APP-002 - Application Filters Persistence
+
+Status: Backlog
+
+Remember:
+
+- Search
+- Status Filter
+- Profile Filter
+- Source Filter
+
+when navigating between pages.
+
+---
+
+## APP-003 - Application Export ( à revoir le besoin)
+
+Status: Backlog
+
+Export applications to CSV.
+
+Fields:
+
+- Profile
+- Opportunity
+- Status
+- Source
+- Created At
+- Updated At
+
+## APP-004 - Application Funnel Dashboard
+
+Status: Backlog
+
+Provide funnel visualization:
+
+Applied
+→ Phone Screen
+→ Interview
+→ Offer
+→ Accepted

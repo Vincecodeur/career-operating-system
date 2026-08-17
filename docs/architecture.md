@@ -194,6 +194,11 @@ ApplicationEvent permet notamment de tracer :
 
 L’objectif est de fournir un suivi complet du cycle de vie d’une candidature.
 
+An Application may be created:
+
+- directly from an Opportunity
+- manually by the user
+
 ### Market Intelligence
 
 Analyse future du marché.
