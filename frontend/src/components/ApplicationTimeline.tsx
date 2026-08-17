@@ -8,11 +8,24 @@ export type ApplicationEvent = {
 
 type Props = {
   events: ApplicationEvent[];
+  createdAt?: string;
 };
 
-export function ApplicationTimeline({ events }: Props) {
+export function ApplicationTimeline({ events, createdAt }: Props) {
   if (events.length === 0) {
-    return <p className="text-slate-400">No timeline available.</p>;
+    return (
+      <div className="border-l-2 border-green-600 pl-4">
+        <p className="text-xs uppercase text-green-400">APPLICATION_CREATED</p>
+
+        <p className="font-medium text-white">Application Created</p>
+
+        <p className="text-sm text-slate-400">
+          {createdAt
+            ? new Date(createdAt).toLocaleString()
+            : "Creation date unavailable"}
+        </p>
+      </div>
+    );
   }
 
   return (
