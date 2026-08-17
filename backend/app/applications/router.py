@@ -10,6 +10,7 @@ from app.applications.schemas import ApplicationCreate
 from app.applications.schemas import ApplicationUpdate
 from app.applications.schemas import ApplicationResponse
 from app.applications.schemas import ApplicationStatusTransition
+from app.applications.schemas import ApplicationEventResponse
 
 from app.core.database import get_db
 
@@ -177,3 +178,32 @@ def transition_application_status(
     db.refresh(application)
 
     return application
+
+@router.get(
+    "/{application_id}/timeline",
+    response_model=list[ApplicationEventResponse]
+)
+def get_application_timeline(
+    application_id: int,
+    db: Session = Depends(get_db)
+):
+    application = db.query(Application).filter(
+        Application.id == application_id
+    ).first()
+
+    if application is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found."
+        )
+
+    return (
+        db.query(ApplicationEvent)
+        .filter(
+            ApplicationEvent.application_id == application_id
+        )
+        .order_by(
+            ApplicationEvent.event_date.desc()
+        )
+        .all()
+    )
