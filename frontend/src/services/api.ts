@@ -873,6 +873,50 @@ export async function rejectProfileEnrichment(
     return response.json();
 }
 
+export type JobDiscoverySettings = {
+    discovery_enabled: boolean;
+    discovery_interval_minutes: number;
+    discovery_connectors: string[];
+};
+
+export async function getJobDiscoverySettings(
+): Promise<JobDiscoverySettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/job-discovery`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load job discovery settings."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateJobDiscoverySettings(
+    payload: JobDiscoverySettings,
+): Promise<JobDiscoverySettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/job-discovery`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update job discovery settings."
+        );
+    }
+
+    return response.json();
+}
+
 
 export async function getJobOffers() {
     const response = await fetch(
