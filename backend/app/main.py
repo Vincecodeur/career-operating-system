@@ -37,6 +37,9 @@ from app.profile.profile_soft_skill_router import (
 from app.profile.router import router as profile_router
 from app.skills.router import router as skills_router
 from app.certifications.router import router as certifications_router
+from app.settings.router import (
+    router as settings_router,
+)
 
 
 
@@ -96,7 +99,7 @@ app.include_router(matching_router)
 app.include_router(applications_router)
 app.include_router(auth_router)
 app.include_router(reference_data_router)
-
+app.include_router(settings_router)
 
 @app.get("/health")
 def health():
