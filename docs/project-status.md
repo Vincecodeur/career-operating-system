@@ -28,7 +28,7 @@ Current Phase
 7.1.18 Opportunities Search & Decision Cockpit
 
 Next Planned Milestone
-7.1.18.1 Keyword Search
+7.1.18.11 Opportunities Search & Filters Validation
 
 ---
 
@@ -1327,6 +1327,16 @@ Post-MVP Planning
 - Commit technique 1cbeeb3 créé
 - Push GitHub réalisé
 
+- Keyword Search validé
+- Search Summary validé
+- Reset Filters validé
+- Application Status Filter validé
+- Source Filter validé
+- Opportunity Decision Badges validés
+- Smart Create/Open Application validé
+- Commit technique 076868d réalisé
+- Push GitHub réalisé
+
 ---
 
 Blocked
@@ -1337,7 +1347,7 @@ Aucun
 
 Phase In Progress
 
-7.1.18.1 Keyword Search
+7.1.18 Opportunities Search & Decision Cockpit
 
 ---
 
@@ -1373,4 +1383,4 @@ Décision structurante DEC-063 :
 
 Last Commits :
 
-- 1cbeeb3 - feat(applications): finalize application page workflow interactions
+- 076868d - feat(opportunities): implement decision cockpit enhancements

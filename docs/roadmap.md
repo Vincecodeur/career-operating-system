@@ -661,134 +661,23 @@ Principes :
 - privilégier les filtres utiles à la décision avant les filtres avancés ;
 - transformer la page en outil d'aide à la décision, pas en simple job board.
 
-Sous-phases :
-⬜ 7.1.18.1 Keyword Search  
-Objectif :
-Ajouter une recherche texte sur les opportunités.
+✅ 7.1.18.1 Keyword Search
+✅ 7.1.18.2 Search Summary
+✅ 7.1.18.3 Reset Filters
+✅ 7.1.18.4 Application Status Filter
+✅ 7.1.18.5 Source Filter
 
-Champs couverts :
+⬜ 7.1.18.6 Location Filter
 
-- titre ;
-- entreprise ;
-- localisation ;
-- description.
+✅ 7.1.18.7 Opportunity Decision Badges
 
-⬜ 7.1.18.2 Search Summary  
-Objectif :
-Afficher un résumé clair des résultats.
+⬜ 7.1.18.8 Matching Score Badge
+⬜ 7.1.18.9 Opportunities Sorting
 
-Exemples :
+✅ 7.1.18.10 Smart Create / Open Application
 
-- 151 total opportunities
-- Showing all opportunities
-- Showing 12 results for "python"
-- Showing 8 Greenhouse opportunities not yet applied
-
-⬜ 7.1.18.3 Reset Filters  
-Objectif :
-Permettre de réinitialiser rapidement la recherche et les filtres actifs.
-
-Le bouton Reset Filters doit être visible uniquement lorsqu'au moins un filtre est actif.
-
-⬜ 7.1.18.4 Application Status Filter  
-Objectif :
-Filtrer les opportunités selon leur état de candidature.
-
-Valeurs MVP :
-
-- All opportunities
-- Not Applied
-- Applied
-- Phone Screen
-- Interview
-- Offer
-- Accepted
-- Rejected
-- Withdrawn
-
-⬜ 7.1.18.5 Source Filter  
-Objectif :
-Filtrer les opportunités par source.
-
-Les sources doivent être dérivées dynamiquement des opportunités chargées.
-
-Exemples :
-
-- All Sources
-- Greenhouse
-- France Travail
-- LinkedIn
-- Manual
-- Unknown
-
-⬜ 7.1.18.6 Location Filter  
-Objectif :
-Filtrer les opportunités par localisation.
-
-Les localisations doivent être dérivées dynamiquement des opportunités chargées.
-
-⬜ 7.1.18.7 Opportunity Decision Badges  
-Objectif :
-Afficher les signaux de décision directement dans les cartes d'opportunité.
-
-Badges MVP :
-
-- Not Applied
-- Applied
-- Phone Screen
-- Interview
-- Offer
-- Accepted
-- Rejected
-- Withdrawn
-- Source
-
-⬜ 7.1.18.8 Matching Score Badge  
-Objectif :
-Afficher le score de matching directement dans les cartes d'opportunité lorsque la donnée est disponible ou calculable sans ajouter de complexité excessive.
-
-Le score reste calculé par le backend.
-Le frontend ne doit pas recalculer le matching.
-
-⬜ 7.1.18.9 Opportunities Sorting  
-Objectif :
-Permettre de trier les opportunités.
-
-Tri MVP :
-
-- Newest
-- Best Match, uniquement si le score est disponible dans la liste sans appel excessif au backend
-- Company A-Z
-
-⬜ 7.1.18.10 Smart Create / Open Application Action  
-Objectif :
-Adapter l'action principale selon l'état réel de l'opportunité pour le profil sélectionné.
-
-Comportement attendu :
-
-- afficher Create Application si aucune candidature n'existe pour le profil sélectionné et l'opportunité sélectionnée ;
-- afficher Open Application si une candidature existe déjà pour le profil sélectionné et l'opportunité sélectionnée ;
-- éviter la création accidentelle de candidatures doublons.
-
-⬜ 7.1.18.11 Opportunities Search & Filters Validation  
-Objectif :
-Valider le comportement complet de recherche, filtrage, tri et navigation.
-
-Validation attendue :
-
-- recherche par mot-clé ;
-- résumé des résultats ;
-- reset filters ;
-- filtre de statut candidature ;
-- filtre source ;
-- filtre localisation ;
-- badges dans les cartes ;
-- action Create / Open Application ;
-- build frontend validé.
-
-⬜ 7.1.18.12 Documentation Synchronization  
-Objectif :
-Synchroniser roadmap, project-status et handoff après validation de la phase 7.1.18.
+⬜ 7.1.18.11 Opportunities Search & Filters Validation
+⬜ 7.1.18.12 Documentation Synchronization
 
 ⬜ 7.1.19 Settings Management
 ⬜ 7.1.19.1 Job Discovery Settings

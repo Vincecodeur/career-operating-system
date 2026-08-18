@@ -466,6 +466,13 @@ Implémenté :
 - Timeline Default Event
 - Application Confirmation Dialog
 - Application Metrics Visualization
+- Opportunities Keyword Search
+- Opportunities Search Summary
+- Opportunities Reset Filters
+- Opportunities Application Status Filter
+- Opportunities Source Filter
+- Opportunities Decision Badges
+- Opportunities Smart Create/Open Application
 
 Documenté mais pas encore implémenté :
 
@@ -686,9 +693,48 @@ Des tests existent pour :
 - Phase 7.1.16.17.9 Frontend Validation
 - Phase 7.1.16.17.10 Documentation Synchronization
 - Phase 7.1.16.18 Soft Skills MVP
+- Phase 7.1.17.1 Repository Audit
+- Phase 7.1.17.2 Product Design
+- Phase 7.1.17.2.1 Application Lifecycle
+- Phase 7.1.17.2.2 Status Definitions
+- Phase 7.1.17.2.3 Notes Strategy
+- Phase 7.1.17.2.4 Timeline Strategy
+- Phase 7.1.17.2.5 Source Tracking Strategy
+- Phase 7.1.17.3 Backend Design
+- Phase 7.1.17.3.1 Data Model
+- Phase 7.1.17.3.2 API Design
+- Phase 7.1.17.3.3 Status Transition Rules
+- Phase 7.1.17.3.4 Metrics Design
+- Phase 7.1.17.4 Backend Implementation
+- Phase 7.1.17.4.1 Application Model Evolution
+- Phase 7.1.17.4.2 ApplicationEvent Model
+- Phase 7.1.17.4.3 Complete Application Create API
+- Phase 7.1.17.4.4 Application Update API
+- Phase 7.1.17.4.5 Status Transition API
+- Phase 7.1.17.4.6 Timeline API
+- Phase 7.1.17.5 Backend Tests
+- Phase 7.1.17.6 Backend Validation
+- Phase 7.1.17.7 Frontend Design
+- Phase 7.1.17.8 Frontend Implementation
+- Phase 7.1.17.9 Frontend Validation
+- Phase 7.1.17.10 Opportunity → Application Conversion Design
+- Phase 7.1.17.11 Opportunity → Application Conversion Implementation
+- Phase 7.1.17.12 Application Metrics
+- Phase 7.1.17.13 End-to-End Validation
+- Phase 7.1.17.14 Documentation Synchronization
+- Phase 7.1.18.1 Keyword Search
+- Phase 7.1.18.2 Search Summary
+- Phase 7.1.18.3 Reset Filters
+- Phase 7.1.18.4 Application Status Filter
+- Phase 7.1.18.5 Source Filter
+- Phase 7.1.18.7 Opportunity Decision Badges
+- Phase 7.1.18.10 Smart Create / Open Application
 
 ## Derniers commits importants
 
+- 076868d - feat(opportunities): implement decision cockpit enhancements
+- cf27667 - docs(opportunities): define search and decision cockpit roadmap
+- c174f9d - docs(applications): finalize application workflow synchronization
 - 1cbeeb3 - feat(applications): finalize application page workflow interactions
 - 32faf25 - feat(applications): complete profile-opportunity navigation and application creation workflow
 - f24e426 - test: add application workflow coverage
@@ -917,8 +963,7 @@ Validation réalisée :
 - validation audit trail
 
 Prochaine sous-phase :
-
-7.1.18.1 Keyword Search
+7.1.18.11 Opportunities Search & Filters Validation
 
 ## Méthode de reprise
 
