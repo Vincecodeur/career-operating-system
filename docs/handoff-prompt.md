@@ -471,7 +471,9 @@ Implémenté :
 - Opportunities Reset Filters
 - Opportunities Application Status Filter
 - Opportunities Source Filter
+- Opportunities Location Filter
 - Opportunities Decision Badges
+- Opportunities Sorting
 - Opportunities Smart Create/Open Application
 
 Documenté mais pas encore implémenté :
@@ -963,7 +965,7 @@ Validation réalisée :
 - validation audit trail
 
 Prochaine sous-phase :
-7.1.18.11 Opportunities Search & Filters Validation
+7.1.18.8 Matching Score Badge
 
 ## Méthode de reprise
 

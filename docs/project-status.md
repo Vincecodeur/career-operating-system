@@ -28,7 +28,7 @@ Current Phase
 7.1.18 Opportunities Search & Decision Cockpit
 
 Next Planned Milestone
-7.1.18.11 Opportunities Search & Filters Validation
+7.1.18.8 Matching Score Badge
 
 ---
 
@@ -1337,6 +1337,10 @@ Post-MVP Planning
 - Commit technique 076868d réalisé
 - Push GitHub réalisé
 
+- Opportunities Sorting validé
+- Location Filter validé
+- Opportunities Search & Filters Validation réalisée
+
 ---
 
 Blocked
@@ -1383,4 +1387,4 @@ Décision structurante DEC-063 :
 
 Last Commits :
 
-- 076868d - feat(opportunities): implement decision cockpit enhancements
+- 3b9f95 - feat(opportunities): implement decision cockpit enhancements

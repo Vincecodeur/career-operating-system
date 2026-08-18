@@ -667,17 +667,17 @@ Principes :
 ✅ 7.1.18.4 Application Status Filter
 ✅ 7.1.18.5 Source Filter
 
-⬜ 7.1.18.6 Location Filter
+✅ 7.1.18.6 Location Filter
 
 ✅ 7.1.18.7 Opportunity Decision Badges
 
 ⬜ 7.1.18.8 Matching Score Badge
-⬜ 7.1.18.9 Opportunities Sorting
+✅ 7.1.18.9 Opportunities Sorting
 
 ✅ 7.1.18.10 Smart Create / Open Application
 
-⬜ 7.1.18.11 Opportunities Search & Filters Validation
-⬜ 7.1.18.12 Documentation Synchronization
+✅ 7.1.18.11 Opportunities Search & Filters Validation
+✅ 7.1.18.12 Documentation Synchronization
 
 ⬜ 7.1.19 Settings Management
 ⬜ 7.1.19.1 Job Discovery Settings
