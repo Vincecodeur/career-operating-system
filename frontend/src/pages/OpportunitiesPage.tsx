@@ -86,6 +86,8 @@ export function OpportunitiesPage() {
   >("ALL");
 
   const [sourceFilter, setSourceFilter] = useState("ALL");
+  const [locationFilter, setLocationFilter] = useState("ALL");
+  const [sortBy, setSortBy] = useState("NOT_APPLIED_FIRST");
 
   const [loading, setLoading] = useState(true);
   const [matchingLoading, setMatchingLoading] = useState(false);
@@ -194,6 +196,15 @@ export function OpportunitiesPage() {
     ),
   ];
 
+  const availableLocations = [
+    "ALL",
+    ...new Set(
+      offers
+        .map((offer) => offer.location)
+        .filter((location): location is string => location !== null),
+    ),
+  ];
+
   const filteredOffers = offers.filter((offer) => {
     const search = searchTerm.toLowerCase().trim();
 
@@ -216,7 +227,54 @@ export function OpportunitiesPage() {
     const matchesSource =
       sourceFilter === "ALL" ? true : offer.source === sourceFilter;
 
-    return matchesSearch && matchesApplicationStatus && matchesSource;
+    const matchesLocation =
+      locationFilter === "ALL" ? true : offer.location === locationFilter;
+
+    return (
+      matchesSearch &&
+      matchesApplicationStatus &&
+      matchesSource &&
+      matchesLocation
+    );
+  });
+
+  const sortedOffers = [...filteredOffers].sort((a, b) => {
+    switch (sortBy) {
+      case "NOT_APPLIED_FIRST": {
+        const aApplied = hasApplications(a.id);
+        const bApplied = hasApplications(b.id);
+
+        if (aApplied === bApplied) {
+          return 0;
+        }
+
+        return aApplied ? 1 : -1;
+      }
+
+      case "APPLIED_FIRST": {
+        const aApplied = hasApplications(a.id);
+        const bApplied = hasApplications(b.id);
+
+        if (aApplied === bApplied) {
+          return 0;
+        }
+
+        return aApplied ? -1 : 1;
+      }
+
+      case "NEWEST_FIRST":
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+
+      case "OLDEST_FIRST":
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+
+      default:
+        return 0;
+    }
   });
 
   const totalOpportunities = offers.length;
@@ -238,13 +296,18 @@ export function OpportunitiesPage() {
       return `Showing ${filteredOffers.length} opportunities from ${sourceFilter}`;
     }
 
+    if (locationFilter !== "ALL") {
+      return `Showing ${filteredOffers.length} opportunities in ${locationFilter}`;
+    }
+
     return "Showing all opportunities";
   })();
 
   const hasActiveFilters =
     searchTerm.trim() !== "" ||
     applicationFilter !== "ALL" ||
-    sourceFilter !== "ALL";
+    sourceFilter !== "ALL" ||
+    locationFilter !== "ALL";
 
   const relatedApplications =
     selectedOffer === null
@@ -319,6 +382,8 @@ export function OpportunitiesPage() {
               setSearchTerm("");
               setApplicationFilter("ALL");
               setSourceFilter("ALL");
+              setSortBy("NOT_APPLIED_FIRST");
+              setLocationFilter("ALL");
             }}
             className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
             Reset
@@ -361,6 +426,17 @@ export function OpportunitiesPage() {
         </button>
 
         <select
+          value={locationFilter}
+          onChange={(event) => setLocationFilter(event.target.value)}
+          className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+          {availableLocations.map((location) => (
+            <option key={location} value={location}>
+              {location === "ALL" ? "All Locations" : location}
+            </option>
+          ))}
+        </select>
+
+        <select
           value={sourceFilter}
           onChange={(event) => setSourceFilter(event.target.value)}
           className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
@@ -369,6 +445,18 @@ export function OpportunitiesPage() {
               {source === "ALL" ? "All Sources" : source}
             </option>
           ))}
+        </select>
+        <select
+          value={sortBy}
+          onChange={(event) => setSortBy(event.target.value)}
+          className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+          <option value="NOT_APPLIED_FIRST">Not Applied First</option>
+
+          <option value="APPLIED_FIRST">Applied First</option>
+
+          <option value="NEWEST_FIRST">Newest First</option>
+
+          <option value="OLDEST_FIRST">Oldest First</option>
         </select>
       </div>
 
@@ -392,7 +480,7 @@ export function OpportunitiesPage() {
                 </p>
               </Card>
             ) : (
-              filteredOffers.map((offer) => (
+              sortedOffers.map((offer) => (
                 <button
                   key={offer.id}
                   type="button"
