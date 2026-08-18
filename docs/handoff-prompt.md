@@ -486,6 +486,13 @@ Implémenté :
 - Settings persistence UI
 - GET /settings/job-discovery integration
 - PUT /settings/job-discovery integration
+- Search Criteria Settings UI
+- Target Job Titles Settings
+- Preferred Countries Settings
+- Work Modes Settings
+- Included Keywords Settings
+- Excluded Keywords Settings
+- Settings Tags UX
 
 Documenté mais pas encore implémenté :
 
@@ -967,7 +974,7 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.19.2 Search Criteria Settings
+7.1.19.3 Matching Weights Configuration
 
 Contexte :
 

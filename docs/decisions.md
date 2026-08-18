@@ -3615,3 +3615,59 @@ Current phase status:
 Backend completed.
 Frontend completed.
 Job Discovery Settings completed.
+
+## DEC-068 - Search Criteria Governed By Reference Data
+
+Date: 2026-08-18
+Status: Accepted
+
+### Context
+
+Search Criteria Settings are now exposed through the Settings page.
+
+The MVP requires users to configure:
+
+- Target Job Titles
+- Preferred Countries
+- Work Modes
+- Included Keywords
+- Excluded Keywords
+
+Reference Data Catalogs for Countries and Work Modes are already available.
+
+### Decision
+
+Preferred Countries must use the Country Catalog.
+
+Work Modes must use the Work Mode Catalog.
+
+Free text is retained only for:
+
+- Target Job Titles
+- Included Keywords
+- Excluded Keywords
+
+### Rationale
+
+Benefits:
+
+- consistent data
+- reduced typing errors
+- better matching quality
+- easier filtering
+- improved UX
+
+### Consequences
+
+The Settings page uses:
+
+- Country selection from Country Catalog
+- Work Mode selection from Work Mode Catalog
+- Tags based visualization
+- Persisted Search Criteria settings
+
+### Related Decisions
+
+DEC-055
+DEC-056
+DEC-067

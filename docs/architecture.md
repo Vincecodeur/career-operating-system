@@ -142,12 +142,24 @@ Responsabilités :
 - Default CV Selection
 - Application Workflow Settings
 
+Search Criteria Settings currently support:
+
+- Target Job Titles
+- Preferred Countries
+- Work Modes
+- Included Keywords
+- Excluded Keywords
+
+Countries and Work Modes are controlled through the Reference Data Catalog.
+
 Implémenté :
 
 - ApplicationSetting
 - SettingsService
 - GET /settings/job-discovery
 - PUT /settings/job-discovery
+- GET /settings/search-criteria
+- PUT /settings/search-criteria
 
 Les paramètres métier sont stockés en PostgreSQL.
 

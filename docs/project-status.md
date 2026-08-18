@@ -28,7 +28,7 @@ Current Phase
 7.1.19 Settings Management
 
 Next Planned Milestone
-7.1.19.1 Job Discovery Settings
+7.1.19.3 Matching Weights Configuration
 
 ---
 
@@ -1346,6 +1346,16 @@ Post-MVP Planning
 - Push GitHub réalisé
 - 7.1.18 Opportunities Search & Decision Cockpit clôturée
 
+- Search Criteria Settings persistence implemented
+- Target Job Titles settings implemented
+- Preferred Countries settings implemented
+- Work Modes settings implemented
+- Included Keywords settings implemented
+- Excluded Keywords settings implemented
+- Settings tag-based UX implemented
+- Search Criteria counters implemented
+- Search Criteria validation completed
+
 ---
 
 Blocked
@@ -1382,7 +1392,7 @@ Phase Status:
 
 Next Step:
 
-7.1.19.2 Search Criteria Settings
+7.1.19.3 Matching Weights Configuration
 
 ---
 

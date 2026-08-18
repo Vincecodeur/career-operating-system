@@ -368,3 +368,31 @@ Out of Scope for MVP:
 - Permission management
 - User-specific settings isolation
 - Advanced settings search
+
+### SETTINGS-002 - Tag Autocomplete And Suggestions
+
+Status: Backlog
+
+Provide autocomplete suggestions for:
+
+- Target Job Titles
+- Included Keywords
+- Excluded Keywords
+
+Examples:
+
+- Technical Partnerships Manager
+- Solution Architect
+- Product Manager
+
+Benefits:
+
+- Faster data entry
+- Reduced duplicates
+- Improved consistency of search criteria
+
+Out of Scope for MVP:
+
+- AI suggestions
+- Market-driven recommendations
+- Dynamic ranking based on opportunity history
