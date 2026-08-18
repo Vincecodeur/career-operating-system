@@ -8,6 +8,7 @@ import {
   getJobOffers,
   getMatching,
   getProfiles,
+  getRankedJobOffers,
   createApplication,
 } from "../services/api";
 import { MatchingResult } from "../components/MatchingResult";
@@ -59,6 +60,11 @@ type MatchingData = {
   ai_explanation?: AIExplanation | null;
 };
 
+type RankedJobOffer = {
+  job_offer_id: number;
+  matching_score: number;
+};
+
 type ApplicationSummary = {
   id: number;
   profile_id: number;
@@ -71,8 +77,12 @@ export function OpportunitiesPage() {
   const [offers, setOffers] = useState<JobOffer[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<JobOffer | null>(null);
   const [matching, setMatching] = useState<MatchingData | null>(null);
+  const [matchingScoresByOfferId, setMatchingScoresByOfferId] = useState<
+    Record<number, number>
+  >({});
   const [applications, setApplications] = useState<ApplicationSummary[]>([]);
   const [profiles, setProfiles] = useState<any[]>([]);
+
   const [selectedProfileId, setSelectedProfileId] = useState<number | null>(
     null,
   );
@@ -141,14 +151,15 @@ export function OpportunitiesPage() {
 
   useEffect(() => {
     async function loadMatching() {
-      if (!selectedOffer) {
+      if (!selectedOffer || selectedProfileId === null) {
+        setMatching(null);
         return;
       }
 
       setMatchingLoading(true);
 
       try {
-        const result = await getMatching(1, selectedOffer.id);
+        const result = await getMatching(selectedProfileId, selectedOffer.id);
 
         setMatching(result);
       } catch {
@@ -159,7 +170,7 @@ export function OpportunitiesPage() {
     }
 
     loadMatching();
-  }, [selectedOffer]);
+  }, [selectedOffer, selectedProfileId]);
 
   useEffect(() => {
     async function loadProfiles() {
@@ -180,6 +191,31 @@ export function OpportunitiesPage() {
 
     loadProfiles();
   }, []);
+
+  useEffect(() => {
+    async function loadRankedScores() {
+      if (selectedProfileId === null) {
+        setMatchingScoresByOfferId({});
+        return;
+      }
+
+      try {
+        const rankedOffers = await getRankedJobOffers(selectedProfileId);
+
+        const scoreMap: Record<number, number> = {};
+
+        (rankedOffers as RankedJobOffer[]).forEach((rankedOffer) => {
+          scoreMap[rankedOffer.job_offer_id] = rankedOffer.matching_score;
+        });
+
+        setMatchingScoresByOfferId(scoreMap);
+      } catch {
+        setMatchingScoresByOfferId({});
+      }
+    }
+
+    loadRankedScores();
+  }, [selectedProfileId]);
 
   function hasApplications(jobOfferId: number) {
     return applications.some(
@@ -491,7 +527,7 @@ export function OpportunitiesPage() {
                       : ""
                   }`}>
                   <Card>
-                    <div className="mb-2">
+                    <div className="mb-2 flex items-center gap-2">
                       {hasApplications(offer.id) ? (
                         <span className="rounded bg-green-600 px-2 py-1 text-xs text-white">
                           Applied
@@ -499,6 +535,12 @@ export function OpportunitiesPage() {
                       ) : (
                         <span className="rounded bg-amber-600 px-2 py-1 text-xs text-white">
                           Not Applied
+                        </span>
+                      )}
+
+                      {matchingScoresByOfferId[offer.id] !== undefined && (
+                        <span className="rounded bg-blue-600 px-2 py-1 text-xs font-medium text-white">
+                          {Math.round(matchingScoresByOfferId[offer.id])}%
                         </span>
                       )}
                     </div>
