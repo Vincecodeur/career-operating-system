@@ -337,3 +337,34 @@ Applied
 → Interview
 → Offer
 → Accepted
+
+### SETTINGS-001 - Settings Categories
+
+Status: Backlog
+
+Group Settings into functional categories:
+
+- Discovery
+- Matching
+- Search
+- Profiles
+- Applications
+
+Possible future navigation:
+
+Settings
+├── Discovery
+├── Matching
+├── Search
+├── Profiles
+└── Applications
+
+Rationale:
+Improve Settings Management scalability and maintainability as new configuration areas are added after MVP completion.
+
+Out of Scope for MVP:
+
+- Multi-page settings navigation
+- Permission management
+- User-specific settings isolation
+- Advanced settings search

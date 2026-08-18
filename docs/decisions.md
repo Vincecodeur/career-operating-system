@@ -3507,3 +3507,95 @@ Le MVP Application Workflow inclut :
 - Profile Navigation
 - Opportunity Navigation
 - Confirmation pour les statuts terminaux
+
+## DEC-067 - Settings Persistence Strategy
+
+Date: 2026-08-18
+Status: Accepted
+
+### Context
+
+The application currently stores technical configuration using environment variables.
+
+Job Discovery scheduling parameters already exist:
+
+- DISCOVERY_ENABLED
+- DISCOVERY_INTERVAL_MINUTES
+- DISCOVERY_CONNECTORS
+
+The new Settings Management phase requires runtime configuration through the application UI.
+
+Future MVP phases will also need configurable settings:
+
+- Search Criteria Settings
+- Matching Weights Configuration
+- Default Profile Selection
+- Default CV Selection
+
+### Decision
+
+Business settings are stored in PostgreSQL.
+
+Environment variables remain reserved for:
+
+- credentials
+- API secrets
+- tokens
+- infrastructure configuration
+
+A dedicated Settings domain is introduced.
+
+### MVP Implementation
+
+Table:
+
+application_settings
+
+Fields:
+
+- id
+- setting_key
+- setting_value
+- created_at
+- updated_at
+
+The first implemented settings are:
+
+- job_discovery_enabled
+- job_discovery_interval_minutes
+- job_discovery_connectors
+
+### API
+
+Implemented endpoints:
+
+- GET /settings/job-discovery
+- PUT /settings/job-discovery
+
+### Consequences
+
+Benefits:
+
+- runtime configuration
+- persistence without code changes
+- reusable foundation for future settings pages
+- preparation for Settings Management MVP
+
+### Related Phases
+
+7.1.19.1 Job Discovery Settings
+
+Validation Status
+
+Completed:
+
+- Data model implemented
+- Persistence service implemented
+- REST API implemented
+- Swagger validation completed
+- PostgreSQL persistence validated
+
+Current phase status:
+
+Backend completed.
+Frontend

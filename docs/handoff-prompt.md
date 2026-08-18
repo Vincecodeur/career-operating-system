@@ -285,6 +285,11 @@ Implémenté :
 - Controlled Reference Data Governance
 - Repository Resolution Strategy
 - Conflict Resolution Workflow
+- Settings Domain
+- ApplicationSetting
+- SettingsService
+- Job Discovery Settings
+- Settings Persistence
 
 Partiellement implémenté :
 
@@ -735,6 +740,9 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- e3f347d - feat(settings): persist job discovery configuration
+- 39be9b8 - refactor(settings): move settings api into settings domain
+- dcf110a - feat(settings): create job discovery settings domain
 - 076868d - feat(opportunities): implement decision cockpit enhancements
 - cf27667 - docs(opportunities): define search and decision cockpit roadmap
 - c174f9d - docs(applications): finalize application workflow synchronization
@@ -954,21 +962,18 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.19 Settings Management
-
-Contexte :
+7.1.19.1.5 Frontend Repository Audit
 
 Validation réalisée :
 
-- test: add application workflow coverage
-- 228/228 tests passants
-- validation Swagger complète
-- validation PostgreSQL complète
-- validation timeline
-- validation audit trail
+- GET /settings/job-discovery
+- PUT /settings/job-discovery
+- PostgreSQL persistence
+- Swagger validation
 
-Prochaine sous-phase :
-7.1.19.1 Job Discovery Settings
+Current focus:
+
+Settings Management frontend implementation.
 
 ## Méthode de reprise
 

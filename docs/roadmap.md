@@ -680,14 +680,41 @@ Principes :
 ✅ 7.1.18.12 Documentation Synchronization
 
 ⬜ 7.1.19 Settings Management
-⬜ 7.1.19.1 Job Discovery Settings
-⬜ 7.1.19.2 Search Criteria Settings
-⬜ 7.1.19.3 Matching Weights Configuration
-⬜ 7.1.19.4 Source Configuration
-⬜ 7.1.19.5 Default Profile Selection
-⬜ 7.1.19.6 Default CV Selection
-⬜ 7.1.19.7 Application Workflow Settings
-⬜ 7.1.19.8 Opportunity Discovery Preferences
+⏳ 7.1.19.1 Job Discovery Settings
+
+Livrables :
+
+- backend/app/settings/models.py
+- backend/app/settings/service.py
+- backend/app/settings/router.py
+- backend/app/settings/schemas.py
+- application_settings table
+
+✅ 7.1.19.1.1 Job Discovery Settings Design
+✅ 7.1.19.1.2 Repository Impact Review
+✅ 7.1.19.1.3 Backend Persistence
+✅ 7.1.19.1.4 Settings API Validation
+
+Validation réalisée :
+
+- ApplicationSetting persistence validated
+- SettingsService validated
+- GET /settings/job-discovery validated
+- PUT /settings/job-discovery validated
+- PostgreSQL persistence validated
+- Swagger validation completed
+
+  ⬜ 7.1.19.1.5 Frontend Repository Audit
+  ⬜ 7.1.19.1.6 Frontend Settings Implementation
+  ⬜ 7.1.19.1.7 Frontend Validation
+  ⬜ 7.1.19.1.8 Documentation Synchronization
+  ⬜ 7.1.19.2 Search Criteria Settings
+  ⬜ 7.1.19.3 Matching Weights Configuration
+  ⬜ 7.1.19.4 Source Configuration
+  ⬜ 7.1.19.5 Default Profile Selection
+  ⬜ 7.1.19.6 Default CV Selection
+  ⬜ 7.1.19.7 Application Workflow Settings
+  ⬜ 7.1.19.8 Opportunity Discovery Preferences
 
 ⬜ 7.1.20 Profile Completeness
 ⬜ 7.1.20.1 Completeness Scoring

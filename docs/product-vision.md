@@ -151,6 +151,7 @@ Le MVP est considéré comme terminé lorsque le système permet de :
 - créer ou enrichir un profil candidat ;
 - gérer plusieurs profils candidats ;
 - définir des critères de recherche ;
+- configurer les paramètres de découverte des opportunités ;
 - collecter automatiquement des offres depuis au moins deux sources externes ;
 - stocker les offres collectées ;
 - filtrer les offres selon les critères définis ;

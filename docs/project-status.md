@@ -19,7 +19,7 @@ main
 ---
 
 Current Milestone
-Phase 7.1 MVP Experience Completion
+Phase 7.1.19 Settings Management
 
 ---
 
@@ -1358,29 +1358,56 @@ Phase In Progress
 
 7.1.19 Settings Management
 
+Job Discovery Settings Progress
+
+Completed:
+
+- ApplicationSetting model
+- Settings domain created
+- SettingsService implemented
+- application_settings table created
+- GET /settings/job-discovery implemented
+- PUT /settings/job-discovery implemented
+- PostgreSQL persistence validated
+- Swagger validation completed
+- Runtime update validation completed
+
+Phase Status:
+
+✅ 7.1.19.1.1 Job Discovery Settings Design
+✅ 7.1.19.1.2 Repository Impact Review
+✅ 7.1.19.1.3 Backend Persistence
+✅ 7.1.19.1.4 Settings API Validation
+
+Next Step:
+
+7.1.19.1.5 Frontend Repository Audit
+
 ---
 
 Last Decision
-DEC-064 - Application Workflow Frontend UX
+DEC-067 - Settings Persistence Strategy
 
 Décisions récemment validées :
 
-- DEC-059 Automatic Hard Skill / Soft Skill Classification
-- DEC-060 User Classification Override
-- DEC-061 Skill Normalization And Compound Skill Splitting
-- DEC-062 Bulk Proposal Processing
-- DEC-063 Application Workflow Lifecycle
-- DEC-064 Application Workflow Frontend UX
+- DEC-065 Opportunity To Application Conversion
+- DEC-066 Application Workflow Completion
+- DEC-067 Settings Persistence Strategy
 
 Résultat :
 
 - Application workflow validé
 - Timeline validée
 - KPI validés
-- Create Manual Application validé
-- Rejected / Withdrawn validés
-- Commit 1cbeeb3 poussé
-- Working tree clean
+- Opportunities Decision Cockpit validé
+- Job Discovery Settings backend validé
+- ApplicationSetting model validé
+- SettingsService validé
+- GET /settings/job-discovery validé
+- PUT /settings/job-discovery validé
+- Persistance PostgreSQL validée
+- Validation Swagger réalisée
+- Runtime update validation réalisée
 
 Décision structurante DEC-063 :
 
@@ -1392,6 +1419,6 @@ Décision structurante DEC-063 :
 
 Last Commits :
 
-- b977883 - feat(opportunities): add matching score badges
-- ee5eb3a - docs(opportunities): synchronize decision cockpit validation
-- 076868d - feat(opportunities): implement decision cockpit enhancements
+- e3f347d - feat(settings): persist job discovery configuration
+- 39be9b8 - refactor(settings): move settings api into settings domain
+- dcf110a - feat(settings): create job discovery settings domain

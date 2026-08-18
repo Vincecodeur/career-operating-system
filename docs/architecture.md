@@ -128,6 +128,38 @@ Types prévus :
 - SCRAPING ;
 - MANUAL_IMPORT.
 
+### Settings
+
+Gestion des paramètres applicatifs.
+
+Responsabilités :
+
+- Job Discovery Settings
+- Search Criteria Settings
+- Matching Weights
+- Source Configuration
+- Default Profile Selection
+- Default CV Selection
+- Application Workflow Settings
+
+Implémenté :
+
+- ApplicationSetting
+- SettingsService
+- GET /settings/job-discovery
+- PUT /settings/job-discovery
+
+Les paramètres métier sont stockés en PostgreSQL.
+
+Les secrets restent stockés dans les variables d'environnement.
+
+Exemples :
+
+- FRANCE_TRAVAIL_CLIENT_ID
+- FRANCE_TRAVAIL_CLIENT_SECRET
+- LINKEDIN_CLIENT_SECRET
+- GREENHOUSE_BOARD_TOKEN
+
 ### Opportunity Analysis
 
 Analyse détaillée des opportunités.
@@ -267,14 +299,20 @@ Objectif carrière futur.
 ## Architecture Backend
 
 app/
-core/
-profile/
-skills/
-experience/
-languages/
-jobs/
-matching/
-applications/
+├── core/
+├── auth/
+├── profile/
+├── skills/
+├── experience/
+├── languages/
+├── certifications/
+├── cv/
+├── profile_enrichment/
+├── reference_data/
+├── jobs/
+├── matching/
+├── applications/
+└── settings/
 
 ### Futurs domaines prévus
 

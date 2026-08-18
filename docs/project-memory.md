@@ -112,6 +112,12 @@ Application Tracker
 
 Le système doit aider à identifier les meilleures opportunités et à prendre de meilleures décisions professionnelles.
 
+Les paramètres métier sont configurables par l'utilisateur.
+
+Les secrets techniques restent séparés des paramètres métier.
+
+Les paramètres métier sont persistés dans PostgreSQL via le domaine Settings.
+
 ---
 
 ## Règle de simplicité
