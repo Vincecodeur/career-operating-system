@@ -482,6 +482,11 @@ Implémenté :
 - Opportunities Smart Create/Open Application
 - Opportunities Matching Score Badge
 
+- Job Discovery Settings UI
+- Settings persistence UI
+- GET /settings/job-discovery integration
+- PUT /settings/job-discovery integration
+
 Documenté mais pas encore implémenté :
 
 - Auth Layout
@@ -962,18 +967,21 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.19.1.5 Frontend Repository Audit
+7.1.19.2 Search Criteria Settings
+
+Contexte :
 
 Validation réalisée :
 
-- GET /settings/job-discovery
-- PUT /settings/job-discovery
-- PostgreSQL persistence
-- Swagger validation
+- test: add application workflow coverage
+- 228/228 tests passants
+- validation Swagger complète
+- validation PostgreSQL complète
+- validation timeline
+- validation audit trail
 
-Current focus:
-
-Settings Management frontend implementation.
+Prochaine sous-phase :
+7.1.19.1 Job Discovery Settings
 
 ## Méthode de reprise
 
