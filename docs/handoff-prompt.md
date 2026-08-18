@@ -981,7 +981,7 @@ Validation réalisée :
 - validation audit trail
 
 Prochaine sous-phase :
-7.1.19.1 Job Discovery Settings
+7.1.19.2 Search Criteria Settings
 
 ## Méthode de reprise
 
