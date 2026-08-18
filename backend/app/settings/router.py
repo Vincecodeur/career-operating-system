@@ -12,6 +12,15 @@ from app.settings.schemas import (
 from app.settings.service import (
     SettingsService,
 )
+from app.settings.schemas import (
+    SearchCriteriaSettingsResponse,
+)
+
+from app.settings.schemas import (
+    SearchCriteriaSettingsUpdate,
+)
+
+
 
 router = APIRouter(
     tags=["settings"],
@@ -45,3 +54,36 @@ def update_job_discovery_settings(
     )
 
     return service.get_job_discovery_settings()
+
+
+@router.get(
+    "/settings/search-criteria",
+    response_model=SearchCriteriaSettingsResponse,
+)
+def get_search_criteria_settings(
+    db: Session = Depends(get_db),
+):
+    service = SettingsService(db)
+
+    return (
+        service.get_search_criteria_settings()
+    )
+
+
+@router.put(
+    "/settings/search-criteria",
+    response_model=SearchCriteriaSettingsResponse,
+)
+def update_search_criteria_settings(
+    payload: SearchCriteriaSettingsUpdate,
+    db: Session = Depends(get_db),
+):
+    service = SettingsService(db)
+
+    service.update_search_criteria_settings(
+        payload.model_dump()
+    )
+
+    return (
+        service.get_search_criteria_settings()
+    )

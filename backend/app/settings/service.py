@@ -108,3 +108,90 @@ class SettingsService:
                 ]
             ),
         )
+        
+        
+        
+    def get_search_criteria_settings(
+        self,
+    ) -> dict:
+        return {
+            "target_job_titles": [
+                item.strip()
+                for item in self.get_value(
+                    "search_target_job_titles",
+                    "",
+                ).split(",")
+                if item.strip()
+            ],
+            "preferred_countries": [
+                item.strip()
+                for item in self.get_value(
+                    "search_preferred_countries",
+                    "",
+                ).split(",")
+                if item.strip()
+            ],
+            "work_modes": [
+                item.strip()
+                for item in self.get_value(
+                    "search_work_modes",
+                    "",
+                ).split(",")
+                if item.strip()
+            ],
+            "included_keywords": [
+                item.strip()
+                for item in self.get_value(
+                    "search_included_keywords",
+                    "",
+                ).split(",")
+                if item.strip()
+            ],
+            "excluded_keywords": [
+                item.strip()
+                for item in self.get_value(
+                    "search_excluded_keywords",
+                    "",
+                ).split(",")
+                if item.strip()
+            ],
+        }
+
+    def update_search_criteria_settings(
+        self,
+        payload: dict,
+    ) -> None:
+        self.set_value(
+            "search_target_job_titles",
+            ",".join(
+                payload["target_job_titles"]
+            ),
+        )
+
+        self.set_value(
+            "search_preferred_countries",
+            ",".join(
+                payload["preferred_countries"]
+            ),
+        )
+
+        self.set_value(
+            "search_work_modes",
+            ",".join(
+                payload["work_modes"]
+            ),
+        )
+
+        self.set_value(
+            "search_included_keywords",
+            ",".join(
+                payload["included_keywords"]
+            ),
+        )
+
+        self.set_value(
+            "search_excluded_keywords",
+            ",".join(
+                payload["excluded_keywords"]
+            ),
+        )

@@ -879,6 +879,15 @@ export type JobDiscoverySettings = {
     discovery_connectors: string[];
 };
 
+export type SearchCriteriaSettings = {
+    target_job_titles: string[];
+    preferred_countries: string[];
+    work_modes: string[];
+    included_keywords: string[];
+    excluded_keywords: string[];
+};
+
+
 export async function getJobDiscoverySettings(
 ): Promise<JobDiscoverySettings> {
     const response = await fetch(
@@ -917,6 +926,43 @@ export async function updateJobDiscoverySettings(
     return response.json();
 }
 
+export async function getSearchCriteriaSettings(
+): Promise<SearchCriteriaSettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/search-criteria`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load search criteria settings."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateSearchCriteriaSettings(
+    payload: SearchCriteriaSettings,
+): Promise<SearchCriteriaSettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/search-criteria`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update search criteria settings."
+        );
+    }
+
+    return response.json();
+}
 
 export async function getJobOffers() {
     const response = await fetch(
