@@ -25,10 +25,10 @@ Phase 7.1 MVP Experience Completion
 
 Current Phase
 
-7.1.18 Opportunities Search & Decision Cockpit
+7.1.19 Settings Management
 
 Next Planned Milestone
-7.1.18.8 Matching Score Badge
+7.1.19.1 Job Discovery Settings
 
 ---
 
@@ -1341,6 +1341,11 @@ Post-MVP Planning
 - Location Filter validé
 - Opportunities Search & Filters Validation réalisée
 
+- Matching Score Badge validé
+- Commit technique b977883 réalisé
+- Push GitHub réalisé
+- 7.1.18 Opportunities Search & Decision Cockpit clôturée
+
 ---
 
 Blocked
@@ -1351,7 +1356,7 @@ Aucun
 
 Phase In Progress
 
-7.1.18 Opportunities Search & Decision Cockpit
+7.1.19 Settings Management
 
 ---
 
@@ -1387,4 +1392,6 @@ Décision structurante DEC-063 :
 
 Last Commits :
 
-- 3b9f95 - feat(opportunities): implement decision cockpit enhancements
+- b977883 - feat(opportunities): add matching score badges
+- ee5eb3a - docs(opportunities): synchronize decision cockpit validation
+- 076868d - feat(opportunities): implement decision cockpit enhancements

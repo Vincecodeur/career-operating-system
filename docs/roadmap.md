@@ -635,7 +635,7 @@ Livrable :
 ✅ 7.1.17.13 End-to-End Validation
 ✅ 7.1.17.14 Documentation Synchronization
 
-⬜ 7.1.18 Opportunities Search & Decision Cockpit  
+✅ 7.1.18 Opportunities Search & Decision Cockpit  
 Objectif :
 Transformer la page Opportunities en cockpit de recherche, filtrage et priorisation des opportunités.
 
@@ -671,7 +671,7 @@ Principes :
 
 ✅ 7.1.18.7 Opportunity Decision Badges
 
-⬜ 7.1.18.8 Matching Score Badge
+✅ 7.1.18.8 Matching Score Badge
 ✅ 7.1.18.9 Opportunities Sorting
 
 ✅ 7.1.18.10 Smart Create / Open Application

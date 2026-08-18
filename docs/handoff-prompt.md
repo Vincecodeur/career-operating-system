@@ -475,6 +475,7 @@ Implémenté :
 - Opportunities Decision Badges
 - Opportunities Sorting
 - Opportunities Smart Create/Open Application
+- Opportunities Matching Score Badge
 
 Documenté mais pas encore implémenté :
 
@@ -859,6 +860,8 @@ Des tests existent pour :
 - 7828d0b - feat: add application tracker component
 - 9893c4d - docs: synchronize application tracker phase
 - 834c331 - feat: implement application crud
+- b977883 - feat(opportunities): add matching score badges
+- ee5eb3a - docs(opportunities): synchronize decision cockpit validation
 
 ## Résultat métier validé
 
@@ -951,7 +954,7 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.18 Opportunities Search & Decision Cockpit
+7.1.19 Settings Management
 
 Contexte :
 
@@ -965,7 +968,7 @@ Validation réalisée :
 - validation audit trail
 
 Prochaine sous-phase :
-7.1.18.8 Matching Score Badge
+7.1.19.1 Job Discovery Settings
 
 ## Méthode de reprise
 
