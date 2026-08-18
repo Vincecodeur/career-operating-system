@@ -80,6 +80,13 @@ export function OpportunitiesPage() {
   const [creatingApplication, setCreatingApplication] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [applicationFilter, setApplicationFilter] = useState<
+    "ALL" | "NOT_APPLIED" | "APPLIED"
+  >("ALL");
+
+  const [sourceFilter, setSourceFilter] = useState("ALL");
+
   const [loading, setLoading] = useState(true);
   const [matchingLoading, setMatchingLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -172,20 +179,72 @@ export function OpportunitiesPage() {
     loadProfiles();
   }, []);
 
+  function hasApplications(jobOfferId: number) {
+    return applications.some(
+      (application) => application.job_offer_id === jobOfferId,
+    );
+  }
+
+  const availableSources = [
+    "ALL",
+    ...new Set(
+      offers
+        .map((offer) => offer.source)
+        .filter((source): source is string => source !== null),
+    ),
+  ];
+
   const filteredOffers = offers.filter((offer) => {
     const search = searchTerm.toLowerCase().trim();
 
-    if (!search) {
-      return true;
-    }
-
-    return (
+    const matchesSearch =
+      !search ||
       offer.title?.toLowerCase().includes(search) ||
       offer.company_name?.toLowerCase().includes(search) ||
       offer.location?.toLowerCase().includes(search) ||
-      offer.description?.toLowerCase().includes(search)
-    );
+      offer.description?.toLowerCase().includes(search);
+
+    const applied = hasApplications(offer.id);
+
+    const matchesApplicationStatus =
+      applicationFilter === "ALL"
+        ? true
+        : applicationFilter === "APPLIED"
+          ? applied
+          : !applied;
+
+    const matchesSource =
+      sourceFilter === "ALL" ? true : offer.source === sourceFilter;
+
+    return matchesSearch && matchesApplicationStatus && matchesSource;
   });
+
+  const totalOpportunities = offers.length;
+
+  const searchSummary = (() => {
+    if (searchTerm.trim()) {
+      return `Showing ${filteredOffers.length} results for "${searchTerm.trim()}"`;
+    }
+
+    if (applicationFilter === "APPLIED") {
+      return `Showing ${filteredOffers.length} applied opportunities`;
+    }
+
+    if (applicationFilter === "NOT_APPLIED") {
+      return `Showing ${filteredOffers.length} not applied opportunities`;
+    }
+
+    if (sourceFilter !== "ALL") {
+      return `Showing ${filteredOffers.length} opportunities from ${sourceFilter}`;
+    }
+
+    return "Showing all opportunities";
+  })();
+
+  const hasActiveFilters =
+    searchTerm.trim() !== "" ||
+    applicationFilter !== "ALL" ||
+    sourceFilter !== "ALL";
 
   const relatedApplications =
     selectedOffer === null
@@ -193,6 +252,8 @@ export function OpportunitiesPage() {
       : applications.filter(
           (application) => application.job_offer_id === selectedOffer.id,
         );
+
+  const hasRelatedApplications = relatedApplications.length > 0;
 
   async function handleCreateApplication() {
     if (!selectedOffer || selectedProfileId === null) {
@@ -222,25 +283,100 @@ export function OpportunitiesPage() {
     }
   }
 
+  function handlePrimaryAction() {
+    if (hasRelatedApplications && relatedApplications.length > 0) {
+      navigate("/applications", {
+        state: {
+          applicationId: relatedApplications[0].id,
+        },
+      });
+
+      return;
+    }
+
+    handleCreateApplication();
+  }
+
   return (
     <>
       <PageHeader
         title="Opportunities"
         description="Explore and analyze opportunities."
       />
-      <div className="mb-6">
+      <div className="mb-6 flex items-center gap-3">
         <input
           type="text"
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           placeholder="Search opportunities..."
-          className="w-full rounded-md border border-slate-700 bg-slate-950 px-4 py-2 text-white outline-none focus:border-blue-500"
+          className="flex-1 rounded-md border border-slate-700 bg-slate-950 px-4 py-2 text-white outline-none focus:border-blue-500"
         />
+
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchTerm("");
+              setApplicationFilter("ALL");
+              setSourceFilter("ALL");
+            }}
+            className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
+            Reset
+          </button>
+        )}
       </div>
 
-      <p className="mb-6 text-sm text-slate-400">
-        {filteredOffers.length} opportunities found
-      </p>
+      <div className="mb-4 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setApplicationFilter("ALL")}
+          className={`rounded-md px-3 py-2 text-sm ${
+            applicationFilter === "ALL"
+              ? "bg-blue-600 text-white"
+              : "border border-slate-700 text-slate-300"
+          }`}>
+          All
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setApplicationFilter("NOT_APPLIED")}
+          className={`rounded-md px-3 py-2 text-sm ${
+            applicationFilter === "NOT_APPLIED"
+              ? "bg-blue-600 text-white"
+              : "border border-slate-700 text-slate-300"
+          }`}>
+          Not Applied
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setApplicationFilter("APPLIED")}
+          className={`rounded-md px-3 py-2 text-sm ${
+            applicationFilter === "APPLIED"
+              ? "bg-blue-600 text-white"
+              : "border border-slate-700 text-slate-300"
+          }`}>
+          Applied
+        </button>
+
+        <select
+          value={sourceFilter}
+          onChange={(event) => setSourceFilter(event.target.value)}
+          className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+          {availableSources.map((source) => (
+            <option key={source} value={source}>
+              {source === "ALL" ? "All Sources" : source}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-6 text-sm text-slate-400">
+        <p>{totalOpportunities} total opportunities</p>
+
+        <p>{searchSummary}</p>
+      </div>
 
       {loading && <p className="text-slate-400">Loading opportunities...</p>}
 
@@ -267,6 +403,18 @@ export function OpportunitiesPage() {
                       : ""
                   }`}>
                   <Card>
+                    <div className="mb-2">
+                      {hasApplications(offer.id) ? (
+                        <span className="rounded bg-green-600 px-2 py-1 text-xs text-white">
+                          Applied
+                        </span>
+                      ) : (
+                        <span className="rounded bg-amber-600 px-2 py-1 text-xs text-white">
+                          Not Applied
+                        </span>
+                      )}
+                    </div>
+
                     <h3 className="font-medium text-white">{offer.title}</h3>
 
                     <p className="text-sm text-slate-300">
@@ -305,11 +453,13 @@ export function OpportunitiesPage() {
                     <button
                       type="button"
                       disabled={creatingApplication}
-                      onClick={handleCreateApplication}
+                      onClick={handlePrimaryAction}
                       className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500">
                       {creatingApplication
                         ? "Creating..."
-                        : "Create Application"}
+                        : hasRelatedApplications
+                          ? "Open Application"
+                          : "Create Application"}
                     </button>
                   </div>
                 </div>
