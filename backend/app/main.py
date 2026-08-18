@@ -20,6 +20,9 @@ from app.jobs.job_offer_skill_router import (
     router as job_offer_skill_router,
 )
 from app.jobs.router import router as jobs_router
+from app.jobs.job_source_router import (
+    router as job_source_router,
+)
 from app.jobs.scheduler import DiscoveryScheduler
 from app.languages.router import router as languages_router
 from app.reference_data.router import (
@@ -87,6 +90,7 @@ app.include_router(certifications_router)
 app.include_router(cv_router)
 app.include_router(profile_enrichment_router)
 app.include_router(jobs_router)
+app.include_router(job_source_router)
 app.include_router(job_offer_skill_router)
 app.include_router(matching_router)
 app.include_router(applications_router)
