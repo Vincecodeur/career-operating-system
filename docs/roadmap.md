@@ -722,12 +722,62 @@ Validation réalisée :
 - Counters implemented
 - End-to-end validation completed
 
-  ⬜ 7.1.19.3 Matching Weights Configuration
-  ⬜ 7.1.19.4 Source Configuration
-  ⬜ 7.1.19.5 Default Profile Selection
-  ⬜ 7.1.19.6 Default CV Selection
-  ⬜ 7.1.19.7 Application Workflow Settings
-  ⬜ 7.1.19.8 Opportunity Discovery Preferences
+  ⏭️ 7.1.19.3 Matching Weights Configuration
+  Moved to Post-MVP:
+  MATCHING-002 Configurable Matching Weights
+
+  ✅ 7.1.19.4 Source Configuration
+
+Validation réalisée:
+
+- Connector catalog introduced
+- Connectors stored as controlled list
+- Connectors tag-based UX implemented
+- Connectors counter implemented
+- End-to-end validation completed
+  ⬜ 7.1.19.5 Opportunity Context Selection
+
+Objectif :
+
+Définir quel profil pilote les opportunités
+dans les écrans MVP avant l'arrivée du
+Multi Profile Opportunity Context.
+
+Principes :
+
+- le premier profil est sélectionné à l'ouverture si aucun contexte n'existe ;
+- l'utilisateur peut sélectionner un profil actif dans les écrans Opportunities ;
+- le classement des opportunités utilise le profil sélectionné ;
+- le détail affiche les scores de tous les profils ;
+- Create Application pré-sélectionne le profil ayant le meilleur matching ;
+- l'utilisateur peut modifier ce profil avant validation ;
+- aucun profil global par défaut n'est stocké ;
+- aucun contexte actif n'est persisté ;
+- lors d'une nouvelle session, le système repart du premier profil disponible.
+
+Règles d'affichage :
+
+Opportunity Cards
+
+- les cartes affichent uniquement le score du profil actuellement sélectionné ;
+- le tri utilise uniquement le score du profil actuellement sélectionné.
+
+Opportunity Details
+
+- la fiche détail affiche les scores de tous les profils disponibles ;
+- le meilleur score est identifié visuellement ;
+- l'utilisateur peut comparer les résultats de tous les profils.
+
+Sous-phases :
+
+⬜ 7.1.19.5.1 Product Design
+⬜ 7.1.19.5.2 Repository Audit
+⬜ 7.1.19.5.3 Technical Design
+⬜ 7.1.19.5.4 Validation
+⬜ 7.1.19.5.5 Documentation Synchronization
+
+⬜ 7.1.19.6 Application Workflow Settings
+⬜ 7.1.19.7 Opportunity Discovery Preferences
 
 ⬜ 7.1.20 Profile Completeness
 ⬜ 7.1.20.1 Completeness Scoring
@@ -756,6 +806,12 @@ Principes :
 - une opportunité peut être pertinente pour plusieurs profils ;
 - l'utilisateur doit comprendre quel profil explique chaque score.
 
+Opportunity details display
+all profile scores simultaneously.
+
+Ranking continues to use
+the currently selected profile context.
+
 Sous-phases :
 
 ⬜ 7.1.22.1 Product Design
@@ -775,7 +831,7 @@ Objectif :
 Une candidature conserve le profil utilisé
 lors de sa création.
 
-⬜ 7.1.22.11 Application Creation From Selected Profile
+⬜ 7.1.22.11 Application Creation Strategy
 
 Objectif :
 Une opportunité peut être pertinente pour plusieurs profils.
@@ -790,6 +846,10 @@ Solution Architect : 58 %
 Technical Partnerships Manager : 41 %
 ↓
 Create Application As Product Manager
+
+pré-sélection du meilleur score
+
+- override manuel utilisateur
 
 ⬜ 7.1.22.12 Multi Profile Validation
 

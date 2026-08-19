@@ -974,21 +974,35 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.19.3 Matching Weights Configuration
+7.1.19.5 Opportunity Context Selection
 
-Contexte :
+Contexte métier :
 
-Validation réalisée :
+Le besoin n'est plus un profil par défaut global.
 
-- test: add application workflow coverage
-- 228/228 tests passants
-- validation Swagger complète
-- validation PostgreSQL complète
-- validation timeline
-- validation audit trail
+Le MVP retient :
 
-Prochaine sous-phase :
-7.1.19.2 Search Criteria Settings
+- premier profil sélectionné automatiquement ;
+- contexte de profil sélectionné pour le ranking ;
+- affichage de tous les scores dans le détail ;
+- pré-sélection du meilleur profil lors de la création d'une candidature ;
+- aucun profil global persistant.
+
+Important :
+
+Le contexte actif est temporaire.
+
+Le MVP ne stocke pas :
+
+- profil par défaut ;
+- dernier profil sélectionné ;
+- contexte actif persistant.
+
+Le système repart toujours du premier profil disponible lorsqu'aucun contexte n'est sélectionné.
+
+Opportunity cards display the score of the currently selected profile context.
+
+Opportunity details display the scores of all available profiles.
 
 ## Méthode de reprise
 

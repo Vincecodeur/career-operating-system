@@ -19,7 +19,7 @@ main
 ---
 
 Current Milestone
-Phase 7.1.19 Settings Management
+7.1.19.5 Opportunity Context Selection
 
 ---
 
@@ -28,7 +28,7 @@ Current Phase
 7.1.19 Settings Management
 
 Next Planned Milestone
-7.1.19.3 Matching Weights Configuration
+7.1.19.5 Opportunity Context Selection
 
 ---
 
@@ -1356,6 +1356,14 @@ Post-MVP Planning
 - Search Criteria counters implemented
 - Search Criteria validation completed
 
+- Search Criteria Settings persistence implemented
+- Search Criteria counters implemented
+- Connectors catalog implemented
+- Connectors controlled multi-select implemented
+- Connectors settings validation completed
+- Source Configuration completed
+- SETTINGS-003 added to Post-MVP backlog
+
 ---
 
 Blocked
@@ -1392,7 +1400,7 @@ Phase Status:
 
 Next Step:
 
-7.1.19.3 Matching Weights Configuration
+7.1.19.5 Opportunity Context Selection
 
 ---
 

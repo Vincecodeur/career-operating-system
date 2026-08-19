@@ -35,6 +35,29 @@ Exemples :
 - Profil Product Manager
 - Profil Head of Partnerships
 
+MVP Multi-Profile Strategy
+
+The system does not use a global default profile.
+
+Opportunity workflows use a selected profile context.
+
+Principles:
+
+- first profile is selected automatically when needed;
+- opportunity ranking uses the selected profile;
+- opportunity details show all profile scores;
+- application creation defaults to the best matching profile;
+- the user remains able to override the selected profile.
+
+Opportunity Context Rules
+
+- opportunity cards display the score of the selected profile context;
+- opportunity ranking uses the selected profile context;
+- opportunity details display the scores of all profiles;
+- application creation defaults to the profile with the highest matching score;
+- active profile context is not persisted.
+- when a new session starts, the system uses the first available profile.
+
 ---
 
 ## Règles projet

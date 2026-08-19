@@ -138,8 +138,6 @@ Responsabilités :
 - Search Criteria Settings
 - Matching Weights
 - Source Configuration
-- Default Profile Selection
-- Default CV Selection
 - Application Workflow Settings
 
 Search Criteria Settings currently support:
@@ -150,7 +148,19 @@ Search Criteria Settings currently support:
 - Included Keywords
 - Excluded Keywords
 
+No global default profile is stored.
+
 Countries and Work Modes are controlled through the Reference Data Catalog.
+
+Discovery Connectors are controlled through a dedicated connector catalog.
+
+Current supported connectors:
+
+- France Travail
+- Greenhouse
+- LinkedIn
+
+Connector selection uses a controlled multi-select UI.
 
 Implémenté :
 
@@ -242,6 +252,11 @@ An Application may be created:
 
 - directly from an Opportunity
 - manually by the user
+
+When an Application is created from an Opportunity:
+
+- the profile with the highest matching score is pre-selected;
+- the user may override the selected profile before confirmation.
 
 ### Market Intelligence
 
