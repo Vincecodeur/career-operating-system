@@ -7,10 +7,13 @@ import {
   getApplications,
   getJobOffers,
   getMatching,
+  getProfileScoresForJobOffer,
   getProfiles,
   getRankedJobOffers,
   createApplication,
+  type ProfileOpportunityScore,
 } from "../services/api";
+
 import { MatchingResult } from "../components/MatchingResult";
 
 type JobOffer = {
@@ -80,6 +83,12 @@ export function OpportunitiesPage() {
   const [matchingScoresByOfferId, setMatchingScoresByOfferId] = useState<
     Record<number, number>
   >({});
+
+  const [profileScores, setProfileScores] = useState<ProfileOpportunityScore[]>(
+    [],
+  );
+
+  const [profileScoresLoading, setProfileScoresLoading] = useState(false);
   const [applications, setApplications] = useState<ApplicationSummary[]>([]);
   const [profiles, setProfiles] = useState<any[]>([]);
 
@@ -97,7 +106,7 @@ export function OpportunitiesPage() {
 
   const [sourceFilter, setSourceFilter] = useState("ALL");
   const [locationFilter, setLocationFilter] = useState("ALL");
-  const [sortBy, setSortBy] = useState("NOT_APPLIED_FIRST");
+  const [sortBy, setSortBy] = useState("BEST_MATCH_FIRST");
 
   const [loading, setLoading] = useState(true);
   const [matchingLoading, setMatchingLoading] = useState(false);
@@ -171,6 +180,29 @@ export function OpportunitiesPage() {
 
     loadMatching();
   }, [selectedOffer, selectedProfileId]);
+
+  useEffect(() => {
+    async function loadProfileScores() {
+      if (!selectedOffer) {
+        setProfileScores([]);
+        return;
+      }
+
+      setProfileScoresLoading(true);
+
+      try {
+        const scores = await getProfileScoresForJobOffer(selectedOffer.id);
+
+        setProfileScores(scores);
+      } catch {
+        setProfileScores([]);
+      } finally {
+        setProfileScoresLoading(false);
+      }
+    }
+
+    loadProfileScores();
+  }, [selectedOffer]);
 
   useEffect(() => {
     async function loadProfiles() {
@@ -276,6 +308,12 @@ export function OpportunitiesPage() {
 
   const sortedOffers = [...filteredOffers].sort((a, b) => {
     switch (sortBy) {
+      case "BEST_MATCH_FIRST": {
+        const aScore = matchingScoresByOfferId[a.id] ?? 0;
+        const bScore = matchingScoresByOfferId[b.id] ?? 0;
+
+        return bScore - aScore;
+      }
       case "NOT_APPLIED_FIRST": {
         const aApplied = hasApplications(a.id);
         const bApplied = hasApplications(b.id);
@@ -354,6 +392,17 @@ export function OpportunitiesPage() {
 
   const hasRelatedApplications = relatedApplications.length > 0;
 
+  const bestProfileScore =
+    profileScores.find((score) => score.is_best_match) ?? null;
+
+  function getGapFromBest(score: number) {
+    if (!bestProfileScore) {
+      return 0;
+    }
+
+    return Math.round(bestProfileScore.matching_score - score);
+  }
+
   async function handleCreateApplication() {
     if (!selectedOffer || selectedProfileId === null) {
       return;
@@ -418,7 +467,7 @@ export function OpportunitiesPage() {
               setSearchTerm("");
               setApplicationFilter("ALL");
               setSourceFilter("ALL");
-              setSortBy("NOT_APPLIED_FIRST");
+              setSortBy("BEST_MATCH_FIRST");
               setLocationFilter("ALL");
             }}
             className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
@@ -427,6 +476,32 @@ export function OpportunitiesPage() {
         )}
       </div>
 
+      <div className="mb-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div>
+            <p className="text-sm font-medium text-white">
+              Opportunity Context
+            </p>
+
+            <p className="text-xs text-slate-400">
+              Active profile used for opportunity ranking and matching analysis.
+            </p>
+          </div>
+
+          <select
+            value={selectedProfileId ?? ""}
+            onChange={(event) =>
+              setSelectedProfileId(Number(event.target.value))
+            }
+            className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+            {profiles.map((profile) => (
+              <option key={profile.id} value={profile.id}>
+                {profile.full_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       <div className="mb-4 flex items-center gap-2">
         <button
           type="button"
@@ -486,6 +561,7 @@ export function OpportunitiesPage() {
           value={sortBy}
           onChange={(event) => setSortBy(event.target.value)}
           className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+          <option value="BEST_MATCH_FIRST">Best Match First</option>
           <option value="NOT_APPLIED_FIRST">Not Applied First</option>
 
           <option value="APPLIED_FIRST">Applied First</option>
@@ -540,6 +616,7 @@ export function OpportunitiesPage() {
 
                       {matchingScoresByOfferId[offer.id] !== undefined && (
                         <span className="rounded bg-blue-600 px-2 py-1 text-xs font-medium text-white">
+                          ⭐ Match{" "}
                           {Math.round(matchingScoresByOfferId[offer.id])}%
                         </span>
                       )}
@@ -567,19 +644,6 @@ export function OpportunitiesPage() {
                   </h2>
 
                   <div className="flex items-center gap-3">
-                    <select
-                      value={selectedProfileId ?? ""}
-                      onChange={(event) =>
-                        setSelectedProfileId(Number(event.target.value))
-                      }
-                      className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
-                      {profiles.map((profile) => (
-                        <option key={profile.id} value={profile.id}>
-                          {profile.full_name}
-                        </option>
-                      ))}
-                    </select>
-
                     <button
                       type="button"
                       disabled={creatingApplication}
@@ -693,10 +757,149 @@ export function OpportunitiesPage() {
                   </p>
                 </div>
 
+                <div className="mb-8 border-t border-slate-700 pt-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-white">
+                        Profile Scores
+                      </h3>
+
+                      <p className="text-xs text-slate-400">
+                        Compare how this opportunity matches each available
+                        profile.
+                      </p>
+                    </div>
+
+                    <span className="text-xs text-slate-400">
+                      {profileScores.length} profiles evaluated
+                    </span>
+                  </div>
+
+                  {profileScoresLoading ? (
+                    <p className="text-slate-400">Loading profile scores...</p>
+                  ) : profileScores.length === 0 ? (
+                    <p className="text-slate-400">
+                      No profile scores available.
+                    </p>
+                  ) : (
+                    <div className="space-y-4">
+                      {bestProfileScore && (
+                        <div className="rounded-lg border border-blue-500 bg-blue-500/10 p-4">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-xs font-medium uppercase tracking-wide text-blue-300">
+                                Best Matching Profile
+                              </p>
+
+                              <p className="mt-1 text-base font-semibold text-white">
+                                🥇 {bestProfileScore.profile_name}
+                              </p>
+                            </div>
+
+                            <p className="text-2xl font-bold text-white">
+                              {Math.round(bestProfileScore.matching_score)}%
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="max-h-56 overflow-y-auto rounded-lg border border-slate-700">
+                        <table className="w-full text-sm">
+                          <thead className="sticky top-0 bg-slate-900 text-left text-xs uppercase tracking-wide text-slate-400">
+                            <tr>
+                              <th className="px-4 py-3">Profile</th>
+
+                              <th className="px-4 py-3 text-right">Score</th>
+
+                              <th className="px-4 py-3 text-right">Skills</th>
+
+                              <th className="px-4 py-3 text-right">
+                                Experience
+                              </th>
+
+                              <th className="px-4 py-3 text-right">
+                                Work Mode
+                              </th>
+
+                              <th className="px-4 py-3 text-right">Location</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {profileScores
+                              .filter((score) => !score.is_best_match)
+                              .map((score) => (
+                                <tr
+                                  key={score.profile_id}
+                                  className={
+                                    score.is_best_match
+                                      ? "border-t border-blue-500/40 bg-blue-500/10"
+                                      : "border-t border-slate-800"
+                                  }>
+                                  <td className="px-4 py-3">
+                                    <div className="flex flex-col">
+                                      <span className="font-medium text-white">
+                                        {score.profile_name}
+                                      </span>
+
+                                      {score.is_best_match && (
+                                        <span className="mt-1 w-fit rounded-full bg-blue-600/30 px-2 py-0.5 text-xs text-blue-200">
+                                          🥇 Best Match
+                                        </span>
+                                      )}
+                                    </div>
+                                  </td>
+
+                                  <td className="px-4 py-3 text-right">
+                                    <div className="flex flex-col items-end">
+                                      <span className="font-semibold text-white">
+                                        {Math.round(score.matching_score)}%
+                                      </span>
+
+                                      <span className="text-xs text-slate-500">
+                                        -{getGapFromBest(score.matching_score)}{" "}
+                                        pts
+                                      </span>
+                                    </div>
+                                  </td>
+
+                                  <td className="px-4 py-3 text-right text-slate-300">
+                                    {Math.round(score.skills_score)}%
+                                  </td>
+
+                                  <td className="px-4 py-3 text-right text-slate-300">
+                                    {Math.round(score.experience_score)}%
+                                  </td>
+
+                                  <td className="px-4 py-3 text-right text-slate-300">
+                                    {Math.round(score.work_mode_score)}%
+                                  </td>
+
+                                  <td className="px-4 py-3 text-right text-slate-300">
+                                    {Math.round(score.location_score)}%
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="border-t border-slate-700 pt-6">
-                  <h3 className="mb-4 text-lg font-semibold text-white">
-                    Matching Analysis
-                  </h3>
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-white">
+                      Matching Analysis
+                    </h3>
+
+                    <span className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-300">
+                      Active Profile:{" "}
+                      {profiles.find(
+                        (profile) => profile.id === selectedProfileId,
+                      )?.full_name ?? "Unknown"}
+                    </span>
+                  </div>
 
                   {matching ? (
                     <MatchingResult

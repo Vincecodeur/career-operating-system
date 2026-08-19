@@ -887,6 +887,17 @@ export type SearchCriteriaSettings = {
     excluded_keywords: string[];
 };
 
+export type ProfileOpportunityScore = {
+  profile_id: number;
+  profile_name: string;
+  matching_score: number;
+  skills_score: number;
+  experience_score: number;
+  work_mode_score: number;
+  location_score: number;
+  is_best_match: boolean;
+}; 
+
 
 export async function getJobDiscoverySettings(
 ): Promise<JobDiscoverySettings> {
@@ -994,6 +1005,23 @@ export async function getMatching(
 
     return response.json();
 }
+
+export async function getProfileScoresForJobOffer(
+    jobOfferId: number,
+): Promise<ProfileOpportunityScore[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/matching/job-offers/${jobOfferId}/profiles`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load profile scores for job offer."
+        );
+    }
+
+    return response.json();
+}
+
 
 export async function getRankedJobOffers(
     profileId: number,

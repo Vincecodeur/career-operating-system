@@ -44,3 +44,18 @@ class OpportunityAnalysis(BaseModel):
     verdict: str
     recommendation: str
     summary: str
+    
+    
+
+class ProfileOpportunityScore(BaseModel):
+    profile_id: int
+    profile_name: str
+
+    matching_score: float
+
+    skills_score: float
+    experience_score: float
+    work_mode_score: float
+    location_score: float
+
+    is_best_match: bool

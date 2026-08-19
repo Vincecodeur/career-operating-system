@@ -295,3 +295,83 @@ def test_opportunity_analysis_is_present():
     assert "verdict" in analysis
     assert "recommendation" in analysis
     assert "summary" in analysis
+    
+def test_profile_scores_endpoint_not_found_for_unknown_job_offer():
+    response = client.get(
+        "/matching/job-offers/999999/profiles"
+    )
+
+    assert response.status_code == 404
+    
+    
+def test_profile_scores_endpoint_returns_list():
+    response = client.get(
+        "/matching/job-offers/1/profiles"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert isinstance(data, list)
+    
+def test_profile_scores_items_have_required_fields():
+    response = client.get(
+        "/matching/job-offers/1/profiles"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    if len(data) == 0:
+        return
+
+    item = data[0]
+
+    assert "profile_id" in item
+    assert "profile_name" in item
+    assert "matching_score" in item
+    assert "skills_score" in item
+    assert "experience_score" in item
+    assert "work_mode_score" in item
+    assert "location_score" in item
+    assert "is_best_match" in item
+    
+    
+def test_profile_scores_only_one_best_match():
+    response = client.get(
+        "/matching/job-offers/1/profiles"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    best_match_count = sum(
+        1
+        for item in data
+        if item["is_best_match"]
+    )
+
+    assert best_match_count <= 1
+    
+    
+def test_profile_scores_sorted_descending():
+    response = client.get(
+        "/matching/job-offers/1/profiles"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    scores = [
+        item["matching_score"]
+        for item in data
+    ]
+
+    assert scores == sorted(
+        scores,
+        reverse=True,
+    )

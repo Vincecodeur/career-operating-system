@@ -6,6 +6,7 @@ from app.matching.schemas import MatchingResult
 from app.matching.schemas import RankedJobOffer
 from app.matching.schemas import ScoreExplanation
 from app.matching.schemas import OpportunityAnalysis
+from app.matching.schemas import ProfileOpportunityScore
 from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
 from app.skills.models import Skill
@@ -673,3 +674,40 @@ def is_unknown(
         "null",
     }
     
+def calculate_profile_scores_for_job_offer(
+    job_offer_id: int,
+    db: Session,
+) -> list[ProfileOpportunityScore]:
+    profiles = db.query(Profile).all()
+
+    scores = []
+
+    for profile in profiles:
+        matching_result = calculate_matching_result(
+            profile_id=profile.id,
+            job_offer_id=job_offer_id,
+            db=db,
+        )
+
+        scores.append(
+            ProfileOpportunityScore(
+                profile_id=profile.id,
+                profile_name=profile.full_name,
+                matching_score=matching_result.matching_score,
+                skills_score=matching_result.skills_score,
+                experience_score=matching_result.experience_score,
+                work_mode_score=matching_result.work_mode_score,
+                location_score=matching_result.location_score,
+                is_best_match=False,
+            )
+        )
+
+    scores.sort(
+        key=lambda score: score.matching_score,
+        reverse=True,
+    )
+
+    if scores:
+        scores[0].is_best_match = True
+
+    return scores
