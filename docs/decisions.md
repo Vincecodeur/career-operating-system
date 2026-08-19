@@ -3671,3 +3671,201 @@ The Settings page uses:
 DEC-055
 DEC-056
 DEC-067
+
+# DEC-070 - Connectors Use Controlled Multi Select
+
+Date: 2026-08-19
+Status: Accepted
+
+## Context
+
+The Settings page now exposes Job Discovery Settings and Search Criteria Settings.
+
+Search Criteria Settings have been redesigned using controlled UI components:
+
+- Target Job Titles → tags
+- Preferred Countries → catalog + tags
+- Work Modes → controlled selection
+- Included Keywords → tags
+- Excluded Keywords → tags
+
+The review of Job Discovery Settings identified an inconsistency.
+
+Discovery Connectors are currently edited through a free-text field where values are entered as a comma-separated list:
+
+Example:
+
+france_travail,greenhouse
+
+The backend already stores connectors as a list of strings.
+
+Current implementation:
+
+- SettingsService returns discovery_connectors as list[str]
+- JobDiscoverySettingsResponse exposes discovery_connectors as list[str]
+- JobDiscoverySettingsUpdate accepts discovery_connectors as list[str]
+
+The limitation is therefore located in the frontend user experience and not in the backend architecture.
+
+## Problem
+
+The current text field introduces several issues:
+
+- typing mistakes are possible
+- unsupported connector names can be entered
+- discoverability is poor
+- the design is inconsistent with the rest of the Settings page
+- users must know connector technical identifiers
+
+Examples of invalid values:
+
+greenhose
+francetravail
+green-house
+
+The interface should not allow invalid connector identifiers when the available values are known in advance.
+
+## Decision
+
+Discovery Connectors shall use a controlled multi-select interface.
+
+The selected values shall be displayed as removable tags.
+
+The interaction model must be identical to the one used for Preferred Countries.
+
+Target design:
+
+Connectors (2)
+
+[ France Travail × ]
+[ Greenhouse × ]
+
+[ Select Connector ▼ ] [ Add ]
+
+Users select a connector from a predefined list and add it through the UI.
+
+Users remove a connector through the × button on the corresponding tag.
+
+Free text connector entry is removed.
+
+## MVP Scope
+
+The MVP implementation shall use a frontend connector catalog.
+
+Example:
+
+- France Travail
+- Greenhouse
+- LinkedIn
+
+The catalog is maintained in the frontend code.
+
+No backend connector catalog endpoint is required for MVP.
+
+No database migration is required.
+
+No ApplicationSetting schema change is required.
+
+No Settings API change is required.
+
+## Rationale
+
+Benefits:
+
+- prevents invalid connector identifiers
+- eliminates connector typing mistakes
+- improves discoverability of available sources
+- aligns Job Discovery Settings with Search Criteria Settings
+- creates a consistent experience across the Settings page
+- reduces support and debugging effort
+
+The backend is already compatible with this approach because connectors are handled as list[str].
+
+The value is primarily UX-related while the implementation cost remains low.
+
+## Consequences
+
+Frontend:
+
+- replace connector text field with controlled multi-select
+- display selected connectors as tags
+- add connector selector dropdown
+- add connector counter
+
+Backend:
+
+- no change required
+
+Database:
+
+- no migration required
+
+API:
+
+- no endpoint modification required
+
+Persistence:
+
+- unchanged
+- connector values continue to be stored in application_settings through SettingsService
+
+## Alternatives Considered
+
+### Option A - Keep CSV Text Field
+
+Example:
+
+france_travail,greenhouse
+
+Rejected because:
+
+- error-prone
+- inconsistent with the rest of the Settings page
+- poor user experience
+
+### Option B - Checkbox List
+
+Example:
+
+☑ France Travail
+☑ Greenhouse
+☐ LinkedIn
+
+Rejected because:
+
+- consumes more vertical space
+- less scalable when new connectors are added
+- visually inconsistent with Preferred Countries
+
+### Option C - Controlled Multi Select
+
+Example:
+
+[ France Travail × ]
+[ Greenhouse × ]
+
+▼ Add Connector
+
+Accepted because:
+
+- scalable
+- compact
+- reusable
+- consistent with existing Settings UX
+
+## Success Criteria
+
+The decision is considered implemented when:
+
+- connectors are selected through a controlled UI
+- no free-text connector editing remains
+- selected connectors are displayed as tags
+- connector removal is supported
+- application settings persistence remains unchanged
+- build passes
+- end-to-end validation passes
+
+## Related Decisions
+
+- DEC-067 - Settings Persistence Through Application Settings
+- DEC-068 - Search Criteria Governed By Reference Data

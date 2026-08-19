@@ -396,3 +396,68 @@ Out of Scope for MVP:
 - AI suggestions
 - Market-driven recommendations
 - Dynamic ranking based on opportunity history
+
+### MATCHING-002 - Configurable Matching Weights
+
+Status: Backlog
+
+Allow users to configure matching score weights:
+
+- Skills
+- Experience
+- Work Mode
+- Location
+
+Current default values:
+
+- Skills: 70%
+- Experience: 15%
+- Work Mode: 10%
+- Location: 5%
+
+Requirements:
+
+- Total must equal 100%
+- Persist through Settings
+- Applied by Matching Engine
+
+Reason deferred:
+Current default weights are sufficient for MVP.
+Additional configurability increases complexity without delivering core user value.
+
+### SETTINGS-003 - Reusable Catalog Tag Selector Component
+
+Status: Backlog
+
+Create a reusable CatalogTagSelector component.
+
+Current duplicated patterns:
+
+- Preferred Countries
+- Connectors
+
+Future candidates:
+
+- Contract Types
+- Job Sources
+- Future Reference Data Catalogs
+
+Expected capabilities:
+
+- Selected tags display
+- Add from dropdown
+- Remove through tag action
+- Counter display
+- Empty state handling
+
+Benefits:
+
+- Reduce duplicated React code
+- Improve maintainability
+- Ensure consistent user experience
+- Simplify future catalog integrations
+
+Reason deferred:
+
+Current implementation is functional and stable.
+This is a code maintainability improvement rather than a user-facing MVP requirement.

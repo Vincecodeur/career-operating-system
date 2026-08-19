@@ -4,6 +4,11 @@ import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
 
 import {
+  AVAILABLE_CONNECTORS,
+  getConnectorLabel,
+} from "../constants/connectors";
+
+import {
   getCountries,
   getJobDiscoverySettings,
   getSearchCriteriaSettings,
@@ -118,6 +123,8 @@ export function SettingsPage() {
   const [workModes, setWorkModes] = useState<ReferenceDataItem[]>([]);
 
   const [selectedCountryCode, setSelectedCountryCode] = useState("");
+
+  const [selectedConnectorCode, setSelectedConnectorCode] = useState("");
 
   const [newTargetJobTitle, setNewTargetJobTitle] = useState("");
 
@@ -236,6 +243,44 @@ export function SettingsPage() {
     });
 
     setSelectedCountryCode("");
+  }
+
+  function addDiscoveryConnector() {
+    if (!settings || !selectedConnectorCode) {
+      return;
+    }
+
+    const alreadyExists = settings.discovery_connectors.includes(
+      selectedConnectorCode,
+    );
+
+    if (alreadyExists) {
+      setSelectedConnectorCode("");
+      return;
+    }
+
+    setSettings({
+      ...settings,
+      discovery_connectors: [
+        ...settings.discovery_connectors,
+        selectedConnectorCode,
+      ],
+    });
+
+    setSelectedConnectorCode("");
+  }
+
+  function removeDiscoveryConnector(connectorCode: string) {
+    if (!settings) {
+      return;
+    }
+
+    setSettings({
+      ...settings,
+      discovery_connectors: settings.discovery_connectors.filter(
+        (existingConnector) => existingConnector !== connectorCode,
+      ),
+    });
   }
 
   function toggleWorkMode(workModeName: string) {
@@ -357,24 +402,61 @@ export function SettingsPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                Connectors
-              </label>
+              <div>
+                <label className="mb-2 block text-sm text-slate-300">
+                  Connectors ({settings.discovery_connectors.length})
+                </label>
 
-              <input
-                type="text"
-                value={settings.discovery_connectors.join(", ")}
-                onChange={(event) =>
-                  setSettings({
-                    ...settings,
-                    discovery_connectors: event.target.value
-                      .split(",")
-                      .map((item) => item.trim())
-                      .filter(Boolean),
-                  })
-                }
-                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
-              />
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {settings.discovery_connectors.map((connectorCode) => (
+                    <span
+                      key={connectorCode}
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-600 bg-slate-800 px-3 py-1 text-sm text-white">
+                      {getConnectorLabel(connectorCode)}
+
+                      <button
+                        type="button"
+                        onClick={() => removeDiscoveryConnector(connectorCode)}
+                        className="text-slate-400 hover:text-red-400">
+                        x
+                      </button>
+                    </span>
+                  ))}
+
+                  {settings.discovery_connectors.length === 0 && (
+                    <span className="text-sm text-slate-500">
+                      No connector configured.
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex gap-2">
+                  <select
+                    value={selectedConnectorCode}
+                    onChange={(event) =>
+                      setSelectedConnectorCode(event.target.value)
+                    }
+                    className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white">
+                    <option value="">Select a connector</option>
+
+                    {AVAILABLE_CONNECTORS.filter(
+                      (connector) =>
+                        !settings.discovery_connectors.includes(connector.code),
+                    ).map((connector) => (
+                      <option key={connector.code} value={connector.code}>
+                        {connector.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    type="button"
+                    onClick={addDiscoveryConnector}
+                    className="rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600">
+                    Add
+                  </button>
+                </div>
+              </div>
             </div>
 
             <button
@@ -504,6 +586,24 @@ export function SettingsPage() {
                 )}
               </div>
             </div>
+
+            <TagEditor
+              label={`Included Keywords (${searchCriteria.included_keywords.length})`}
+              values={searchCriteria.included_keywords}
+              inputValue={newIncludedKeyword}
+              placeholder="Add an included keyword"
+              onInputChange={setNewIncludedKeyword}
+              onAdd={() =>
+                addSearchCriteriaValue(
+                  "included_keywords",
+                  newIncludedKeyword,
+                  () => setNewIncludedKeyword(""),
+                )
+              }
+              onRemove={(value) =>
+                removeSearchCriteriaValue("included_keywords", value)
+              }
+            />
 
             <TagEditor
               label={`Excluded Keywords (${searchCriteria.excluded_keywords.length})`}
