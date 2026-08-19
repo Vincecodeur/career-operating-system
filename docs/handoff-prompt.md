@@ -494,6 +494,13 @@ Implémenté :
 - Excluded Keywords Settings
 - Settings Tags UX
 
+- Opportunity Context Selection
+- Active Profile Context
+- Best Match First Sorting
+- Multi Profile Opportunity Scoring
+- Profile Score Comparison
+- Best Matching Profile Visualization
+
 Documenté mais pas encore implémenté :
 
 - Auth Layout
@@ -974,7 +981,7 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.19.5 Opportunity Context Selection
+7.1.19.6 Application Workflow Settings
 
 Contexte métier :
 
@@ -985,7 +992,8 @@ Le MVP retient :
 - premier profil sélectionné automatiquement ;
 - contexte de profil sélectionné pour le ranking ;
 - affichage de tous les scores dans le détail ;
-- pré-sélection du meilleur profil lors de la création d'une candidature ;
+- utilisation du profil actuellement sélectionné lors de la création d'une candidature ;
+- La pré-sélection automatique du meilleur profil est reportée au backlog APP-005.
 - aucun profil global persistant.
 
 Important :

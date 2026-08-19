@@ -735,7 +735,7 @@ Validation réalisée:
 - Connectors tag-based UX implemented
 - Connectors counter implemented
 - End-to-end validation completed
-  ⬜ 7.1.19.5 Opportunity Context Selection
+  ✅ 7.1.19.5 Opportunity Context Selection
 
 Objectif :
 
@@ -749,8 +749,9 @@ Principes :
 - l'utilisateur peut sélectionner un profil actif dans les écrans Opportunities ;
 - le classement des opportunités utilise le profil sélectionné ;
 - le détail affiche les scores de tous les profils ;
-- Create Application pré-sélectionne le profil ayant le meilleur matching ;
+- Create Application utilise le profil actuellement sélectionné ;
 - l'utilisateur peut modifier ce profil avant validation ;
+- la pré-sélection automatique du meilleur profil est reportée à APP-005 ;
 - aucun profil global par défaut n'est stocké ;
 - aucun contexte actif n'est persisté ;
 - lors d'une nouvelle session, le système repart du premier profil disponible.
@@ -770,11 +771,11 @@ Opportunity Details
 
 Sous-phases :
 
-⬜ 7.1.19.5.1 Product Design
-⬜ 7.1.19.5.2 Repository Audit
-⬜ 7.1.19.5.3 Technical Design
-⬜ 7.1.19.5.4 Validation
-⬜ 7.1.19.5.5 Documentation Synchronization
+✅ 7.1.19.5.1 Product Design
+✅ 7.1.19.5.2 Repository Audit
+✅ 7.1.19.5.3 Technical Design
+✅ 7.1.19.5.4 Validation
+✅ 7.1.19.5.5 Documentation Synchronization
 
 ⬜ 7.1.19.6 Application Workflow Settings
 ⬜ 7.1.19.7 Opportunity Discovery Preferences

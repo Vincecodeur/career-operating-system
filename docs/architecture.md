@@ -202,6 +202,19 @@ Version actuelle :
 
 - matching basé sur les compétences.
 
+Opportunity Profile Comparison
+
+The Matching domain exposes a multi-profile opportunity comparison capability.
+
+For a given opportunity:
+
+- the score is calculated against every active profile;
+- the best matching profile is identified;
+- opportunity details can display all profile scores simultaneously;
+- opportunity cards use the currently selected profile context.
+
+The comparison logic remains entirely in the backend.
+
 Version future :
 
 - compétences ;
@@ -255,8 +268,10 @@ An Application may be created:
 
 When an Application is created from an Opportunity:
 
-- the profile with the highest matching score is pre-selected;
-- the user may override the selected profile before confirmation.
+- the currently selected profile context is used;
+- profile selection remains editable by the user.
+
+Automatic best-profile preselection is deferred to a future application creation strategy phase.
 
 ### Market Intelligence
 

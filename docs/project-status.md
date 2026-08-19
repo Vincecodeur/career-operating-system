@@ -25,10 +25,10 @@ Current Milestone
 
 Current Phase
 
-7.1.19 Settings Management
+7.1.19 Documentation Synchronization
 
 Next Planned Milestone
-7.1.19.5 Opportunity Context Selection
+7.1.19.6 Application Workflow Settings
 
 ---
 
@@ -1364,6 +1364,18 @@ Post-MVP Planning
 - Source Configuration completed
 - SETTINGS-003 added to Post-MVP backlog
 
+- Opportunity Context selector implemented
+- Active Profile context implemented
+- Best Match First sorting implemented
+- Opportunity cards display context-specific score
+- Opportunity details display all profile scores
+- Best Matching Profile visualization implemented
+- ProfileOpportunityScore schema implemented
+- Multi-profile opportunity scoring endpoint implemented
+- Matching backend tests extended
+- Frontend validation completed
+- 238 tests passing
+
 ---
 
 Blocked
@@ -1434,6 +1446,4 @@ Job Discovery Settings completed.
 
 Last Commits :
 
-- e3f347d - feat(settings): persist job discovery configuration
-- 39be9b8 - refactor(settings): move settings api into settings domain
-- dcf110a - feat(settings): create job discovery settings domain
+- ca8135f - feat(opportunities): implement opportunity context selection and multi-profile scoring

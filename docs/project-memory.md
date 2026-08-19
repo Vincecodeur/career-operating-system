@@ -46,15 +46,18 @@ Principles:
 - first profile is selected automatically when needed;
 - opportunity ranking uses the selected profile;
 - opportunity details show all profile scores;
-- application creation defaults to the best matching profile;
-- the user remains able to override the selected profile.
+- application creation currently uses the selected profile context;
+- profile selection remains editable by the user;
+- automatic best profile preselection is deferred to a future phase.
 
 Opportunity Context Rules
 
 - opportunity cards display the score of the selected profile context;
 - opportunity ranking uses the selected profile context;
 - opportunity details display the scores of all profiles;
-- application creation defaults to the profile with the highest matching score;
+- opportunity details identify the best matching profile;
+- application creation from Opportunities currently uses the selected profile context;
+- best matching profile automatic preselection is deferred to a future application creation strategy phase;
 - active profile context is not persisted.
 - when a new session starts, the system uses the first available profile.
 

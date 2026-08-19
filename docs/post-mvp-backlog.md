@@ -461,3 +461,34 @@ Reason deferred:
 
 Current implementation is functional and stable.
 This is a code maintainability improvement rather than a user-facing MVP requirement.
+
+### APP-005 - Best Matching Profile Preselection
+
+Status: Backlog
+
+When creating an application from an opportunity:
+
+- automatically preselect the profile with the highest matching score;
+- allow user override before validation;
+- preserve current workflow compatibility.
+
+Reason deferred:
+Current MVP uses the active profile context.
+Opportunity profile comparison is already implemented.
+
+### TECH-001 - Frontend Bundle Optimization
+
+Status: Backlog
+
+Current Vite build produces chunks larger than 500 KB.
+
+Potential improvements:
+
+- route splitting
+- dynamic imports
+- lazy loading
+- bundle optimization
+
+Reason deferred:
+No functional impact on MVP.
+Build validation is successful.
