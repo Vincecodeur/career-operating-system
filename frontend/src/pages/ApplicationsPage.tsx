@@ -29,6 +29,7 @@ type JobOfferSummary = {
 type ProfileSummary = {
   id: number;
   full_name: string;
+  is_active: boolean;
 };
 
 type MatchingSummary = {
@@ -106,6 +107,18 @@ export function ApplicationsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const [creatingApplication, setCreatingApplication] = useState(false);
+  const [isProfileChangeModalOpen, setIsProfileChangeModalOpen] =
+    useState(false);
+
+  const [profileChangeDraftId, setProfileChangeDraftId] = useState<
+    number | null
+  >(null);
+
+  const [changingProfile, setChangingProfile] = useState(false);
+
+  const [profileChangeError, setProfileChangeError] = useState<string | null>(
+    null,
+  );
 
   const [manualProfileId, setManualProfileId] = useState<number | null>(null);
 
@@ -200,6 +213,26 @@ export function ApplicationsPage() {
     );
   }
 
+  function openProfileChangeModal() {
+    if (!selectedApplication) {
+      return;
+    }
+
+    setProfileChangeDraftId(selectedApplication.profile_id);
+    setProfileChangeError(null);
+    setIsProfileChangeModalOpen(true);
+  }
+
+  function closeProfileChangeModal() {
+    if (changingProfile) {
+      return;
+    }
+
+    setIsProfileChangeModalOpen(false);
+    setProfileChangeDraftId(null);
+    setProfileChangeError(null);
+  }
+
   async function selectApplication(application: Application) {
     setSelectedApplication(application);
     setNotesDraft(application.notes ?? "");
@@ -233,11 +266,13 @@ export function ApplicationsPage() {
           ? (profilesData as ProfileSummary[])
           : [];
 
-        setAvailableJobOffers(offers);
-        setAvailableProfiles(profiles);
+        const activeProfiles = profiles.filter((profile) => profile.is_active);
 
-        if (profiles.length > 0) {
-          setManualProfileId(profiles[0].id);
+        setAvailableJobOffers(offers);
+        setAvailableProfiles(activeProfiles);
+
+        if (activeProfiles.length > 0) {
+          setManualProfileId(activeProfiles[0].id);
         }
 
         if (offers.length > 0) {
@@ -475,6 +510,7 @@ export function ApplicationsPage() {
       const updatedApplication = await updateApplication(
         selectedApplication.id,
         {
+          profile_id: selectedApplication.profile_id,
           status: selectedApplication.status,
           notes: notesDraft,
           source_type: selectedApplication.source_type,
@@ -511,6 +547,7 @@ export function ApplicationsPage() {
       const updatedApplication = await updateApplication(
         selectedApplication.id,
         {
+          profile_id: selectedApplication.profile_id,
           status: selectedApplication.status,
           notes: notesDraft,
           source_type: sourceDraft,
@@ -534,6 +571,60 @@ export function ApplicationsPage() {
       });
     } finally {
       setSavingSource(false);
+    }
+  }
+
+  async function confirmProfileChange() {
+    if (!selectedApplication || profileChangeDraftId === null) {
+      setProfileChangeError("A profile is required.");
+      return;
+    }
+
+    if (profileChangeDraftId === selectedApplication.profile_id) {
+      return;
+    }
+
+    setChangingProfile(true);
+    setProfileChangeError(null);
+    setActionMessage(null);
+
+    try {
+      const updatedApplication = await updateApplication(
+        selectedApplication.id,
+        {
+          profile_id: profileChangeDraftId,
+          status: selectedApplication.status,
+          notes: selectedApplication.notes,
+          source_type: selectedApplication.source_type,
+        },
+      );
+
+      setSelectedApplication(updatedApplication);
+      replaceApplicationInList(updatedApplication);
+
+      setNotesDraft(updatedApplication.notes ?? "");
+      setSourceDraft(updatedApplication.source_type);
+
+      await Promise.all([
+        loadTimeline(updatedApplication.id),
+        loadMatchingScore(updatedApplication),
+      ]);
+
+      setIsProfileChangeModalOpen(false);
+      setProfileChangeDraftId(null);
+
+      setActionMessage({
+        type: "success",
+        text: "Application profile updated successfully.",
+      });
+    } catch (error) {
+      setProfileChangeError(
+        error instanceof Error
+          ? error.message
+          : "Unable to update the application profile.",
+      );
+    } finally {
+      setChangingProfile(false);
     }
   }
 
@@ -773,18 +864,30 @@ export function ApplicationsPage() {
 
                         <p>{getProfileName(selectedApplication.profile_id)}</p>
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            navigate("/profiles", {
-                              state: {
-                                profileId: selectedApplication.profile_id,
-                              },
-                            })
-                          }
-                          className="mt-2 rounded-md border border-blue-500 px-3 py-1 text-sm text-blue-300 hover:bg-blue-500/10">
-                          Open Profile
-                        </button>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              navigate("/profiles", {
+                                state: {
+                                  profileId: selectedApplication.profile_id,
+                                },
+                              })
+                            }
+                            className="rounded-md border border-blue-500 px-3 py-1 text-sm text-blue-300 hover:bg-blue-500/10">
+                            Open Profile
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={openProfileChangeModal}
+                            disabled={
+                              changingProfile || availableProfiles.length === 0
+                            }
+                            className="rounded-md border border-amber-500 px-3 py-1 text-sm text-amber-300 hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-50">
+                            Change Profile
+                          </button>
+                        </div>
                       </div>
 
                       <div>
@@ -904,7 +1007,8 @@ export function ApplicationsPage() {
 
                         <ApplicationTimeline
                           events={timeline}
-                          createdAt={selectedApplication?.created_at}
+                          createdAt={selectedApplication.created_at}
+                          profileNames={profileNames}
                         />
                       </div>
                     </div>
@@ -1026,6 +1130,100 @@ export function ApplicationsPage() {
                 onClick={handleCreateManualApplication}
                 className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50">
                 {creatingApplication ? "Creating..." : "Create Application"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isProfileChangeModalOpen && selectedApplication && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-md rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-xl">
+            <h2 className="text-xl font-bold text-white">
+              Change Application Profile
+            </h2>
+
+            <p className="mt-2 text-sm text-slate-400">
+              Select the profile that should be associated with this
+              application.
+            </p>
+
+            <div className="mt-6 space-y-5">
+              <div>
+                <p className="text-sm font-medium text-slate-300">
+                  Current Profile
+                </p>
+
+                <p className="mt-1 text-white">
+                  {getProfileName(selectedApplication.profile_id)}
+                </p>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="application-profile-change"
+                  className="mb-2 block text-sm font-medium text-slate-300">
+                  New Profile
+                </label>
+
+                <select
+                  id="application-profile-change"
+                  value={profileChangeDraftId ?? ""}
+                  disabled={changingProfile}
+                  onChange={(event) => {
+                    setProfileChangeDraftId(Number(event.target.value));
+                    setProfileChangeError(null);
+                  }}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-blue-500">
+                  <option value="" disabled>
+                    Select a profile
+                  </option>
+
+                  {availableProfiles.map((profile) => (
+                    <option key={profile.id} value={profile.id}>
+                      {getProfileName(profile.id)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="rounded-md border border-slate-700 bg-slate-950 p-3 text-sm text-slate-400">
+                <p>
+                  The opportunity, status, source, notes and existing timeline
+                  will remain unchanged.
+                </p>
+
+                <p className="mt-2">
+                  The matching score will be refreshed for the selected profile.
+                </p>
+              </div>
+
+              {profileChangeError && (
+                <p className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                  {profileChangeError}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                disabled={changingProfile}
+                onClick={closeProfileChangeModal}
+                className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50">
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                disabled={
+                  changingProfile ||
+                  profileChangeDraftId === null ||
+                  profileChangeDraftId === selectedApplication.profile_id
+                }
+                onClick={confirmProfileChange}
+                className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50">
+                {changingProfile ? "Updating..." : "Confirm Change"}
               </button>
             </div>
           </div>

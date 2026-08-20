@@ -1227,6 +1227,7 @@ export async function getApplicationTimeline(
 }
 
 export type ApplicationUpdatePayload = {
+    profile_id: number;
     status: string;
     notes: string | null;
     source_type: string;

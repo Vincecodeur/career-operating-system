@@ -107,6 +107,17 @@ export function OpportunitiesPage() {
 
   const [creatingApplication, setCreatingApplication] = useState(false);
 
+  const [isCreateApplicationModalOpen, setIsCreateApplicationModalOpen] =
+    useState(false);
+
+  const [applicationProfileId, setApplicationProfileId] = useState<
+    number | null
+  >(null);
+
+  const [applicationCreationError, setApplicationCreationError] = useState<
+    string | null
+  >(null);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const [applicationFilter, setApplicationFilter] = useState<
@@ -502,9 +513,48 @@ export function OpportunitiesPage() {
   );
 
   const bestProfileScore =
-    [...activeProfileScores].sort(
-      (a, b) => b.matching_score - a.matching_score,
-    )[0] ?? null;
+    [...activeProfileScores].sort((firstScore, secondScore) => {
+      const scoreDifference =
+        secondScore.matching_score - firstScore.matching_score;
+
+      if (scoreDifference !== 0) {
+        return scoreDifference;
+      }
+
+      if (
+        firstScore.profile_id === selectedProfileId &&
+        secondScore.profile_id !== selectedProfileId
+      ) {
+        return -1;
+      }
+
+      if (
+        secondScore.profile_id === selectedProfileId &&
+        firstScore.profile_id !== selectedProfileId
+      ) {
+        return 1;
+      }
+
+      return firstScore.profile_id - secondScore.profile_id;
+    })[0] ?? null;
+
+  function getDefaultApplicationProfileId() {
+    if (
+      bestProfileScore &&
+      profiles.some((profile) => profile.id === bestProfileScore.profile_id)
+    ) {
+      return bestProfileScore.profile_id;
+    }
+
+    if (
+      selectedProfileId !== null &&
+      profiles.some((profile) => profile.id === selectedProfileId)
+    ) {
+      return selectedProfileId;
+    }
+
+    return null;
+  }
 
   function getGapFromBest(score: number) {
     if (!bestProfileScore) {
@@ -514,16 +564,43 @@ export function OpportunitiesPage() {
     return Math.round(bestProfileScore.matching_score - score);
   }
 
+  function openCreateApplicationModal() {
+    if (!selectedOffer) {
+      return;
+    }
+
+    setApplicationProfileId(getDefaultApplicationProfileId());
+    setApplicationCreationError(null);
+    setIsCreateApplicationModalOpen(true);
+  }
+
+  function closeCreateApplicationModal() {
+    if (creatingApplication) {
+      return;
+    }
+
+    setIsCreateApplicationModalOpen(false);
+    setApplicationProfileId(null);
+    setApplicationCreationError(null);
+  }
+
   async function handleCreateApplication() {
-    if (!selectedOffer || selectedProfileId === null) {
+    if (!selectedOffer) {
+      setApplicationCreationError("An opportunity is required.");
+      return;
+    }
+
+    if (applicationProfileId === null) {
+      setApplicationCreationError("An application profile is required.");
       return;
     }
 
     setCreatingApplication(true);
+    setApplicationCreationError(null);
 
     try {
       await createApplication({
-        profile_id: selectedProfileId,
+        profile_id: applicationProfileId,
         job_offer_id: selectedOffer.id,
         status: "Applied",
         notes: null,
@@ -536,6 +613,15 @@ export function OpportunitiesPage() {
         Array.isArray(refreshedApplications)
           ? refreshedApplications
           : (refreshedApplications.value ?? []),
+      );
+
+      setIsCreateApplicationModalOpen(false);
+      setApplicationProfileId(null);
+    } catch (error) {
+      setApplicationCreationError(
+        error instanceof Error
+          ? error.message
+          : "Unable to create application.",
       );
     } finally {
       setCreatingApplication(false);
@@ -621,7 +707,7 @@ export function OpportunitiesPage() {
       return;
     }
 
-    handleCreateApplication();
+    openCreateApplicationModal();
   }
 
   return (
@@ -1344,6 +1430,130 @@ export function OpportunitiesPage() {
                 </p>
               </Card>
             )}
+          </div>
+        </div>
+      )}
+      {isCreateApplicationModalOpen && selectedOffer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-xl rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-xl">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-white">
+                Create Application
+              </h2>
+
+              <p className="mt-1 text-sm text-slate-400">
+                Review the profile assigned to this application before creating
+                it.
+              </p>
+            </div>
+
+            <div className="space-y-5">
+              <div>
+                <p className="text-sm font-medium text-slate-300">
+                  Opportunity
+                </p>
+
+                <p className="mt-1 font-semibold text-white">
+                  {selectedOffer.title}
+                </p>
+
+                <p className="text-sm text-slate-400">
+                  {selectedOffer.company_name ?? "Unknown company"}
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-amber-300">
+                  Best Matching Profile
+                </p>
+
+                {bestProfileScore ? (
+                  <>
+                    <p className="mt-1 font-semibold text-white">
+                      {bestProfileScore.profile_name}
+                    </p>
+
+                    <p className="text-sm text-amber-200">
+                      {Math.round(bestProfileScore.matching_score)}% match
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-1 text-sm text-slate-300">
+                    Matching scores are unavailable. The Primary Profile has
+                    been selected by default.
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="application-profile"
+                  className="mb-2 block text-sm font-medium text-slate-300">
+                  Application Profile
+                </label>
+
+                <select
+                  id="application-profile"
+                  value={applicationProfileId ?? ""}
+                  disabled={creatingApplication}
+                  onChange={(event) => {
+                    setApplicationProfileId(Number(event.target.value));
+                    setApplicationCreationError(null);
+                  }}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-blue-500">
+                  <option value="" disabled>
+                    Select a profile
+                  </option>
+
+                  {profiles.map((profile) => (
+                    <option key={profile.id} value={profile.id}>
+                      {profile.profile_name}
+                    </option>
+                  ))}
+                </select>
+
+                <p className="mt-2 text-xs text-slate-400">
+                  The selected profile will be permanently linked to the
+                  application until explicitly changed.
+                </p>
+              </div>
+
+              <div className="grid gap-3 text-sm sm:grid-cols-2">
+                <div>
+                  <p className="text-slate-500">Initial Status</p>
+                  <p className="text-slate-200">Applied</p>
+                </div>
+
+                <div>
+                  <p className="text-slate-500">Source</p>
+                  <p className="text-slate-200">Opportunity</p>
+                </div>
+              </div>
+
+              {applicationCreationError && (
+                <p className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                  {applicationCreationError}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                disabled={creatingApplication}
+                onClick={closeCreateApplicationModal}
+                className="rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50">
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                disabled={creatingApplication || applicationProfileId === null}
+                onClick={handleCreateApplication}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50">
+                {creatingApplication ? "Creating..." : "Create Application"}
+              </button>
+            </div>
           </div>
         </div>
       )}
