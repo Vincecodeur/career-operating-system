@@ -1,7 +1,7 @@
 # Career Operating System - Post MVP Backlog
 
 Status: Draft
-Last Updated: 2026-08-16
+Last Updated: 2026-08-20
 
 ## Purpose
 
@@ -280,13 +280,21 @@ Replace technical event labels:
 
 APPLICATION_CREATED
 STATUS_CHANGED
+PROFILE_CHANGED
 
 with user-friendly labels:
 
 Application Created
 Status Changed
+Application Profile Changed
 
 without changing backend event types.
+
+Current partial implementation:
+
+PROFILE_CHANGED already displays the user-friendly title
+"Application Profile Changed", but the technical event code
+remains visible.
 
 ---
 
@@ -456,19 +464,19 @@ Reason deferred:
 Current implementation is functional and stable.
 This is a code maintainability improvement rather than a user-facing MVP requirement.
 
-### APP-005 - Best Matching Profile Preselection
+### APP-005 - Automatic Best Matching Profile Acceptance
 
 Status: Backlog
 
-When creating an application from an opportunity:
+When the user creates an application:
 
-- automatically preselect the profile with the highest matching score;
-- allow user override before validation;
-- preserve current workflow compatibility.
+- automatically select the Best Matching Profile;
+- bypass manual profile confirmation;
+- create the application immediately.
 
 Reason deferred:
-Current MVP uses the active profile context.
-Opportunity profile comparison is already implemented.
+
+The MVP keeps explicit user validation before application creation.
 
 ### TECH-001 - Frontend Bundle Optimization
 

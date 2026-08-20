@@ -749,9 +749,9 @@ Principes :
 - l'utilisateur peut sélectionner un profil actif dans les écrans Opportunities ;
 - le classement des opportunités utilise le profil sélectionné ;
 - le détail affiche les scores de tous les profils ;
-- Create Application utilise le profil actuellement sélectionné ;
-- l'utilisateur peut modifier ce profil avant validation ;
-- la pré-sélection automatique du meilleur profil est reportée à APP-005 ;
+- Create Application recommande le Best Matching Profile ;
+- l'utilisateur peut sélectionner un autre profil avant validation ;
+- le profil confirmé est attaché à la candidature créée ;
 - aucun profil global par défaut n'est stocké ;
 - aucun contexte actif n'est persisté ;
 - lors d'une nouvelle session, le système repart du premier profil disponible.
@@ -856,7 +856,7 @@ Validation réalisée :
 ✅ 7.1.21.8 Functional Validation
 ✅ 7.1.21.9 Documentation Synchronization
 
-⬜ 7.1.22 Multi Profile Opportunity Context
+⏳ 7.1.22 Multi Profile Opportunity Context
 
 Objectif :
 Plusieurs profils peuvent être activés simultanément.
@@ -889,13 +889,21 @@ Sous-phases :
 ✅ 7.1.22.8 Multi Profile Matching
 ✅ 7.1.22.9 Multi Profile Opportunities
 
-⬜ 7.1.22.10 Application Profile Attribution
+✅ 7.1.22.10 Application Profile Attribution
 
-Objectif :
-Une candidature conserve le profil utilisé
-lors de sa création.
+Validation réalisée :
 
-⬜ 7.1.22.11 Application Creation Strategy
+- Application profile attribution persisted
+- Profile selection dialog implemented
+- Best Matching Profile recommendation displayed
+- Application profile override implemented
+- Application reassignment implemented
+- PROFILE_CHANGED timeline event implemented
+- Timeline profile name rendering implemented
+- Frontend validation completed
+- Backend validation completed
+
+⏳ 7.1.22.11 Application Creation Strategy
 
 Objectif :
 Une opportunité peut être pertinente pour plusieurs profils.
@@ -911,12 +919,22 @@ Technical Partnerships Manager : 41 %
 ↓
 Create Application As Product Manager
 
-Le profil primaire est utilisé par défaut.
+Le système recommande le Best Matching Profile.
+Règle de recommandation actuelle :
 
-APP-005 Best Matching Profile Preselection
-reste hors périmètre MVP.
+1. score de matching le plus élevé ;
+2. Primary Profile en cas d'égalité ;
+3. profile_id le plus faible si l'égalité persiste.
 
-- override manuel utilisateur
+L'utilisateur peut :
+
+- conserver la recommandation ;
+- sélectionner un autre profil avant création ;
+- créer la candidature avec le profil choisi.
+
+Les règles définitives de création de candidature multi-profils restent à définir.
+
+APP-005 reste hors MVP car il vise la création immédiate avec le Best Matching Profile sans confirmation manuelle.
 
 ⬜ 7.1.22.12 Multi Profile Validation
 

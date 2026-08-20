@@ -1,12 +1,12 @@
 # Decisions
 
-## DEC-001
+# DEC-001
 
 Le projet est personnel.
 
 ---
 
-## DEC-002
+# DEC-002
 
 Le Job Board est un module.
 
@@ -14,7 +14,7 @@ Le produit principal est un Career Operating System.
 
 ---
 
-## DEC-003
+# DEC-003
 
 Stack retenue :
 
@@ -31,7 +31,7 @@ PostgreSQL
 
 ---
 
-## DEC-004
+# DEC-004
 
 Architecture retenue :
 
@@ -39,7 +39,7 @@ Monolithe modulaire.
 
 ---
 
-## DEC-005
+# DEC-005
 
 Commencer par l'import manuel des offres.
 
@@ -47,7 +47,7 @@ L'automatisation viendra plus tard.
 
 ---
 
-## DEC-006
+# DEC-006
 
 Le scoring doit toujours être justifié.
 
@@ -55,19 +55,19 @@ Aucun score opaque.
 
 ---
 
-## DEC-007
+# DEC-007
 
 La documentation est optimisée pour la reprise de contexte Copilot.
 
 ---
 
-## DEC-008
+# DEC-008
 
 Le projet doit rester publiable sur GitHub.
 
 ---
 
-## DEC-009
+# DEC-009
 
 Aucune candidature automatique.
 
@@ -77,7 +77,7 @@ L'utilisateur décide.
 
 ---
 
-## DEC-010
+# DEC-010
 
 Le repository suit une architecture Frontend / Backend séparée.
 
@@ -121,7 +121,7 @@ Aucun dossier vide ne doit être créé de manière anticipée.
 
 ---
 
-## DEC-013
+# DEC-013
 
 Le profil candidat est construit selon une approche hybride.
 
@@ -141,7 +141,7 @@ Les documents importés servent uniquement à créer ou mettre à jour ce profil
 
 ---
 
-## DEC-014
+# DEC-014
 
 Le backend est construit dès le départ avec :
 
@@ -158,7 +158,7 @@ L'objectif est de limiter les refactorings futurs tout en conservant une archite
 
 ---
 
-## DEC-015
+# DEC-015
 
 Le projet utilise une base PostgreSQL dédiée.
 
@@ -176,7 +176,7 @@ Chaque projet possède sa propre base de données.
 
 ---
 
-## DEC-016
+# DEC-016
 
 Le domaine Profile est l'agrégat racine du système.
 
@@ -189,7 +189,7 @@ par les besoins du Profile.
 
 ---
 
-## DEC-017
+# DEC-017
 
 Le système supporte plusieurs profils candidats.
 
@@ -206,7 +206,7 @@ Exemples :
 
 ---
 
-## DEC-018
+# DEC-018
 
 Le modèle Profile V1 contient uniquement
 les informations de pilotage de carrière.
@@ -219,7 +219,7 @@ et représenter la vue synthétique du candidat.
 
 ---
 
-## DEC-019
+# DEC-019
 
 SQLAlchemy create_all() est utilisé uniquement
 pour les phases initiales du projet.
@@ -232,7 +232,7 @@ commencera à évoluer régulièrement.
 
 ---
 
-## DEC-020
+# DEC-020
 
 Le projet utilise un catalogue central de compétences.
 
@@ -263,7 +263,7 @@ Le catalogue central permettra plus tard d'ajouter :
 - synonymes ;
 - relations avec les offres d'emploi.
 
-## DEC-021
+# DEC-021
 
 Les compétences d'un profil sont représentées par une table d'association dédiée : ProfileSkill.
 
@@ -280,7 +280,7 @@ Les informations de maîtrise appartiennent à la relation ProfileSkill, pas à 
 
 ---
 
-## DEC-022
+# DEC-022
 
 Le projet expose une API dédiée pour associer les compétences aux profils.
 
@@ -297,7 +297,7 @@ Les données de maîtrise appartiennent à ProfileSkill.
 
 ---
 
-## DEC-023
+# DEC-023
 
 Les expériences professionnelles sont stockées dans une entité dédiée WorkExperience.
 
@@ -314,7 +314,7 @@ WorkExperience permet de reconstruire le parcours professionnel du profil candid
 
 ---
 
-## DEC-024
+# DEC-024
 
 Le projet utilise un catalogue central de langues.
 
@@ -341,7 +341,7 @@ Les niveaux recommandés sont :
 
 ---
 
-## DEC-025
+# DEC-025
 
 Le projet utilise un catalogue central de certifications.
 
@@ -362,7 +362,7 @@ ProfileCertification permet de gérer :
 
 ---
 
-## DEC-026
+# DEC-026
 
 Les offres d'emploi sont stockées dans une entité JobOffer.
 
@@ -376,7 +376,7 @@ Le modèle JobOffer V1 doit rester minimal et contenir uniquement les informatio
 
 ---
 
-## DEC-027
+# DEC-027
 
 Le projet utilise Pytest comme framework de tests automatisés.
 
@@ -386,7 +386,7 @@ Chaque nouveau domaine métier important devra progressivement être couvert par
 
 ---
 
-## DEC-028
+# DEC-028
 
 Les compétences requises par une offre sont stockées dans une relation dédiée JobOfferSkill.
 
@@ -398,7 +398,7 @@ Les compétences d'une offre ne sont pas stockées sous forme de texte libre afi
 
 ---
 
-## DEC-029
+# DEC-029
 
 Le Matching Engine V1 compare uniquement les compétences du profil candidat et les compétences requises par une offre d'emploi.
 
@@ -410,7 +410,7 @@ L'objectif est de valider le flux métier complet avant l'introduction de règle
 
 ---
 
-## DEC-030
+# DEC-030
 
 Le Frontend MVP adopte une approche Dashboard First.
 
@@ -428,7 +428,7 @@ Le backend reste la source unique de vérité.
 
 ---
 
-## DEC-031
+# DEC-031
 
 Le Dashboard MVP affiche en priorité :
 
@@ -443,7 +443,7 @@ Le Dashboard constitue une couche de visualisation.
 
 ---
 
-## DEC-032
+# DEC-032
 
 La Matching View affiche exclusivement les résultats
 calculés par le backend.
@@ -456,7 +456,7 @@ sont entièrement produits par l'API backend.
 
 ---
 
-## DEC-033
+# DEC-033
 
 Opportunity Ranking
 
@@ -476,7 +476,7 @@ Les offres sont triées par score décroissant.
 
 ---
 
-## DEC-034
+# DEC-034
 
 Application Tracker
 
@@ -505,7 +505,7 @@ Aucune synchronisation avec LinkedIn, Indeed ou d'autres plateformes n'est prév
 
 Le système conserve l'historique courant de la candidature afin d'aider à piloter la recherche d'emploi.
 
-## DEC-035
+# DEC-035
 
 Profile Structured Source Of Truth
 
@@ -523,7 +523,7 @@ Ces sources servent uniquement à enrichir le profil.
 
 Toutes les analyses, comparaisons et recommandations utilisent exclusivement le profil structuré enregistré dans le système.
 
-## DEC-036
+# DEC-036
 
 Opportunity Discovery As Core MVP Capability
 
@@ -553,7 +553,7 @@ Decision Support
 ↓
 Application Tracker
 
-## DEC-037
+# DEC-037
 
 API First Job Discovery Strategy
 
@@ -573,7 +573,7 @@ Les offres collectées conservent toujours :
 - leur URL d'origine ;
 - leur date de collecte.
 
-## DEC-038
+# DEC-038
 
 LinkedIn MVP Target Source
 
@@ -587,7 +587,7 @@ Le MVP ne dépend pas exclusivement de LinkedIn.
 
 Le système doit être capable de fonctionner avec plusieurs sources d'opportunités.
 
-## DEC-039
+# DEC-039
 
 Explainable Opportunity Scoring
 
@@ -604,7 +604,7 @@ Le système doit pouvoir expliquer :
 
 Aucun score opaque n'est autorisé.
 
-## DEC-040
+# DEC-040
 
 UX First Frontend Strategy
 
@@ -620,7 +620,7 @@ Avant toute évolution majeure du frontend :
 
 Le refactoring frontend intervient uniquement après validation de ces éléments.
 
-## DEC-041
+# DEC-041
 
 Standardized Job Evaluation Rules
 
@@ -658,7 +658,7 @@ Gestion des offres expirées :
 
 L'utilisateur peut filtrer l'affichage des offres archivées.
 
-## DEC-042
+# DEC-042
 
 Frontend Technical Stack
 
@@ -679,7 +679,7 @@ TanStack Query est responsable des données serveur, du cache, des états loadin
 
 Cette combinaison est retenue pour conserver une architecture simple, moderne et maintenable.
 
-## DEC-043
+# DEC-043
 
 Authentication From MVP
 
@@ -706,7 +706,7 @@ L'architecture doit rester compatible avec :
 - SSO Google ;
 - autres fournisseurs d'identité futurs.
 
-## DEC-044
+# DEC-044
 
 Multilingual Ready Frontend
 
@@ -724,7 +724,7 @@ Aucune chaîne d'interface ne doit être hardcodée dans les composants React.
 
 Toutes les chaînes UI doivent être externalisées afin de préparer l'internationalisation sans refactoring majeur.
 
-## DEC-045
+# DEC-045
 
 Design System Strategy
 
@@ -758,7 +758,7 @@ Objectif :
 
 Permettre un rebranding futur sans refactoring majeur du frontend.
 
-## DEC-046
+# DEC-046
 
 Frontend UX Scope Before Implementation
 
@@ -777,7 +777,7 @@ Le développement frontend de Phase 5.8 doit s'appuyer sur ces documents et ne p
 
 ---
 
-## DEC-047
+# DEC-047
 
 Connector Pattern
 
@@ -795,7 +795,7 @@ Permettre l'ajout de nouvelles sources sans modifier la logique métier.
 
 ---
 
-## DEC-048
+# DEC-048
 
 Offer As Primary Discovery Entity
 
@@ -807,7 +807,7 @@ Une même offre peut être associée à plusieurs sources.
 
 ---
 
-## DEC-049
+# DEC-049
 
 Job Discovery Pipeline
 
@@ -825,7 +825,7 @@ Aucune offre ne peut contourner l'étape de normalisation.
 
 ---
 
-## DEC-050
+# DEC-050
 
 France Travail First External Source
 
@@ -836,7 +836,7 @@ LinkedIn.
 
 La stratégie retenue est API First.
 
-## DEC-051
+# DEC-051
 
 Reference Data Governance
 
@@ -850,7 +850,7 @@ La création d'une nouvelle entrée de référentiel
 est exceptionnelle et nécessite l'absence de correspondance
 ainsi qu'une validation explicite de l'utilisateur.
 
-## DEC-052
+# DEC-052
 
 Repository Resolution Strategy
 
@@ -886,7 +886,7 @@ Objectifs :
 - améliorer la qualité du matching ;
 - simplifier la gouvernance des données.
 
-## DEC-053
+# DEC-053
 
 Les skills inconnues ne sont pas créées automatiquement.
 
@@ -895,7 +895,7 @@ Le système ne peut pas inventer une catégorie fiable.
 Le profil structuré reste la source de vérité.
 Le catalogue de skills doit rester gouverné.
 
-## DEC-054
+# DEC-054
 
 Skill Mapping UX
 
@@ -906,7 +906,7 @@ Le MVP peut charger l'ensemble du catalogue puis filtrer en mémoire.
 
 Aucune recherche serveur n'est introduite dans cette phase.
 
-## DEC-055
+# DEC-055
 
 Reference Data Catalog
 
@@ -935,7 +935,7 @@ Les champs fermés ou fortement normalisables doivent utiliser des listes contr�
 
 Aucune nouvelle valeur de référence ne doit être créée automatiquement sans validation explicite de l'utilisateur lorsque cette valeur impacte le matching, les filtres ou les préférences.
 
-## DEC-056
+# DEC-056
 
 Reference Data Implementation Before Application Workflow
 
@@ -957,7 +957,7 @@ Motivations :
 - améliorer l'enrichissement CV ;
 - préparer les futurs modules d'analyse.
 
-## DEC-057
+# DEC-057
 
 Preferred Countries Frontend Multi-Select Option A
 
@@ -986,7 +986,7 @@ profile_preferred_countries
 
 Cette évolution est explicitement reportée à une phase ultérieure de normalisation du modèle.
 
-## DEC-058 - Soft Skills MVP
+# DEC-058 - Soft Skills MVP
 
 ## Contexte
 
@@ -1174,7 +1174,7 @@ A classification layer is therefore required between CV parsing and profile enri
 
 ---
 
-## Decision
+# DECision
 
 The CV parser remains unchanged.
 
@@ -1441,7 +1441,7 @@ The user must remain able to correct the classification before importing data in
 
 ---
 
-## Decision
+# DECision
 
 The CV enrichment engine remains responsible for proposing an initial classification.
 
@@ -1614,7 +1614,7 @@ The platform requires a normalization layer capable of splitting compound skills
 
 ---
 
-## Decision
+# DECision
 
 A new Skill Normalization layer is introduced between CV Parsing and Enrichment Classification.
 
@@ -2163,7 +2163,7 @@ Issues:
 
 ---
 
-## Decision
+# DECision
 
 The platform shall support bulk processing of enrichment proposals.
 
@@ -2855,23 +2855,23 @@ Potential actions:
 
 ## Related Decisions
 
-## DEC-058
+# DEC-058
 
 Hard Skills and Soft Skills stored separately.
 
-## DEC-059
+# DEC-059
 
 Automatic Hard Skill / Soft Skill Classification.
 
-## DEC-060
+# DEC-060
 
 User Classification Override.
 
-## DEC-061
+# DEC-061
 
 Skill Normalization And Compound Skill Splitting.
 
-## DEC-062
+# DEC-062
 
 Bulk Proposal Processing.
 
@@ -2905,7 +2905,7 @@ Profile Enriched
 
 ```
 
-## DEC-063 - Application Workflow Lifecycle
+# DEC-063 - Application Workflow Lifecycle
 
 Date: 2026-08-16
 
@@ -2953,7 +2953,7 @@ The MVP now requires the Application domain to represent a real application work
 
 ---
 
-## Decision
+# DECision
 
 An Application represents a real job application.
 
@@ -3403,13 +3403,13 @@ DEC-063 replaces the legacy Application statuses from DEC-034 with a clearer wor
 
 DEC-063 prepares the future phase 7.1.22 Multi Profile Opportunity Context.
 
-## DEC-064 - Application Workflow Frontend UX
+# DEC-064 - Application Workflow Frontend UX
 
 Date: 2026-08-17
 
 Status: Accepted
 
-## Decision
+# DECision
 
 The Application Workflow MVP frontend uses:
 
@@ -3433,7 +3433,7 @@ Career Operating System is a career management platform, not an ATS.
 
 The selected design provides a better balance between usability, simplicity and future Dashboard Evolution.
 
-## DEC-065 - Opportunity To Application Conversion
+# DEC-065 - Opportunity To Application Conversion
 
 Date: 2026-08-17
 Status: Accepted
@@ -3444,7 +3444,7 @@ Users can evaluate Job Offers from OpportunitiesPage.
 
 A workflow was required to create a tracked Application directly from an Opportunity.
 
-## Decision
+# DECision
 
 An Opportunity can create an Application.
 
@@ -3489,7 +3489,7 @@ The Application domain becomes the operational tracking layer.
 
 The Opportunity domain remains the discovery layer.
 
-## DEC-066 - Application Workflow Completion
+# DEC-066 - Application Workflow Completion
 
 Date: 2026-08-17
 
@@ -3508,7 +3508,7 @@ Le MVP Application Workflow inclut :
 - Opportunity Navigation
 - Confirmation pour les statuts terminaux
 
-## DEC-067 - Settings Persistence Strategy
+# DEC-067 - Settings Persistence Strategy
 
 Date: 2026-08-18
 Status: Accepted
@@ -3532,7 +3532,7 @@ Future MVP phases will also need configurable settings:
 - Default Profile Selection
 - Default CV Selection
 
-### Decision
+# DECision
 
 Business settings are stored in PostgreSQL.
 
@@ -3616,7 +3616,7 @@ Backend completed.
 Frontend completed.
 Job Discovery Settings completed.
 
-## DEC-068 - Search Criteria Governed By Reference Data
+# DEC-068 - Search Criteria Governed By Reference Data
 
 Date: 2026-08-18
 Status: Accepted
@@ -3635,7 +3635,7 @@ The MVP requires users to configure:
 
 Reference Data Catalogs for Countries and Work Modes are already available.
 
-### Decision
+# DECision
 
 Preferred Countries must use the Country Catalog.
 
@@ -3725,7 +3725,7 @@ green-house
 
 The interface should not allow invalid connector identifiers when the available values are known in advance.
 
-## Decision
+# DECision
 
 Discovery Connectors shall use a controlled multi-select interface.
 
@@ -3870,7 +3870,7 @@ The decision is considered implemented when:
 - DEC-067 - Settings Persistence Through Application Settings
 - DEC-068 - Search Criteria Governed By Reference Data
 
-## DEC-071 - Multi Profile Opportunity Context
+# DEC-071 - Multi Profile Opportunity Context
 
 Date: 2026-08-20
 
@@ -3911,7 +3911,7 @@ The system must not merge several profiles into one combined profile.
 
 The system must not calculate an averaged or combined multi-profile matching score.
 
-### Decision
+# DECision
 
 The Opportunities workflow uses a temporary Multi Profile Opportunity Context composed of:
 
@@ -4384,7 +4384,7 @@ No migration of existing Application records is required by this decision.
 
 ### Alternatives Rejected
 
-#### Global Default Profile
+### Global Default Profile
 
 Rejected.
 
@@ -4395,7 +4395,7 @@ Reasons:
 - creates unnecessary persistence;
 - conflicts with the temporary Opportunity Context strategy.
 
-#### Combined Multi-Profile Score
+### Combined Multi-Profile Score
 
 Rejected.
 
@@ -4413,7 +4413,7 @@ Reasons:
 - changes the current deterministic ranking model;
 - introduces unnecessary complexity.
 
-#### Automatic Best Profile As Primary Profile
+### Automatic Best Profile As Primary Profile
 
 Rejected for the MVP.
 
@@ -4423,7 +4423,7 @@ Reasons:
 - the Best Matching Profile is analytical information;
 - automatic replacement would change the working context without an explicit user decision.
 
-#### Persistent Opportunity Context
+### Persistent Opportunity Context
 
 Rejected for the MVP.
 
@@ -4433,7 +4433,7 @@ Reasons:
 - unnecessary database and settings complexity;
 - current temporary session behavior is sufficient.
 
-#### Multiple Applications Created Automatically
+### Multiple Applications Created Automatically
 
 Rejected.
 
@@ -4445,7 +4445,7 @@ Reasons:
 
 ### Consequences
 
-#### Positive Consequences
+### Positive Consequences
 
 - several career strategies can be compared simultaneously;
 - ranking remains deterministic;
@@ -4457,7 +4457,7 @@ Reasons:
 - no database migration is required for Opportunity Context;
 - the single-profile workflow remains supported.
 
-#### Negative Consequences
+### Negative Consequences
 
 - the Opportunity Context is lost when the session ends;
 - the first available profile is selected again in a new session;
@@ -4598,3 +4598,78 @@ The Opportunity Context is temporary and is not persisted during the MVP.
 The user remains responsible for selecting the Primary Profile.
 
 The system must not automatically replace user intent with the Best Matching Profile.
+
+# DEC-072 - Application Profile Attribution
+
+Date: 2026-08-20  
+Status: Accepted
+
+### Context
+
+DEC-071 established the temporary Multi Profile Opportunity Context:
+
+- one Primary Profile;
+- one or more Active Profiles;
+- independent matching results;
+- one Profile per Application.
+
+Phase 7.1.22.10 implemented the detailed Application profile attribution workflow.
+
+An Application must remain associated with exactly one Profile.
+
+The user must understand which Profile is attached to the Application before creation.
+
+# DECision
+
+When an Application is created from an Opportunity:
+
+- the system recommends the Best Matching Profile;
+- the recommended Profile is determined from existing backend matching results;
+- the frontend does not calculate or modify matching scores;
+- the user may select another active Profile;
+- creation requires explicit user confirmation;
+- the confirmed profile_id is persisted on the Application.
+
+The Primary Profile remains responsible for:
+
+- opportunity ranking;
+- score-based filtering;
+- opportunity card score display;
+- the default matching analysis context.
+
+The Best Matching Profile recommendation does not replace the Primary Profile.
+
+### Tie-Breaking Rule
+
+When several Profiles have the same matching score:
+
+1. the Primary Profile is preferred;
+2. if the tie remains, the lowest profile_id is preferred.
+
+This rule only determines the displayed recommendation.
+
+The user may still override the recommendation.
+
+### Fallback Rule
+
+If matching scores are unavailable:
+
+- the Primary Profile is proposed when it is available;
+- the user keeps explicit control before creation.
+
+No profile is fabricated when no active Profile exists.
+
+### Reassignment
+
+After creation:
+
+- the user may explicitly reassign the Application to another active Profile;
+- the Opportunity remains unchanged;
+- the status remains unchanged;
+- the notes remain unchanged;
+- the source remains unchanged;
+- the matching result is refreshed for the selected Profile.
+
+Every effective reassignment creates:
+
+PROFILE

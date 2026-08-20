@@ -290,6 +290,9 @@ Implémenté :
 - SettingsService
 - Job Discovery Settings
 - Settings Persistence
+- Application Profile Attribution
+- PROFILE_CHANGED ApplicationEvent
+- Application Profile Reassignment
 
 Partiellement implémenté :
 
@@ -520,6 +523,11 @@ Implémenté :
 - Primary Profile
 - Active Profiles
 
+- Create Application Profile Selection Dialog
+- Best Matching Profile Recommendation
+- Application Profile Reassignment Dialog
+- PROFILE_CHANGED Timeline Display
+
 Documenté mais pas encore implémenté :
 
 - Auth Layout
@@ -540,6 +548,11 @@ Des tests existent pour :
 - matching
 - opportunity ranking
 - applications
+- application profile reassignment
+- unknown profile rejection
+- unknown job offer rejection
+- PROFILE_CHANGED event creation
+- unchanged profile event prevention
 - job discovery models
 - raw offer schema
 - normalized job offer schema
@@ -817,9 +830,23 @@ Des tests existent pour :
 - Phase 7.1.21.7 Frontend Implementation
 - Phase 7.1.21.8 Functional Validation
 - Phase 7.1.21.9 Documentation Synchronization
+- Phase 7.1.22.1 Product Design
+- Phase 7.1.22.2 DEC Multi Active Profiles
+- Phase 7.1.22.3 Backend Context Model
+- Phase 7.1.22.4 Backend APIs
+- Phase 7.1.22.5 Backend Tests
+- Phase 7.1.22.6 Frontend UX Design
+- Phase 7.1.22.7 Profile Activation UI
+- Phase 7.1.22.8 Multi Profile Matching
+- Phase 7.1.22.9 Multi Profile Opportunities
+- Phase 7.1.22.10 Application Profile Attribution
 
 ## Derniers commits importants
 
+- cd257dc - docs(applications): finalize profile attribution status
+- 2188576 - feat(applications): support profile attribution workflow
+- bc02091 - docs(applications): add profile attribution designs
+- bccdc5b - feat(applications): support profile reassignment
 - 5edfbf5 - docs: add multi-profile opportunity context designs
 - c40b031 - feat: complete opportunity context and multi-profile matching
 - 630d2c2 - feat: rebuild demo profiles for multi-profile matching
@@ -1010,16 +1037,25 @@ Respecter notamment :
 - DEC-042 : Frontend Technical Stack
 - DEC-043 : Authentication From MVP
 - DEC-044 : Multilingual Ready Frontend
-- DEC-045 :
-- DEC-046 :
-- DEC-047 :
-- DEC-048 :
-- DEC-049 :
-- DEC-050 :
-- DEC-051 :
-- DEC-052 :
-- DEC-053 :
-- DEC-054 :
+- DEC-045 : Design System Strategy
+- DEC-046 : Frontend UX Scope Before Implementation
+- DEC-047 : Connector Pattern
+- DEC-048 : Offer As Primary Discovery Entity
+- DEC-049 : Job Discovery Pipeline
+- DEC-050 : France Travail First External Source
+- DEC-051 : Reference Data Governance
+- DEC-052 : Repository Resolution Strategy
+- DEC-053 : Unknown Skills Are Not Automatically Created
+- DEC-054 : Skill Mapping UX
+- DEC-055 : Reference Data Catalog
+- DEC-056 : Reference Data Implementation Before Application Workflow
+- DEC-058 : Soft Skills MVP
+- DEC-063 : Application Workflow Lifecycle
+- DEC-065 : Opportunity To Application Conversion
+- DEC-067 : Settings Persistence Strategy
+- DEC-068 : Search Criteria Governed By Reference Data
+- DEC-070 : Connectors Use Controlled Multi Select
+- DEC-071 : Multi Profile Opportunity Context
 
 Décision UX validée :
 
@@ -1050,27 +1086,32 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.22.10 Application Profile Attribution
+7.1.22.11 Application Creation Strategy
 
 Contexte métier :
 
-Une Application reste liée à un unique profile_id.
+Une opportunité peut être pertinente pour plusieurs profils actifs.
 
-Le système supporte désormais :
+Une candidature reste liée à un profil unique.
 
-- un Primary Profile ;
-- plusieurs Active Profiles ;
-- un Best Matching Profile distinct.
+État déjà implémenté :
 
-La création d'une candidature doit conserver explicitement le profil utilisé lors de la création.
+- le Best Matching Profile est recommandé ;
+- le Primary Profile départage les scores égaux ;
+- profile_id départage ensuite les égalités restantes ;
+- l'utilisateur peut sélectionner un autre profil ;
+- la création nécessite une confirmation explicite ;
+- le profil confirmé est attaché à la candidature ;
+- une candidature peut ensuite être réattribuée explicitement.
 
-Objectifs :
+Objectif de 7.1.22.11 :
 
-- formaliser l'attribution profile_id d'une Application ;
-- définir les règles lorsque plusieurs profils actifs existent ;
-- préserver la compatibilité avec DEC-063 ;
-- préserver la compatibilité avec DEC-071 ;
-- ne pas introduire la présélection automatique du meilleur profil (APP-005 reste hors scope MVP).
+- valider si le comportement implémenté constitue la stratégie MVP finale ;
+- confirmer la règle de départage des scores égaux ;
+- confirmer le comportement lorsque les scores sont indisponibles ;
+- confirmer le comportement lorsqu'aucun profil actif n'est disponible ;
+- définir précisément ce qui reste post-MVP ;
+- produire la décision structurante correspondante avant toute nouvelle modification du code.
 
 ## Méthode de reprise
 

@@ -39,27 +39,46 @@ MVP Multi-Profile Strategy
 
 The system does not use a global default profile.
 
-Opportunity workflows use a Primary Profile and Active Profiles context.
+Opportunity workflows use:
 
-Principles:
+- one Primary Profile;
+- one or more Active Profiles.
 
-- first profile is selected automatically when needed;
-- opportunity ranking uses the selected profile;
-- opportunity details show all profile scores;
-- application creation currently uses the Primary Profile and Active Profiles context;
-- profile selection remains editable by the user;
-- automatic best profile preselection is deferred to a future phase.
+Primary Profile rules:
 
-Opportunity Context Rules
+- the first available profile is selected when no context exists;
+- the Primary Profile belongs to Active Profiles;
+- opportunity ranking uses only the Primary Profile;
+- score-based opportunity filtering uses only the Primary Profile;
+- opportunity cards display the Primary Profile score;
+- changing Active Profiles without changing the Primary Profile does not change ranking.
 
-- opportunity cards display the score of the Primary Profile and Active Profiles context;
-- opportunity ranking uses the Primary Profile and Active Profiles context;
-- opportunity details display the scores of all profiles;
-- opportunity details identify the best matching profile;
-- application creation from Opportunities currently uses the Primary Profile and Active Profiles context;
-- best matching profile automatic preselection is deferred to a future application creation strategy phase;
-- active profile context is not persisted.
-- when a new session starts, the system uses the first available profile.
+Active Profiles rules:
+
+- several profiles can be active simultaneously;
+- matching remains calculated independently for each profile;
+- opportunity details display profile-specific comparison results;
+- opportunity details identify the Best Matching Profile;
+- active profiles are never merged into a combined profile;
+- no average or combined multi-profile score is calculated.
+
+Application profile attribution rules:
+
+- an Application is attached to exactly one Profile;
+- application creation recommends the Best Matching Profile;
+- the Primary Profile resolves equal matching scores;
+- the lowest profile_id resolves any remaining tie;
+- the user may select another active profile before validation;
+- the confirmed profile is attached to the created Application;
+- the Application may later be explicitly reassigned to another active Profile;
+- every effective reassignment creates a PROFILE_CHANGED timeline event;
+- changing an Application profile does not change the Primary Profile or Active Profiles context.
+
+Persistence rules:
+
+- the Opportunity Context is not persisted during the MVP;
+- no global default profile is stored;
+- a new session starts from the first available profile.
 
 ---
 

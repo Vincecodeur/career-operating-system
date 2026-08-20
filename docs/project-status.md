@@ -25,10 +25,10 @@ Current Milestone
 
 Current Phase
 
-7.1.22 Multi Profile Opportunity Context
+7.1.22.11 Application Creation Strategy
 
 Next Planned Milestone
-7.1.22.10 Application Profile Attribution
+7.1.22.12 Multi Profile Validation
 
 ---
 
@@ -1400,6 +1400,21 @@ Post-MVP Planning
 - Profile Completeness visualization implemented
 - Frontend validation completed
 
+- 7.1.22.10 Application Profile Attribution completed
+- Application profile permanently linked to Application
+- Create Application dialog implemented
+- Best Matching Profile recommendation displayed
+- User profile override supported
+- Application profile reassignment implemented
+- PROFILE_CHANGED timeline event implemented
+- Timeline renders profile names instead of profile identifiers
+- Frontend validation completed
+- Backend application tests completed: 16 passed
+- Backend non-regression suite completed: 247 passed
+- Frontend production build completed
+- PROFILE_CHANGED timeline rendering functionally validated
+- Documentation synchronized
+
 ---
 
 Blocked
@@ -1410,7 +1425,7 @@ Aucun
 
 Phase In Progress
 
-7.1.22 Multi Profile Opportunity Context
+7.1.22.11 Application Creation Strategy
 
 Job Discovery Settings Progress
 
@@ -1436,18 +1451,19 @@ Phase Status:
 
 Next Step:
 
-7.1.22 Multi Profile Opportunity Context
+7.1.22.11 Application Creation Strategy Design Review
 
 ---
 
 Last Decision
-DEC-071 - Multi Profile Opportunity Context
+DEC-072 - Application Profile Attribution
 
 Décisions récemment validées :
 
 - DEC-068 Search Criteria Governed By Reference Data
 - DEC-070 Connectors Use Controlled Multi Select
 - DEC-071 Multi Profile Opportunity Context
+- DEC-072 Application Profile Attribution
 
 Validation Status
 
@@ -1462,12 +1478,35 @@ Completed:
 - Frontend API integration completed
 - End-to-end validation completed
 
-Current phase status:
+Current Phase Status
 
-Backend completed.
-Frontend completed.
-Job Discovery Settings completed.
+7.1.22.11 Application Creation Strategy
+
+Status:
+Design Review
+
+Current implementation baseline:
+
+- Best Matching Profile recommendation implemented
+- Primary Profile tie-break implemented
+- profile_id final tie-break implemented
+- explicit user override implemented
+- explicit confirmation implemented
+- Application profile persistence implemented
+- Application profile reassignment implemented
+- PROFILE_CHANGED audit event implemented
+
+Design review objectives:
+
+- validate the implemented behavior as the final MVP strategy
+- confirm tie-breaking rules
+- confirm missing-score fallback behavior
+- confirm the no-active-profile behavior
+- define the exact post-MVP scope
 
 Last Commits :
 
-- 5edfbf5 - docs: add multi-profile opportunity context designs
+cd257dc - docs(applications): finalize profile attribution status
+2188576 - feat(applications): support profile attribution workflow
+bc02091 - docs(applications): add profile attribution designs
+bccdc5b - feat(applications): support profile reassignment

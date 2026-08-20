@@ -265,21 +265,36 @@ Le système conserve également un historique structuré via ApplicationEvent.
 ApplicationEvent permet notamment de tracer :
 
 - APPLICATION_CREATED ;
-- STATUS_CHANGED.
+- STATUS_CHANGED ;
+- PROFILE_CHANGED.
 
 L’objectif est de fournir un suivi complet du cycle de vie d’une candidature.
 
-An Application may be created:
+Une Application peut être créée :
 
-- directly from an Opportunity
-- manually by the user
+- directement depuis une Opportunity ;
+- manuellement par l'utilisateur.
 
-When an Application is created from an Opportunity:
+Lorsqu'une Application est créée depuis une Opportunity :
 
-- the currently selected profile context is used;
-- profile selection remains editable by the user.
+- le Best Matching Profile est recommandé à l'utilisateur ;
+- l'utilisateur peut sélectionner un autre profil actif avant validation ;
+- le profil confirmé est définitivement associé à l'Application.
 
-Automatic best-profile preselection is deferred to a future application creation strategy phase.
+Après la création :
+
+- l'utilisateur peut explicitement réattribuer l'Application à un autre profil actif ;
+- la réattribution ne modifie ni l'Opportunity, ni le statut, ni les notes, ni la source ;
+- le résultat de matching est recalculé pour le nouveau profil ;
+- toute réattribution effective crée un ApplicationEvent PROFILE_CHANGED ;
+- aucun événement PROFILE_CHANGED n'est créé lorsque profile_id reste inchangé.
+
+Règles de validation de l'attribution :
+
+- le backend vérifie que le Profile sélectionné existe ;
+- le backend vérifie que le Profile sélectionné est actif ;
+- le backend vérifie que le JobOffer référencé existe lors de la création ;
+- les clés étrangères de la base de données constituent le dernier niveau de protection de l'intégrité.
 
 ### Market Intelligence
 
