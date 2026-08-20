@@ -1500,3 +1500,36 @@ nouvelle session
 ```
 
 Le choix utilisateur validé reste la source de vérité de l’attribution de la candidature.
+
+# Implementation Status
+
+## Backend
+
+Completed
+
+- Application profile reassignment API
+- Validation of profile assignment
+- PROFILE_CHANGED timeline event
+
+## Frontend
+
+Completed
+
+- Create Application dialog
+- Best Matching Profile recommendation
+- Manual profile override
+- Application reassignment dialog
+- PROFILE_CHANGED timeline rendering
+
+## Validation
+
+Completed
+
+- Backend tests passed
+- Manual UI validation passed
+- Timeline validation passed
+
+## Final Status
+
+Released on branch:
+docs/application-workflow-sync
