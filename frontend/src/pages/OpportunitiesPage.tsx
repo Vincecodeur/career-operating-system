@@ -4,14 +4,20 @@ import { AIExplanationCard } from "../components/AIExplanationCard";
 import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
 import {
+  createApplication,
+  createSavedSearch,
+  deleteSavedSearch,
   getApplications,
+  getDiscoveryPreferencesSettings,
   getJobOffers,
   getMatching,
   getProfileScoresForJobOffer,
   getProfiles,
   getRankedJobOffers,
-  createApplication,
+  getSavedSearches,
+  type DiscoveryPreferencesSettings,
   type ProfileOpportunityScore,
+  type SavedSearch,
 } from "../services/api";
 
 import { MatchingResult } from "../components/MatchingResult";
@@ -107,6 +113,14 @@ export function OpportunitiesPage() {
   const [sourceFilter, setSourceFilter] = useState("ALL");
   const [locationFilter, setLocationFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("BEST_MATCH_FIRST");
+  const [discoveryPreferences, setDiscoveryPreferences] =
+    useState<DiscoveryPreferencesSettings | null>(null);
+
+  const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
+  const [savedSearchName, setSavedSearchName] = useState("");
+  const [showSaveSearchForm, setShowSaveSearchForm] = useState(false);
+  const [savingSearch, setSavingSearch] = useState(false);
+  const [savedSearchError, setSavedSearchError] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [matchingLoading, setMatchingLoading] = useState(false);
@@ -205,6 +219,36 @@ export function OpportunitiesPage() {
   }, [selectedOffer]);
 
   useEffect(() => {
+    async function loadDiscoveryPreferences() {
+      try {
+        const preferences = await getDiscoveryPreferencesSettings();
+
+        setDiscoveryPreferences(preferences);
+
+        setSortBy(preferences.discovery_default_sort);
+      } catch {
+        setDiscoveryPreferences(null);
+      }
+    }
+
+    loadDiscoveryPreferences();
+  }, []);
+
+  useEffect(() => {
+    async function loadSavedSearches() {
+      try {
+        const data = await getSavedSearches();
+
+        setSavedSearches(data);
+      } catch {
+        setSavedSearches([]);
+      }
+    }
+
+    loadSavedSearches();
+  }, []);
+
+  useEffect(() => {
     async function loadProfiles() {
       try {
         const data = await getProfiles();
@@ -298,11 +342,41 @@ export function OpportunitiesPage() {
     const matchesLocation =
       locationFilter === "ALL" ? true : offer.location === locationFilter;
 
+    const minimumScore =
+      discoveryPreferences?.discovery_minimum_matching_score ?? 25;
+
+    const offerScore = matchingScoresByOfferId[offer.id] ?? 0;
+
+    const matchesMinimumScore = offerScore >= minimumScore;
+
+    const ageWindow = discoveryPreferences?.discovery_age_window ?? "30_DAYS";
+
+    const now = Date.now();
+
+    const ageLimitDays =
+      ageWindow === "7_DAYS"
+        ? 7
+        : ageWindow === "14_DAYS"
+          ? 14
+          : ageWindow === "30_DAYS"
+            ? 30
+            : ageWindow === "90_DAYS"
+              ? 90
+              : null;
+
+    const matchesAgeWindow =
+      ageLimitDays === null
+        ? true
+        : now - new Date(offer.created_at).getTime() <=
+          ageLimitDays * 24 * 60 * 60 * 1000;
+
     return (
       matchesSearch &&
       matchesApplicationStatus &&
       matchesSource &&
-      matchesLocation
+      matchesLocation &&
+      matchesMinimumScore &&
+      matchesAgeWindow
     );
   });
 
@@ -431,6 +505,74 @@ export function OpportunitiesPage() {
     }
   }
 
+  async function handleSaveSearch() {
+    const cleanName = savedSearchName.trim();
+
+    if (!cleanName) {
+      setSavedSearchError("Search name is required.");
+      return;
+    }
+
+    setSavingSearch(true);
+    setSavedSearchError(null);
+
+    try {
+      const createdSearch = await createSavedSearch({
+        name: cleanName,
+        keyword: searchTerm.trim(),
+        application_status: applicationFilter,
+        source: sourceFilter,
+        location: locationFilter,
+        sort_by: sortBy,
+      });
+
+      setSavedSearches((currentSearches) => [
+        ...currentSearches,
+        createdSearch,
+      ]);
+
+      setSavedSearchName("");
+      setShowSaveSearchForm(false);
+    } catch {
+      setSavedSearchError("Unable to save the current search.");
+    } finally {
+      setSavingSearch(false);
+    }
+  }
+
+  function handleApplySavedSearch(savedSearch: SavedSearch) {
+    setSearchTerm(savedSearch.keyword);
+    setApplicationFilter(savedSearch.application_status);
+    setSourceFilter(savedSearch.source);
+    setLocationFilter(savedSearch.location);
+    setSortBy(savedSearch.sort_by);
+    setSavedSearchError(null);
+  }
+
+  async function handleDeleteSavedSearch(savedSearchId: number) {
+    const confirmed = window.confirm(
+      "Delete this saved search? This action cannot be undone.",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setSavedSearchError(null);
+
+    try {
+      await deleteSavedSearch(savedSearchId);
+
+      setSavedSearches((currentSearches) =>
+        currentSearches.filter(
+          (savedSearch) => savedSearch.id !== savedSearchId,
+        ),
+      );
+    } catch {
+      setSavedSearchError("Unable to delete the saved search.");
+    }
+  }
+
   function handlePrimaryAction() {
     if (hasRelatedApplications && relatedApplications.length > 0) {
       navigate("/applications", {
@@ -459,6 +601,15 @@ export function OpportunitiesPage() {
           placeholder="Search opportunities..."
           className="flex-1 rounded-md border border-slate-700 bg-slate-950 px-4 py-2 text-white outline-none focus:border-blue-500"
         />
+        <button
+          type="button"
+          onClick={() => {
+            setShowSaveSearchForm(true);
+            setSavedSearchError(null);
+          }}
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500">
+          Save Search
+        </button>
 
         {hasActiveFilters && (
           <button
@@ -467,7 +618,10 @@ export function OpportunitiesPage() {
               setSearchTerm("");
               setApplicationFilter("ALL");
               setSourceFilter("ALL");
-              setSortBy("BEST_MATCH_FIRST");
+              setSortBy(
+                discoveryPreferences?.discovery_default_sort ??
+                  "BEST_MATCH_FIRST",
+              );
               setLocationFilter("ALL");
             }}
             className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
@@ -475,6 +629,91 @@ export function OpportunitiesPage() {
           </button>
         )}
       </div>
+      {showSaveSearchForm && (
+        <div className="mb-6 rounded-lg border border-blue-500/40 bg-slate-900 p-4">
+          <div className="mb-4 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-white">
+                Save Current Search
+              </h2>
+
+              <p className="text-sm text-slate-400">
+                Save the current filters and sort order for later use.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setShowSaveSearchForm(false);
+                setSavedSearchName("");
+                setSavedSearchError(null);
+              }}
+              className="text-sm text-slate-400 hover:text-white">
+              Cancel
+            </button>
+          </div>
+
+          <div className="mb-4">
+            <label className="mb-2 block text-sm text-slate-300">
+              Search Name
+            </label>
+
+            <input
+              type="text"
+              value={savedSearchName}
+              onChange={(event) => {
+                setSavedSearchName(event.target.value);
+
+                if (savedSearchError) {
+                  setSavedSearchError(null);
+                }
+              }}
+              placeholder="Technical Partnerships France"
+              className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div className="mb-4 grid gap-3 text-sm md:grid-cols-5">
+            <div>
+              <p className="text-slate-500">Keyword</p>
+              <p className="text-slate-200">{searchTerm.trim() || "None"}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Application Status</p>
+              <p className="text-slate-200">{applicationFilter}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Source</p>
+              <p className="text-slate-200">{sourceFilter}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Location</p>
+              <p className="text-slate-200">{locationFilter}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-500">Sort</p>
+              <p className="text-slate-200">{sortBy}</p>
+            </div>
+          </div>
+
+          {savedSearchError && (
+            <p className="mb-4 text-sm text-red-400">{savedSearchError}</p>
+          )}
+
+          <button
+            type="button"
+            onClick={handleSaveSearch}
+            disabled={savingSearch}
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60">
+            {savingSearch ? "Saving..." : "Save Search"}
+          </button>
+        </div>
+      )}
 
       <div className="mb-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4">
         <div className="flex flex-wrap items-center gap-3">
@@ -570,6 +809,67 @@ export function OpportunitiesPage() {
 
           <option value="OLDEST_FIRST">Oldest First</option>
         </select>
+      </div>
+
+      <div className="mb-6 rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-white">Saved Searches</h2>
+
+            <p className="text-sm text-slate-400">
+              Reapply frequently used opportunity filters.
+            </p>
+          </div>
+
+          <span className="text-xs text-slate-500">
+            {savedSearches.length} saved
+          </span>
+        </div>
+
+        {savedSearches.length === 0 ? (
+          <p className="text-sm text-slate-400">
+            No saved searches yet. Save your first search configuration.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {savedSearches.map((savedSearch) => (
+              <div
+                key={savedSearch.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-slate-700 bg-slate-950 p-3">
+                <div>
+                  <p className="font-medium text-white">{savedSearch.name}</p>
+
+                  <p className="text-xs text-slate-500">
+                    Keyword: {savedSearch.keyword || "None"} · Status:{" "}
+                    {savedSearch.application_status} · Source:{" "}
+                    {savedSearch.source} · Location: {savedSearch.location} ·
+                    Sort: {savedSearch.sort_by}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleApplySavedSearch(savedSearch)}
+                    className="rounded-md border border-blue-500 px-3 py-1.5 text-sm text-blue-300 hover:bg-blue-500/10">
+                    Apply
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteSavedSearch(savedSearch.id)}
+                    className="rounded-md border border-red-500/60 px-3 py-1.5 text-sm text-red-300 hover:bg-red-500/10">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {savedSearchError && !showSaveSearchForm && (
+          <p className="mt-3 text-sm text-red-400">{savedSearchError}</p>
+        )}
       </div>
 
       <div className="mb-6 text-sm text-slate-400">

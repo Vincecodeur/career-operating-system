@@ -135,12 +135,6 @@ Maintain canonical aliases for common technologies.
 
 # P2 - Career Operating System
 
-## CAREER-001 - Profile Completeness Score
-
-Status: Backlog
-
-Calculate profile completion percentage.
-
 ---
 
 ## CAREER-002 - Career Readiness Score

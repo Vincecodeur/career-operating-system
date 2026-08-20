@@ -500,6 +500,21 @@ Implémenté :
 - Multi Profile Opportunity Scoring
 - Profile Score Comparison
 - Best Matching Profile Visualization
+- Application Workflow Strategy Visualization
+- APP-005 roadmap visibility
+- 7.1.22 roadmap visibility
+
+- Discovery Preferences Settings
+- Opportunity Age Window
+- Minimum Matching Score
+- Default Opportunity Sort
+- Discovery Preferences Opportunities Integration
+
+- Profile Completeness
+- Foundation Profile scoring
+- Professional Evidence scoring
+- Missing Information detection
+- Recommended Actions
 
 Documenté mais pas encore implémenté :
 
@@ -759,6 +774,8 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- 1348a6b - docs(opportunities): finalize opportunity context selection
+- ca8135f - feat(opportunities): implement opportunity context selection and multi-profile scoring
 - e3f347d - feat(settings): persist job discovery configuration
 - 39be9b8 - refactor(settings): move settings api into settings domain
 - dcf110a - feat(settings): create job discovery settings domain
@@ -981,7 +998,7 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.19.6 Application Workflow Settings
+7.1.21 Saved Searches
 
 Contexte métier :
 

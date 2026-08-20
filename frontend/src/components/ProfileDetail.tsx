@@ -195,6 +195,93 @@ export function ProfileDetail({
     (application: Application) => application.profile_id === profile.id,
   );
 
+  const foundationScore =
+    (profile.profile_name?.trim() ? 5 : 0) +
+    (profile.full_name?.trim() ? 10 : 0) +
+    (profile.current_title?.trim() ? 5 : 0) +
+    (profile.location?.trim() ? 5 : 0) +
+    ((profile.years_of_experience ?? 0) > 0 ? 5 : 0) +
+    (profile.target_role_short_term?.trim() ? 5 : 0) +
+    (profile.target_role_long_term?.trim() ? 5 : 0) +
+    (profile.remote_preference?.trim() ? 5 : 0) +
+    (profile.preferred_countries?.trim() ? 5 : 0);
+
+  const professionalEvidenceScore =
+    (cvs.length > 0 ? 15 : 0) +
+    (profileSkills.length > 0 ? 10 : 0) +
+    (workExperiences.length > 0 ? 10 : 0) +
+    (profileLanguages.length > 0 ? 10 : 0) +
+    (profileCertifications.length > 0 ? 5 : 0);
+
+  const overallScore = foundationScore + professionalEvidenceScore;
+
+  const foundationPercentage = Math.round((foundationScore / 50) * 100);
+
+  const professionalEvidencePercentage = Math.round(
+    (professionalEvidenceScore / 50) * 100,
+  );
+
+  const completenessStatus =
+    overallScore >= 90
+      ? "Excellent"
+      : overallScore >= 75
+        ? "Good"
+        : overallScore >= 50
+          ? "Needs Improvement"
+          : "Incomplete";
+
+  const missingInformation: string[] = [];
+
+  if (cvs.length === 0) {
+    missingInformation.push("No CV uploaded");
+  }
+
+  if (profileSkills.length === 0) {
+    missingInformation.push("No hard skill added");
+  }
+
+  if (workExperiences.length === 0) {
+    missingInformation.push("No work experience added");
+  }
+
+  if (profileLanguages.length === 0) {
+    missingInformation.push("No language added");
+  }
+
+  if (profileCertifications.length === 0) {
+    missingInformation.push("No certification added");
+  }
+
+  if (!profile.preferred_countries?.trim()) {
+    missingInformation.push("Preferred countries not configured");
+  }
+
+  if (!profile.target_role_long_term?.trim()) {
+    missingInformation.push("Long-term target not defined");
+  }
+
+  const recommendedActions: string[] = [];
+
+  if (cvs.length === 0) {
+    recommendedActions.push("Upload a CV (+15)");
+  }
+
+  if (workExperiences.length === 0) {
+    recommendedActions.push("Add work experience (+10)");
+  }
+
+  if (profileLanguages.length === 0) {
+    recommendedActions.push("Add a language (+10)");
+  }
+
+  if (profileSkills.length === 0) {
+    recommendedActions.push("Add a hard skill (+10)");
+  }
+
+  if (profileCertifications.length === 0) {
+    recommendedActions.push("Add a certification (+5)");
+  }
+
   if (loading) {
     return (
       <Card>
@@ -268,6 +355,75 @@ export function ProfileDetail({
         </div>
       </div>
 
+      <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <h3 className="mb-4 text-lg font-semibold text-white">
+          Profile Completeness
+        </h3>
+
+        <div className="grid gap-4 md:grid-cols-4">
+          <div>
+            <p className="text-sm text-slate-400">Overall</p>
+
+            <p className="text-3xl font-bold text-white">{overallScore}%</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-slate-400">Foundation Profile</p>
+
+            <p className="text-xl font-semibold text-white">
+              {foundationPercentage}%
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-slate-400">Professional Evidence</p>
+
+            <p className="text-xl font-semibold text-white">
+              {professionalEvidencePercentage}%
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-slate-400">Status</p>
+
+            <p className="text-xl font-semibold text-white">
+              {completenessStatus}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <h3 className="mb-4 text-lg font-semibold text-white">
+          Missing Information
+        </h3>
+
+        {missingInformation.length === 0 ? (
+          <p className="text-green-400">No missing information detected.</p>
+        ) : (
+          <ul className="space-y-2 text-slate-300">
+            {missingInformation.map((item) => (
+              <li key={item}>• {item}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <h3 className="mb-4 text-lg font-semibold text-white">
+          Recommended Actions
+        </h3>
+
+        {recommendedActions.length === 0 ? (
+          <p className="text-green-400">Profile is fully optimized.</p>
+        ) : (
+          <ul className="space-y-2 text-slate-300">
+            {recommendedActions.slice(0, 3).map((action) => (
+              <li key={action}>• {action}</li>
+            ))}
+          </ul>
+        )}
+      </div>
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-3">
         <h3 className="mb-4 text-lg font-semibold text-white">
           General Information
@@ -323,6 +479,7 @@ export function ProfileDetail({
           </div>
         </div>
       </div>
+
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>

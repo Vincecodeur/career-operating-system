@@ -887,6 +887,32 @@ export type SearchCriteriaSettings = {
     excluded_keywords: string[];
 };
 
+export type DiscoveryPreferencesSettings = {
+    discovery_age_window: string;
+    discovery_minimum_matching_score: number;
+    discovery_show_archived: boolean;
+    discovery_default_sort: string;
+};
+
+export type SavedSearch = {
+    id: number;
+    name: string;
+    keyword: string;
+    application_status: "ALL" | "APPLIED" | "NOT_APPLIED";
+    source: string;
+    location: string;
+    sort_by: string;
+};
+
+export type SavedSearchCreate = {
+    name: string;
+    keyword: string;
+    application_status: "ALL" | "APPLIED" | "NOT_APPLIED";
+    source: string;
+    location: string;
+    sort_by: string;
+};
+
 export type ProfileOpportunityScore = {
   profile_id: number;
   profile_name: string;
@@ -969,6 +995,101 @@ export async function updateSearchCriteriaSettings(
     if (!response.ok) {
         throw new Error(
             "Unable to update search criteria settings."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getDiscoveryPreferencesSettings(
+): Promise<DiscoveryPreferencesSettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/discovery-preferences`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load discovery preferences."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateDiscoveryPreferencesSettings(
+    payload: DiscoveryPreferencesSettings,
+): Promise<DiscoveryPreferencesSettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/discovery-preferences`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update discovery preferences."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getSavedSearches(
+): Promise<SavedSearch[]> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/saved-searches`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load saved searches."
+        );
+    }
+
+    return response.json();
+}
+
+export async function createSavedSearch(
+    payload: SavedSearchCreate,
+): Promise<SavedSearch> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/saved-searches`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to create saved search."
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteSavedSearch(
+    savedSearchId: number,
+): Promise<SavedSearch> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/saved-searches/${savedSearchId}`,
+        {
+            method: "DELETE",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to delete saved search."
         );
     }
 

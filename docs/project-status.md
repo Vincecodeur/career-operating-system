@@ -19,16 +19,16 @@ main
 ---
 
 Current Milestone
-7.1.19.5 Opportunity Context Selection
+7.1.21 Saved Searches
 
 ---
 
 Current Phase
 
-7.1.19 Documentation Synchronization
+7.1.21 Saved Searches
 
 Next Planned Milestone
-7.1.19.6 Application Workflow Settings
+7.1.21 Saved Searches
 
 ---
 
@@ -1376,6 +1376,30 @@ Post-MVP Planning
 - Frontend validation completed
 - 238 tests passing
 
+- Application Workflow Strategy visualization implemented
+- Current MVP workflow strategy documented in Settings
+- APP-005 roadmap visualization added
+- 7.1.22 roadmap visualization added
+- Frontend-only implementation validated
+- Build validation completed
+- No backend changes required
+
+- Opportunity Discovery Preferences implemented
+- Opportunity Age Window implemented
+- Minimum Matching Score implemented
+- Default Opportunity Sort implemented
+- Discovery Preferences persistence implemented
+- Opportunities filtering preferences integrated
+- Discovery Preferences frontend validation completed
+
+- Profile Completeness implemented
+- Foundation Profile scoring implemented
+- Professional Evidence scoring implemented
+- Missing Information detection implemented
+- Recommended Actions implemented
+- Profile Completeness visualization implemented
+- Frontend validation completed
+
 ---
 
 Blocked
@@ -1386,7 +1410,7 @@ Aucun
 
 Phase In Progress
 
-7.1.19 Settings Management
+7.1.21 Saved Searches
 
 Job Discovery Settings Progress
 
@@ -1412,7 +1436,7 @@ Phase Status:
 
 Next Step:
 
-7.1.19.5 Opportunity Context Selection
+7.1.21 Saved Searches
 
 ---
 
@@ -1446,4 +1470,4 @@ Job Discovery Settings completed.
 
 Last Commits :
 
-- ca8135f - feat(opportunities): implement opportunity context selection and multi-profile scoring
+- 1348a6b - docs(opportunities): finalize opportunity context selection

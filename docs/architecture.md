@@ -139,6 +139,7 @@ Responsabilités :
 - Matching Weights
 - Source Configuration
 - Application Workflow Settings
+- Opportunity Discovery Preferences
 
 Search Criteria Settings currently support:
 
@@ -147,6 +148,12 @@ Search Criteria Settings currently support:
 - Work Modes
 - Included Keywords
 - Excluded Keywords
+
+Opportunity Discovery Preferences currently support:
+
+- Opportunity Age Window
+- Minimum Matching Score
+- Default Opportunity Sort
 
 No global default profile is stored.
 
@@ -439,6 +446,12 @@ Langue post MVP :
 - L'IA enrichit les résultats mais ne remplace jamais les règles métier.
 - Les offres collectées conservent leur lien source d'origine.
 - Le frontend est une couche de navigation et de visualisation.
+
+Exception MVP:
+Profile Completeness is a frontend-only visualization score.
+It is computed from already loaded profile data.
+No backend persistence exists.
+No business decision depends on this score.
 
 ---
 

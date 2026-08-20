@@ -777,14 +777,72 @@ Sous-phases :
 ✅ 7.1.19.5.4 Validation
 ✅ 7.1.19.5.5 Documentation Synchronization
 
-⬜ 7.1.19.6 Application Workflow Settings
-⬜ 7.1.19.7 Opportunity Discovery Preferences
+✅ 7.1.19.6 Application Workflow Settings
+Objectif :
 
-⬜ 7.1.20 Profile Completeness
-⬜ 7.1.20.1 Completeness Scoring
-⬜ 7.1.20.2 Missing Information Detection
-⬜ 7.1.20.3 Profile Quality Recommendations
-⬜ 7.1.20.4 Profile Completeness Visualization
+Visualiser les stratégies actuelles du workflow
+et les évolutions déjà planifiées.
+
+Aucune persistance.
+Aucune API.
+Aucune migration.
+
+Validation réalisée :
+
+- Application Workflow Strategy section added to Settings
+- Current MVP strategy documented
+- APP-005 roadmap visualization added
+- 7.1.22 roadmap visualization added
+- Frontend build validated
+- No backend impact
+- No database impact
+
+✅ 7.1.19.6.1 Product Design
+✅ 7.1.19.6.2 Repository Audit
+✅ 7.1.19.6.3 Technical Design
+✅ 7.1.19.6.4 Frontend Strategy Visualization
+✅ 7.1.19.6.5 Frontend Validation
+✅ 7.1.19.6.6 Documentation Synchronization
+
+✅ 7.1.19.7 Opportunity Discovery Preferences
+
+Validation réalisée :
+
+- Discovery Preferences Settings persistence implemented
+- Opportunity Age Window implemented
+- Minimum Matching Score implemented
+- Default Opportunity Sort implemented
+- Settings UI implemented
+- Opportunities integration implemented
+- Frontend build validated
+
+Removed during design review:
+
+- Archived Opportunities Visibility
+
+Reason:
+No demonstrated MVP value.
+
+✅ 7.1.20 Profile Completeness
+
+✅ 7.1.20.1 Completeness Scoring
+✅ 7.1.20.2 Missing Information Detection
+✅ 7.1.20.3 Profile Quality Recommendations
+✅ 7.1.20.4 Profile Completeness Visualization
+
+Validation réalisée :
+
+- Foundation Profile scoring implemented
+- Professional Evidence scoring implemented
+- Overall Completeness scoring implemented
+- Missing Information detection implemented
+- Recommended Actions implemented
+- Profile Completeness visualization implemented
+- Frontend build validated
+- Frontend functional validation completed
+- No backend changes required
+- No database changes required
+- No API changes required
 
 ⬜ 7.1.21 Saved Searches
 ⬜ 7.1.21.1 Search Presets

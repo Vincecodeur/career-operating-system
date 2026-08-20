@@ -15,6 +15,9 @@ import {
   getWorkModes,
   updateJobDiscoverySettings,
   updateSearchCriteriaSettings,
+  getDiscoveryPreferencesSettings,
+  updateDiscoveryPreferencesSettings,
+  type DiscoveryPreferencesSettings,
   type JobDiscoverySettings,
   type ReferenceDataItem,
   type SearchCriteriaSettings,
@@ -118,6 +121,9 @@ export function SettingsPage() {
   const [searchCriteria, setSearchCriteria] =
     useState<SearchCriteriaSettings | null>(null);
 
+  const [discoveryPreferences, setDiscoveryPreferences] =
+    useState<DiscoveryPreferencesSettings | null>(null);
+
   const [countries, setCountries] = useState<ReferenceDataItem[]>([]);
 
   const [workModes, setWorkModes] = useState<ReferenceDataItem[]>([]);
@@ -144,14 +150,18 @@ export function SettingsPage() {
     const [
       discoverySettings,
       criteriaSettings,
+      discoveryPreferencesSettings,
       countryOptions,
       workModeOptions,
     ] = await Promise.all([
       getJobDiscoverySettings(),
       getSearchCriteriaSettings(),
+      getDiscoveryPreferencesSettings(),
       getCountries(),
       getWorkModes(),
     ]);
+
+    setDiscoveryPreferences(discoveryPreferencesSettings);
 
     setSettings(discoverySettings);
 
@@ -342,7 +352,26 @@ export function SettingsPage() {
     }
   }
 
-  if (!settings || !searchCriteria) {
+  async function saveDiscoveryPreferences() {
+    if (!discoveryPreferences) {
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      const updated =
+        await updateDiscoveryPreferencesSettings(discoveryPreferences);
+
+      setDiscoveryPreferences(updated);
+
+      setMessage("Discovery preferences saved successfully.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!settings || !searchCriteria || !discoveryPreferences) {
     return (
       <>
         <PageHeader
@@ -629,6 +658,188 @@ export function SettingsPage() {
               className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-500">
               {saving ? "Saving..." : "Save Search Criteria"}
             </button>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-white">
+              Opportunity Discovery Preferences
+            </h2>
+
+            <p className="text-sm text-slate-400">
+              Configure how opportunities are displayed and prioritized
+              throughout the Opportunities workspace.
+            </p>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                Opportunity Age Window
+              </label>
+
+              <select
+                value={discoveryPreferences.discovery_age_window}
+                onChange={(event) =>
+                  setDiscoveryPreferences({
+                    ...discoveryPreferences,
+                    discovery_age_window: event.target.value,
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white">
+                <option value="7_DAYS">Last 7 Days</option>
+                <option value="14_DAYS">Last 14 Days</option>
+                <option value="30_DAYS">Last 30 Days</option>
+                <option value="90_DAYS">Last 90 Days</option>
+                <option value="ALL">All Opportunities</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                Minimum Matching Score
+              </label>
+
+              <select
+                value={discoveryPreferences.discovery_minimum_matching_score}
+                onChange={(event) =>
+                  setDiscoveryPreferences({
+                    ...discoveryPreferences,
+                    discovery_minimum_matching_score: Number(
+                      event.target.value,
+                    ),
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white">
+                <option value={0}>0%</option>
+                <option value={25}>25%</option>
+                <option value={50}>50%</option>
+                <option value={75}>75%</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                Show Archived Opportunities
+              </label>
+
+              <input
+                type="checkbox"
+                checked={discoveryPreferences.discovery_show_archived}
+                onChange={(event) =>
+                  setDiscoveryPreferences({
+                    ...discoveryPreferences,
+                    discovery_show_archived: event.target.checked,
+                  })
+                }
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                Default Opportunity Sort
+              </label>
+
+              <select
+                value={discoveryPreferences.discovery_default_sort}
+                onChange={(event) =>
+                  setDiscoveryPreferences({
+                    ...discoveryPreferences,
+                    discovery_default_sort: event.target.value,
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white">
+                <option value="BEST_MATCH_FIRST">Best Match First</option>
+
+                <option value="NEWEST_FIRST">Newest First</option>
+
+                <option value="OLDEST_FIRST">Oldest First</option>
+              </select>
+            </div>
+
+            <button
+              onClick={saveDiscoveryPreferences}
+              disabled={saving}
+              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-500">
+              {saving ? "Saving..." : "Save Discovery Preferences"}
+            </button>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-white">
+              Application Workflow Strategy
+            </h2>
+
+            <p className="text-sm text-slate-400">
+              These settings explain the current application workflow strategy
+              and highlight future enhancements already planned in the roadmap.
+            </p>
+
+            <div className="space-y-4 rounded-lg border border-slate-700 bg-slate-900/50 p-4">
+              <h3 className="text-lg font-medium text-white">Current MVP</h3>
+
+              <div>
+                <p className="font-medium text-white">
+                  Application Profile Selection
+                </p>
+                <p className="text-sm text-slate-400">
+                  Selected Profile Context
+                </p>
+              </div>
+
+              <div>
+                <p className="font-medium text-white">
+                  Opportunity Context Initialization
+                </p>
+                <p className="text-sm text-slate-400">
+                  First Available Profile
+                </p>
+              </div>
+
+              <div>
+                <p className="font-medium text-white">
+                  Opportunity Profile Comparison
+                </p>
+                <p className="text-sm text-slate-400">All Profiles</p>
+              </div>
+
+              <div>
+                <p className="font-medium text-white">
+                  Multiple Active Profiles
+                </p>
+                <p className="text-sm text-slate-400">Disabled</p>
+              </div>
+            </div>
+
+            <div className="space-y-4 rounded-lg border border-blue-900/50 bg-blue-950/20 p-4">
+              <h3 className="text-lg font-medium text-white">
+                Upcoming Enhancements
+              </h3>
+
+              <div>
+                <span className="rounded-full border border-blue-500 px-2 py-1 text-xs text-blue-300">
+                  APP-005
+                </span>
+
+                <p className="mt-2 text-sm text-slate-300">
+                  □ Best Matching Profile Preselection
+                </p>
+              </div>
+
+              <div>
+                <span className="rounded-full border border-purple-500 px-2 py-1 text-xs text-purple-300">
+                  7.1.22 Multi Profile Opportunity Context
+                </span>
+
+                <div className="mt-2 space-y-1 text-sm text-slate-300">
+                  <p>□ Ask Every Time</p>
+                  <p>□ Last Used Profile</p>
+                  <p>□ Active Profile Only</p>
+                  <p>□ Multiple Active Profiles</p>
+                </div>
+              </div>
+            </div>
           </div>
         </Card>
 

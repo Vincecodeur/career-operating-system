@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+import json
 
 from app.settings.models import ApplicationSetting
 
@@ -195,3 +196,150 @@ class SettingsService:
                 payload["excluded_keywords"]
             ),
         )
+        
+    def get_discovery_preferences_settings(
+        self,
+    ) -> dict:
+        return {
+            "discovery_age_window": self.get_value(
+                "discovery_age_window",
+                "30_DAYS",
+            ),
+            "discovery_minimum_matching_score": int(
+                self.get_value(
+                    "discovery_minimum_matching_score",
+                    "25",
+                )
+            ),
+            "discovery_show_archived": (
+                self.get_value(
+                    "discovery_show_archived",
+                    "false",
+                ).lower()
+                == "true"
+            ),
+            "discovery_default_sort": self.get_value(
+                "discovery_default_sort",
+                "BEST_MATCH_FIRST",
+            ),
+        }
+
+    def update_discovery_preferences_settings(
+        self,
+        payload: dict,
+    ) -> None:
+        self.set_value(
+            "discovery_age_window",
+            payload["discovery_age_window"],
+        )
+
+        self.set_value(
+            "discovery_minimum_matching_score",
+            str(
+                payload["discovery_minimum_matching_score"]
+            ),
+        )
+
+        self.set_value(
+            "discovery_show_archived",
+            str(
+                payload["discovery_show_archived"]
+            ).lower(),
+        )
+
+        self.set_value(
+            "discovery_default_sort",
+            payload["discovery_default_sort"],
+        )
+        
+    def get_saved_searches(
+        self,
+    ) -> list[dict]:
+        value = self.get_value(
+            "saved_searches",
+            "[]",
+        )
+
+        return json.loads(value)
+    
+    def create_saved_search(
+    self,
+    payload: dict,
+    ) -> dict:
+        searches = (
+            self.get_saved_searches()
+        )
+
+        next_id = (
+            max(
+                [
+                    search["id"]
+                    for search in searches
+                ],
+                default=0,
+            )
+            + 1
+        )
+
+        saved_search = {
+            "id": next_id,
+            "name": payload["name"],
+            "keyword": payload["keyword"],
+            "application_status": payload[
+                "application_status"
+            ],
+            "source": payload["source"],
+            "location": payload["location"],
+            "sort_by": payload["sort_by"],
+        }
+
+        searches.append(
+            saved_search
+        )
+
+        self.set_value(
+            "saved_searches",
+            json.dumps(searches),
+        )
+
+        return saved_search
+
+    def delete_saved_search(
+        self,
+        saved_search_id: int,
+    ) -> dict:
+        searches = (
+            self.get_saved_searches()
+        )
+
+        search = next(
+            (
+                item
+                for item in searches
+                if item["id"]
+                == saved_search_id
+            ),
+            None,
+        )
+
+        if search is None:
+            raise ValueError(
+                "Saved search not found."
+            )
+
+        searches = [
+            item
+            for item in searches
+            if item["id"]
+            != saved_search_id
+        ]
+
+        self.set_value(
+            "saved_searches",
+            json.dumps(searches),
+        )
+
+        return search
+
+
+
