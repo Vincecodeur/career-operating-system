@@ -679,7 +679,7 @@ Principes :
 ✅ 7.1.18.11 Opportunities Search & Filters Validation
 ✅ 7.1.18.12 Documentation Synchronization
 
-⬜ 7.1.19 Settings Management
+✅ 7.1.19 Settings Management
 ⏳ 7.1.19.1 Job Discovery Settings
 
 Livrables :
@@ -879,16 +879,15 @@ the currently selected profile context.
 
 Sous-phases :
 
-⬜ 7.1.22.1 Product Design
-⬜ 7.1.22.2 DEC Multi Active Profiles
-⬜ 7.1.22.3 Backend Context Model
-⬜ 7.1.22.4 Backend APIs
-⬜ 7.1.22.5 Backend Tests
-⬜ 7.1.22.6 Frontend UX Design
-⬜ 7.1.22.7 Profile Activation UI
-⬜ 7.1.22.8 Multi Profile Matching
-
-⬜ 7.1.22.9 Multi Profile Opportunities
+✅ 7.1.22.1 Product Design
+✅ 7.1.22.2 DEC Multi Active Profiles
+✅ 7.1.22.3 Backend Context Model
+✅ 7.1.22.4 Backend APIs
+✅ 7.1.22.5 Backend Tests
+✅ 7.1.22.6 Frontend UX Design
+✅ 7.1.22.7 Profile Activation UI
+✅ 7.1.22.8 Multi Profile Matching
+✅ 7.1.22.9 Multi Profile Opportunities
 
 ⬜ 7.1.22.10 Application Profile Attribution
 
@@ -912,7 +911,10 @@ Technical Partnerships Manager : 41 %
 ↓
 Create Application As Product Manager
 
-pré-sélection du meilleur score
+Le profil primaire est utilisé par défaut.
+
+APP-005 Best Matching Profile Preselection
+reste hors périmètre MVP.
 
 - override manuel utilisateur
 

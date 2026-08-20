@@ -516,6 +516,10 @@ Implémenté :
 - Missing Information detection
 - Recommended Actions
 
+- DEC-071
+- Primary Profile
+- Active Profiles
+
 Documenté mais pas encore implémenté :
 
 - Auth Layout
@@ -771,9 +775,56 @@ Des tests existent pour :
 - Phase 7.1.18.5 Source Filter
 - Phase 7.1.18.7 Opportunity Decision Badges
 - Phase 7.1.18.10 Smart Create / Open Application
+- Phase 7.1.18.11 Opportunities Search & Filters Validation
+- Phase 7.1.18.12 Documentation Synchronization
+- Phase 7.1.19 Settings Management
+- Phase 7.1.19.1.1 Job Discovery Settings Design
+- Phase 7.1.19.1.2 Repository Impact Review
+- Phase 7.1.19.1.3 Backend Persistence
+- Phase 7.1.19.1.4 Settings API Validation
+- Phase 7.1.19.1.5 Frontend Repository Audit
+- Phase 7.1.19.1.6 Frontend Settings Implementation
+- Phase 7.1.19.1.7 Frontend Validation
+- Phase 7.1.19.1.8 Documentation Synchronization
+- Phase 7.1.19.2 Search Criteria Settings
+- Phase 7.1.19.4 Source Configuration
+- Phase 7.1.19.5 Opportunity Context Selection
+- Phase 7.1.19.5.1 Product Design
+- Phase 7.1.19.5.2 Repository Audit
+- Phase 7.1.19.5.3 Technical Design
+- Phase 7.1.19.5.4 Validation
+- Phase 7.1.19.5.5 Documentation Synchronization
+- Phase 7.1.19.6 Application Workflow Settings
+- Phase 7.1.19.6.1 Product Design
+- Phase 7.1.19.6.2 Repository Audit
+- Phase 7.1.19.6.3 Technical Design
+- Phase 7.1.19.6.4 Frontend Strategy Visualization
+- Phase 7.1.19.6.5 Frontend Validation
+- Phase 7.1.19.6.6 Documentation Synchronization
+- Phase 7.1.19.7 Opportunity Discovery Preferences
+- Phase 7.1.20 Profile Completeness
+- Phase 7.1.20.1 Completeness Scoring
+- Phase 7.1.20.2 Missing Information Detection
+- Phase 7.1.20.3 Profile Quality Recommendations
+- Phase 7.1.20.4 Profile Completeness Visualization
+- Phase 7.1.21 Saved Searches
+- Phase 7.1.21.1 Repository Audit
+- Phase 7.1.21.2 Product Design
+- Phase 7.1.21.3 Technical Design
+- Phase 7.1.21.4 Backend Implementation
+- Phase 7.1.21.5 Backend Validation
+- Phase 7.1.21.6 Frontend Design
+- Phase 7.1.21.7 Frontend Implementation
+- Phase 7.1.21.8 Functional Validation
+- Phase 7.1.21.9 Documentation Synchronization
 
 ## Derniers commits importants
 
+- 5edfbf5 - docs: add multi-profile opportunity context designs
+- c40b031 - feat: complete opportunity context and multi-profile matching
+- 630d2c2 - feat: rebuild demo profiles for multi-profile matching
+- 2211df9 - cleanup: reduce demo applications to one per profile
+- 14a7376 - docs(saved-searches): close phase 7.1.21
 - ef5cc4d - feat(saved-searches): implement saved searches MVP
 - 1348a6b - docs(opportunities): finalize opportunity context selection
 - ca8135f - feat(opportunities): implement opportunity context selection and multi-profile scoring
@@ -999,36 +1050,27 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.22 Multi Profile Opportunity Context
+7.1.22.10 Application Profile Attribution
 
 Contexte métier :
 
-Le besoin n'est plus un profil par défaut global.
+Une Application reste liée à un unique profile_id.
 
-Le MVP retient :
+Le système supporte désormais :
 
-- premier profil sélectionné automatiquement ;
-- contexte de profil sélectionné pour le ranking ;
-- affichage de tous les scores dans le détail ;
-- utilisation du profil actuellement sélectionné lors de la création d'une candidature ;
-- La pré-sélection automatique du meilleur profil est reportée au backlog APP-005.
-- aucun profil global persistant.
+- un Primary Profile ;
+- plusieurs Active Profiles ;
+- un Best Matching Profile distinct.
 
-Important :
+La création d'une candidature doit conserver explicitement le profil utilisé lors de la création.
 
-Le contexte actif est temporaire.
+Objectifs :
 
-Le MVP ne stocke pas :
-
-- profil par défaut ;
-- dernier profil sélectionné ;
-- contexte actif persistant.
-
-Le système repart toujours du premier profil disponible lorsqu'aucun contexte n'est sélectionné.
-
-Opportunity cards display the score of the currently selected profile context.
-
-Opportunity details display the scores of all available profiles.
+- formaliser l'attribution profile_id d'une Application ;
+- définir les règles lorsque plusieurs profils actifs existent ;
+- préserver la compatibilité avec DEC-063 ;
+- préserver la compatibilité avec DEC-071 ;
+- ne pas introduire la présélection automatique du meilleur profil (APP-005 reste hors scope MVP).
 
 ## Méthode de reprise
 

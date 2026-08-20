@@ -3869,3 +3869,732 @@ The decision is considered implemented when:
 
 - DEC-067 - Settings Persistence Through Application Settings
 - DEC-068 - Search Criteria Governed By Reference Data
+
+## DEC-071 - Multi Profile Opportunity Context
+
+Date: 2026-08-20
+
+Status: Accepted
+
+### Context
+
+The Career Operating System supports several independent candidate profiles.
+
+This multi-profile capability allows the user to represent several career strategies, for example:
+
+- current professional profile;
+- Technical Partnerships profile;
+- Solution Architect profile;
+- Product Manager profile;
+- Head of Partnerships profile.
+
+DEC-017 established the general support of multiple candidate profiles.
+
+The Opportunities workflow previously used one selected profile at a time for:
+
+- opportunity ranking;
+- score-based filtering;
+- matching score display on opportunity cards;
+- matching analysis;
+- application creation from an opportunity.
+
+The system also supports the comparison of one opportunity against several profiles.
+
+The Multi Profile Opportunity Context must formalize the distinction between:
+
+- the profile controlling the main Opportunities workflow;
+- the profiles included in opportunity comparison.
+
+The system must preserve deterministic and explainable matching.
+
+The system must not merge several profiles into one combined profile.
+
+The system must not calculate an averaged or combined multi-profile matching score.
+
+### Decision
+
+The Opportunities workflow uses a temporary Multi Profile Opportunity Context composed of:
+
+```text
+1 Primary Profile
++
+1..N Active Profiles
+```
+
+Conceptual contract:
+
+```python
+class OpportunityContext:
+    primary_profile_id: int
+    active_profile_ids: list[int]
+```
+
+Example:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12, 17, 22]
+}
+```
+
+The Opportunity Context is used only for the current Opportunities workflow session.
+
+The Opportunity Context is not persisted during the MVP.
+
+### Primary Profile
+
+The Primary Profile is the single profile controlling the main Opportunities workflow.
+
+Exactly one Primary Profile exists when at least one available profile exists.
+
+The Primary Profile controls:
+
+- opportunity ranking;
+- score-based opportunity filtering;
+- the matching score displayed on opportunity cards;
+- the matching analysis selected by default;
+- the profile used by default when creating an application from an opportunity.
+
+The Primary Profile must always belong to Active Profiles.
+
+Valid context:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12, 17]
+}
+```
+
+Invalid context:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [17]
+}
+```
+
+The Primary Profile cannot be deactivated while it remains the Primary Profile.
+
+To deactivate the current Primary Profile, another available profile must first become the Primary Profile.
+
+Changing the Primary Profile does not automatically deactivate the previous Primary Profile.
+
+Example before the change:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12, 17]
+}
+```
+
+Example after profile 17 becomes the Primary Profile:
+
+```json
+{
+  "primary_profile_id": 17,
+  "active_profile_ids": [12, 17]
+}
+```
+
+Both profiles remain active.
+
+Only the Primary Profile changes.
+
+### Active Profiles
+
+Active Profiles are the profiles included in the multi-profile opportunity comparison context.
+
+One or more profiles can be active simultaneously.
+
+Active Profiles are used to:
+
+- compare matching scores;
+- analyze an opportunity from several career perspectives;
+- identify the best matching profile;
+- understand whether an opportunity is relevant to several profiles.
+
+Active Profiles remain independent.
+
+Activating several profiles does not:
+
+- merge profile data;
+- create a composite profile;
+- create an average matching score;
+- create a combined matching score;
+- change the matching formula.
+
+Active Profile identifiers must be unique.
+
+Valid context:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12, 17, 22]
+}
+```
+
+Invalid context:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12, 17, 17]
+}
+```
+
+When available profiles exist, at least one Active Profile must exist.
+
+Because the Primary Profile must remain active, the minimum valid context contains one profile:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12]
+}
+```
+
+### Available Profiles
+
+An available profile is a profile that can be selected as Primary Profile or included in Active Profiles.
+
+Only existing and available profiles can participate in the Opportunity Context.
+
+Archived profiles must not be selected automatically as Primary Profile.
+
+Archived profiles must not be activated automatically.
+
+Profile archival state and Opportunity Context activation remain separate concepts.
+
+Activating or deactivating a profile in the Opportunity Context does not modify the profile record.
+
+### Context Initialization
+
+When the Opportunities workflow starts and no context exists:
+
+1. the available profiles are loaded;
+2. the first available profile becomes the Primary Profile;
+3. the Primary Profile is included in Active Profiles.
+
+Initial example:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12]
+}
+```
+
+This rule preserves compatibility with the existing single-profile workflow.
+
+If no available profile exists, no valid Opportunity Context can be created.
+
+The interface must expose an explicit no-profile state instead of fabricating a profile context.
+
+### Matching Rules
+
+Matching remains calculated independently for one profile and one opportunity.
+
+Conceptual rule:
+
+```text
+Profile
++
+Opportunity
+=
+Matching Result
+```
+
+Example:
+
+```text
+Opportunity 501
+
+Profile 12
+82%
+
+Profile 17
+66%
+
+Profile 22
+91%
+```
+
+Activating or deactivating a profile does not change the mathematical matching result for that profile.
+
+Example:
+
+```text
+Profile 17 before activation
+66%
+
+Profile 17 after activation
+66%
+```
+
+The context changes which results are displayed or emphasized.
+
+The context does not change how the result is calculated.
+
+All matching logic remains in the backend.
+
+The frontend must not calculate or modify matching scores.
+
+### Ranking Rules
+
+Opportunity ranking uses only the Primary Profile.
+
+Conceptual rule:
+
+```text
+Opportunity Ranking Score
+=
+Matching Score for Primary Profile
+```
+
+Example:
+
+```text
+Primary Profile
+Profile 12
+
+Opportunity A
+
+Profile 12
+72%
+
+Profile 17
+91%
+
+Profile 22
+48%
+```
+
+The ranking score for Opportunity A remains:
+
+```text
+72%
+```
+
+The system does not rank opportunities using:
+
+- the highest Active Profile score;
+- the average Active Profile score;
+- the sum of Active Profile scores;
+- a weighted combination of Active Profile scores;
+- a composite profile.
+
+Changing Active Profiles without changing the Primary Profile must not change opportunity ranking.
+
+Changing the Primary Profile must update opportunity ranking.
+
+### Opportunity Filtering Rules
+
+Score-based opportunity filtering uses only the Primary Profile score.
+
+Example:
+
+```text
+Minimum matching score
+70%
+
+Primary Profile score
+62%
+
+Secondary Active Profile score
+91%
+```
+
+The opportunity does not pass the score filter because the Primary Profile score is below the configured minimum.
+
+A secondary Active Profile score does not override the Primary Profile score filter during the MVP.
+
+Keyword, source, location, application status and age filtering remain independent from Active Profiles unless a separate decision explicitly changes those rules.
+
+### Opportunity Card Rules
+
+Opportunity cards display the matching score of the Primary Profile.
+
+The main card score must not display:
+
+- an average multi-profile score;
+- a combined score;
+- the highest Active Profile score in place of the Primary Profile score.
+
+The interface may display secondary comparison information, but that information must not replace or redefine the Primary Profile score.
+
+The profile responsible for the displayed score must remain understandable to the user.
+
+### Opportunity Detail Rules
+
+Opportunity details support multi-profile comparison.
+
+The interface must distinguish between:
+
+- Primary Profile;
+- secondary Active Profiles;
+- Best Matching Profile.
+
+The Primary Profile and the Best Matching Profile are separate concepts.
+
+The Primary Profile is selected by the user.
+
+The Best Matching Profile is determined from individual matching scores within the displayed comparison scope.
+
+The Primary Profile may be different from the Best Matching Profile.
+
+Example:
+
+```text
+Technical Partnerships Manager
+Primary Profile
+82%
+
+Solution Architect
+Active Profile
+Best Match
+91%
+```
+
+The interface must not imply that the Primary Profile is automatically the Best Matching Profile.
+
+### Application Rules
+
+An Application remains associated with exactly one Profile.
+
+Conceptual relation:
+
+```text
+Application
++
+Profile
++
+Opportunity
+```
+
+Multiple Active Profiles must not automatically create several Applications.
+
+The Primary Profile represents the default profile context when application creation starts from an opportunity.
+
+The Application must preserve the selected `profile_id` when it is created.
+
+The detailed attribution and user override behavior are handled by:
+
+```text
+7.1.22.10 Application Profile Attribution
+7.1.22.11 Application Creation Strategy
+```
+
+Automatic selection of the highest-scoring profile is not introduced by DEC-071.
+
+Automatic Best Matching Profile preselection remains deferred to:
+
+```text
+APP-005 - Best Matching Profile Preselection
+```
+
+### Persistence Rules
+
+The Opportunity Context is temporary during the MVP.
+
+The system does not persist:
+
+- the Primary Profile;
+- Active Profiles;
+- the last selected profile;
+- the last active context;
+- a global default profile.
+
+No new PostgreSQL table is introduced for Opportunity Context.
+
+No new Profile column is introduced for Opportunity Context.
+
+No Opportunity Context value is stored in `ApplicationSetting`.
+
+Saved Searches do not store the Opportunity Context during the MVP.
+
+Discovery Preferences do not store the Opportunity Context during the MVP.
+
+A new session starts from the first available profile when no context exists.
+
+### Backend Responsibility
+
+The backend remains responsible for:
+
+- matching calculation;
+- opportunity ranking;
+- multi-profile score comparison;
+- profile-specific matching results;
+- application profile attribution rules when implemented.
+
+The matching engine continues to calculate one matching result for one profile and one opportunity.
+
+No combined multi-profile matching engine is introduced.
+
+### Frontend Responsibility
+
+The frontend is responsible for:
+
+- selecting the Primary Profile;
+- selecting Active Profiles;
+- preventing deactivation of the current Primary Profile;
+- displaying the Primary Profile context;
+- displaying Active Profiles;
+- displaying profile comparison results returned by the backend;
+- distinguishing Primary Profile from Best Matching Profile.
+
+The frontend must not:
+
+- calculate matching scores;
+- merge profile data;
+- calculate a combined score;
+- calculate opportunity ranking;
+- infer missing backend results.
+
+### Backward Compatibility
+
+The single-profile workflow remains valid.
+
+Single-profile context:
+
+```json
+{
+  "primary_profile_id": 12,
+  "active_profile_ids": [12]
+}
+```
+
+In this state:
+
+- ranking uses profile 12;
+- opportunity cards display the score of profile 12;
+- score-based filtering uses profile 12;
+- opportunity comparison contains profile 12;
+- application creation starts from profile 12.
+
+Existing profile-specific matching behavior remains unchanged.
+
+Existing Application records remain linked to one `profile_id`.
+
+No migration of existing Application records is required by this decision.
+
+### Alternatives Rejected
+
+#### Global Default Profile
+
+Rejected.
+
+Reasons:
+
+- introduces a hidden global preference;
+- does not represent temporary career exploration context;
+- creates unnecessary persistence;
+- conflicts with the temporary Opportunity Context strategy.
+
+#### Combined Multi-Profile Score
+
+Rejected.
+
+Examples:
+
+- average score;
+- maximum score used as ranking score;
+- weighted profile score;
+- merged-profile score.
+
+Reasons:
+
+- reduces explainability;
+- hides individual profile differences;
+- changes the current deterministic ranking model;
+- introduces unnecessary complexity.
+
+#### Automatic Best Profile As Primary Profile
+
+Rejected for the MVP.
+
+Reasons:
+
+- the Primary Profile represents user intent;
+- the Best Matching Profile is analytical information;
+- automatic replacement would change the working context without an explicit user decision.
+
+#### Persistent Opportunity Context
+
+Rejected for the MVP.
+
+Reasons:
+
+- no demonstrated MVP requirement;
+- unnecessary database and settings complexity;
+- current temporary session behavior is sufficient.
+
+#### Multiple Applications Created Automatically
+
+Rejected.
+
+Reasons:
+
+- one Application must represent one real application;
+- several active profiles do not mean several applications were submitted;
+- application creation remains an explicit user action.
+
+### Consequences
+
+#### Positive Consequences
+
+- several career strategies can be compared simultaneously;
+- ranking remains deterministic;
+- matching remains explainable;
+- the user retains control of the Primary Profile;
+- the Best Matching Profile remains visible without replacing user intent;
+- the existing matching formula remains unchanged;
+- the existing Application model remains compatible;
+- no database migration is required for Opportunity Context;
+- the single-profile workflow remains supported.
+
+#### Negative Consequences
+
+- the Opportunity Context is lost when the session ends;
+- the first available profile is selected again in a new session;
+- users must reactivate secondary profiles when starting a new session;
+- ranking does not consider a stronger score from a secondary Active Profile;
+- opportunity filtering may exclude an opportunity that strongly matches a secondary Active Profile;
+- the frontend must clearly explain the distinction between Primary Profile, Active Profile and Best Matching Profile.
+
+These limitations are accepted for the MVP.
+
+### Out Of Scope
+
+DEC-071 does not introduce:
+
+- persistent Opportunity Context;
+- global default profile;
+- restoration of the last selected profile;
+- profile priority weighting;
+- profile folders;
+- merged profiles;
+- combined multi-profile ranking;
+- average multi-profile score;
+- maximum-score ranking;
+- automatic opportunity visibility based on any Active Profile;
+- automatic Best Matching Profile preselection;
+- simultaneous creation of several Applications;
+- profile-specific Saved Searches;
+- matching formula changes;
+- artificial intelligence for profile selection.
+
+### Related Decisions
+
+```text
+DEC-017
+Multiple Candidate Profiles
+```
+
+DEC-017 establishes general support for several candidate profiles.
+
+```text
+DEC-033
+Opportunity Ranking
+```
+
+DEC-033 establishes backend-controlled opportunity ranking.
+
+```text
+DEC-063
+Application Workflow Lifecycle
+```
+
+DEC-063 establishes that an Application remains linked to one `profile_id`.
+
+```text
+DEC-065
+Opportunity To Application Conversion
+```
+
+DEC-065 establishes conversion from an Opportunity to one Application.
+
+```text
+DEC-067
+Settings Persistence Strategy
+```
+
+DEC-067 separates persistent business settings from temporary workflow context.
+
+```text
+APP-005
+Best Matching Profile Preselection
+```
+
+APP-005 remains deferred to the post-MVP backlog.
+
+### Implementation Compatibility
+
+The current implementation already provides:
+
+- selected profile context for ranking;
+- profile-specific opportunity card scores;
+- multi-profile opportunity score comparison;
+- Best Matching Profile identification;
+- ProfileOpportunityScore API contract;
+- an endpoint returning profile scores for one opportunity;
+- Primary Profile selection in the Opportunities page;
+- Active Profiles selection in the Opportunities page.
+
+DEC-071 formalizes these existing rules.
+
+DEC-071 does not authorize skipping the remaining validation and application attribution phases.
+
+### Success Criteria
+
+DEC-071 is considered respected when:
+
+- exactly one Primary Profile is selected when profiles exist;
+- the Primary Profile is included in Active Profiles;
+- one or more Active Profiles can coexist;
+- the Primary Profile cannot be deactivated directly;
+- ranking uses only the Primary Profile;
+- opportunity cards use only the Primary Profile score;
+- opportunity details display multi-profile comparison;
+- the Best Matching Profile is identified separately;
+- matching remains profile-specific;
+- Application remains linked to one profile;
+- Opportunity Context is not persisted during the MVP;
+- no combined multi-profile score is introduced.
+
+### Final Decision
+
+The Career Operating System adopts a temporary Multi Profile Opportunity Context composed of:
+
+```text
+1 Primary Profile
++
+1..N Active Profiles
+```
+
+The Primary Profile controls:
+
+- opportunity ranking;
+- score-based filtering;
+- opportunity card scores;
+- default application context.
+
+Active Profiles control:
+
+- multi-profile comparison;
+- comparison across career strategies;
+- Best Matching Profile identification.
+
+Matching remains calculated independently for each profile.
+
+Applications remain associated with one profile.
+
+The Opportunity Context is temporary and is not persisted during the MVP.
+
+The user remains responsible for selecting the Primary Profile.
+
+The system must not automatically replace user intent with the Best Matching Profile.

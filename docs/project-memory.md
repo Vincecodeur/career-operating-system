@@ -39,24 +39,24 @@ MVP Multi-Profile Strategy
 
 The system does not use a global default profile.
 
-Opportunity workflows use a selected profile context.
+Opportunity workflows use a Primary Profile and Active Profiles context.
 
 Principles:
 
 - first profile is selected automatically when needed;
 - opportunity ranking uses the selected profile;
 - opportunity details show all profile scores;
-- application creation currently uses the selected profile context;
+- application creation currently uses the Primary Profile and Active Profiles context;
 - profile selection remains editable by the user;
 - automatic best profile preselection is deferred to a future phase.
 
 Opportunity Context Rules
 
-- opportunity cards display the score of the selected profile context;
-- opportunity ranking uses the selected profile context;
+- opportunity cards display the score of the Primary Profile and Active Profiles context;
+- opportunity ranking uses the Primary Profile and Active Profiles context;
 - opportunity details display the scores of all profiles;
 - opportunity details identify the best matching profile;
-- application creation from Opportunities currently uses the selected profile context;
+- application creation from Opportunities currently uses the Primary Profile and Active Profiles context;
 - best matching profile automatic preselection is deferred to a future application creation strategy phase;
 - active profile context is not persisted.
 - when a new session starts, the system uses the first available profile.

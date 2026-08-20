@@ -19,7 +19,7 @@ main
 ---
 
 Current Milestone
-7.1.21 Saved Searches
+7.1.22 Multi Profile Opportunity Context
 
 ---
 
@@ -28,7 +28,7 @@ Current Phase
 7.1.22 Multi Profile Opportunity Context
 
 Next Planned Milestone
-7.1.22.1 Product Design
+7.1.22.10 Application Profile Attribution
 
 ---
 
@@ -1441,13 +1441,13 @@ Next Step:
 ---
 
 Last Decision
-DEC-067 - Settings Persistence Strategy
+DEC-071 - Multi Profile Opportunity Context
 
 Décisions récemment validées :
 
-- DEC-065 Opportunity To Application Conversion
-- DEC-066 Application Workflow Completion
-- DEC-067 Settings Persistence Strategy
+- DEC-068 Search Criteria Governed By Reference Data
+- DEC-070 Connectors Use Controlled Multi Select
+- DEC-071 Multi Profile Opportunity Context
 
 Validation Status
 
@@ -1470,4 +1470,4 @@ Job Discovery Settings completed.
 
 Last Commits :
 
-- ef5cc4d - feat(saved-searches): implement saved searches MVP
+- 5edfbf5 - docs: add multi-profile opportunity context designs
