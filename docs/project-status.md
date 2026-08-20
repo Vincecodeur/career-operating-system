@@ -25,10 +25,10 @@ Current Milestone
 
 Current Phase
 
-7.1.21 Saved Searches
+7.1.22 Multi Profile Opportunity Context
 
 Next Planned Milestone
-7.1.21 Saved Searches
+7.1.22.1 Product Design
 
 ---
 
@@ -1410,7 +1410,7 @@ Aucun
 
 Phase In Progress
 
-7.1.21 Saved Searches
+7.1.22 Multi Profile Opportunity Context
 
 Job Discovery Settings Progress
 
@@ -1436,7 +1436,7 @@ Phase Status:
 
 Next Step:
 
-7.1.21 Saved Searches
+7.1.22 Multi Profile Opportunity Context
 
 ---
 
@@ -1470,4 +1470,4 @@ Job Discovery Settings completed.
 
 Last Commits :
 
-- 1348a6b - docs(opportunities): finalize opportunity context selection
+- ef5cc4d - feat(saved-searches): implement saved searches MVP

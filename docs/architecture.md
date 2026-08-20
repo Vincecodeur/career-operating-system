@@ -140,6 +140,7 @@ Responsabilités :
 - Source Configuration
 - Application Workflow Settings
 - Opportunity Discovery Preferences
+- Saved Searches
 
 Search Criteria Settings currently support:
 

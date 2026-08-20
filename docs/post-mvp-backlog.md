@@ -486,3 +486,79 @@ Potential improvements:
 Reason deferred:
 No functional impact on MVP.
 Build validation is successful.
+
+#### SETTINGS-004 - Prevent Duplicate Saved Search Names
+
+Status: Backlog
+
+Prevent creation of multiple Saved Searches using the same name.
+
+Current behavior:
+
+- Duplicate names are allowed.
+- Users can create multiple Saved Searches with identical labels.
+
+Expected behavior:
+
+- Saved Search name must be unique.
+- Validation occurs before persistence.
+- User receives a clear validation message.
+
+Example:
+Technical Partnerships France
+→ already exists
+→ creation refused
+
+Benefits:
+
+- Reduce user confusion.
+- Improve Saved Search discoverability.
+- Simplify management of Saved Searches.
+
+Out of Scope:
+
+- Automatic rename generation.
+- Folder organization.
+- Saved Search tagging.
+
+#### SETTINGS-005 - Saved Search UX Refinements
+
+Status: Backlog
+
+Improve usability and discoverability of Saved Searches.
+
+Candidate improvements:
+
+- Move Save Search action closer to filter management actions.
+- Simplify Saved Search summary display.
+- Improve empty state messaging.
+- Add success notification after creation.
+- Improve Apply/Delete visual hierarchy.
+- Improve mobile responsiveness.
+
+Current behavior:
+
+- Full filter summary is displayed.
+- Save Search action is separated from filter actions.
+- No user feedback after successful creation.
+
+Expected behavior:
+
+- Faster understanding of saved searches.
+- Cleaner visual presentation.
+- Reduced cognitive load.
+
+Benefits:
+
+- Better user experience.
+- Faster opportunity review workflow.
+- Higher Saved Search adoption.
+
+Out of Scope:
+
+- Edit Saved Search.
+- Favorite Saved Search.
+- Search folders.
+- Shared searches.
+- Scheduled searches.
+- Notification alerts.

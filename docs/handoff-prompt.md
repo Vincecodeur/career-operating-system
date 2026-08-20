@@ -774,6 +774,7 @@ Des tests existent pour :
 
 ## Derniers commits importants
 
+- ef5cc4d - feat(saved-searches): implement saved searches MVP
 - 1348a6b - docs(opportunities): finalize opportunity context selection
 - ca8135f - feat(opportunities): implement opportunity context selection and multi-profile scoring
 - e3f347d - feat(settings): persist job discovery configuration
@@ -998,7 +999,7 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.21 Saved Searches
+7.1.22 Multi Profile Opportunity Context
 
 Contexte métier :
 

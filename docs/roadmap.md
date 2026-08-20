@@ -844,11 +844,17 @@ Validation réalisée :
 - No database changes required
 - No API changes required
 
-⬜ 7.1.21 Saved Searches
-⬜ 7.1.21.1 Search Presets
-⬜ 7.1.21.2 Saved Filters
-⬜ 7.1.21.3 Default Search Strategy
-⬜ 7.1.21.4 Saved Search Execution
+✅ 7.1.21 Saved Searches
+
+✅ 7.1.21.1 Repository Audit
+✅ 7.1.21.2 Product Design
+✅ 7.1.21.3 Technical Design
+✅ 7.1.21.4 Backend Implementation
+✅ 7.1.21.5 Backend Validation
+✅ 7.1.21.6 Frontend Design
+✅ 7.1.21.7 Frontend Implementation
+✅ 7.1.21.8 Functional Validation
+✅ 7.1.21.9 Documentation Synchronization
 
 ⬜ 7.1.22 Multi Profile Opportunity Context
 
