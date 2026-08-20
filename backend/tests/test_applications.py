@@ -5,6 +5,39 @@ from app.main import app
 
 client = TestClient(app)
 
+APPLICATION_TEST_PROFILE_PAYLOAD = {
+    "profile_name": "Inactive Application Test Profile",
+    "full_name": "Application Test User",
+    "current_title": "Technical Partnerships Manager",
+    "location": "France",
+    "years_of_experience": 10,
+    "target_role_short_term": "Solution Architect",
+    "target_role_long_term": "Enterprise Architect",
+    "remote_preference": "Hybrid",
+    "preferred_countries": "France,UK",
+}
+
+
+def create_application_test_profile():
+    response = client.post(
+        "/profiles",
+        json=APPLICATION_TEST_PROFILE_PAYLOAD,
+    )
+
+    assert response.status_code == 200
+
+    return response.json()
+
+
+def archive_application_test_profile(profile_id: int):
+    response = client.delete(
+        f"/profiles/{profile_id}"
+    )
+
+    assert response.status_code == 200
+    assert response.json()["is_active"] is False
+
+    return response.json()
 
 def test_list_applications():
     response = client.get(
@@ -395,3 +428,87 @@ def test_update_application_rejects_unknown_profile():
 
     assert get_response.status_code == 200
     assert get_response.json()["profile_id"] == 1
+    
+    
+    
+def test_create_application_rejects_inactive_profile():
+    profile = create_application_test_profile()
+
+    archived_profile = archive_application_test_profile(
+        profile["id"]
+    )
+
+    response = client.post(
+        "/applications",
+        json={
+            "profile_id": archived_profile["id"],
+            "job_offer_id": 1,
+            "status": "Applied",
+            "notes": None,
+            "source_type": "OPPORTUNITY",
+        },
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == (
+        "The selected profile is not available."
+    )
+    
+def test_update_application_rejects_inactive_profile():
+    inactive_profile = create_application_test_profile()
+
+    archived_profile = archive_application_test_profile(
+        inactive_profile["id"]
+    )
+
+    create_response = client.post(
+        "/applications",
+        json={
+            "profile_id": 1,
+            "job_offer_id": 1,
+            "status": "Applied",
+            "notes": None,
+            "source_type": "OPPORTUNITY",
+        },
+    )
+
+    assert create_response.status_code == 200
+
+    application_id = create_response.json()["id"]
+    original_profile_id = create_response.json()["profile_id"]
+
+    update_response = client.put(
+        f"/applications/{application_id}",
+        json={
+            "profile_id": archived_profile["id"],
+            "status": "Applied",
+            "notes": None,
+            "source_type": "OPPORTUNITY",
+        },
+    )
+
+    assert update_response.status_code == 400
+    assert update_response.json()["detail"] == (
+        "The selected profile is not available."
+    )
+
+    get_response = client.get(
+        f"/applications/{application_id}"
+    )
+
+    assert get_response.status_code == 200
+    assert get_response.json()["profile_id"] == original_profile_id
+
+    timeline_response = client.get(
+        f"/applications/{application_id}/timeline"
+    )
+
+    assert timeline_response.status_code == 200
+
+    profile_events = [
+        event
+        for event in timeline_response.json()
+        if event["event_type"] == "PROFILE_CHANGED"
+    ]
+
+    assert profile_events == []
