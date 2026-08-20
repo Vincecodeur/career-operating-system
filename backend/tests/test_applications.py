@@ -85,9 +85,10 @@ def test_update_application():
     response = client.put(
         f"/applications/{application_id}",
         json={
+            "profile_id": 1,
             "status": "Interview",
             "notes": "Entretien RH réalisé",
-            "source_type": "REFERRAL"
+            "source_type": "REFERRAL",
         }
     )
 
@@ -205,3 +206,192 @@ def test_timeline_application_not_found():
     )
 
     assert response.status_code == 404
+    
+    
+def test_create_application_rejects_unknown_profile():
+    response = client.post(
+        "/applications",
+        json={
+            "profile_id": 999999,
+            "job_offer_id": 1,
+            "status": "Applied",
+        },
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == (
+        "Profile not found."
+    )
+
+
+def test_create_application_rejects_unknown_job_offer():
+    response = client.post(
+        "/applications",
+        json={
+            "profile_id": 1,
+            "job_offer_id": 999999,
+            "status": "Applied",
+        },
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == (
+        "Job offer not found."
+    )
+
+
+def test_update_application_changes_profile():
+    create_response = client.post(
+        "/applications",
+        json={
+            "profile_id": 1,
+            "job_offer_id": 1,
+            "status": "Applied",
+        },
+    )
+
+    assert create_response.status_code == 200
+
+    application_id = create_response.json()["id"]
+
+    response = client.put(
+        f"/applications/{application_id}",
+        json={
+            "profile_id": 2,
+            "status": "Applied",
+            "notes": None,
+            "source_type": "OPPORTUNITY",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["profile_id"] == 2
+    assert data["job_offer_id"] == 1
+    assert data["status"] == "Applied"
+    assert data["source_type"] == "OPPORTUNITY"
+
+
+def test_update_application_creates_profile_changed_event():
+    create_response = client.post(
+        "/applications",
+        json={
+            "profile_id": 1,
+            "job_offer_id": 1,
+            "status": "Applied",
+        },
+    )
+
+    assert create_response.status_code == 200
+
+    application_id = create_response.json()["id"]
+
+    update_response = client.put(
+        f"/applications/{application_id}",
+        json={
+            "profile_id": 2,
+            "status": "Applied",
+            "notes": None,
+            "source_type": "OPPORTUNITY",
+        },
+    )
+
+    assert update_response.status_code == 200
+
+    timeline_response = client.get(
+        f"/applications/{application_id}/timeline"
+    )
+
+    assert timeline_response.status_code == 200
+
+    events = timeline_response.json()
+
+    profile_events = [
+        event
+        for event in events
+        if event["event_type"] == "PROFILE_CHANGED"
+    ]
+
+    assert len(profile_events) == 1
+    assert profile_events[0]["old_value"] == "1"
+    assert profile_events[0]["new_value"] == "2"
+
+
+def test_update_application_does_not_create_profile_event_when_unchanged():
+    create_response = client.post(
+        "/applications",
+        json={
+            "profile_id": 1,
+            "job_offer_id": 1,
+            "status": "Applied",
+        },
+    )
+
+    assert create_response.status_code == 200
+
+    application_id = create_response.json()["id"]
+
+    update_response = client.put(
+        f"/applications/{application_id}",
+        json={
+            "profile_id": 1,
+            "status": "Applied",
+            "notes": "No profile change.",
+            "source_type": "MANUAL",
+        },
+    )
+
+    assert update_response.status_code == 200
+
+    timeline_response = client.get(
+        f"/applications/{application_id}/timeline"
+    )
+
+    assert timeline_response.status_code == 200
+
+    profile_events = [
+        event
+        for event in timeline_response.json()
+        if event["event_type"] == "PROFILE_CHANGED"
+    ]
+
+    assert profile_events == []
+
+
+def test_update_application_rejects_unknown_profile():
+    create_response = client.post(
+        "/applications",
+        json={
+            "profile_id": 1,
+            "job_offer_id": 1,
+            "status": "Applied",
+        },
+    )
+
+    assert create_response.status_code == 200
+
+    application_id = create_response.json()["id"]
+
+    response = client.put(
+        f"/applications/{application_id}",
+        json={
+            "profile_id": 999999,
+            "status": "Applied",
+            "notes": None,
+            "source_type": "MANUAL",
+        },
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == (
+        "Profile not found."
+    )
+
+    get_response = client.get(
+        f"/applications/{application_id}"
+    )
+
+    assert get_response.status_code == 200
+    assert get_response.json()["profile_id"] == 1

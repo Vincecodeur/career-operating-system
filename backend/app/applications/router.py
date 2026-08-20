@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.applications.models import Application
 from app.applications.event_models import ApplicationEvent
+from app.jobs.models import JobOffer
+from app.profile.models import Profile
 
 from app.applications.schemas import ApplicationCreate
 from app.applications.schemas import ApplicationUpdate
@@ -46,6 +48,45 @@ VALID_TRANSITIONS = {
     "Withdrawn": []
 }
 
+def get_profile_or_404(
+    db: Session,
+    profile_id: int,
+) -> Profile:
+    profile = db.query(Profile).filter(
+        Profile.id == profile_id
+    ).first()
+
+    if profile is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile not found."
+        )
+
+    if not profile.is_active:
+        raise HTTPException(
+            status_code=400,
+            detail="The selected profile is not available."
+        )
+
+    return profile
+
+
+def get_job_offer_or_404(
+    db: Session,
+    job_offer_id: int,
+) -> JobOffer:
+    job_offer = db.query(JobOffer).filter(
+        JobOffer.id == job_offer_id
+    ).first()
+
+    if job_offer is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Job offer not found."
+        )
+
+    return job_offer
+
 @router.post(
     "",
     response_model=ApplicationResponse
@@ -54,17 +95,31 @@ def create_application(
     application: ApplicationCreate,
     db: Session = Depends(get_db)
 ):
+    profile = get_profile_or_404(
+        db=db,
+        profile_id=application.profile_id,
+    )
+
+    job_offer = get_job_offer_or_404(
+        db=db,
+        job_offer_id=application.job_offer_id,
+    )
+
     new_application = Application(
-    profile_id=application.profile_id,
-    job_offer_id=application.job_offer_id,
-    status=application.status,
-    notes=application.notes,
-    source_type=application.source_type
+        profile_id=profile.id,
+        job_offer_id=job_offer.id,
+        status=application.status,
+        notes=application.notes,
+        source_type=application.source_type,
     )
 
     db.add(new_application)
 
-    db.commit()
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
 
     db.refresh(new_application)
 
@@ -121,11 +176,35 @@ def update_application(
             detail="Application not found."
         )
 
+    profile = get_profile_or_404(
+        db=db,
+        profile_id=application_update.profile_id,
+    )
+
+    old_profile_id = application.profile_id
+    new_profile_id = profile.id
+
+    application.profile_id = new_profile_id
     application.status = application_update.status
     application.notes = application_update.notes
     application.source_type = application_update.source_type
 
-    db.commit()
+    if old_profile_id != new_profile_id:
+        profile_changed_event = ApplicationEvent(
+            application_id=application.id,
+            event_type="PROFILE_CHANGED",
+            old_value=str(old_profile_id),
+            new_value=str(new_profile_id),
+        )
+
+        db.add(profile_changed_event)
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
     db.refresh(application)
 
     return application

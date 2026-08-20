@@ -15,6 +15,7 @@ class ApplicationCreate(ApplicationBase):
     pass
 
 class ApplicationUpdate(BaseModel):
+    profile_id: int
     status: str
     notes: str | None = None
     source_type: str = "MANUAL"
