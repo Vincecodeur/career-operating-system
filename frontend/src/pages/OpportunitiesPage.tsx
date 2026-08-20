@@ -16,6 +16,7 @@ import {
   getRankedJobOffers,
   getSavedSearches,
   type DiscoveryPreferencesSettings,
+  type Profile,
   type ProfileOpportunityScore,
   type SavedSearch,
 } from "../services/api";
@@ -96,11 +97,13 @@ export function OpportunitiesPage() {
 
   const [profileScoresLoading, setProfileScoresLoading] = useState(false);
   const [applications, setApplications] = useState<ApplicationSummary[]>([]);
-  const [profiles, setProfiles] = useState<any[]>([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
 
   const [selectedProfileId, setSelectedProfileId] = useState<number | null>(
     null,
   );
+
+  const [activeProfileIds, setActiveProfileIds] = useState<number[]>([]);
 
   const [creatingApplication, setCreatingApplication] = useState(false);
 
@@ -255,10 +258,18 @@ export function OpportunitiesPage() {
 
         const profileList = Array.isArray(data) ? data : (data.value ?? []);
 
-        setProfiles(profileList);
+        const availableProfiles = profileList.filter(
+          (profile: Profile) => profile.is_active,
+        );
 
-        if (profileList.length > 0) {
-          setSelectedProfileId(profileList[0].id);
+        setProfiles(availableProfiles);
+
+        if (availableProfiles.length > 0) {
+          const firstProfileId = availableProfiles[0].id;
+
+          setSelectedProfileId(firstProfileId);
+
+          setActiveProfileIds([firstProfileId]);
         }
       } catch {
         setProfiles([]);
@@ -292,6 +303,26 @@ export function OpportunitiesPage() {
 
     loadRankedScores();
   }, [selectedProfileId]);
+
+  function isActiveProfile(profileId: number) {
+    return activeProfileIds.includes(profileId);
+  }
+
+  function toggleActiveProfile(profileId: number) {
+    if (profileId === selectedProfileId) {
+      return;
+    }
+
+    setActiveProfileIds((currentProfiles) => {
+      const isActive = currentProfiles.includes(profileId);
+
+      if (isActive) {
+        return currentProfiles.filter((id) => id !== profileId);
+      }
+
+      return [...currentProfiles, profileId];
+    });
+  }
 
   function hasApplications(jobOfferId: number) {
     return applications.some(
@@ -466,8 +497,14 @@ export function OpportunitiesPage() {
 
   const hasRelatedApplications = relatedApplications.length > 0;
 
+  const activeProfileScores = profileScores.filter((score) =>
+    activeProfileIds.includes(score.profile_id),
+  );
+
   const bestProfileScore =
-    profileScores.find((score) => score.is_best_match) ?? null;
+    [...activeProfileScores].sort(
+      (a, b) => b.matching_score - a.matching_score,
+    )[0] ?? null;
 
   function getGapFromBest(score: number) {
     if (!bestProfileScore) {
@@ -716,31 +753,89 @@ export function OpportunitiesPage() {
       )}
 
       <div className="mb-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <div>
-            <p className="text-sm font-medium text-white">
-              Opportunity Context
-            </p>
+        <div>
+          <p className="text-sm font-medium text-white">Opportunity Context</p>
 
-            <p className="text-xs text-slate-400">
-              Active profile used for opportunity ranking and matching analysis.
-            </p>
-          </div>
+          <p className="text-xs text-slate-400">
+            Primary profile controls ranking, matching score display and
+            application creation.
+          </p>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <span className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+            Primary :
+            {profiles.find((p) => p.id === selectedProfileId)?.profile_name}
+          </span>
+
+          <span className="rounded bg-green-600 px-2 py-1 text-xs text-white">
+            Active:
+            {activeProfileIds.length}
+          </span>
+
+          {bestProfileScore && (
+            <span className="rounded bg-amber-500 px-2 py-1 text-xs text-black font-medium">
+              Best:
+              {bestProfileScore.profile_name}
+            </span>
+          )}
+        </div>
+        <div className="mt-4">
+          <label className="mb-2 block text-sm text-slate-300">
+            Primary Profile
+          </label>
 
           <select
             value={selectedProfileId ?? ""}
-            onChange={(event) =>
-              setSelectedProfileId(Number(event.target.value))
-            }
+            onChange={(event) => {
+              const profileId = Number(event.target.value);
+
+              setSelectedProfileId(profileId);
+
+              setActiveProfileIds((current) =>
+                current.includes(profileId) ? current : [...current, profileId],
+              );
+            }}
             className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
             {profiles.map((profile) => (
               <option key={profile.id} value={profile.id}>
-                {profile.full_name}
+                {profile.profile_name}
               </option>
             ))}
           </select>
         </div>
+
+        <div className="mt-4">
+          <p className="mb-2 text-sm text-slate-300">Active Profiles</p>
+
+          <div className="space-y-2">
+            {profiles.map((profile) => {
+              const isPrimary = profile.id === selectedProfileId;
+
+              return (
+                <label
+                  key={profile.id}
+                  className="flex items-center gap-3 text-sm text-slate-300">
+                  <input
+                    type="checkbox"
+                    checked={isActiveProfile(profile.id)}
+                    disabled={isPrimary}
+                    onChange={() => toggleActiveProfile(profile.id)}
+                  />
+
+                  <span>{profile.profile_name}</span>
+
+                  {isPrimary && (
+                    <span className="rounded bg-blue-600 px-2 py-0.5 text-xs text-white">
+                      Primary
+                    </span>
+                  )}
+                </label>
+              );
+            })}
+          </div>
+        </div>
       </div>
+
       <div className="mb-4 flex items-center gap-2">
         <button
           type="button"

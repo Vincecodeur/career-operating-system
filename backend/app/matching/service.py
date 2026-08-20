@@ -692,7 +692,7 @@ def calculate_profile_scores_for_job_offer(
         scores.append(
             ProfileOpportunityScore(
                 profile_id=profile.id,
-                profile_name=profile.full_name,
+                profile_name=profile.profile_name,
                 matching_score=matching_result.matching_score,
                 skills_score=matching_result.skills_score,
                 experience_score=matching_result.experience_score,

@@ -924,6 +924,22 @@ export type ProfileOpportunityScore = {
   is_best_match: boolean;
 }; 
 
+export type Profile = {
+    id: number;
+    profile_name: string;
+    full_name: string;
+    current_title: string;
+    location: string;
+    years_of_experience: number;
+    target_role_short_term: string;
+    target_role_long_term: string;
+    remote_preference: string;
+    preferred_countries: string;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+};
+
 
 export async function getJobDiscoverySettings(
 ): Promise<JobDiscoverySettings> {

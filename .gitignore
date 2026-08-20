@@ -40,3 +40,8 @@ build/
 # Generated CV files
 backend/storage/cvs/
 storage
+
+
+*.sql
+
+.backups/
