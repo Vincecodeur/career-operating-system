@@ -1086,32 +1086,37 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.22.11 Application Creation Strategy
+7.1.22.13 End-to-End Validation
 
-Contexte métier :
+Objectif :
+Valider le flux complet multi-profils :
 
-Une opportunité peut être pertinente pour plusieurs profils actifs.
+Profile
+↓
+Opportunity Context
+↓
+Multi Profile Matching
+↓
+Primary Profile Ranking
+↓
+Best Matching Profile Recommendation
+↓
+Application Creation
+↓
+Application Reassignment
+↓
+Timeline Audit Trail
 
-Une candidature reste liée à un profil unique.
+Points à vérifier :
 
-État déjà implémenté :
-
-- le Best Matching Profile est recommandé ;
-- le Primary Profile départage les scores égaux ;
-- profile_id départage ensuite les égalités restantes ;
-- l'utilisateur peut sélectionner un autre profil ;
-- la création nécessite une confirmation explicite ;
-- le profil confirmé est attaché à la candidature ;
-- une candidature peut ensuite être réattribuée explicitement.
-
-Objectif de 7.1.22.11 :
-
-- valider si le comportement implémenté constitue la stratégie MVP finale ;
-- confirmer la règle de départage des scores égaux ;
-- confirmer le comportement lorsque les scores sont indisponibles ;
-- confirmer le comportement lorsqu'aucun profil actif n'est disponible ;
-- définir précisément ce qui reste post-MVP ;
-- produire la décision structurante correspondante avant toute nouvelle modification du code.
+- comportement du Primary Profile
+- comportement des Active Profiles
+- recommandation du Best Matching Profile
+- création de candidature avec profil explicite
+- réattribution de candidature
+- événements PROFILE_CHANGED
+- cohérence frontend/backend
+- absence de régression fonctionnelle
 
 ## Méthode de reprise
 

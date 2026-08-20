@@ -903,7 +903,7 @@ Validation réalisée :
 - Frontend validation completed
 - Backend validation completed
 
-⏳ 7.1.22.11 Application Creation Strategy
+✅ 7.1.22.11 Application Creation Strategy
 
 Objectif :
 Une opportunité peut être pertinente pour plusieurs profils.
@@ -936,7 +936,7 @@ Les règles définitives de création de candidature multi-profils restent à d�
 
 APP-005 reste hors MVP car il vise la création immédiate avec le Best Matching Profile sans confirmation manuelle.
 
-⬜ 7.1.22.12 Multi Profile Validation
+✅ 7.1.22.12 Multi Profile Validation
 
 ⬜ 7.1.22.13 End-to-End Validation
 

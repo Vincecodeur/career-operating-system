@@ -25,10 +25,10 @@ Current Milestone
 
 Current Phase
 
-7.1.22.11 Application Creation Strategy
+7.1.22.12 Multi Profile Validation
 
 Next Planned Milestone
-7.1.22.12 Multi Profile Validation
+7.1.22.13 End-to-End Validation
 
 ---
 
@@ -1425,7 +1425,7 @@ Aucun
 
 Phase In Progress
 
-7.1.22.11 Application Creation Strategy
+7.1.22.12 Multi Profile Validation
 
 Job Discovery Settings Progress
 
@@ -1479,30 +1479,39 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-
-7.1.22.11 Application Creation Strategy
+7.1.22.12 Multi Profile Validation
 
 Status:
-Design Review
+Completed
 
-Current implementation baseline:
+Validation results:
 
-- Best Matching Profile recommendation implemented
-- Primary Profile tie-break implemented
-- profile_id final tie-break implemented
-- explicit user override implemented
-- explicit confirmation implemented
-- Application profile persistence implemented
-- Application profile reassignment implemented
-- PROFILE_CHANGED audit event implemented
+- Best Matching Profile recommendation validated
+- Primary Profile tie-break validated
+- profile_id final tie-break validated
+- explicit user override validated
+- explicit confirmation validated
+- Application profile persistence validated
+- Application profile reassignment validated
+- PROFILE_CHANGED audit event validated
+- archived profile rejection validated
+- inactive profile validation tests added
+- backend non-regression suite validated
+- 249 backend tests passing
 
-Design review objectives:
+Validated business rules:
 
-- validate the implemented behavior as the final MVP strategy
-- confirm tie-breaking rules
-- confirm missing-score fallback behavior
-- confirm the no-active-profile behavior
-- define the exact post-MVP scope
+- exactly one Primary Profile
+- Primary Profile belongs to Active Profiles
+- several Active Profiles supported
+- ranking uses only Primary Profile
+- opportunity comparison uses Active Profiles
+- Applications remain linked to exactly one Profile
+- inactive profiles cannot be used for Application creation
+- effective profile reassignment creates PROFILE_CHANGED
+
+Next step:
+7.1.22.13 End-to-End Validation
 
 Last Commits :
 
