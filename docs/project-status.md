@@ -19,16 +19,16 @@ main
 ---
 
 Current Milestone
-7.1.22 Multi Profile Opportunity Context
+7.1.23 MVP Experience Review
 
 ---
 
 Current Phase
 
-7.1.22.12 Multi Profile Validation
+7.1.23 MVP Experience Review
 
 Next Planned Milestone
-7.1.22.13 End-to-End Validation
+7.1.23 MVP Experience Review
 
 ---
 
@@ -1425,7 +1425,7 @@ Aucun
 
 Phase In Progress
 
-7.1.22.12 Multi Profile Validation
+7.1.23 MVP Experience Review
 
 Job Discovery Settings Progress
 
@@ -1451,7 +1451,7 @@ Phase Status:
 
 Next Step:
 
-7.1.22.11 Application Creation Strategy Design Review
+7.1.23 MVP Experience Review
 
 ---
 
@@ -1479,39 +1479,27 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.22.12 Multi Profile Validation
+7.1.23 MVP Experience Review
 
 Status:
-Completed
+Ready To Start
 
-Validation results:
+Completed validations:
 
+- Opportunity → Application creation validated
 - Best Matching Profile recommendation validated
-- Primary Profile tie-break validated
-- profile_id final tie-break validated
-- explicit user override validated
-- explicit confirmation validated
-- Application profile persistence validated
-- Application profile reassignment validated
-- PROFILE_CHANGED audit event validated
-- archived profile rejection validated
-- inactive profile validation tests added
-- backend non-regression suite validated
+- Application profile override validated
+- PostgreSQL profile attribution validated
+- Application reassignment validated
+- PROFILE_CHANGED timeline event validated
+- Inactive profile protection validated
+- Frontend end-to-end workflow validated
+- Backend non-regression suite validated
 - 249 backend tests passing
 
-Validated business rules:
-
-- exactly one Primary Profile
-- Primary Profile belongs to Active Profiles
-- several Active Profiles supported
-- ranking uses only Primary Profile
-- opportunity comparison uses Active Profiles
-- Applications remain linked to exactly one Profile
-- inactive profiles cannot be used for Application creation
-- effective profile reassignment creates PROFILE_CHANGED
-
-Next step:
-7.1.22.13 End-to-End Validation
+Next Step:
+Repository Audit For MVP Review
+7.1.23 MVP Experience Review
 
 Last Commits :
 

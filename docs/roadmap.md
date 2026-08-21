@@ -938,9 +938,21 @@ APP-005 reste hors MVP car il vise la création immédiate avec le Best Matching
 
 ✅ 7.1.22.12 Multi Profile Validation
 
-⬜ 7.1.22.13 End-to-End Validation
+✅ 7.1.22.13 End-to-End Validation
 
-⬜ 7.1.22.14 Documentation Synchronization
+Validation réalisée :
+
+- Opportunity → Application workflow validated
+- Best Matching Profile recommendation validated
+- Application profile override validated
+- PostgreSQL profile attribution validated
+- Application reassignment validated
+- PROFILE_CHANGED timeline event validated
+- Inactive profile protection validated
+- Backend non-regression suite validated
+- 249 backend tests passing
+
+✅ 7.1.22.14 Documentation Synchronization
 
 ⬜ 7.1.23 MVP Experience Review
 

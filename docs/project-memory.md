@@ -80,6 +80,14 @@ Persistence rules:
 - no global default profile is stored;
 - a new session starts from the first available profile.
 
+Validation status:
+
+- Opportunity → Application workflow validated
+- Profile reassignment validated
+- PROFILE_CHANGED audit trail validated
+- Inactive profile protection validated
+- End-to-end multi-profile workflow validated
+
 ---
 
 ## Règles projet

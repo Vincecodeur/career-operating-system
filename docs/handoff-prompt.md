@@ -1086,37 +1086,33 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.22.13 End-to-End Validation
+#### Phase suivante recommandée
+
+7.1.23 MVP Experience Review
 
 Objectif :
-Valider le flux complet multi-profils :
+Réaliser une revue complète du MVP avant l'entrée dans les phases post-MVP.
 
-Profile
-↓
-Opportunity Context
-↓
-Multi Profile Matching
-↓
-Primary Profile Ranking
-↓
-Best Matching Profile Recommendation
-↓
-Application Creation
-↓
-Application Reassignment
-↓
-Timeline Audit Trail
+Périmètre :
 
-Points à vérifier :
+- Profiles
+- CV Management
+- CV Enrichment
+- Opportunity Discovery
+- Opportunity Analysis
+- Multi Profile Context
+- Applications Workflow
+- Settings
+- Saved Searches
 
-- comportement du Primary Profile
-- comportement des Active Profiles
-- recommandation du Best Matching Profile
-- création de candidature avec profil explicite
-- réattribution de candidature
-- événements PROFILE_CHANGED
-- cohérence frontend/backend
-- absence de régression fonctionnelle
+Objectifs :
+
+- identifier les incohérences restantes
+- vérifier la cohérence UX
+- vérifier la cohérence documentaire
+- vérifier les dépendances MVP
+- confirmer que le MVP est réellement complet
+- décider des éventuelles corrections avant clôture MVP
 
 ## Méthode de reprise
 
