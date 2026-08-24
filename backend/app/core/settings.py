@@ -122,6 +122,15 @@ class Settings:
         "GREENHOUSE_TIMEOUT",
         "10",
     )
+    
+    DATABASE_URL: str = os.getenv(
+    "DATABASE_URL",
+    "",
+    )
 
+    DATABASE_URL_TEST: str = os.getenv(
+        "DATABASE_URL_TEST",
+        "",
+    )
 
 settings = Settings()
