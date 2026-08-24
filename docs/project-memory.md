@@ -397,3 +397,17 @@ Commit technique
 Documentation
 ↓
 Commit documentaire
+
+MVP Review Findings
+
+Critical before AI:
+
+- Test Database Isolation
+- CV Parsing Data Quality
+- Existing Data Cleanup
+- Enrichment Summary Consistency
+- Profile Creation With Optional CV
+- Additional Profile Context
+- AI Context Contract
+- AI Context Preview
+- AI Readiness Validation

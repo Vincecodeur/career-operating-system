@@ -24,8 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-
-7.1.23 MVP Experience Review
+7.1.23.1 Test Database Isolation
 
 Next Planned Milestone
 7.1.23 MVP Experience Review
@@ -1425,7 +1424,7 @@ Aucun
 
 Phase In Progress
 
-7.1.23 MVP Experience Review
+7.1.23.1 Test Database Isolation
 
 Job Discovery Settings Progress
 
@@ -1479,7 +1478,7 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23 MVP Experience Review
+7.1.23.1 Test Database Isolation
 
 Status:
 Ready To Start

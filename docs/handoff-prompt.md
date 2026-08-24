@@ -840,9 +840,13 @@ Des tests existent pour :
 - Phase 7.1.22.8 Multi Profile Matching
 - Phase 7.1.22.9 Multi Profile Opportunities
 - Phase 7.1.22.10 Application Profile Attribution
+- Phase 7.1.22.11 Application Creation Strategy
+- Phase 7.1.22.12 Multi Profile Validation
+- Phase 7.1.22.13 End-to-End Validation
 
 ## Derniers commits importants
 
+- 6f967d9 - docs(mvp): finalize multi-profile context documentation
 - cd257dc - docs(applications): finalize profile attribution status
 - 2188576 - feat(applications): support profile attribution workflow
 - bc02091 - docs(applications): add profile attribution designs
@@ -1086,12 +1090,14 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-#### Phase suivante recommandée
+7.1.23.1 Test Database Isolation
 
-7.1.23 MVP Experience Review
+Les tests créent actuellement des données
+dans career_os.
 
 Objectif :
-Réaliser une revue complète du MVP avant l'entrée dans les phases post-MVP.
+séparer totalement les données de test
+des données utilisateur.
 
 Périmètre :
 
@@ -1113,6 +1119,20 @@ Objectifs :
 - vérifier les dépendances MVP
 - confirmer que le MVP est réellement complet
 - décider des éventuelles corrections avant clôture MVP
+
+Validated MVP Review Findings:
+
+- Test Database Isolation
+- CV Parsing Data Quality
+- Existing Data Cleanup
+- Enrichment Summary Consistency
+- Profile Creation With Optional CV
+- Additional Profile Context
+- AI Context Contract
+- AI Context Preview
+- AI Readiness Validation
+
+These items must be reviewed before Phase 7.2 AI Career Advisor.
 
 ## Méthode de reprise
 

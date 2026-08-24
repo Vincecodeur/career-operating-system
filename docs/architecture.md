@@ -92,6 +92,16 @@ Sous-domaines :
 
 Le système supporte plusieurs profils candidats.
 
+Additional Profile Context
+
+Purpose:
+
+- Professional Summary
+- Career Motivations
+- Preferred Environment
+- Non-Negotiables
+- Additional Context
+
 ### Search Criteria
 
 Gestion des critères de recherche d'opportunités.
@@ -309,6 +319,15 @@ Planification de carrière.
 Services IA d'assistance.
 
 L'IA enrichit l'analyse mais ne constitue jamais la seule source de vérité.
+
+Before AI Career Advisor:
+
+- AI Context Contract
+- AI Context Preview
+- AI Readiness Validation
+
+Only validated profile information can be provided
+to the AI layer.
 
 ---
 

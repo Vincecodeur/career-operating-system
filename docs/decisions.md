@@ -4673,3 +4673,149 @@ After creation:
 Every effective reassignment creates:
 
 PROFILE
+
+## DEC-073 - Profile Creation With Optional CV
+
+Date: 2026-08-24
+Status: Accepted
+
+### Context
+
+The Career Operating System currently supports:
+
+- manual profile creation
+- CV upload
+- CV enrichment
+
+The MVP review identified that profile creation and CV enrichment are disconnected workflows.
+
+### Decision
+
+Profile creation must support an optional CV upload.
+
+Workflow:
+
+New Profile
+↓
+General Information
+↓
+Optional CV Upload
+
+If no CV is uploaded:
+→ create profile
+→ open profile
+
+If a CV is uploaded:
+→ create profile
+→ upload CV
+→ run enrichment workflow
+→ user review
+→ user validation
+→ apply selected changes
+
+### Principles
+
+- CV remains optional.
+- Structured profile remains the source of truth.
+- No CV data is imported automatically.
+- User validation remains mandatory.
+- Profile creation must succeed even if CV processing fails.
+
+### Related Decisions
+
+DEC-013
+DEC-035
+
+---
+
+## DEC-074 - Additional Profile Context
+
+Date: 2026-08-24
+Status: Accepted
+
+### Decision
+
+Each Profile may contain additional strategic information not covered by structured fields.
+
+Supported sections:
+
+- Professional Summary
+- Career Motivations
+- Preferred Environment
+- Non-Negotiables
+- Additional Context
+
+### Principles
+
+This information:
+
+- belongs to the Profile
+- does not replace structured fields
+- explains user intent
+- can be used by future AI capabilities
+
+The profile remains the source of truth.
+
+### Related Decisions
+
+DEC-035
+
+---
+
+## DEC-075 - AI Context Contract
+
+Date: 2026-08-24
+Status: Accepted
+
+### Decision
+
+All future AI services must rely on an explicit context contract.
+
+Allowed inputs:
+
+- validated profile data
+- validated profile enrichment data
+- validated additional profile context
+
+The AI layer must not infer or fabricate profile information.
+
+### Principles
+
+- deterministic data first
+- user validated data only
+- explainable context
+- explicit payloads
+
+### Related Decisions
+
+DEC-035
+DEC-074
+
+---
+
+## DEC-076 - AI Readiness Validation
+
+Date: 2026-08-24
+Status: Accepted
+
+### Decision
+
+Before invoking AI Career Advisor, the system must evaluate whether sufficient information exists.
+
+AI Readiness must be deterministic.
+
+The readiness result must explain:
+
+- missing data
+- available data
+- readiness status
+
+### Principles
+
+AI must not replace missing profile information.
+
+The system must encourage profile completion before AI analysis.
+
+### Related Decisions
+
+DEC-075
