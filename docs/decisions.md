@@ -4866,3 +4866,25 @@ Les fichiers impactés seront :
 - backend/tests/test_cv_parsing_service.py
 
 Aucune modification de base de données n'est prévue pour la V1.
+
+Implementation Status
+
+Completed
+
+Commit:
+c574ea9
+
+Implemented:
+
+- DOCX table extraction
+- Reading order preservation
+- PROFIL heading support
+- Hard skills / soft skills separation
+- Improved heading detection
+- Acronym-safe parsing
+- Split skill line merging
+
+Validation:
+
+- 10 targeted parsing tests passed
+- 255 backend tests passed

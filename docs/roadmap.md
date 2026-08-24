@@ -958,8 +958,40 @@ Validation réalisée :
 
 ✅ 7.1.23.1 Test Database Isolation
 ✅ 7.1.23.2 CV Parsing Data Quality
-⏳ 7.1.23.3 CV Parsing Improvement Design
-⬜ 7.1.23.4 CV Parsing Implementation V1
+✅ 7.1.23.3 CV Parsing Improvement Design
+
+### CV Parsing Improvements Completed
+
+Status: DONE
+
+Implemented:
+
+- DOCX table extraction preserving reading order
+- French heading support (`PROFIL`)
+- Improved full-name detection
+- Hard skills / soft skills separation
+- Skill line merge support for split skills
+- Robust handling of technical acronyms (SQL, VBA, UAT, CSS, HTML)
+- Additional non-regression test coverage
+
+Validation:
+
+- 10 CV parsing tests passed
+- 255 backend tests passed
+
+✅ 7.1.23.4 CV Parsing Implementation V1
+Validation réalisée :
+
+- DOCX table extraction
+- Reading order preservation
+- PROFIL heading support
+- Hard skills / soft skills separation
+- Acronym handling (SQL, VBA, UAT, HTML, CSS)
+- Split skill lines merge
+- 10 targeted tests passed
+- 255 backend tests passed
+- Commit c574ea9
+
 ⬜ 7.1.23.5 CV Parsing Regression Validation
 
 ⬜ 7.1.23.6 Existing Data Cleanup

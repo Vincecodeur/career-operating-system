@@ -415,9 +415,14 @@ Completed:
 - Test Database Isolation
 - CV Parsing Data Quality
 
-In Progress:
+Completed:
 
 - CV Parsing Improvement Design
+- CV Parsing Implementation V1
+
+Current Phase:
+
+- CV Parsing Regression Validation
 
 Remaining:
 

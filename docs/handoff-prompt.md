@@ -295,7 +295,7 @@ Implémenté :
 - Application Profile Reassignment
 - CV Parsing Data Quality Review completed
 - CV Parsing Improvement Strategy documented
-- DOCX table limitation identified
+- DOCX table limitation resolved
 - PDF multi-column limitation identified
 
 Partiellement implémenté :
@@ -1095,32 +1095,30 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
+Latest completed milestone
+
 7.1.23.4 CV Parsing Implementation V1
 
-Objectif :
+Commit:
+c574ea9
 
-Corriger les défauts confirmés lors de l'audit qualité CV.
+Implemented:
 
-Scope V1 :
+- DOCX table extraction
+- Reading order preservation
+- PROFIL heading support
+- Hard skills / soft skills separation
+- Acronym handling
+- Split skill line merging
 
-- Support des tableaux DOCX
-- Validation du nom détecté
-- Support du heading PROFIL
-- Séparation Hard Skills / Soft Skills
-- Activation des règles de fusion des compétences coupées
+Validation:
 
-  Fichiers probablement concernés :
+- 10 CV parsing tests passed
+- 255 backend tests passed
 
-- backend/app/cv/parsing_service.py
-- backend/tests/test_cv_parsing_service.py
+Next recommended phase
 
-Validation attendue :
-
-✅ DOCX simple
-✅ DOCX tableaux
-✅ CV français
-✅ PDF simple
-⚠️ PDF multicolonnes détecté correctement
+7.1.23.5 CV Parsing Regression Validation
 
 Décision validée :
 
@@ -1138,7 +1136,7 @@ Tests réalisés :
 - DOCX avec tableaux
 - CV français
 
-Conclusions :
+Conclusions historiques avant correction :
 
 P1
 

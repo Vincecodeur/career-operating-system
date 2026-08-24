@@ -1414,6 +1414,21 @@ Post-MVP Planning
 - PROFILE_CHANGED timeline rendering functionally validated
 - Documentation synchronized
 
+- DOCX table parsing
+- French CV section support
+- Improved heading detection
+- Soft skills boundary detection
+- Acronym handling improvements
+- Additional regression tests
+
+Validation:
+
+- Targeted tests: 10 passed
+- Full backend suite: 255 passed
+
+Commit:
+c574ea9
+
 ---
 
 Blocked
@@ -1424,7 +1439,7 @@ Aucun
 
 Phase In Progress
 
-7.1.23.3 CV Parsing Improvement Design
+7.1.23.5 CV Parsing Regression Validation
 
 Job Discovery Settings Progress
 
@@ -1450,7 +1465,7 @@ Phase Status:
 
 Next Step:
 
-7.1.23.4 CV Parsing Implementation V1
+7.1.23.5 CV Parsing Regression Validation
 
 ---
 
@@ -1479,10 +1494,10 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.3 CV Parsing Improvement Design
+7.1.23.5 CV Parsing Regression Validation
 
 Status:
-Ready To Start
+In Progress
 
 Completed validations:
 
@@ -1500,9 +1515,10 @@ Completed validations:
 - French CV parsing validated
 
 Next Step:
-7.1.23.4 CV Parsing Implementation V1
+7.1.23.5 CV Parsing Regression Validation
 
 Last Commits :
 
+c574ea9 - feat(cv): improve DOCX parsing and skill extraction
 03fff29 - test(database): isolate pytest from production database
 0c3e036 - docs(mvp): document test database isolation phase
