@@ -402,8 +402,25 @@ MVP Review Findings
 
 Critical before AI:
 
+- Existing Data Cleanup
+- Enrichment Summary Consistency
+- Profile Creation With Optional CV
+- Additional Profile Context
+- AI Context Contract
+- AI Context Preview
+- AI Readiness Validation
+
+Completed:
+
 - Test Database Isolation
 - CV Parsing Data Quality
+
+In Progress:
+
+- CV Parsing Improvement Design
+
+Remaining:
+
 - Existing Data Cleanup
 - Enrichment Summary Consistency
 - Profile Creation With Optional CV

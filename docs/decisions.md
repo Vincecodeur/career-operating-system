@@ -4819,3 +4819,50 @@ The system must encourage profile completion before AI analysis.
 ### Related Decisions
 
 DEC-075
+
+---
+
+## DEC-077 CV Parsing Improvement Strategy
+
+Date: 2026-08-24
+
+Status: Accepted
+
+Context
+
+Le parser CV a été audité sur plusieurs cas réels :
+
+- PDF multicolonnes
+- PDF standard
+- DOCX standard
+- DOCX avec tableaux
+- CV français
+
+L'audit a mis en évidence plusieurs limitations fonctionnelles bloquantes pour l'utilisation future par AI Career Advisor.
+
+Decision
+
+Implémenter les améliorations suivantes en priorité :
+
+V1 (MVP)
+
+- Lecture des tableaux DOCX
+- Validation du nom détecté
+- Support du heading PROFIL pour summary
+- Séparation Hard Skills / Soft Skills
+- Activation des règles de fusion des compétences coupées
+
+V2
+
+- Structuration des expériences
+- Structuration des langues
+- Extraction société et dates
+
+Consequences
+
+Les fichiers impactés seront :
+
+- backend/app/cv/parsing_service.py
+- backend/tests/test_cv_parsing_service.py
+
+Aucune modification de base de données n'est prévue pour la V1.

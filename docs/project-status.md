@@ -24,7 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-7.1.23.1 Test Database Isolation
+7.1.23.3 CV Parsing Improvement Design
 
 Next Planned Milestone
 7.1.23 MVP Experience Review
@@ -1424,7 +1424,7 @@ Aucun
 
 Phase In Progress
 
-7.1.23.1 Test Database Isolation
+7.1.23.3 CV Parsing Improvement Design
 
 Job Discovery Settings Progress
 
@@ -1450,12 +1450,12 @@ Phase Status:
 
 Next Step:
 
-7.1.23 MVP Experience Review
+7.1.23.4 CV Parsing Implementation V1
 
 ---
 
 Last Decision
-DEC-072 - Application Profile Attribution
+DEC-077 - CV Parsing Improvement Strategy
 
 Décisions récemment validées :
 
@@ -1463,6 +1463,7 @@ Décisions récemment validées :
 - DEC-070 Connectors Use Controlled Multi Select
 - DEC-071 Multi Profile Opportunity Context
 - DEC-072 Application Profile Attribution
+- DEC-077 CV Parsing Improvement Strategy
 
 Validation Status
 
@@ -1478,31 +1479,30 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.1 Test Database Isolation
+7.1.23.3 CV Parsing Improvement Design
 
 Status:
 Ready To Start
 
 Completed validations:
 
-- Opportunity → Application creation validated
-- Best Matching Profile recommendation validated
-- Application profile override validated
-- PostgreSQL profile attribution validated
-- Application reassignment validated
-- PROFILE_CHANGED timeline event validated
-- Inactive profile protection validated
-- Frontend end-to-end workflow validated
+- Test database created
+- PostgreSQL isolation validated
+- career_os data protected
+- career_os_test used by pytest
 - Backend non-regression suite validated
 - 249 backend tests passing
+- CV Parsing Audit completed
+- PDF standard validated
+- PDF multicolumn limitations identified
+- DOCX standard validated
+- DOCX tables limitation identified
+- French CV parsing validated
 
 Next Step:
-Repository Audit For MVP Review
-7.1.23 MVP Experience Review
+7.1.23.4 CV Parsing Implementation V1
 
 Last Commits :
 
-cd257dc - docs(applications): finalize profile attribution status
-2188576 - feat(applications): support profile attribution workflow
-bc02091 - docs(applications): add profile attribution designs
-bccdc5b - feat(applications): support profile reassignment
+03fff29 - test(database): isolate pytest from production database
+0c3e036 - docs(mvp): document test database isolation phase

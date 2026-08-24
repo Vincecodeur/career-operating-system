@@ -956,22 +956,25 @@ Validation réalisée :
 
 ⬜ 7.1.23 MVP Experience Review
 
-⬜ 7.1.23.1 Test Database Isolation
-⬜ 7.1.23.2 CV Parsing Data Quality
-⬜ 7.1.23.3 Existing Data Cleanup
-⬜ 7.1.23.4 Enrichment Summary Consistency
-⬜ 7.1.23.5 Profile Creation With Optional CV
-⬜ 7.1.23.6 Additional Profile Context
-⬜ 7.1.23.7 AI Context Contract
-⬜ 7.1.23.8 AI Context Preview And Consent
-⬜ 7.1.23.9 AI Readiness Validation
+✅ 7.1.23.1 Test Database Isolation
+✅ 7.1.23.2 CV Parsing Data Quality
+⏳ 7.1.23.3 CV Parsing Improvement Design
+⬜ 7.1.23.4 CV Parsing Implementation V1
+⬜ 7.1.23.5 CV Parsing Regression Validation
 
-⬜ 7.1.23.10 Login UX Polish
-⬜ 7.1.23.11 Minimal Account UX Polish
-⬜ 7.1.23.12 Settings Strategy Synchronization
-⬜ 7.1.23.13 Best Profile Recommendation Architecture Review
-⬜ 7.1.23.14 Final Regression And Documentation
-⬜ 7.1.23.15 MVP Closure Decision
+⬜ 7.1.23.6 Existing Data Cleanup
+⬜ 7.1.23.7 Enrichment Summary Consistency
+⬜ 7.1.23.8 Profile Creation With Optional CV
+⬜ 7.1.23.9 Additional Profile Context
+⬜ 7.1.23.10 AI Context Contract
+⬜ 7.1.23.11 AI Context Preview And Consent
+⬜ 7.1.23.12 AI Readiness Validation
+⬜ 7.1.23.13 Login UX Polish
+⬜ 7.1.23.14 Minimal Account UX Polish
+⬜ 7.1.23.15 Settings Strategy Synchronization
+⬜ 7.1.23.16 Best Profile Recommendation Architecture Review
+⬜ 7.1.23.17 Final Regression And Documentation
+⬜ 7.1.23.18 MVP Closure Decision
 
 Statut :
 

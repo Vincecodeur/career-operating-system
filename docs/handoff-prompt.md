@@ -293,6 +293,10 @@ Implémenté :
 - Application Profile Attribution
 - PROFILE_CHANGED ApplicationEvent
 - Application Profile Reassignment
+- CV Parsing Data Quality Review completed
+- CV Parsing Improvement Strategy documented
+- DOCX table limitation identified
+- PDF multi-column limitation identified
 
 Partiellement implémenté :
 
@@ -1060,6 +1064,7 @@ Respecter notamment :
 - DEC-068 : Search Criteria Governed By Reference Data
 - DEC-070 : Connectors Use Controlled Multi Select
 - DEC-071 : Multi Profile Opportunity Context
+- DEC-077 : CV Parsing Improvement Strategy
 
 Décision UX validée :
 
@@ -1090,49 +1095,67 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-7.1.23.1 Test Database Isolation
-
-Les tests créent actuellement des données
-dans career_os.
+7.1.23.4 CV Parsing Implementation V1
 
 Objectif :
-séparer totalement les données de test
-des données utilisateur.
 
-Périmètre :
+Corriger les défauts confirmés lors de l'audit qualité CV.
 
-- Profiles
-- CV Management
-- CV Enrichment
-- Opportunity Discovery
-- Opportunity Analysis
-- Multi Profile Context
-- Applications Workflow
-- Settings
-- Saved Searches
+Scope V1 :
 
-Objectifs :
+- Support des tableaux DOCX
+- Validation du nom détecté
+- Support du heading PROFIL
+- Séparation Hard Skills / Soft Skills
+- Activation des règles de fusion des compétences coupées
 
-- identifier les incohérences restantes
-- vérifier la cohérence UX
-- vérifier la cohérence documentaire
-- vérifier les dépendances MVP
-- confirmer que le MVP est réellement complet
-- décider des éventuelles corrections avant clôture MVP
+  Fichiers probablement concernés :
 
-Validated MVP Review Findings:
+- backend/app/cv/parsing_service.py
+- backend/tests/test_cv_parsing_service.py
 
-- Test Database Isolation
-- CV Parsing Data Quality
-- Existing Data Cleanup
-- Enrichment Summary Consistency
-- Profile Creation With Optional CV
-- Additional Profile Context
-- AI Context Contract
-- AI Context Preview
-- AI Readiness Validation
+Validation attendue :
+
+✅ DOCX simple
+✅ DOCX tableaux
+✅ CV français
+✅ PDF simple
+⚠️ PDF multicolonnes détecté correctement
+
+Décision validée :
+
+DEC-077 CV Parsing Improvement Strategy
 
 These items must be reviewed before Phase 7.2 AI Career Advisor.
+
+CV Parsing Audit Summary
+
+Tests réalisés :
+
+- PDF multicolonnes
+- PDF standard
+- DOCX standard
+- DOCX avec tableaux
+- CV français
+
+Conclusions :
+
+P1
+
+- DOCX tables ignorées
+- PDF multicolonnes fortement dégradés
+- Hard Skills / Soft Skills mélangés
+
+P2
+
+- PROFIL non mappé vers summary
+- company non extraite
+- start_date non extraite
+- end_date non extraite
+
+Décision :
+
+Design V1 avant implémentation.
 
 ## Méthode de reprise
 

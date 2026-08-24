@@ -536,3 +536,18 @@ Applications
 ↔ Opportunity
 
 Applications may be created directly from Opportunities.
+
+### CV Parsing Architecture
+
+Version actuelle :
+
+- Extraction PDF via PyPDF2
+- Extraction DOCX via python-docx
+- Parsing heuristique par sections
+
+Amélioration V1 :
+
+- Support des contenus présents dans les tableaux DOCX
+- Validation renforcée des noms détectés
+- Gestion explicite des sections PROFIL
+- Séparation des soft skills et hard skills
