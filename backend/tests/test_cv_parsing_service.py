@@ -1,6 +1,9 @@
 from pathlib import Path
 
 import pytest
+from docx import Document
+
+from app.cv.parsing_service import extract_text_from_docx
 
 from app.cv.parsing_service import CVParsingError
 from app.cv.parsing_service import extract_text_from_cv
@@ -90,26 +93,184 @@ def test_extract_text_from_cv_rejects_missing_file(
         extract_text_from_cv(missing_file)
 
     assert "CV file does not exist" in str(exc_info.value)
-    
-def clean_list_value(
-    value: str,
-) -> str:
-    cleaned_value = " ".join(
-        value.strip().split(),
+
+
+def test_extract_text_from_docx_preserves_table_content_order(
+    tmp_path: Path,
+):
+    document = Document()
+
+    document.add_paragraph("SOPHIE DUBOIS")
+    document.add_paragraph(
+        "Data & Business Intelligence Analyst",
     )
 
-    cleaned_value = (
-        cleaned_value
-        .strip("-")
-        .strip("&")
-        .strip("/")
-        .strip("â€¢")
-        .strip("Â·")
-        .strip("(")
-        .strip(")")
-        .strip()
+    document.add_paragraph("Professional Summary")
+    document.add_paragraph(
+        "Business intelligence analyst with six years of experience.",
     )
 
-    return cleaned_value
+    document.add_paragraph("Technical Skills")
+    skills_table = document.add_table(
+        rows=1,
+        cols=2,
+    )
+    skills_table.cell(0, 0).text = "Power BI\nSQL"
+    skills_table.cell(0, 1).text = "Python\nPostgreSQL"
+
+    document.add_paragraph("Languages")
+    languages_table = document.add_table(
+        rows=1,
+        cols=2,
+    )
+    languages_table.cell(0, 0).text = "French: Native"
+    languages_table.cell(0, 1).text = "English: Professional"
+
+    document.add_paragraph("Certifications")
+    certifications_table = document.add_table(
+        rows=1,
+        cols=1,
+    )
+    certifications_table.cell(0, 0).text = "Microsoft PL-300"
+
+    cv_path = tmp_path / "cv-table.docx"
+    document.save(cv_path)
+
+    raw_text = extract_text_from_docx(cv_path)
+    parsed_cv = parse_cv_text(raw_text)
 
 
+    assert parsed_cv.full_name == "SOPHIE DUBOIS"
+    assert (
+        parsed_cv.professional_title
+        == "Data & Business Intelligence Analyst"
+    )
+    assert "Power BI" in parsed_cv.skills
+    assert "SQL" in parsed_cv.skills
+    assert "Python" in parsed_cv.skills
+    assert "PostgreSQL" in parsed_cv.skills
+    assert "French: Native" in parsed_cv.languages
+    assert "English: Professional" in parsed_cv.languages
+    assert "Microsoft PL-300" in parsed_cv.certifications
+
+    assert raw_text.index("Technical Skills") < raw_text.index("Power BI")
+    assert raw_text.index("Power BI") < raw_text.index("Languages")
+
+
+def test_parse_cv_text_maps_french_profil_to_summary():
+    raw_text = """
+JEAN DUPONT
+Chef de projet informatique
+
+PROFIL
+Chef de projet avec 10 ans d'expérience.
+
+COMPÉTENCES
+Python, API REST
+"""
+
+    parsed_cv = parse_cv_text(raw_text)
+
+    assert parsed_cv.summary == (
+        "Chef de projet avec 10 ans d'expérience."
+    )
+
+def test_parse_cv_text_rejects_section_heading_as_full_name():
+    raw_text = """
+OUTILS &
+LANGAGES DE PROGRAMMATION
+Python
+"""
+
+    parsed_cv = parse_cv_text(raw_text)
+
+    assert parsed_cv.full_name is None
+
+
+def test_parse_cv_text_stops_skills_at_soft_skills_heading():
+    raw_text = """
+Alex Martin
+Software Engineer
+
+Technical Skills
+Python, FastAPI, PostgreSQL
+
+Soft Skills
+Curious
+Reliable
+Team spirit
+
+Languages
+French: Native
+"""
+
+    parsed_cv = parse_cv_text(raw_text)
+
+    assert parsed_cv.skills == [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+    ]
+    assert "Curious" not in parsed_cv.skills
+    assert "Reliable" not in parsed_cv.skills
+    assert "Team spirit" not in parsed_cv.skills
+
+
+def test_parse_cv_text_merges_known_split_skill_lines():
+    raw_text = """
+Alex Martin
+Software Engineer
+
+Technical Skills
+Cross
+functional collaboration
+Low -code
+development
+
+Languages
+English: Professional
+"""
+
+    parsed_cv = parse_cv_text(raw_text)
+
+    assert "Cross-functional collaboration" in parsed_cv.skills
+    assert "Low-code development" in parsed_cv.skills
+    assert "Cross" not in parsed_cv.skills
+    assert "development" not in parsed_cv.skills
+
+
+def test_parse_cv_text_does_not_treat_skill_acronyms_as_headings():
+    raw_text = """
+Alex Martin
+Software Engineer
+
+Technical Skills
+SQL
+VBA
+UAT
+CSS
+HTML
+
+Languages
+English: Professional
+"""
+
+    parsed_cv = parse_cv_text(
+        raw_text,
+    )
+
+    assert parsed_cv.skills == [
+        "SQL",
+        "VBA",
+        "UAT",
+        "CSS",
+        "HTML",
+    ]
+
+    assert parsed_cv.languages == [
+        "English: Professional",
+    ]
+
+    assert parsed_cv.summary is None
+    assert parsed_cv.certifications == []
+    assert parsed_cv.experiences == []

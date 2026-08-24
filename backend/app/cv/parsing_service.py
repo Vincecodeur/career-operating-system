@@ -43,6 +43,8 @@ def extract_text_from_docx(
 ) -> str:
     try:
         from docx import Document
+        from docx.table import Table
+        from docx.text.paragraph import Paragraph
     except ImportError as exc:
         raise CVParsingError(
             "DOCX parsing requires python-docx to be installed.",
@@ -50,18 +52,44 @@ def extract_text_from_docx(
 
     try:
         document = Document(str(file_path))
-        paragraphs = [
-            paragraph.text.strip()
-            for paragraph in document.paragraphs
-            if paragraph.text.strip()
-        ]
+        extracted_lines: list[str] = []
 
-        return "\n".join(paragraphs).strip()
+        for child in document.element.body.iterchildren():
+            if child.tag.endswith("}p"):
+                paragraph = Paragraph(
+                    child,
+                    document,
+                )
+                paragraph_text = paragraph.text.strip()
+
+                if paragraph_text:
+                    extracted_lines.append(
+                        paragraph_text,
+                    )
+
+            elif child.tag.endswith("}tbl"):
+                table = Table(
+                    child,
+                    document,
+                )
+
+                for row in table.rows:
+                    for cell in row.cells:
+                        for paragraph in cell.paragraphs:
+                            paragraph_text = paragraph.text.strip()
+
+                            if paragraph_text:
+                                extracted_lines.extend(
+                                    line.strip()
+                                    for line in paragraph_text.splitlines()
+                                    if line.strip()
+                                )
+
+        return "\n".join(extracted_lines).strip()
     except Exception as exc:
         raise CVParsingError(
             "Unable to extract text from DOCX file.",
         ) from exc
-
 
 def extract_text_from_cv(
     file_path: Path,
@@ -106,6 +134,7 @@ def parse_cv_text(
             section_names=[
                 "summary",
                 "profile",
+                "profil",
                 "professional summary",
                 "about",
                 "about me",
@@ -165,11 +194,13 @@ def detect_full_name(
 
     first_line = lines[0]
 
+    if is_known_section_heading(first_line):
+        return None
+
     if len(first_line.split()) <= 6:
         return first_line
 
     return None
-
 
 def detect_professional_title(
     lines: list[str],
@@ -213,7 +244,11 @@ def extract_list_section(
     )
 
     normalized_section_lines = normalize_list_section_lines(
-        section_lines,
+    section_lines,
+    )
+
+    normalized_section_lines = merge_known_split_skill_lines(
+        normalized_section_lines,
     )
 
     values: list[str] = []
@@ -318,7 +353,7 @@ def merge_known_split_skill_lines(
     merged_lines: list[str] = []
     index = 0
 
-    while indexs():
+    while index < len(lines):
         current_line = lines[index].strip()
 
         next_line = (
@@ -326,6 +361,12 @@ def merge_known_split_skill_lines(
             if index + 1 < len(lines)
             else None
         )
+
+        normalized_current_line = re.sub(
+            r"\s*-\s*",
+            "-",
+            current_line,
+        ).lower()
 
         if (
             next_line is not None
@@ -340,7 +381,7 @@ def merge_known_split_skill_lines(
 
         if (
             next_line is not None
-            and normalize_skill_alias(current_line) == "Low-code"
+            and normalized_current_line == "low-code"
             and next_line.lower() == "development"
         ):
             merged_lines.append(
@@ -352,11 +393,9 @@ def merge_known_split_skill_lines(
         merged_lines.append(
             current_line,
         )
-
         index += 1
 
     return merged_lines
-
 
 def extract_section_lines(
     lines: list[str],
@@ -583,8 +622,7 @@ def normalize_heading(
         .replace(":", "")
     )
 
-
-def is_section_heading(
+def is_known_section_heading(
     value: str,
 ) -> bool:
     normalized = normalize_heading(value)
@@ -592,6 +630,7 @@ def is_section_heading(
     known_headings = {
         "summary",
         "profile",
+        "profil",
         "professional summary",
         "about",
         "about me",
@@ -600,6 +639,8 @@ def is_section_heading(
         "core skills",
         "competencies",
         "key skills",
+        "soft skills",
+        "soft skill",
         "languages",
         "language",
         "certifications",
@@ -624,11 +665,23 @@ def is_section_heading(
         "expériences professionnelles",
         "formation",
         "formations",
+        "qualités",
+        "qualites",
+        "qualités personnelles",
+        "qualites personnelles",
+        "qualités & langues",
+        "qualites & langues",
         "outils",
+        "outils &",
         "outils & logiciels",
-            }
+    }
 
-    if normalized in known_headings:
+    return normalized in known_headings
+
+def is_section_heading(
+    value: str,
+) -> bool:
+    if is_known_section_heading(value):
         return True
 
     if len(value) > 80:
@@ -641,6 +694,9 @@ def is_section_heading(
     ]
 
     if not alpha_chars:
+        return False
+
+    if len(alpha_chars) <= 4:
         return False
 
     uppercase_ratio = (
