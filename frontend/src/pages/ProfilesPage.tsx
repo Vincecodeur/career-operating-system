@@ -326,6 +326,10 @@ export function ProfilesPage() {
 
   const [selectedCv, setSelectedCv] = useState<Cv | null>(null);
 
+  const [cvTargetProfileId, setCvTargetProfileId] = useState<number | null>(
+    null,
+  );
+
   const [isUploadCvModalOpen, setIsUploadCvModalOpen] = useState(false);
 
   const [isDeleteCvDialogOpen, setIsDeleteCvDialogOpen] = useState(false);
@@ -434,20 +438,28 @@ export function ProfilesPage() {
     loadDetails();
   }, [selectedProfile]);
 
-  async function handleCreateProfile(values: CreateProfileFormValues) {
+  async function handleCreateProfile(submission: {
+    profile: CreateProfileFormValues;
+    continueWithCv: boolean;
+  }) {
     setIsCreatingProfile(true);
     setProfileMutationError(null);
 
     try {
-      const createdProfile = await createProfile(values);
+      const createdProfile = await createProfile(submission.profile);
 
       setProfiles((profiles) => [
         createdProfile,
         ...profiles.filter((profile) => profile.id !== createdProfile.id),
       ]);
 
-      setSelectedProfile(createdProfile);
+      setCvTargetProfileId(createdProfile.id);
       setIsCreateModalOpen(false);
+      if (submission.continueWithCv) {
+        setCvMutationError(null);
+
+        setIsUploadCvModalOpen(true);
+      }
     } catch {
       setProfileMutationError("Unable to create profile.");
     } finally {
@@ -921,7 +933,7 @@ export function ProfilesPage() {
   }
 
   async function handleUploadCv(values: UploadCvFormValues): Promise<Cv> {
-    if (!selectedProfile) {
+    if (!cvTargetProfileId) {
       throw new Error("No profile selected.");
     }
 
@@ -930,14 +942,14 @@ export function ProfilesPage() {
 
     try {
       const cv = await uploadCv(
-        selectedProfile.id,
+        cvTargetProfileId,
         values.file,
         values.language,
         values.versionLabel,
         values.isDefault,
       );
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadSelectedProfileDetails(cvTargetProfileId);
 
       return cv;
     } catch {
@@ -1097,7 +1109,12 @@ export function ProfilesPage() {
                 }}
                 cvs={cvs}
                 onUploadCv={() => {
+                  if (selectedProfile) {
+                    setCvTargetProfileId(selectedProfile.id);
+                  }
+
                   setCvMutationError(null);
+
                   setIsUploadCvModalOpen(true);
                 }}
                 onDeleteCv={(cv: Cv) => {

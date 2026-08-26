@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 import type { MultiValue } from "react-select";
 import { Controller, useForm } from "react-hook-form";
@@ -22,6 +22,11 @@ const createProfileSchema = z.object({
 
 export type CreateProfileFormValues = z.infer<typeof createProfileSchema>;
 
+export type CreateProfileSubmission = {
+  profile: CreateProfileFormValues;
+  continueWithCv: boolean;
+};
+
 type CountryOption = {
   value: string;
   label: string;
@@ -32,7 +37,7 @@ type Props = {
   isSaving: boolean;
   error: string | null;
   onClose: () => void;
-  onCreate: (values: CreateProfileFormValues) => Promise<void>;
+  onCreate: (values: CreateProfileSubmission) => Promise<void>;
   workModes: {
     id: number;
     code: string;
@@ -75,6 +80,8 @@ export function CreateProfileModal({
     },
   });
 
+  const [continueWithCv, setContinueWithCv] = useState(false);
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -91,6 +98,7 @@ export function CreateProfileModal({
       remote_preference: "",
       preferred_countries: "",
     });
+    setContinueWithCv(false);
   }, [isOpen, reset]);
 
   const countryOptions: CountryOption[] = countries.map((country) => ({
@@ -137,7 +145,14 @@ export function CreateProfileModal({
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onCreate)} className="space-y-5">
+        <form
+          onSubmit={handleSubmit((values) =>
+            onCreate({
+              profile: values,
+              continueWithCv,
+            }),
+          )}
+          className="space-y-5">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium text-slate-300">
@@ -313,6 +328,23 @@ export function CreateProfileModal({
                 {errors.preferred_countries.message}
               </p>
             )}
+          </div>
+
+          <div className="rounded-md border border-slate-700 p-4">
+            <h3 className="font-semibold text-white">Optional CV</h3>
+
+            <p className="mt-1 text-sm text-slate-400">
+              Open the CV wizard immediately after the profile is created.
+            </p>
+
+            <label className="mt-3 flex items-center gap-2 text-slate-300">
+              <input
+                type="checkbox"
+                checked={continueWithCv}
+                onChange={(event) => setContinueWithCv(event.target.checked)}
+              />
+              Continue with CV upload
+            </label>
           </div>
 
           <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
