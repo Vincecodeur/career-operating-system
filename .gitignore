@@ -46,4 +46,5 @@ storage
 
 # PostgreSQL backups
 .backups/
+.backup
 career_os_before_cleanup.backup
