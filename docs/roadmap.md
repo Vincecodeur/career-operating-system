@@ -992,11 +992,47 @@ Validation réalisée :
 - 255 backend tests passed
 - Commit c574ea9
 
-⬜ 7.1.23.5 CV Parsing Regression Validation
+✅ 7.1.23.5 CV Parsing Regression Validation
 
-⬜ 7.1.23.6 Existing Data Cleanup
-⬜ 7.1.23.7 Enrichment Summary Consistency
-⬜ 7.1.23.8 Profile Creation With Optional CV
+Validation réalisée :
+
+- validation du parsing PDF standard ;
+- validation du parsing DOCX standard ;
+- validation du parsing DOCX avec tableaux ;
+- validation du heading français PROFIL ;
+- validation de la séparation Hard Skills / Soft Skills ;
+- validation de la gestion des acronymes techniques ;
+- 10 tests ciblés passants ;
+- 255 tests backend passants.
+
+✅ 7.1.23.6 Existing Data Cleanup
+
+Validation réalisée :
+
+- sauvegarde PostgreSQL créée avant nettoyage ;
+- audit non destructif de la base career_os réalisé ;
+- profils temporaires 2101, 2102, 2103 et 2104 identifiés ;
+- absence de candidature associée confirmée ;
+- profils temporaires supprimés ;
+- CV et données dépendantes supprimés ;
+- dataset ramené aux quatre profils du démonstrateur ;
+- contrôles post-nettoyage validés.
+
+✅ 7.1.23.7 Enrichment Summary Consistency
+
+Validation réalisée :
+
+- pollution historique du profil Cloud identifiée ;
+- 10 associations de langues invalides supprimées ;
+- 12 propositions invalides du CV 822 supprimées ;
+- 10 entrées de langues orphelines supprimées du catalogue ;
+- compétence invalide "17/01/2022" supprimée du catalogue ;
+- aucune référence résiduelle détectée ;
+- aucun fichier CV orphelin détecté ;
+- CV 822 conservé ;
+- 255 tests backend passants.
+
+⏳ 7.1.23.8 Profile Creation With Optional CV
 ⬜ 7.1.23.9 Additional Profile Context
 ⬜ 7.1.23.10 AI Context Contract
 ⬜ 7.1.23.11 AI Context Preview And Consent

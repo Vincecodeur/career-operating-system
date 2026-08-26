@@ -414,22 +414,38 @@ Completed:
 
 - Test Database Isolation
 - CV Parsing Data Quality
-
-Completed:
-
 - CV Parsing Improvement Design
 - CV Parsing Implementation V1
+- CV Parsing Regression Validation
+- Existing Data Cleanup
+- Enrichment Summary Consistency
+
+Data cleanup results:
+
+- Temporary profiles 2101, 2102, 2103 and 2104 removed
+- Demo dataset restored to four business profiles
+- Invalid enrichment data removed from the Cloud profile
+- Invalid CV 822 enrichment proposals removed
+- Orphan invalid language catalog entries removed
+- Invalid "17/01/2022" skill entry removed
+- CV 822 preserved
+- No orphan CV storage files detected
+- Backend non-regression suite validated with 255 passing tests
 
 Current Phase:
 
-- CV Parsing Regression Validation
+- Profile Creation With Optional CV
 
 Remaining:
 
-- Existing Data Cleanup
-- Enrichment Summary Consistency
 - Profile Creation With Optional CV
 - Additional Profile Context
 - AI Context Contract
-- AI Context Preview
+- AI Context Preview And Consent
 - AI Readiness Validation
+- Login UX Polish
+- Minimal Account UX Polish
+- Settings Strategy Synchronization
+- Best Profile Recommendation Architecture Review
+- Final Regression And Documentation
+- MVP Closure Decision

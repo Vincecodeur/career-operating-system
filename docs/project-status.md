@@ -24,7 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-7.1.23.3 CV Parsing Improvement Design
+7.1.23.8 Profile Creation With Optional CV
 
 Next Planned Milestone
 7.1.23 MVP Experience Review
@@ -1421,6 +1421,23 @@ Post-MVP Planning
 - Acronym handling improvements
 - Additional regression tests
 
+- Phase 7.1.23.5 CV Parsing Regression Validation terminée
+- Validation fonctionnelle des améliorations du parser réalisée
+- 10 tests CV Parsing passants
+- Phase 7.1.23.6 Existing Data Cleanup terminée
+- Backup PostgreSQL avant nettoyage créé
+- Profils temporaires 2101 à 2104 supprimés
+- Dépendances des profils temporaires supprimées
+- Dataset de démonstration ramené à quatre profils
+- Phase 7.1.23.7 Enrichment Summary Consistency terminée
+- Données d'enrichissement invalides du profil Cloud supprimées
+- Propositions invalides du CV 822 supprimées
+- Entrées de langues invalides 420 à 429 supprimées
+- Compétence invalide "17/01/2022" supprimée
+- Aucun fichier CV orphelin détecté
+- Validation backend réalisée
+- 255 tests backend passants
+
 Validation:
 
 - Targeted tests: 10 passed
@@ -1439,7 +1456,7 @@ Aucun
 
 Phase In Progress
 
-7.1.23.5 CV Parsing Regression Validation
+7.1.23.8 Profile Creation With Optional CV
 
 Job Discovery Settings Progress
 
@@ -1465,12 +1482,12 @@ Phase Status:
 
 Next Step:
 
-7.1.23.5 CV Parsing Regression Validation
+7.1.23.8.1 Repository Audit And Product Design
 
 ---
 
 Last Decision
-DEC-077 - CV Parsing Improvement Strategy
+DEC-073 - Profile Creation With Optional CV
 
 Décisions récemment validées :
 
@@ -1494,31 +1511,34 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.5 CV Parsing Regression Validation
+7.1.23.8 Profile Creation With Optional CV
 
 Status:
-In Progress
+Ready To Start
 
 Completed validations:
 
-- Test database created
-- PostgreSQL isolation validated
-- career_os data protected
+- Test database isolation validated
+- career_os protected from pytest
 - career_os_test used by pytest
+- CV parsing data quality audit completed
+- PDF standard parsing validated
+- PDF multicolumn limitation documented
+- DOCX standard parsing validated
+- DOCX table extraction validated
+- French PROFIL heading validated
+- Hard Skills / Soft Skills boundary validated
+- Technical acronym handling validated
+- Temporary CV validation profiles removed
+- Invalid enrichment data removed from the Cloud profile
+- Invalid orphan reference-data entries removed
+- No orphan CV storage files detected
 - Backend non-regression suite validated
-- 249 backend tests passing
-- CV Parsing Audit completed
-- PDF standard validated
-- PDF multicolumn limitations identified
-- DOCX standard validated
-- DOCX tables limitation identified
-- French CV parsing validated
+- 255 backend tests passing
 
 Next Step:
-7.1.23.5 CV Parsing Regression Validation
+7.1.23.8 Profile Creation With Optional CV
 
-Last Commits :
-
+Last Commits :  
+db85e02 - docs(cv): synchronize parsing implementation status
 c574ea9 - feat(cv): improve DOCX parsing and skill extraction
-03fff29 - test(database): isolate pytest from production database
-0c3e036 - docs(mvp): document test database isolation phase

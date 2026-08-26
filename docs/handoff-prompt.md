@@ -1097,63 +1097,51 @@ Le Kanban est explicitement reporté après le MVP.
 
 Latest completed milestone
 
-7.1.23.4 CV Parsing Implementation V1
+7.1.23.7 Enrichment Summary Consistency
 
-Commit:
-c574ea9
+Completed:
 
-Implemented:
-
-- DOCX table extraction
-- Reading order preservation
-- PROFIL heading support
-- Hard skills / soft skills separation
-- Acronym handling
-- Split skill line merging
+- CV Parsing Regression Validation
+- Existing Data Cleanup
+- Enrichment Summary Consistency
+- Temporary validation profiles removed
+- Demo dataset restored to four business profiles
+- Invalid Cloud profile language associations removed
+- Invalid CV 822 enrichment proposals removed
+- Invalid orphan language catalog entries removed
+- Invalid "17/01/2022" skill removed
+- CV 822 preserved
+- No orphan CV storage files detected
 
 Validation:
 
-- 10 CV parsing tests passed
+- 10 targeted CV parsing tests passed
 - 255 backend tests passed
+- Production data cleanup validated
+- Enrichment consistency cleanup validated
 
-Next recommended phase
+Latest technical commit:
+c574ea9 - feat(cv): improve DOCX parsing and skill extraction
 
-7.1.23.5 CV Parsing Regression Validation
+Last Commits :
+db85e02 - docs(cv): synchronize parsing implementation status
+c574ea9 - feat(cv): improve DOCX parsing and skill extraction
 
-Décision validée :
+Next recommended phase:
 
-DEC-077 CV Parsing Improvement Strategy
+7.1.23.8 Profile Creation With Optional CV
 
-These items must be reviewed before Phase 7.2 AI Career Advisor.
+Decision already accepted:
 
-CV Parsing Audit Summary
+DEC-073 Profile Creation With Optional CV
 
-Tests réalisés :
+Required starting sequence:
 
-- PDF multicolonnes
-- PDF standard
-- DOCX standard
-- DOCX avec tableaux
-- CV français
-
-Conclusions historiques avant correction :
-
-P1
-
-- DOCX tables ignorées
-- PDF multicolonnes fortement dégradés
-- Hard Skills / Soft Skills mélangés
-
-P2
-
-- PROFIL non mappé vers summary
-- company non extraite
-- start_date non extraite
-- end_date non extraite
-
-Décision :
-
-Design V1 avant implémentation.
+- Repository audit
+- Product design validation
+- Technical design
+- Implementation plan
+- Code and tests only after design validation
 
 ## Méthode de reprise
 
