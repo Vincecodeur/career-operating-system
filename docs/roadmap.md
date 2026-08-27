@@ -959,6 +959,41 @@ Validation réalisée :
 ✅ 7.1.23.1 Test Database Isolation
 ✅ 7.1.23.2 CV Parsing Data Quality
 ✅ 7.1.23.3 CV Parsing Improvement Design
+✅ 7.1.23.3.1 CV Parsing Benchmark Framework
+
+Validation réalisée :
+
+- 8 parser fixtures créées
+- PDF simple validé
+- PDF sidebar gauche validé
+- PDF sidebar droite validé
+- PDF colonnes partielles validé
+- PDF multipages validé
+- PDF scanné validé
+- DOCX standard validé
+- DOCX tableaux validé
+- benchmark automatisé créé
+
+✅ 7.1.23.3.2 Multiple Skills Sections Support
+
+Validation réalisée :
+
+- support de plusieurs sections skills dans un même CV
+- COMPETENCIES + PROGRAMMING LANGUAGES supportés
+- test de non-régression ajouté
+- benchmark parser validé
+- 256 tests backend passants
+
+⚠️ Limitation documentée
+
+PDF multicolonnes complexes :
+support partiel
+
+Exemple connu :
+CV Lathan
+
+Cause identifiée :
+PyPDF2 peut produire un flux structurellement corrompu avant parsing.
 
 ### CV Parsing Improvements Completed
 

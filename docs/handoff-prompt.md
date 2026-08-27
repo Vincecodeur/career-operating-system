@@ -1121,7 +1121,24 @@ Validation:
 - Enrichment consistency cleanup validated
 
 Latest technical commit:
-c574ea9 - feat(cv): improve DOCX parsing and skill extraction
+224b19b - feat(cv): support multiple skill sections and add parser benchmark
+
+Validation completed:
+
+- 8 parser fixtures benchmark
+- Multiple skills section support
+- 256 backend tests passing
+
+Known limitation:
+PyPDF2 still produces corrupted reading order
+for some complex multi-column PDFs.
+
+Example:
+CV Lathan
+
+Status:
+Parser improvement validated.
+Multi-column PDF extraction remains a separate topic.
 
 Last Commits :
 db85e02 - docs(cv): synchronize parsing implementation status

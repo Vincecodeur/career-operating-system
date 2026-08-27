@@ -1535,6 +1535,16 @@ Completed validations:
 - No orphan CV storage files detected
 - Backend non-regression suite validated
 - 255 backend tests passing
+- CV parser benchmark created
+- 8 parser fixtures validated
+- Multi-skill sections support implemented
+- Sidebar CV parsing validated
+- 256 backend tests passing
+
+Known limitation:
+
+- Multi-column PDFs may still produce corrupted text extraction through PyPDF2
+- CV Lathan remains a known unsupported scenario
 
 Next Step:
 7.1.23.8 Profile Creation With Optional CV

@@ -123,6 +123,28 @@ Examples:
 - Cross
 - development
 
+DATA-002.A - Multi-Column PDF Extraction
+
+Status: Backlog
+
+Context:
+PyPDF2 may produce structurally corrupted text
+for complex multi-column CVs.
+
+Example:
+CV Lathan
+
+Potential solutions:
+
+- pdfplumber extraction
+- layout-aware parsing
+- OCR-assisted extraction
+- dedicated PDF zone analysis
+
+Reason deferred:
+Outside current MVP scope.
+Benchmark and parser improvements already validated.
+
 ---
 
 ## DATA-003 - Skill Alias Catalog

@@ -551,3 +551,21 @@ Amélioration V1 :
 - Validation renforcée des noms détectés
 - Gestion explicite des sections PROFIL
 - Séparation des soft skills et hard skills
+
+Validation status:
+
+- Parser benchmark framework implemented
+- 8 parser fixtures validated
+- Standard sidebar CV layouts supported
+- Multiple skills sections supported
+- 256 backend tests passing
+
+Known limitation:
+Complex multi-column PDFs may produce corrupted reading order when extracted through PyPDF2.
+
+Representative example:
+CV Lathan
+
+Current MVP decision:
+Support for complex multi-column PDFs remains partial.
+A dedicated extraction strategy is deferred outside the current MVP scope.
