@@ -19,6 +19,11 @@ type Profile = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  professional_summary: string | null;
+  career_motivations: string | null;
+  preferred_environment: string | null;
+  non_negotiables: string | null;
+  additional_context: string | null;
 };
 
 const profileSchema = z.object({
@@ -34,6 +39,11 @@ const profileSchema = z.object({
   target_role_long_term: z.string().min(1, "Long-term target is required."),
   remote_preference: z.string().min(1, "Remote preference is required."),
   preferred_countries: z.string().min(1, "Preferred countries are required."),
+  professional_summary: z.string().optional(),
+  career_motivations: z.string().optional(),
+  preferred_environment: z.string().optional(),
+  non_negotiables: z.string().optional(),
+  additional_context: z.string().optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -92,6 +102,11 @@ export function EditProfileModal({
       target_role_long_term: "",
       remote_preference: "",
       preferred_countries: "",
+      professional_summary: "",
+      career_motivations: "",
+      preferred_environment: "",
+      non_negotiables: "",
+      additional_context: "",
     },
   });
 
@@ -110,6 +125,11 @@ export function EditProfileModal({
       target_role_long_term: profile.target_role_long_term ?? "",
       remote_preference: profile.remote_preference ?? "",
       preferred_countries: profile.preferred_countries ?? "",
+      professional_summary: profile.professional_summary ?? "",
+      career_motivations: profile.career_motivations ?? "",
+      preferred_environment: profile.preferred_environment ?? "",
+      non_negotiables: profile.non_negotiables ?? "",
+      additional_context: profile.additional_context ?? "",
     });
   }, [profile, reset]);
 
@@ -335,7 +355,73 @@ export function EditProfileModal({
               </p>
             )}
           </div>
+          <div className="border-t border-slate-700 pt-5">
+            <h3 className="mb-4 text-lg font-semibold text-white">
+              Additional Profile Context
+            </h3>
 
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-300">
+                  Professional Summary
+                </label>
+
+                <textarea
+                  {...register("professional_summary")}
+                  rows={3}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-300">
+                  Career Motivations
+                </label>
+
+                <textarea
+                  {...register("career_motivations")}
+                  rows={3}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-300">
+                  Preferred Environment
+                </label>
+
+                <textarea
+                  {...register("preferred_environment")}
+                  rows={3}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-300">
+                  Non-Negotiables
+                </label>
+
+                <textarea
+                  {...register("non_negotiables")}
+                  rows={3}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-300">
+                  Additional Context
+                </label>
+
+                <textarea
+                  {...register("additional_context")}
+                  rows={4}
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                />
+              </div>
+            </div>
+          </div>
           <div className="flex justify-end gap-3 border-t border-slate-700 pt-5">
             <button
               type="button"

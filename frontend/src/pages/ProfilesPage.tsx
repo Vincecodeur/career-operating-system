@@ -87,6 +87,13 @@ type Profile = {
   target_role_long_term: string | null;
   remote_preference: string | null;
   preferred_countries: string | null;
+
+  professional_summary: string | null;
+  career_motivations: string | null;
+  preferred_environment: string | null;
+  non_negotiables: string | null;
+  additional_context: string | null;
+
   is_active: boolean;
   created_at: string;
   updated_at: string;

@@ -14,6 +14,11 @@ type Profile = {
   target_role_long_term: string | null;
   remote_preference: string | null;
   preferred_countries: string | null;
+  professional_summary: string | null;
+  career_motivations: string | null;
+  preferred_environment: string | null;
+  non_negotiables: string | null;
+  additional_context: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -479,7 +484,50 @@ export function ProfileDetail({
           </div>
         </div>
       </div>
+      <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
+        <h3 className="mb-4 text-lg font-semibold text-white">
+          Additional Profile Context
+        </h3>
 
+        <div className="space-y-4">
+          {profile.professional_summary && (
+            <div>
+              <p className="font-medium text-slate-300">Professional Summary</p>
+              <p className="text-slate-400">{profile.professional_summary}</p>
+            </div>
+          )}
+
+          {profile.career_motivations && (
+            <div>
+              <p className="font-medium text-slate-300">Career Motivations</p>
+              <p className="text-slate-400">{profile.career_motivations}</p>
+            </div>
+          )}
+
+          {profile.preferred_environment && (
+            <div>
+              <p className="font-medium text-slate-300">
+                Preferred Environment
+              </p>
+              <p className="text-slate-400">{profile.preferred_environment}</p>
+            </div>
+          )}
+
+          {profile.non_negotiables && (
+            <div>
+              <p className="font-medium text-slate-300">Non-Negotiables</p>
+              <p className="text-slate-400">{profile.non_negotiables}</p>
+            </div>
+          )}
+
+          {profile.additional_context && (
+            <div>
+              <p className="font-medium text-slate-300">Additional Context</p>
+              <p className="text-slate-400">{profile.additional_context}</p>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
