@@ -1014,6 +1014,28 @@ Validation:
 - 10 CV parsing tests passed
 - 255 backend tests passed
 
+✅ 7.1.23.3.3 Parser Benchmark And Sidebar Validation
+
+Validation réalisée :
+
+- benchmark parser créé
+- 8 fixtures CV validées
+- PDF mono-colonne validé
+- PDF sidebar gauche validé
+- PDF sidebar droite validé
+- PDF colonnes partielles validé
+- PDF multipages validé
+- PDF scanné validé
+- DOCX standard validé
+- DOCX tableaux validé
+- support de plusieurs sections skills validé
+- 256 tests backend passants
+
+Décision :
+
+- le parser est considéré stable sur les layouts couverts par le benchmark
+- les PDF multicolonnes complexes restent hors périmètre MVP
+
 ✅ 7.1.23.4 CV Parsing Implementation V1
 Validation réalisée :
 
