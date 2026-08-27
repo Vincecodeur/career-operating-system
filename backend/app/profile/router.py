@@ -25,16 +25,21 @@ def create_profile(
     db: Session = Depends(get_db)
 ):
     new_profile = Profile(
-        profile_name=profile.profile_name,
-        full_name=profile.full_name,
-        current_title=profile.current_title,
-        location=profile.location,
-        years_of_experience=profile.years_of_experience,
-        target_role_short_term=profile.target_role_short_term,
-        target_role_long_term=profile.target_role_long_term,
-        remote_preference=profile.remote_preference,
-        preferred_countries=profile.preferred_countries
-    )
+    profile_name=profile.profile_name,
+    full_name=profile.full_name,
+    current_title=profile.current_title,
+    location=profile.location,
+    years_of_experience=profile.years_of_experience,
+    target_role_short_term=profile.target_role_short_term,
+    target_role_long_term=profile.target_role_long_term,
+    remote_preference=profile.remote_preference,
+    preferred_countries=profile.preferred_countries,
+    professional_summary=profile.professional_summary,
+    career_motivations=profile.career_motivations,
+    preferred_environment=profile.preferred_environment,
+    non_negotiables=profile.non_negotiables,
+    additional_context=profile.additional_context,
+)
 
     db.add(new_profile)
     db.commit()
@@ -102,6 +107,24 @@ def update_profile(
     profile.target_role_long_term = profile_update.target_role_long_term
     profile.remote_preference = profile_update.remote_preference
     profile.preferred_countries = profile_update.preferred_countries
+    profile.professional_summary = (
+    profile_update.professional_summary
+)   
+    profile.career_motivations = (
+        profile_update.career_motivations
+    )
+
+    profile.preferred_environment = (
+        profile_update.preferred_environment
+    )
+
+    profile.non_negotiables = (
+        profile_update.non_negotiables
+    )
+
+    profile.additional_context = (
+        profile_update.additional_context
+    )
 
     db.commit()
     db.refresh(profile)

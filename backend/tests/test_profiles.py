@@ -124,3 +124,66 @@ def test_soft_delete_sets_is_active_false():
     body = delete_response.json()
 
     assert body["is_active"] is False
+    
+    
+def test_profile_additional_context_fields():
+    profile_payload = {
+        "profile_name": "Technical Partnerships",
+        "full_name": "Vincent Gueret",
+        "current_title": "Technical Partnerships Manager",
+        "location": "France",
+        "years_of_experience": 10,
+        "target_role_short_term": "Head of Partnerships",
+        "target_role_long_term": "VP Partnerships",
+        "remote_preference": "HYBRID",
+        "preferred_countries": "FR,UK",
+        "professional_summary": "Partnership and integration specialist.",
+        "career_motivations": "Build strategic partnerships.",
+        "preferred_environment": "International SaaS environment.",
+        "non_negotiables": "Remote flexibility.",
+        "additional_context": "Interested in platform strategy.",
+    }
+
+    create_response = client.post(
+        "/profiles",
+        json=profile_payload,
+    )
+
+    assert create_response.status_code == 200
+
+    created_profile = create_response.json()
+
+    profile_id = created_profile["id"]
+
+    get_response = client.get(
+        f"/profiles/{profile_id}",
+    )
+
+    assert get_response.status_code == 200
+
+    profile = get_response.json()
+
+    assert (
+        profile["professional_summary"]
+        == "Partnership and integration specialist."
+    )
+
+    assert (
+        profile["career_motivations"]
+        == "Build strategic partnerships."
+    )
+
+    assert (
+        profile["preferred_environment"]
+        == "International SaaS environment."
+    )
+
+    assert (
+        profile["non_negotiables"]
+        == "Remote flexibility."
+    )
+
+    assert (
+        profile["additional_context"]
+        == "Interested in platform strategy."
+    )

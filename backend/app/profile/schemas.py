@@ -13,6 +13,11 @@ class ProfileCreate(BaseModel):
     target_role_long_term: str
     remote_preference: str
     preferred_countries: str
+    professional_summary: str | None = None
+    career_motivations: str | None = None
+    preferred_environment: str | None = None
+    non_negotiables: str | None = None
+    additional_context: str | None = None
 
 
 class ProfileUpdate(BaseModel):
@@ -25,6 +30,11 @@ class ProfileUpdate(BaseModel):
     target_role_long_term: str
     remote_preference: str
     preferred_countries: str
+    professional_summary: str | None = None
+    career_motivations: str | None = None
+    preferred_environment: str | None = None
+    non_negotiables: str | None = None
+    additional_context: str | None = None
 
 
 class ProfileResponse(BaseModel):
@@ -41,6 +51,11 @@ class ProfileResponse(BaseModel):
     is_active: bool
     created_at: datetime
     updated_at: datetime
+    professional_summary: str | None = None
+    career_motivations: str | None = None
+    preferred_environment: str | None = None
+    non_negotiables: str | None = None
+    additional_context: str | None = None
 
     model_config = {
         "from_attributes": True

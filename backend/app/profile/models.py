@@ -7,6 +7,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+from sqlalchemy import Text
 
 from app.core.database import Base
 
@@ -64,6 +65,31 @@ class Profile(Base):
     preferred_countries: Mapped[str] = mapped_column(
         String(500),
         nullable=False
+    )
+    
+    professional_summary: Mapped[str | None] = mapped_column(
+    Text,
+    nullable=True,
+    )
+
+    career_motivations: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    preferred_environment: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    non_negotiables: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    additional_context: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     is_active: Mapped[bool] = mapped_column(
