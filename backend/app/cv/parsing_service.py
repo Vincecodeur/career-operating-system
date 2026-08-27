@@ -126,6 +126,10 @@ def parse_cv_text(
 ) -> ParsedCVData:
     normalized_lines = normalize_text_lines(raw_text)
 
+    normalized_lines = merge_split_section_headings(
+        normalized_lines
+    )
+
     return ParsedCVData(
         full_name=detect_full_name(normalized_lines),
         professional_title=detect_professional_title(normalized_lines),
@@ -148,10 +152,12 @@ def parse_cv_text(
                 "core skills",
                 "competencies",
                 "key skills",
-                "compétences",
-                "competences",
-                "compétences clés",
-                "competences cles",
+                "programming languages",
+                "tools & programming languages",
+                "tools and programming languages",
+                "technologies",
+                "technical stack",
+                
             ],
         ),
         languages=extract_list_section(
@@ -184,6 +190,39 @@ def normalize_text_lines(
         for line in raw_text.replace("\r", "\n").split("\n")
         if line.strip()
     ]
+    
+def merge_split_section_headings(
+    lines: list[str],
+) -> list[str]:
+    merged = []
+
+    index = 0
+
+    while index < len(lines):
+        current = lines[index]
+
+        next_line = (
+            lines[index + 1]
+            if index + 1 < len(lines)
+            else None
+        )
+
+        if (
+            next_line
+            and current.lower() == "tools &"
+            and next_line.lower() == "programming languages"
+        ):
+            merged.append(
+                "Tools & Programming Languages"
+            )
+            index += 2
+            continue
+
+        merged.append(current)
+        index += 1
+
+    return merged
+
 
 
 def detect_full_name(
@@ -397,12 +436,14 @@ def merge_known_split_skill_lines(
 
     return merged_lines
 
+
 def extract_section_lines(
     lines: list[str],
     section_names: list[str],
 ) -> list[str]:
     normalized_section_names = {
-        section_name.lower()
+        normalize_heading(section_name,
+        )
         for section_name in section_names
     }
 
@@ -410,17 +451,25 @@ def extract_section_lines(
     inside_section = False
 
     for line in lines:
-        normalized_line = normalize_heading(line)
+        normalized_line = normalize_heading(
+            line,
+        )
 
         if normalized_line in normalized_section_names:
             inside_section = True
             continue
 
-        if inside_section and is_section_heading(line):
-            break
+        if (
+            inside_section
+            and is_section_heading(line)
+        ):
+            inside_section = False
+            continue
 
         if inside_section:
-            collected_lines.append(line)
+            collected_lines.append(
+                line,
+            )
 
     return collected_lines
 

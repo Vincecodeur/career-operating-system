@@ -1,0 +1,87 @@
+{
+  "purpose": "Synthetic CV parser regression fixtures. All names and contact details are fictional.",
+  "expected_profile": {
+    "full_name": "Alex Martin",
+    "professional_title": "Software Engineer",
+    "summary": "Software engineer with five years of experience building reliable web applications and APIs.",
+    "skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "React",
+      "Docker",
+      "SQL"
+    ],
+    "languages": [
+      "French: Native",
+      "English: Professional"
+    ],
+    "certifications": [
+      "Microsoft Azure Fundamentals"
+    ],
+    "experiences": [
+      {
+        "title": "Software Engineer at Northwind Labs",
+        "description": "Built REST APIs, automated tests and deployment pipelines."
+      },
+      {
+        "title": "Web Developer at Contoso Studio",
+        "description": "Developed React interfaces and PostgreSQL-backed services."
+      }
+    ]
+  },
+  "fixtures": [
+    {
+      "file": "01_pdf_single_column.pdf",
+      "case": "machine-generated PDF, one column",
+      "expected": "standard sections parsed"
+    },
+    {
+      "file": "02_pdf_two_columns_left_sidebar.pdf",
+      "case": "machine-generated PDF, left sidebar",
+      "expected": "sidebar skills/languages separated from main profile/experience"
+    },
+    {
+      "file": "03_pdf_two_columns_right_sidebar.pdf",
+      "case": "machine-generated PDF, right sidebar",
+      "expected": "column detection must not assume sidebar side"
+    },
+    {
+      "file": "04_pdf_partial_columns.pdf",
+      "case": "header and experience full-width, middle section two-column",
+      "expected": "page layout varies vertically"
+    },
+    {
+      "file": "05_pdf_multipage_mixed_layout.pdf",
+      "case": "page 1 one-column, page 2 two-column",
+      "expected": "layout decision per page"
+    },
+    {
+      "file": "06_pdf_image_only_scanned.pdf",
+      "case": "image-only scanned PDF",
+      "expected": "no text or explicit OCR-required outcome"
+    },
+    {
+      "file": "07_docx_standard.docx",
+      "case": "standard DOCX paragraphs",
+      "expected": "existing DOCX flow remains correct"
+    },
+    {
+      "file": "08_docx_tables.docx",
+      "case": "DOCX content in tables",
+      "expected": "table reading order remains correct"
+    }
+  ],
+  "acceptance_rules": {
+    "must_never_auto_accept": "All extracted values remain user-reviewed enrichment proposals.",
+    "no_cross_section_pollution": [
+      "programming skills not languages",
+      "dates not skills/languages",
+      "candidate name not skills/languages"
+    ],
+    "non_regression": [
+      "all existing parser tests",
+      "full backend pytest suite"
+    ]
+  }
+}

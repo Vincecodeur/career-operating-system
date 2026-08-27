@@ -8,6 +8,8 @@ from app.cv.parsing_service import extract_text_from_docx
 from app.cv.parsing_service import CVParsingError
 from app.cv.parsing_service import extract_text_from_cv
 from app.cv.parsing_service import parse_cv_text
+from app.cv.parsing_service import extract_section_lines
+from app.cv.parsing_service import normalize_text_lines
 
 
 def test_parse_cv_text_extracts_basic_profile_information():
@@ -274,3 +276,49 @@ English: Professional
     assert parsed_cv.summary is None
     assert parsed_cv.certifications == []
     assert parsed_cv.experiences == []
+    
+    
+
+    
+def test_extract_section_lines_collects_multiple_matching_sections():
+    lines = normalize_text_lines(
+        """
+Alex Martin
+Software Engineer
+
+COMPETENCIES
+API design
+Database modelling
+
+PROFESSIONAL EXPERIENCE
+Software Engineer at Northwind Labs
+
+TOOLS &
+PROGRAMMING LANGUAGES
+Python
+FastAPI
+PostgreSQL
+
+LANGUAGES
+French: Native
+"""
+    )
+
+    skill_lines = extract_section_lines(
+        lines,
+        section_names=[
+            "skills",
+            "technical skills",
+            "competencies",
+            "programming languages",
+            "tools & programming languages",
+        ],
+    )
+
+    assert skill_lines == [
+        "API design",
+        "Database modelling",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+    ]

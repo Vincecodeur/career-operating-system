@@ -1,0 +1,84 @@
+{
+  "results": [
+    {
+      "file": "01_pdf_single_column.pdf",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    },
+    {
+      "file": "02_pdf_two_columns_left_sidebar.pdf",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    },
+    {
+      "file": "03_pdf_two_columns_right_sidebar.pdf",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    },
+    {
+      "file": "04_pdf_partial_columns.pdf",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    },
+    {
+      "file": "05_pdf_multipage_mixed_layout.pdf",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    },
+    {
+      "file": "06_pdf_image_only_scanned.pdf",
+      "score": 0,
+      "checks": {
+        "name": false,
+        "skills": 0,
+        "languages": 0,
+        "experiences": 0
+      }
+    },
+    {
+      "file": "07_docx_standard.docx",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    },
+    {
+      "file": "08_docx_tables.docx",
+      "score": 4,
+      "checks": {
+        "name": true,
+        "skills": 6,
+        "languages": 2,
+        "experiences": 3
+      }
+    }
+  ]
+}

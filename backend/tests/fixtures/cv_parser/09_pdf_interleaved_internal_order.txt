@@ -1,0 +1,37 @@
+OUTILS &
+LANGAGES DE
+PROGRAMMATIONEXPERIENCES PROFESSIONNELLES
+FORMATIONCONTACT
+
+07 67 22 79 83
+alex@example.test
+
+QUALITÉS &
+LANGUES
+
+Curieux
+Organisé
+Analytique
+Créatif
+Minutieux
+Collaboratif
+
+Python
+PHP
+C
+C++
+HTML
+Java
+CSS
+SQL
+
+Français : bilingue
+Anglais : courant
+Tamoul : bilingue
+
+COMPETENCES
+
+API design
+Database modelling
+Automated testing
+Cloud deployment
