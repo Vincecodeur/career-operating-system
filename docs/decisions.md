@@ -230,6 +230,18 @@ via un système de migrations.
 Alembic sera introduit lorsque le modèle métier
 commencera à évoluer régulièrement.
 
+Implementation Follow-Up
+
+The threshold described by this decision has now been reached.
+
+Several schema evolutions have required explicit PostgreSQL changes.
+
+Current rule:
+
+- Base.metadata.create_all() must not be treated as a migration mechanism
+- every model change affecting an existing table requires an explicit schema update
+- Alembic introduction must be evaluated before the next schema evolution
+
 ---
 
 # DEC-020
@@ -4756,6 +4768,39 @@ This information:
 
 The profile remains the source of truth.
 
+### Implementation Status
+
+Completed
+
+Implemented:
+
+- professional_summary
+- career_motivations
+- preferred_environment
+- non_negotiables
+- additional_context
+
+Storage:
+
+- fields stored directly on Profile
+- nullable TEXT columns
+- PostgreSQL persistence validated
+- no separate table introduced
+
+Validation:
+
+- Create Profile validated
+- Edit Profile validated
+- Profile Detail display validated
+- frontend production build passed
+- 8 Profile tests passed
+- 257 backend tests passed
+
+Technical commits:
+
+- 7e787ff
+- 63d956e
+
 ### Related Decisions
 
 DEC-035
@@ -4869,22 +4914,37 @@ Aucune modification de base de données n'est prévue pour la V1.
 
 Implementation Status
 
-Completed
+Completed with known limitation
 
-Commit:
-c574ea9
+Technical commits:
+
+- c574ea9
+- 224b19b
 
 Implemented:
 
 - DOCX table extraction
-- Reading order preservation
+- Reading order preservation for covered DOCX layouts
 - PROFIL heading support
 - Hard skills / soft skills separation
 - Improved heading detection
 - Acronym-safe parsing
 - Split skill line merging
+- Multiple skills section collection
+- Parser benchmark framework
+- Regression fixtures for supported layouts
 
 Validation:
 
-- 10 targeted parsing tests passed
-- 255 backend tests passed
+- 11 targeted CV parsing tests passed after benchmark hardening
+- 8 benchmark document fixtures validated
+- 256 backend tests passed at completion of parser hardening
+
+Known limitation:
+
+- complex multi-column PDFs may produce structurally corrupted reading order through PyPDF2
+- CV Lathan remains the reference failing scenario
+
+Follow-up decision:
+
+- a dedicated complex multi-column PDF extraction phase is required before AI Career Advisor integration

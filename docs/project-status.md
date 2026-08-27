@@ -24,7 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-7.1.23.8 Profile Creation With Optional CV
+7.1.23.10 Complex Multi-Column PDF Extraction
 
 Next Planned Milestone
 7.1.23 MVP Experience Review
@@ -1438,13 +1438,16 @@ Post-MVP Planning
 - Validation backend réalisée
 - 255 tests backend passants
 
-Validation:
-
-- Targeted tests: 10 passed
-- Full backend suite: 255 passed
-
-Commit:
-c574ea9
+- Profile Creation With Optional CV completed
+- Additional Profile Context completed
+- Professional Summary implemented
+- Career Motivations implemented
+- Preferred Environment implemented
+- Non-Negotiables implemented
+- Additional Context implemented
+- Additional Profile Context frontend validation completed
+- Backend non-regression suite validated
+- 257 backend tests passing
 
 ---
 
@@ -1455,8 +1458,29 @@ Aucun
 ---
 
 Phase In Progress
+7.1.23.10 Complex Multi-Column PDF Extraction
 
-7.1.23.8 Profile Creation With Optional CV
+Objective:
+Resolve or explicitly constrain complex multi-column PDF extraction before AI Career Advisor integration.
+
+Reference case:
+
+- CV Lathan
+
+Known cause:
+
+- PyPDF2 may return structurally corrupted reading order before CV parsing
+
+Prerequisites completed:
+
+- Profile Creation With Optional CV completed
+- Additional Profile Context completed
+- Additional Profile Context persisted in PostgreSQL
+- Frontend creation, editing and display validated
+- Frontend production build validated
+- 257 backend tests passing
+
+---
 
 Job Discovery Settings Progress
 
@@ -1482,12 +1506,15 @@ Phase Status:
 
 Next Step:
 
-7.1.23.8.1 Repository Audit And Product Design
+7.1.23.10.1 Repository Audit And Extraction Strategy
 
 ---
 
-Last Decision
-DEC-073 - Profile Creation With Optional CV
+Last Decisions
+
+- DEC-073 - Profile Creation With Optional CV
+- DEC-074 - Additional Profile Context
+- DEC-077 - CV Parsing Improvement Strategy
 
 Décisions récemment validées :
 
@@ -1511,44 +1538,36 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.8 Profile Creation With Optional CV
+7.1.23.10 Complex Multi-Column PDF Extraction
 
 Status:
 Ready To Start
 
-Completed validations:
+Latest completed phases:
 
-- Test database isolation validated
-- career_os protected from pytest
-- career_os_test used by pytest
-- CV parsing data quality audit completed
-- PDF standard parsing validated
-- PDF multicolumn limitation documented
-- DOCX standard parsing validated
-- DOCX table extraction validated
-- French PROFIL heading validated
-- Hard Skills / Soft Skills boundary validated
-- Technical acronym handling validated
-- Temporary CV validation profiles removed
-- Invalid enrichment data removed from the Cloud profile
-- Invalid orphan reference-data entries removed
-- No orphan CV storage files detected
-- Backend non-regression suite validated
-- 255 backend tests passing
-- CV parser benchmark created
-- 8 parser fixtures validated
-- Multi-skill sections support implemented
-- Sidebar CV parsing validated
-- 256 backend tests passing
+- 7.1.23.8 Profile Creation With Optional CV
+- 7.1.23.9 Additional Profile Context
 
-Known limitation:
+Latest validation:
 
-- Multi-column PDFs may still produce corrupted text extraction through PyPDF2
-- CV Lathan remains a known unsupported scenario
+- Optional CV workflow validated
+- Additional Profile Context creation validated
+- Additional Profile Context editing validated
+- Additional Profile Context persistence validated in PostgreSQL
+- Additional Profile Context display validated
+- Frontend production build validated
+- 8 Profile tests passing
+- 257 backend tests passing
+
+Known blocking prerequisite before AI Career Advisor:
+
+- Complex multi-column PDF extraction must be addressed
+- CV Lathan remains the reference failing scenario
 
 Next Step:
-7.1.23.8 Profile Creation With Optional CV
+7.1.23.10.1 Repository Audit And Extraction Strategy
 
-Last Commits :  
-db85e02 - docs(cv): synchronize parsing implementation status
-c574ea9 - feat(cv): improve DOCX parsing and skill extraction
+Last Commits :
+
+- 63d956e - feat(profile): add additional profile context support
+- 7e787ff - feat(profile): add additional profile context support

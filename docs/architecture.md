@@ -102,6 +102,29 @@ Purpose:
 - Non-Negotiables
 - Additional Context
 
+Implementation Status:
+Completed
+
+Stored directly on Profile.
+
+Fields:
+
+- professional_summary
+- career_motivations
+- preferred_environment
+- non_negotiables
+- additional_context
+
+No impact on matching.
+No impact on scoring.
+Prepared for future AI Context phases.
+
+Database status:
+
+- five nullable TEXT columns added to the profiles table
+- PostgreSQL persistence validated
+- no separate domain table introduced
+
 ### Search Criteria
 
 Gestion des critères de recherche d'opportunités.
@@ -566,6 +589,14 @@ Complex multi-column PDFs may produce corrupted reading order when extracted thr
 Representative example:
 CV Lathan
 
-Current MVP decision:
+Current decision:
 Support for complex multi-column PDFs remains partial.
-A dedicated extraction strategy is deferred outside the current MVP scope.
+
+A dedicated extraction phase must be completed before AI Career Advisor integration.
+
+Reference failing scenario:
+
+- CV Lathan
+
+AI safety boundary:
+Profile data produced by a known failed extraction must not be treated as reliable AI context.

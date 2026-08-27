@@ -182,6 +182,12 @@ React consomme les APIs FastAPI et affiche les résultats.
 Implémenté :
 
 - Profile
+- Additional Profile Context fields
+- Professional Summary persistence
+- Career Motivations persistence
+- Preferred Environment persistence
+- Non-Negotiables persistence
+- Additional Context persistence
 - Skill
 - ProfileSkill
 - WorkExperience
@@ -403,6 +409,10 @@ Implémenté :
 - CreateProfileModal
 - Profile Create
 - Frontend Profile Creation
+- Profile Creation With Optional CV
+- Additional Profile Context creation fields
+- Additional Profile Context editing fields
+- Additional Profile Context detail display
 - AddProfileSkillModal
 - EditProfileSkillModal
 - DeleteProfileSkillDialog
@@ -547,6 +557,7 @@ Des tests existent pour :
 
 - health
 - profiles
+- profile additional context persistence
 - skills
 - job offers
 - matching
@@ -1095,67 +1106,60 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-Latest completed milestone
-
-7.1.23.7 Enrichment Summary Consistency
-
-Completed:
-
-- CV Parsing Regression Validation
-- Existing Data Cleanup
-- Enrichment Summary Consistency
-- Temporary validation profiles removed
-- Demo dataset restored to four business profiles
-- Invalid Cloud profile language associations removed
-- Invalid CV 822 enrichment proposals removed
-- Invalid orphan language catalog entries removed
-- Invalid "17/01/2022" skill removed
-- CV 822 preserved
-- No orphan CV storage files detected
-
-Validation:
-
-- 10 targeted CV parsing tests passed
-- 255 backend tests passed
-- Production data cleanup validated
-- Enrichment consistency cleanup validated
-
-Latest technical commit:
-224b19b - feat(cv): support multiple skill sections and add parser benchmark
-
-Validation completed:
-
-- 8 parser fixtures benchmark
-- Multiple skills section support
-- 256 backend tests passing
-
-Known limitation:
-PyPDF2 still produces corrupted reading order
-for some complex multi-column PDFs.
-
-Example:
-CV Lathan
-
-Status:
-Parser improvement validated.
-Multi-column PDF extraction remains a separate topic.
-
-Last Commits :
-db85e02 - docs(cv): synchronize parsing implementation status
-c574ea9 - feat(cv): improve DOCX parsing and skill extraction
-
-Next recommended phase:
+Latest completed milestones
 
 7.1.23.8 Profile Creation With Optional CV
 
-Decision already accepted:
+Completed:
 
-DEC-073 Profile Creation With Optional CV
+- Optional CV choice added to profile creation
+- Profile created before opening the CV workflow
+- Upload CV Wizard opened after profile creation when requested
+- Profile remains created when the CV workflow is cancelled
+- Functional frontend validation completed
+
+  7.1.23.9 Additional Profile Context
+
+Completed:
+
+- Professional Summary implemented
+- Career Motivations implemented
+- Preferred Environment implemented
+- Non-Negotiables implemented
+- Additional Context implemented
+- fields stored directly on Profile
+- PostgreSQL schema updated
+- profile creation validated
+- profile editing validated
+- Profile Detail display validated
+
+Latest technical commits:
+
+- 63d956e - feat(profile): add additional profile context support
+- 7e787ff - feat(profile): add additional profile context support
+
+Latest validation:
+
+- frontend production build passed
+- 8 Profile tests passed
+- 257 backend tests passed
+- PostgreSQL persistence validated
+- working tree clean after technical commits
+
+Known prerequisite before AI Career Advisor:
+
+- complex multi-column PDF extraction remains unresolved
+- CV Lathan remains the reference failing scenario
+- this issue must be addressed before AI Career Advisor integration
+
+Next recommended phase:
+7.1.23.10 Complex Multi-Column PDF Extraction
 
 Required starting sequence:
 
 - Repository audit
-- Product design validation
+- Extraction strategy design
+- Reproducible Lathan regression fixture or authorized test case
 - Technical design
 - Implementation plan
 - Code and tests only after design validation

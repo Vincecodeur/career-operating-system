@@ -122,7 +122,7 @@ Comparer profil et offres.
 ✅ 5.6.4 Application Tests
 ✅ 5.6.5.1 Application Tracker Component
 ✅ 5.6.5.2 Dashboard Integration
-⏳ 5.6.5.3 Frontend Validation & Documentation
+✅ 5.6.5.3 Frontend Validation & Documentation
 
 ---
 
@@ -196,7 +196,7 @@ Sous-phases :
 - ✅ 5.8.4 Authentication Flow
 - ✅ 5.8.5 App Layout
 - ✅ 5.8.6 Sidebar & Header
-- ⏳ 5.8.7 Dashboard Migration & Design System Foundation
+- ✅ 5.8.7 Dashboard Migration & Design System Foundation
   - ✅ 5.8.7.1 Dashboard Overview
   - ✅ 5.8.7.5.0 Design System Document
   - ✅ 5.8.7.5.1 Tailwind CSS Installation
@@ -249,7 +249,7 @@ Sous-phases :
 - ✅ 5.9.6 Scheduled Synchronization
 - ✅ 5.9.6.1 France Travail End-to-End Validation
 
-- ⏳ 5.9.7 Job Discovery Visualization
+- ✅ 5.9.7 Job Discovery Visualization
 
 - ✅ 5.9.7.1 Opportunities List
 - ✅ 5.9.7.2 Opportunity Details
@@ -257,7 +257,7 @@ Sous-phases :
 - ✅ 5.9.7.4 End-to-End Validation
 
 Statut :
-In Progress
+Completed
 
 ### Phase 6.0
 
@@ -286,7 +286,7 @@ Sous-phases :
 - ✅ 6.0.7 Opportunity Analysis Frontend Validation
 
 Statut :
-In Progress
+Completed
 
 ### Phase 6.1
 
@@ -680,7 +680,7 @@ Principes :
 ✅ 7.1.18.12 Documentation Synchronization
 
 ✅ 7.1.19 Settings Management
-⏳ 7.1.19.1 Job Discovery Settings
+✅ 7.1.19.1 Job Discovery Settings
 
 Livrables :
 
@@ -856,7 +856,7 @@ Validation réalisée :
 ✅ 7.1.21.8 Functional Validation
 ✅ 7.1.21.9 Documentation Synchronization
 
-⏳ 7.1.22 Multi Profile Opportunity Context
+✅ 7.1.22 Multi Profile Opportunity Context
 
 Objectif :
 Plusieurs profils peuvent être activés simultanément.
@@ -954,7 +954,7 @@ Validation réalisée :
 
 ✅ 7.1.22.14 Documentation Synchronization
 
-⬜ 7.1.23 MVP Experience Review
+⏳ 7.1.23 MVP Experience Review
 
 ✅ 7.1.23.1 Test Database Isolation
 ✅ 7.1.23.2 CV Parsing Data Quality
@@ -1034,7 +1034,9 @@ Validation réalisée :
 Décision :
 
 - le parser est considéré stable sur les layouts couverts par le benchmark
-- les PDF multicolonnes complexes restent hors périmètre MVP
+- les PDF multicolonnes complexes ne sont pas couverts par cette étape
+- leur traitement est déplacé vers la phase 7.1.23.10 Complex Multi-Column PDF Extraction
+- cette phase doit être réalisée avant l’intégration de l’AI Career Advisor
 
 ✅ 7.1.23.4 CV Parsing Implementation V1
 Validation réalisée :
@@ -1089,17 +1091,68 @@ Validation réalisée :
 - CV 822 conservé ;
 - 255 tests backend passants.
 
-⏳ 7.1.23.8 Profile Creation With Optional CV
-⬜ 7.1.23.9 Additional Profile Context
-⬜ 7.1.23.10 AI Context Contract
-⬜ 7.1.23.11 AI Context Preview And Consent
-⬜ 7.1.23.12 AI Readiness Validation
-⬜ 7.1.23.13 Login UX Polish
-⬜ 7.1.23.14 Minimal Account UX Polish
-⬜ 7.1.23.15 Settings Strategy Synchronization
-⬜ 7.1.23.16 Best Profile Recommendation Architecture Review
-⬜ 7.1.23.17 Final Regression And Documentation
-⬜ 7.1.23.18 MVP Closure Decision
+✅ 7.1.23.8 Profile Creation With Optional CV
+
+Validation réalisée :
+
+- workflow Create Profile validé
+- option Continue With CV validée
+- Upload CV Wizard lancé automatiquement
+- profile créé même si le workflow CV est interrompu
+- frontend validation réalisée
+
+✅ 7.1.23.9 Additional Profile Context
+
+Validation réalisée :
+
+- Professional Summary implémenté
+- Career Motivations implémenté
+- Preferred Environment implémenté
+- Non-Negotiables implémenté
+- Additional Context implémenté
+- persistance PostgreSQL validée
+- création de profil validée
+- édition de profil validée
+- affichage dans Profile Detail validé
+- frontend build validé
+- 257 tests backend passants
+- commits techniques 7e787ff et 63d956e
+
+⏳ 7.1.23.10 Complex Multi-Column PDF Extraction
+
+Objectif :
+Résoudre ou encadrer techniquement la corruption de l’ordre de lecture des PDF multicolonnes complexes avant l’intégration de l’AI Career Advisor.
+
+Cas de référence :
+
+- CV Lathan
+
+Cause racine connue :
+
+- PyPDF2 peut produire un texte structurellement corrompu avant le parsing
+- le parser métier ne peut pas reconstruire de manière fiable un texte dont l’ordre de lecture est déjà dégradé
+
+Critères de fin :
+
+- stratégie d’extraction documentée
+- cas Lathan couvert par un test reproductible
+- résultat du cas Lathan validé fonctionnellement
+- benchmark CV existant sans régression
+- suite backend complète passante
+- décision explicite si certaines structures PDF restent non supportées
+
+Principe :
+Aucune donnée issue d’un PDF connu comme incorrectement extrait ne doit être transmise à la future couche AI Career Advisor.
+
+⬜ 7.1.23.11 AI Context Contract
+⬜ 7.1.23.12 AI Context Preview And Consent
+⬜ 7.1.23.13 AI Readiness Validation
+⬜ 7.1.23.14 Login UX Polish
+⬜ 7.1.23.15 Minimal Account UX Polish
+⬜ 7.1.23.16 Settings Strategy Synchronization
+⬜ 7.1.23.17 Best Profile Recommendation Architecture Review
+⬜ 7.1.23.18 Final Regression And Documentation
+⬜ 7.1.23.19 MVP Closure Decision
 
 Statut :
 

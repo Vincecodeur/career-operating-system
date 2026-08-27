@@ -1,7 +1,7 @@
 # Career Operating System - Post MVP Backlog
 
 Status: Draft
-Last Updated: 2026-08-20
+Last Updated: 2026-08-27
 
 ## Purpose
 
@@ -123,27 +123,14 @@ Examples:
 - Cross
 - development
 
-DATA-002.A - Multi-Column PDF Extraction
+Multi-column PDF extraction is no longer tracked as a post-MVP item.
 
-Status: Backlog
+Moved to:
 
-Context:
-PyPDF2 may produce structurally corrupted text
-for complex multi-column CVs.
+- 7.1.23.10 Complex Multi-Column PDF Extraction
 
-Example:
-CV Lathan
-
-Potential solutions:
-
-- pdfplumber extraction
-- layout-aware parsing
-- OCR-assisted extraction
-- dedicated PDF zone analysis
-
-Reason deferred:
-Outside current MVP scope.
-Benchmark and parser improvements already validated.
+Reason:
+The issue must be addressed before AI Career Advisor integration because known corrupted extraction results must not enter the AI context.
 
 ---
 
