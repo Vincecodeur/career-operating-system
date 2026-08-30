@@ -24,10 +24,13 @@ Current Milestone
 ---
 
 Current Phase
-7.1.23.11 AI Context Contract
+7.1.23.12 AI Context Preview And Consent
+
+Current Step
+Frontend Implementation
 
 Next Planned Milestone
-7.1.23.11 AI Context Contract
+7.1.23.13 AI Readiness Validation
 
 ---
 
@@ -1449,7 +1452,9 @@ Post-MVP Planning
 - Backend non-regression suite validated
 - 257 backend tests passing
 
----
+- Phase 7.1.23.11 AI Context Contract terminée
+- docs/ai-context-contract-design.md créé
+- ***
 
 Blocked
 
@@ -1502,7 +1507,7 @@ Phase Status:
 
 Next Step:
 
-7.1.23.11 AI Context Contract
+7.1.23.12 AI Context Preview And Consent
 
 ---
 
@@ -1534,10 +1539,10 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.11 AI Context Contract
+7.1.23.12 AI Context Preview And Consent
 
 Status:
-Ready To Start
+Backend Completed
 
 Latest completed phases:
 
@@ -1567,9 +1572,8 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-7.1.23.11 AI Context Contract
+7.1.23.12 Frontend Implementation
 
 Last Commits :
 
-- 63d956e - feat(profile): add additional profile context support
-- 7e787ff - feat(profile): add additional profile context support
+- 2cc84d3 - feat(ai): add AI context preview, readiness and consent backend

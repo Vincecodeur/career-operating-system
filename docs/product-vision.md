@@ -194,13 +194,37 @@ Le système doit être capable de répondre clairement aux questions suivantes :
 
 ## Career Source of Truth
 
-Le système considère comme source de vérité carrière :
+Le profil structuré enregistré dans l’application constitue la source de vérité carrière principale.
 
-- le profil structuré ;
-- les CV associés ;
-- l'historique des candidatures.
+Les informations peuvent provenir de plusieurs sources :
 
-Toutes les fonctionnalités IA doivent s'appuyer sur cette base avant de produire des recommandations.
+- CV associés ;
+- informations saisies manuellement ;
+- analyses Copilot ;
+- autres sources futures.
+
+Ces sources servent uniquement à enrichir le profil structuré.
+
+Les CV associés et l’historique des candidatures font partie du contexte carrière général, mais ne sont pas automatiquement transmis aux fonctionnalités d’intelligence artificielle.
+
+Pour les fonctionnalités IA du MVP :
+
+- seules les données validées du profil structuré peuvent être utilisées ;
+- le fichier CV ne doit pas être transmis ;
+- le texte brut extrait d’un CV ne doit pas être transmis ;
+- les propositions d’enrichissement non validées ne doivent pas être transmises ;
+- l’historique des candidatures ne doit pas être transmis ;
+- les secrets et données techniques ne doivent jamais être transmis ;
+- le consentement explicite de l’utilisateur est obligatoire ;
+- le profil doit être AI Ready avant qu’un appel IA soit autorisé.
+
+L’autorisation finale d’un appel IA repose sur trois conditions simultanées :
+
+AI Ready
+AND
+AI Features Enabled
+AND
+AI Consent Accepted
 
 ---
 

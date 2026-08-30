@@ -4974,3 +4974,174 @@ Known remaining improvements:
 
 - DATA-001 Advanced Skill Normalization
 - Experience Extraction Refinement
+
+## DEC-078 - AI Context Preview And Consent
+
+Date: 2026-08-30
+Status: Accepted
+
+### Context
+
+The Career Operating System requires a controlled boundary before future AI Career Advisor features can use structured profile information.
+
+DEC-075 established that future AI services must rely on an explicit context contract.
+
+DEC-076 established that AI Readiness must be deterministic and explain missing and available information.
+
+The system also requires:
+
+- explicit user consent ;
+- disabled-by-default AI features ;
+- a preview of available context categories ;
+- explicit exclusions ;
+- backend-controlled authorization.
+
+### Decision
+
+The system introduces a backend AI Context capability separated from AI Explanation.
+
+The implementation uses:
+
+- AIContextPreviewResponse ;
+- AIContextService ;
+- a dedicated AI Context router ;
+- AI settings persisted through ApplicationSetting.
+
+### AI Readiness
+
+AI Readiness uses STRICT mode.
+
+A profile is AI Ready only if it contains:
+
+- Current Title ;
+- at least one Hard Skill ;
+- at least one Work Experience ;
+- at least one Language ;
+- Professional Summary ;
+- Career Motivations ;
+- Preferred Environment ;
+- Non-Negotiables ;
+- Additional Context.
+
+The following elements are optional:
+
+- Soft Skills ;
+- Certifications ;
+- CV.
+
+CV presence does not participate in AI Readiness.
+
+Applications do not participate in AI Readiness.
+
+### AI Settings
+
+The following settings are persisted:
+
+- ai_features_enabled ;
+- ai_consent_accepted.
+
+Default values:
+
+- ai_features_enabled = false ;
+- ai_consent_accepted = false.
+
+Valid states:
+
+- false / false ;
+- true / true.
+
+AI features cannot be enabled without accepted consent.
+
+Disabling AI features also revokes consent in the MVP contract.
+
+No new database table is introduced.
+
+### AI Call Authorization
+
+The backend calculates:
+
+ai_call_allowed =
+is_ai_ready
+AND
+ai_features_enabled
+AND
+ai_consent_accepted
+
+The frontend must not independently redefine this rule.
+
+### API
+
+Implemented endpoints:
+
+- GET /settings/ai ;
+- PUT /settings/ai ;
+- GET /profiles/{profile_id}/ai-context-preview.
+
+### Excluded Categories
+
+The preview always declares the following exclusions:
+
+- RAW_CV ;
+- UNVALIDATED_ENRICHMENT ;
+- APPLICATION_HISTORY ;
+- TECHNICAL_SECRETS.
+
+The preview endpoint does not return:
+
+- raw CV content ;
+- extracted CV text ;
+- enrichment proposals ;
+- application history ;
+- credentials ;
+- prompts ;
+- secrets.
+
+### Separation Of Responsibilities
+
+AIExplanationService remains responsible for AI explanations.
+
+AIContextService is responsible for:
+
+- loading structured Profile information ;
+- calculating AI Readiness ;
+- determining available categories ;
+- determining missing optional categories ;
+- applying exclusions ;
+- calculating ai_call_allowed.
+
+SettingsService remains responsible for AI settings persistence.
+
+### Validation
+
+Backend validation completed:
+
+- AI Context router tests passed ;
+- AI Context service tests passed ;
+- AI Settings tests passed ;
+- 59 AI tests passed ;
+- 304 backend tests passed ;
+- application import validated ;
+- git diff validation passed.
+
+Technical commit:
+
+2cc84d3 - feat(ai): add AI context preview, readiness and consent backend
+
+### Remaining Work
+
+The following frontend work remains required before closing phase 7.1.23.12:
+
+- AI Settings API integration ;
+- consent confirmation dialog ;
+- AI Features section in Settings ;
+- AI Context Readiness card in Profile Detail ;
+- frontend build validation ;
+- functional validation.
+
+### Related Decisions
+
+- DEC-035 - Structured Profile Source Of Truth
+- DEC-067 - Settings Persistence Strategy
+- DEC-074 - Additional Profile Context
+- DEC-075 - AI Context Contract
+- DEC-076 - AI Readiness Validation

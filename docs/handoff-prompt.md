@@ -303,6 +303,18 @@ Implémenté :
 - CV Parsing Improvement Strategy documented
 - DOCX table limitation resolved
 - PDF multi-column limitation identified
+- AI Context Contract
+- AIContextPreviewResponse
+- AIContextService
+- AI Context Router
+- STRICT AI Readiness
+- AI Settings persistence
+- AI Features disabled by default
+- AI Consent validation
+- AI Call Authorization
+- GET /settings/ai
+- PUT /settings/ai
+- GET /profiles/{profile_id}/ai-context-preview
 
 Partiellement implémenté :
 
@@ -602,6 +614,9 @@ Des tests existent pour :
 - profile certifications
 - cvs
 - profile enrichment
+- AI Context Service
+- AI Context Router
+- AI Settings
 
 ## Phases terminées
 
@@ -1106,80 +1121,56 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-Latest completed milestones
+#### Phase suivante recommandée
 
-7.1.23.8 Profile Creation With Optional CV
+Latest technical commit:
 
-Completed:
+2cc84d3 - feat(ai): add AI context preview, readiness and consent backend
 
-- Optional CV choice added to profile creation
-- Profile created before opening the CV workflow
-- Upload CV Wizard opened after profile creation when requested
-- Profile remains created when the CV workflow is cancelled
-- Functional frontend validation completed
+Latest backend validation:
 
-  7.1.23.9 Additional Profile Context
+- AI Context Router: 8 tests passed
+- AI Context Service: 14 tests passed
+- AI Settings: 8 tests passed
+- AI suite: 59 tests passed
+- complete backend suite: 304 tests passed
+- FastAPI application import validated
+- git diff --check validated
 
-Completed:
+Current phase:
 
-- Professional Summary implemented
-- Career Motivations implemented
-- Preferred Environment implemented
-- Non-Negotiables implemented
-- Additional Context implemented
-- fields stored directly on Profile
-- PostgreSQL schema updated
-- profile creation validated
-- profile editing validated
-- Profile Detail display validated
+7.1.23.12 AI Context Preview And Consent
 
-Latest technical commits:
+Current state:
 
-- 63d956e - feat(profile): add additional profile context support
-- 7e787ff - feat(profile): add additional profile context support
+- AI Context Contract completed
+- backend implementation completed
+- backend tests completed
+- technical commit pushed
+- documentation synchronization in progress
+- frontend implementation not started
 
-Latest validation:
+Next required step:
 
-- frontend production build passed
-- 8 Profile tests passed
-- 257 backend tests passed
-- PostgreSQL persistence validated
-- working tree clean after technical commits
+7.1.23.12 Frontend Repository Audit And Implementation
 
-Latest completed milestone:
-7.1.23.10 Complex Multi-Column PDF Extraction
+Required frontend targets:
 
-Completed:
+- frontend/src/services/api.ts
+- frontend/src/pages/ProfilesPage.tsx
+- frontend/src/components/ProfileDetail.tsx
+- frontend/src/pages/SettingsPage.tsx
+- frontend/src/components/AIContextReadinessCard.tsx
+- frontend/src/components/AIConsentDialog.tsx
 
-- multi-engine extraction strategy
-- pdfplumber integration
-- French heading support improvements
-- identity reconstruction improvements
-- language extraction improvements
-- experience reconstruction improvements
+Do not start phase 7.1.23.13 before:
 
-Validation:
-
-- real Lathan CV validated
-- CV 1070 validated
-- 274 backend tests passed
-
-Known remaining improvements:
-
-- skill normalization refinement
-- experience metadata enrichment
-
-Next recommended phase:
-7.1.23.11 AI Context Contract
-
-Required starting sequence:
-
-- Repository audit
-- Existing AI domain review
-- AI context contract design
-- Backend contract design
-- Validation criteria definition
-- Code and tests only after design validation
+- frontend AI Settings is implemented ;
+- frontend consent flow is implemented ;
+- AI Context Readiness is visible in Profile Detail ;
+- frontend build passes ;
+- functional validation is completed ;
+- phase 7.1.23.12 documentation is closed.
 
 ## Méthode de reprise
 

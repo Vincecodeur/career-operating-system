@@ -1172,8 +1172,48 @@ Critères de fin :
 Principe :
 Aucune donnée issue d’un PDF connu comme incorrectement extrait ne doit être transmise à la future couche AI Career Advisor.
 
-⬜ 7.1.23.11 AI Context Contract
-⬜ 7.1.23.12 AI Context Preview And Consent
+✅ 7.1.23.11 AI Context Contract
+
+Validation réalisée :
+
+- source de vérité structurée définie ;
+- données autorisées définies ;
+- données interdites définies ;
+- AI Readiness STRICT définie ;
+- rôle autorisé de l’IA défini ;
+- gouvernance du contexte IA définie ;
+- docs/ai-context-contract-design.md créé.
+
+⏳ 7.1.23.12 AI Context Preview And Consent
+
+Backend terminé :
+
+- AI Settings persistés via ApplicationSetting ;
+- GET /settings/ai implémenté ;
+- PUT /settings/ai implémenté ;
+- consentement explicite requis ;
+- fonctionnalités IA désactivées par défaut ;
+- AIContextPreviewResponse implémenté ;
+- AIContextService implémenté ;
+- AI Readiness STRICT calculée par le backend ;
+- ai_call_allowed calculé par le backend ;
+- GET /profiles/{profile_id}/ai-context-preview implémenté ;
+- catégories exclues appliquées ;
+- 59 tests AI passants ;
+- 304 tests backend passants ;
+- commit technique 2cc84d3 poussé.
+
+Frontend restant :
+
+- AI Settings API integration ;
+- AI Consent Dialog ;
+- AI Features Settings section ;
+- AI Context Readiness Card ;
+- Profile Detail integration ;
+- frontend build validation ;
+- functional validation ;
+- documentation closure.
+
 ⬜ 7.1.23.13 AI Readiness Validation
 ⬜ 7.1.23.14 Login UX Polish
 ⬜ 7.1.23.15 Minimal Account UX Polish

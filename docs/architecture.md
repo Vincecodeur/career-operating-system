@@ -174,6 +174,8 @@ Responsabilités :
 - Application Workflow Settings
 - Opportunity Discovery Preferences
 - Saved Searches
+- AI Features Settings
+- AI Consent Settings
 
 Search Criteria Settings currently support:
 
@@ -211,6 +213,27 @@ Implémenté :
 - PUT /settings/job-discovery
 - GET /settings/search-criteria
 - PUT /settings/search-criteria
+- GET /settings/ai
+- PUT /settings/ai
+
+AI Settings utilisent les clés suivantes dans ApplicationSetting :
+
+- ai_features_enabled ;
+- ai_consent_accepted.
+
+Valeurs par défaut :
+
+- ai_features_enabled = false ;
+- ai_consent_accepted = false.
+
+États cohérents autorisés :
+
+- false / false ;
+- true / true.
+
+Les fonctionnalités IA ne peuvent pas être activées sans consentement accepté.
+
+La désactivation des fonctionnalités IA révoque également le consentement dans le contrat MVP.
 
 Les paramètres métier sont stockés en PostgreSQL.
 
@@ -339,18 +362,86 @@ Planification de carrière.
 
 ### AI
 
-Services IA d'assistance.
+Le domaine AI fournit des services d’assistance séparés des moteurs déterministes du système.
 
-L'IA enrichit l'analyse mais ne constitue jamais la seule source de vérité.
+L’IA enrichit l’analyse mais ne constitue jamais la source de vérité.
 
-Before AI Career Advisor:
+Le système reste utilisable lorsque les fonctionnalités IA sont désactivées.
 
-- AI Context Contract
-- AI Context Preview
-- AI Readiness Validation
+Sous-domaines actuellement présents :
 
-Only validated profile information can be provided
-to the AI layer.
+- AI Explanation ;
+- AI Context Preview ;
+- AI Readiness ;
+- AI Consent.
+
+AI Explanation reste responsable de l’explication des résultats déterministes existants.
+
+AI Context Preview est responsable de présenter les catégories de données validées qui pourront être utilisées par de futures fonctionnalités IA.
+
+AI Readiness est calculé exclusivement par le backend.
+
+Un profil est AI Ready uniquement lorsque les éléments suivants sont présents :
+
+- Current Title ;
+- au moins une Hard Skill ;
+- au moins une Work Experience ;
+- au moins une Language ;
+- Professional Summary ;
+- Career Motivations ;
+- Preferred Environment ;
+- Non-Negotiables ;
+- Additional Context.
+
+Les Soft Skills, Certifications et CV sont optionnels pour AI Readiness.
+
+L’autorisation finale est calculée par le backend :
+
+ai_call_allowed =
+is_ai_ready
+AND
+ai_features_enabled
+AND
+ai_consent_accepted
+
+Le backend expose :
+
+- GET /profiles/{profile_id}/ai-context-preview ;
+- GET /settings/ai ;
+- PUT /settings/ai.
+
+L’endpoint AI Context Preview :
+
+- ne contacte aucun fournisseur IA ;
+- ne construit aucun prompt ;
+- ne retourne pas le contenu brut du profil ;
+- ne lit pas le contenu brut d’un CV ;
+- ne lit pas les propositions d’enrichissement non validées ;
+- ne lit pas les candidatures.
+
+Catégories explicitement exclues :
+
+- RAW_CV ;
+- UNVALIDATED_ENRICHMENT ;
+- APPLICATION_HISTORY ;
+- TECHNICAL_SECRETS.
+
+Architecture backend :
+
+app/ai/
+├── schemas.py
+├── services.py
+├── context_schemas.py
+├── context_service.py
+└── router.py
+
+Séparation des responsabilités :
+
+- AIExplanationService gère les explications IA ;
+- AIContextService gère la readiness, le preview et l’autorisation ;
+- SettingsService gère la persistance de l’activation et du consentement.
+
+Le frontend AI Context Preview et Consent reste à implémenter avant la clôture complète de la phase 7.1.23.12.
 
 ---
 
@@ -419,7 +510,8 @@ app/
 ├── jobs/
 ├── matching/
 ├── applications/
-└── settings/
+├── settings/
+└── ai/
 
 ### Futurs domaines prévus
 
