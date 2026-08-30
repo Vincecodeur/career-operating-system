@@ -315,6 +315,7 @@ Implémenté :
 - GET /settings/ai
 - PUT /settings/ai
 - GET /profiles/{profile_id}/ai-context-preview
+- AI Context frontend integration completed
 
 Partiellement implémenté :
 
@@ -553,6 +554,11 @@ Implémenté :
 - Best Matching Profile Recommendation
 - Application Profile Reassignment Dialog
 - PROFILE_CHANGED Timeline Display
+
+- AIConsentDialog
+- AIContextReadinessCard
+- AI Settings integration
+- AI Context Preview integration
 
 Documenté mais pas encore implémenté :
 
@@ -1121,8 +1127,6 @@ Le Kanban est explicitement reporté après le MVP.
 
 ### Phase suivante recommandée
 
-#### Phase suivante recommandée
-
 Latest technical commit:
 
 2cc84d3 - feat(ai): add AI context preview, readiness and consent backend
@@ -1138,39 +1142,20 @@ Latest backend validation:
 - git diff --check validated
 
 Current phase:
+7.1.23.13 AI Readiness Validation
 
-7.1.23.12 AI Context Preview And Consent
+Latest frontend commit:
+651d262 - feat(ai): integrate AI context preview and consent frontend
 
 Current state:
 
-- AI Context Contract completed
-- backend implementation completed
-- backend tests completed
-- technical commit pushed
+- backend completed
+- frontend completed
+- functional validation completed
 - documentation synchronization in progress
-- frontend implementation not started
 
 Next required step:
-
-7.1.23.12 Frontend Repository Audit And Implementation
-
-Required frontend targets:
-
-- frontend/src/services/api.ts
-- frontend/src/pages/ProfilesPage.tsx
-- frontend/src/components/ProfileDetail.tsx
-- frontend/src/pages/SettingsPage.tsx
-- frontend/src/components/AIContextReadinessCard.tsx
-- frontend/src/components/AIConsentDialog.tsx
-
-Do not start phase 7.1.23.13 before:
-
-- frontend AI Settings is implemented ;
-- frontend consent flow is implemented ;
-- AI Context Readiness is visible in Profile Detail ;
-- frontend build passes ;
-- functional validation is completed ;
-- phase 7.1.23.12 documentation is closed.
+7.1.23.13 AI Readiness Validation
 
 ## Méthode de reprise
 

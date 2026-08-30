@@ -412,6 +412,16 @@ Critical before AI:
 
 Completed:
 
+- AI Context Preview frontend integration
+- AI Consent Dialog
+- AI Features Settings section
+- AI Context Readiness Card
+- GET /settings/ai frontend integration
+- PUT /settings/ai frontend integration
+- GET /profiles/{profile_id}/ai-context-preview frontend integration
+- Frontend AI validation completed
+- Frontend production build validated
+- Technical commit 651d262 pushed
 - Test Database Isolation
 - CV Parsing Data Quality
 - CV Parsing Improvement Design
@@ -463,8 +473,7 @@ Complex Multi-Column PDF results:
 
 Current Phase:
 
-- AI Context Contract
-- AI Context Preview backend
+- AI Readiness Validation
 - STRICT AI Readiness backend calculation
 - AI Settings persistence
 - Explicit AI consent validation
@@ -475,8 +484,6 @@ Current Phase:
 
 Remaining:
 
-- AI Context Preview And Consent frontend implementation
-- AI Context Preview And Consent frontend validation
 - AI Readiness Validation
 - Login UX Polish
 - Minimal Account UX Polish

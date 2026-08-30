@@ -1184,9 +1184,44 @@ Validation réalisée :
 - gouvernance du contexte IA définie ;
 - docs/ai-context-contract-design.md créé.
 
-⏳ 7.1.23.12 AI Context Preview And Consent
+✅ 7.1.23.12 AI Context Preview And Consent
 
 Backend terminé :
+
+- AI Settings persistés via ApplicationSetting
+- GET /settings/ai implémenté
+- PUT /settings/ai implémenté
+- consentement explicite requis
+- fonctionnalités IA désactivées par défaut
+- AIContextPreviewResponse implémenté
+- AIContextService implémenté
+- AI Readiness STRICT calculée par le backend
+- ai_call_allowed calculé par le backend
+- GET /profiles/{profile_id}/ai-context-preview implémenté
+
+Frontend terminé :
+
+- AI Consent Dialog implémenté
+- AI Features Settings section implémentée
+- AI Context Readiness Card implémentée
+- intégration Settings réalisée
+- intégration Profile Detail réalisée
+- activation AI validée
+- désactivation AI validée
+- affichage AI Readiness validé
+
+Validation :
+
+- 59 tests AI passants
+- 304 tests backend passants
+- build frontend validé
+
+Commits :
+
+- 2cc84d3 backend
+- 651d262 frontend
+
+terminé :
 
 - AI Settings persistés via ApplicationSetting ;
 - GET /settings/ai implémenté ;
@@ -1202,9 +1237,6 @@ Backend terminé :
 - 59 tests AI passants ;
 - 304 tests backend passants ;
 - commit technique 2cc84d3 poussé.
-
-Frontend restant :
-
 - AI Settings API integration ;
 - AI Consent Dialog ;
 - AI Features Settings section ;
