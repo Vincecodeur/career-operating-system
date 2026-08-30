@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+import { Card } from "../components/ui/Card";
 import { useAuthStore } from "../stores/authStore";
 
 export function LoginPage() {
@@ -34,45 +35,90 @@ export function LoginPage() {
   }
 
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Career OS</h1>
-      <h2>Login</h2>
+    <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+      <div className="w-full max-w-md">
+        <Card>
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-white">
+              Career Operating System
+            </h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <br />
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-        </div>
+            <h2 className="mt-6 text-xl font-semibold text-white">
+              Welcome Back
+            </h2>
 
-        <div style={{ marginTop: "1rem" }}>
-          <label htmlFor="password">Password</label>
-          <br />
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
+            <p className="mt-2 text-sm text-slate-400">
+              Sign in to access your profiles, opportunities and application
+              tracking.
+            </p>
+          </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-1 block text-sm text-slate-300">
+                Email
+              </label>
 
-        <button type="submit" disabled={loading} style={{ marginTop: "1rem" }}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
 
-      <p style={{ marginTop: "1rem" }}>
-        <a href="/forgot-password">Forgot password?</a>
-      </p>
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-1 block text-sm text-slate-300">
+                Password
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
+
+            <div className="text-sm text-slate-500">
+              Remember Me (Coming Soon)
+            </div>
+
+            {error && (
+              <div className="rounded border border-red-900 bg-red-950 p-3 text-sm text-red-300">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+
+          <div className="mt-6 space-y-2 text-center text-sm">
+            <Link
+              to="/forgot-password"
+              className="text-blue-400 hover:text-blue-300">
+              Forgot Password?
+            </Link>
+
+            <p className="text-slate-500">
+              Don't have an account? Sign Up (Coming Soon)
+            </p>
+          </div>
+        </Card>
+      </div>
     </main>
   );
 }
