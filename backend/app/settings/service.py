@@ -1,5 +1,6 @@
-from sqlalchemy.orm import Session
 import json
+
+from sqlalchemy.orm import Session
 
 from app.settings.models import ApplicationSetting
 
@@ -19,7 +20,8 @@ class SettingsService:
         setting = (
             self.db.query(ApplicationSetting)
             .filter(
-                ApplicationSetting.setting_key == key
+                ApplicationSetting.setting_key
+                == key
             )
             .first()
         )
@@ -33,11 +35,13 @@ class SettingsService:
         self,
         key: str,
         value: str,
+        commit: bool = True,
     ) -> None:
         setting = (
             self.db.query(ApplicationSetting)
             .filter(
-                ApplicationSetting.setting_key == key
+                ApplicationSetting.setting_key
+                == key
             )
             .first()
         )
@@ -52,7 +56,8 @@ class SettingsService:
         else:
             setting.setting_value = value
 
-        self.db.commit()
+        if commit:
+            self.db.commit()
 
     def get_job_discovery_settings(
         self,
@@ -109,9 +114,7 @@ class SettingsService:
                 ]
             ),
         )
-        
-        
-        
+
     def get_search_criteria_settings(
         self,
     ) -> dict:
@@ -196,7 +199,7 @@ class SettingsService:
                 payload["excluded_keywords"]
             ),
         )
-        
+
     def get_discovery_preferences_settings(
         self,
     ) -> dict:
@@ -236,14 +239,18 @@ class SettingsService:
         self.set_value(
             "discovery_minimum_matching_score",
             str(
-                payload["discovery_minimum_matching_score"]
+                payload[
+                    "discovery_minimum_matching_score"
+                ]
             ),
         )
 
         self.set_value(
             "discovery_show_archived",
             str(
-                payload["discovery_show_archived"]
+                payload[
+                    "discovery_show_archived"
+                ]
             ).lower(),
         )
 
@@ -251,7 +258,87 @@ class SettingsService:
             "discovery_default_sort",
             payload["discovery_default_sort"],
         )
-        
+
+    def get_ai_settings(
+        self,
+    ) -> dict:
+        ai_features_enabled = (
+            self.get_value(
+                "ai_features_enabled",
+                "false",
+            ).lower()
+            == "true"
+        )
+
+        ai_consent_accepted = (
+            self.get_value(
+                "ai_consent_accepted",
+                "false",
+            ).lower()
+            == "true"
+        )
+
+        if (
+            ai_features_enabled
+            and not ai_consent_accepted
+        ):
+            ai_features_enabled = False
+
+        return {
+            "ai_features_enabled": (
+                ai_features_enabled
+            ),
+            "ai_consent_accepted": (
+                ai_consent_accepted
+            ),
+        }
+
+    def update_ai_settings(
+        self,
+        payload: dict,
+    ) -> None:
+        ai_features_enabled = payload[
+            "ai_features_enabled"
+        ]
+
+        ai_consent_accepted = payload[
+            "ai_consent_accepted"
+        ]
+
+        if (
+            ai_features_enabled
+            and not ai_consent_accepted
+        ):
+            raise ValueError(
+                "AI consent must be accepted before AI features can be enabled."
+            )
+
+        if (
+            not ai_features_enabled
+            and ai_consent_accepted
+        ):
+            raise ValueError(
+                "AI consent cannot remain accepted when AI features are disabled."
+            )
+
+        self.set_value(
+            "ai_features_enabled",
+            str(
+                ai_features_enabled
+            ).lower(),
+            commit=False,
+        )
+
+        self.set_value(
+            "ai_consent_accepted",
+            str(
+                ai_consent_accepted
+            ).lower(),
+            commit=False,
+        )
+
+        self.db.commit()
+
     def get_saved_searches(
         self,
     ) -> list[dict]:
@@ -261,14 +348,12 @@ class SettingsService:
         )
 
         return json.loads(value)
-    
+
     def create_saved_search(
-    self,
-    payload: dict,
+        self,
+        payload: dict,
     ) -> dict:
-        searches = (
-            self.get_saved_searches()
-        )
+        searches = self.get_saved_searches()
 
         next_id = (
             max(
@@ -308,9 +393,7 @@ class SettingsService:
         self,
         saved_search_id: int,
     ) -> dict:
-        searches = (
-            self.get_saved_searches()
-        )
+        searches = self.get_saved_searches()
 
         search = next(
             (
@@ -340,6 +423,3 @@ class SettingsService:
         )
 
         return search
-
-
-

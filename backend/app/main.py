@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+
 from app.applications.router import (
     router as applications_router,
 )
@@ -12,6 +13,7 @@ from app.certifications.router import router as certifications_router
 from app.core.database import create_tables
 from app.core.database import engine
 from app.core.database import SessionLocal
+from app.ai.router import router as ai_router
 from app.reference_data.seed_loader import seed_reference_data
 from app.cv.router import router as cv_router
 from app.profile_enrichment.router import router as profile_enrichment_router
@@ -100,6 +102,7 @@ app.include_router(applications_router)
 app.include_router(auth_router)
 app.include_router(reference_data_router)
 app.include_router(settings_router)
+app.include_router(ai_router)
 
 @app.get("/health")
 def health():
