@@ -731,3 +731,22 @@ Validation:
 Known limitation:
 Some tool/language combinations may still appear merged
 inside skill extraction results.
+
+### Frontend / Authentication
+
+Current authentication UX includes:
+
+- Login page
+- Forgot Password page
+- Account page
+
+The authentication roadmap is visible inside Account Page.
+
+Future learning features:
+
+- Sign Up
+- Remember Me
+- Password Recovery
+- Email Recovery
+- MFA
+- SSO

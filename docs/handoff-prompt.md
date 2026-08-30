@@ -560,6 +560,11 @@ Implémenté :
 - AI Settings integration
 - AI Context Preview integration
 
+- Login UX redesign
+- Forgot Password UX redesign
+- Account UX redesign
+- Authentication roadmap visualization
+
 Documenté mais pas encore implémenté :
 
 - Auth Layout
@@ -1142,10 +1147,10 @@ Latest backend validation:
 - git diff --check validated
 
 Current phase:
-7.1.23.13 AI Readiness Validation
+7.1.23.15 Authentication Learning Features
 
 Latest frontend commit:
-651d262 - feat(ai): integrate AI context preview and consent frontend
+179f8e6 - feat(auth): improve login, account and recovery UX
 
 Current state:
 
@@ -1155,7 +1160,7 @@ Current state:
 - documentation synchronization in progress
 
 Next required step:
-7.1.23.13 AI Readiness Validation
+7.1.23.15 Authentication Learning Features
 
 ## Méthode de reprise
 

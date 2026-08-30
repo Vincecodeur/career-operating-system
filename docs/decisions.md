@@ -5167,3 +5167,28 @@ Validated:
 
 DEC-078 implementation status:
 Completed
+
+## DEC-079 - Authentication Learning Strategy
+
+Date: 2026-08-30
+Status: Accepted
+
+Decision
+
+The MVP keeps a single manually managed account.
+
+Authentication learning features remain part of the planned roadmap and are intentionally visible in the UI.
+
+Learning scope:
+
+- Sign Up
+- Remember Me
+- Password Recovery
+- Email Recovery
+
+These features are not required for MVP completion but are retained to support learning objectives.
+
+Frontend authentication roadmap visibility was introduced during Login UX Polish.
+
+Technical commit:
+179f8e6 - feat(auth): improve login, account and recovery UX
