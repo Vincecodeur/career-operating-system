@@ -1118,7 +1118,35 @@ Validation réalisée :
 - 257 tests backend passants
 - commits techniques 7e787ff et 63d956e
 
-⏳ 7.1.23.10 Complex Multi-Column PDF Extraction
+✅ 7.1.23.10 Complex Multi-Column PDF Extraction
+
+Validation réalisée :
+
+- stratégie multi-moteur implémentée
+  - PyPDF2
+  - pdfplumber
+- benchmark parser conservé
+- régressions benchmark validées
+- support amélioré des PDF multicolonnes
+- support amélioré des CV avec sidebar
+- headings français améliorés
+- détection du nom améliorée
+- détection du titre améliorée
+- détection des langues améliorée
+- reconstruction des expériences améliorée
+- validation fonctionnelle sur le CV réel Lathan
+- validation fonctionnelle sur un nouvel upload (CV 1070)
+- 274 tests backend passants
+
+Limitation connue :
+
+- certaines compétences restent fusionnées
+  (ex : Linux Python, MS Office PHP)
+
+Actions futures :
+
+- DATA-001 Advanced Skill Normalization
+- Experience Extraction Refinement
 
 Objectif :
 Résoudre ou encadrer techniquement la corruption de l’ordre de lecture des PDF multicolonnes complexes avant l’intégration de l’AI Career Advisor.

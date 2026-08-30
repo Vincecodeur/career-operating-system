@@ -1146,22 +1146,39 @@ Latest validation:
 - PostgreSQL persistence validated
 - working tree clean after technical commits
 
-Known prerequisite before AI Career Advisor:
+Latest completed milestone:
+7.1.23.10 Complex Multi-Column PDF Extraction
 
-- complex multi-column PDF extraction remains unresolved
-- CV Lathan remains the reference failing scenario
-- this issue must be addressed before AI Career Advisor integration
+Completed:
+
+- multi-engine extraction strategy
+- pdfplumber integration
+- French heading support improvements
+- identity reconstruction improvements
+- language extraction improvements
+- experience reconstruction improvements
+
+Validation:
+
+- real Lathan CV validated
+- CV 1070 validated
+- 274 backend tests passed
+
+Known remaining improvements:
+
+- skill normalization refinement
+- experience metadata enrichment
 
 Next recommended phase:
-7.1.23.10 Complex Multi-Column PDF Extraction
+7.1.23.11 AI Context Contract
 
 Required starting sequence:
 
 - Repository audit
-- Extraction strategy design
-- Reproducible Lathan regression fixture or authorized test case
-- Technical design
-- Implementation plan
+- Existing AI domain review
+- AI context contract design
+- Backend contract design
+- Validation criteria definition
 - Code and tests only after design validation
 
 ## Méthode de reprise

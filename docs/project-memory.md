@@ -421,6 +421,7 @@ Completed:
 - Enrichment Summary Consistency
 - Profile Creation With Optional CV
 - Additional Profile Context
+- Complex Multi-Column PDF Extraction
 
 Data cleanup results:
 
@@ -448,13 +449,24 @@ Additional Profile Context results:
 - Frontend build validated
 - Backend non-regression suite validated with 257 passing tests
 
+Complex Multi-Column PDF results:
+
+- pdfplumber extraction integrated
+- multi-column strategy implemented
+- French section support improved
+- name detection improved
+- language extraction improved
+- experience reconstruction improved
+- Lathan real CV validated
+- CV 1070 validated
+- 274 backend tests passing
+
 Current Phase:
 
-- Complex Multi-Column PDF Extraction
+- AI Context Contract
 
 Remaining:
 
-- Complex Multi-Column PDF Extraction
 - AI Context Contract
 - AI Context Preview And Consent
 - AI Readiness Validation

@@ -24,10 +24,10 @@ Current Milestone
 ---
 
 Current Phase
-7.1.23.10 Complex Multi-Column PDF Extraction
+7.1.23.11 AI Context Contract
 
 Next Planned Milestone
-7.1.23 MVP Experience Review
+7.1.23.11 AI Context Contract
 
 ---
 
@@ -1457,28 +1457,24 @@ Aucun
 
 ---
 
-Phase In Progress
+Latest completed phase
+
 7.1.23.10 Complex Multi-Column PDF Extraction
 
-Objective:
-Resolve or explicitly constrain complex multi-column PDF extraction before AI Career Advisor integration.
+Validation:
 
-Reference case:
+- Multi-engine extraction implemented
+- pdfplumber integrated
+- French CV support improved
+- Experience reconstruction implemented
+- Lathan real CV validated
+- CV 1070 validated
+- 274 backend tests passing
 
-- CV Lathan
+Known remaining improvements:
 
-Known cause:
-
-- PyPDF2 may return structurally corrupted reading order before CV parsing
-
-Prerequisites completed:
-
-- Profile Creation With Optional CV completed
-- Additional Profile Context completed
-- Additional Profile Context persisted in PostgreSQL
-- Frontend creation, editing and display validated
-- Frontend production build validated
-- 257 backend tests passing
+- Advanced Skill Normalization
+- Experience metadata enrichment
 
 ---
 
@@ -1506,7 +1502,7 @@ Phase Status:
 
 Next Step:
 
-7.1.23.10.1 Repository Audit And Extraction Strategy
+7.1.23.11 AI Context Contract
 
 ---
 
@@ -1538,7 +1534,7 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.10 Complex Multi-Column PDF Extraction
+7.1.23.11 AI Context Contract
 
 Status:
 Ready To Start
@@ -1557,15 +1553,21 @@ Latest validation:
 - Additional Profile Context display validated
 - Frontend production build validated
 - 8 Profile tests passing
-- 257 backend tests passing
+- 274 backend tests passing
 
-Known blocking prerequisite before AI Career Advisor:
+Latest completed prerequisite before AI Career Advisor:
 
-- Complex multi-column PDF extraction must be addressed
-- CV Lathan remains the reference failing scenario
+- Complex Multi-Column PDF Extraction completed
+- Lathan real CV validated
+- CV 1070 validated
+
+Known remaining improvements:
+
+- Advanced Skill Normalization
+- Experience Extraction Refinement
 
 Next Step:
-7.1.23.10.1 Repository Audit And Extraction Strategy
+7.1.23.11 AI Context Contract
 
 Last Commits :
 

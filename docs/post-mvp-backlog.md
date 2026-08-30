@@ -109,6 +109,13 @@ NodeJS
 PowerBI
 → Power BI
 
+Examples observed:
+
+- Linux Python
+- MS Office PHP
+- Visual Studio Code C
+- PyCharm C++
+
 ---
 
 ## DATA-002 - CV Parsing Refinements
@@ -139,6 +146,23 @@ The issue must be addressed before AI Career Advisor integration because known c
 Status: Backlog
 
 Maintain canonical aliases for common technologies.
+
+### DATA-004 - Experience Extraction Refinement
+
+Status: Backlog
+
+Improvements:
+
+- Date normalization
+- Organization detection improvements
+- Experience location extraction
+- Experience type classification
+  - Professional Experience
+  - Academic Project
+  - Personal Project
+
+Reason deferred:
+Current experience reconstruction is functionally validated for MVP.
 
 ---
 

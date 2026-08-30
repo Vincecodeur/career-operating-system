@@ -590,7 +590,16 @@ Representative example:
 CV Lathan
 
 Current decision:
-Support for complex multi-column PDFs remains partial.
+Support for complex multi-column PDFs significantly improved.
+
+Validated:
+
+- benchmark fixtures
+- real Lathan CV
+- re-upload validation through CV 1070
+
+Known remaining limitation:
+some tool/language combinations may still appear merged in extracted skills.
 
 A dedicated extraction phase must be completed before AI Career Advisor integration.
 
@@ -600,3 +609,20 @@ Reference failing scenario:
 
 AI safety boundary:
 Profile data produced by a known failed extraction must not be treated as reliable AI context.
+
+Current implementation:
+
+- PyPDF2 extraction engine
+- pdfplumber extraction engine
+- extraction quality evaluation
+- automatic engine selection
+
+Validation:
+
+- benchmark fixtures validated
+- Lathan real CV validated
+- experience reconstruction validated
+
+Known limitation:
+Some tool/language combinations may still appear merged
+inside skill extraction results.
