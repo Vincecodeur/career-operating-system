@@ -35,7 +35,12 @@ import { UploadCvModal } from "../components/UploadCvModal";
 import type { UploadCvFormValues } from "../components/UploadCvModal";
 import { DeleteCvDialog } from "../components/DeleteCvDialog";
 
-import type { Cv, ProfileSoftSkill, Application } from "../services/api";
+import type {
+  AIContextPreview,
+  Cv,
+  ProfileSoftSkill,
+  Application,
+} from "../services/api";
 
 import { ProfileDetail } from "../components/ProfileDetail";
 import { ProfileList } from "../components/ProfileList";
@@ -55,6 +60,7 @@ import {
   getProfileSoftSkills,
   getProfileWorkExperiences,
   getApplications,
+  getAIContextPreview,
   getProfiles,
   getSkills,
   updateProfile,
@@ -182,6 +188,14 @@ export function ProfilesPage() {
   const [countries, setCountries] = useState<ReferenceDataItem[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(true);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [aiContextPreview, setAIContextPreview] =
+    useState<AIContextPreview | null>(null);
+
+  const [loadingAIContextPreview, setLoadingAIContextPreview] = useState(false);
+
+  const [aiContextPreviewError, setAIContextPreviewError] = useState<
+    string | null
+  >(null);
 
   const location = useLocation();
 
@@ -345,6 +359,25 @@ export function ProfilesPage() {
 
   const [cvMutationError, setCvMutationError] = useState<string | null>(null);
 
+  async function reloadAIContextPreview(profileId: number) {
+    setLoadingAIContextPreview(true);
+    setAIContextPreviewError(null);
+
+    try {
+      const preview = await getAIContextPreview(profileId);
+      setAIContextPreview(preview);
+    } catch (error) {
+      setAIContextPreview(null);
+      setAIContextPreviewError(
+        error instanceof Error
+          ? error.message
+          : "Unable to load AI context preview.",
+      );
+    } finally {
+      setLoadingAIContextPreview(false);
+    }
+  }
+
   async function reloadSelectedProfileDetails(profileId: number) {
     const [
       profileSkillsData,
@@ -392,6 +425,13 @@ export function ProfilesPage() {
     );
   }
 
+  async function reloadCompleteSelectedProfile(profileId: number) {
+    await Promise.all([
+      reloadSelectedProfileDetails(profileId),
+      reloadAIContextPreview(profileId),
+    ]);
+  }
+
   useEffect(() => {
     async function loadProfiles() {
       try {
@@ -426,13 +466,18 @@ export function ProfilesPage() {
   useEffect(() => {
     async function loadDetails() {
       if (!selectedProfile) {
+        setAIContextPreview(null);
+        setAIContextPreviewError(null);
         return;
       }
 
       setLoadingDetails(true);
 
       try {
-        await reloadSelectedProfileDetails(selectedProfile.id);
+        await Promise.all([
+          reloadSelectedProfileDetails(selectedProfile.id),
+          reloadAIContextPreview(selectedProfile.id),
+        ]);
       } catch {
         setError("Unable to load profile details.");
       } finally {
@@ -539,7 +584,14 @@ export function ProfilesPage() {
         self_assessment_level: values.self_assessment_level,
       });
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadCompleteSelectedProfile(selectedProfile.id);
+
+      async function reloadCompleteSelectedProfile(profileId: number) {
+        await Promise.all([
+          reloadSelectedProfileDetails(profileId),
+          reloadAIContextPreview(profileId),
+        ]);
+      }
 
       setIsAddProfileSkillModalOpen(false);
     } catch {
@@ -567,7 +619,7 @@ export function ProfilesPage() {
         },
       );
 
-      await reloadSelectedProfileDetails(selectedProfileSkill.profile_id);
+      await reloadCompleteSelectedProfile(selectedProfileSkill.profile_id);
 
       setSelectedProfileSkill(null);
       setIsEditProfileSkillModalOpen(false);
@@ -592,7 +644,7 @@ export function ProfilesPage() {
         selectedProfileSkill.skill_id,
       );
 
-      await reloadSelectedProfileDetails(selectedProfileSkill.profile_id);
+      await reloadCompleteSelectedProfile(selectedProfileSkill.profile_id);
 
       setSelectedProfileSkill(null);
       setIsDeleteProfileSkillDialogOpen(false);
@@ -619,7 +671,7 @@ export function ProfilesPage() {
         name: values.name,
       });
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadCompleteSelectedProfile(selectedProfile.id);
 
       setIsAddProfileSoftSkillModalOpen(false);
     } catch {
@@ -640,7 +692,7 @@ export function ProfilesPage() {
     try {
       await deleteProfileSoftSkill(selectedProfileSoftSkill.id);
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadCompleteSelectedProfile(selectedProfile.id);
 
       setSelectedProfileSoftSkill(null);
       setIsDeleteProfileSoftSkillDialogOpen(false);
@@ -674,7 +726,7 @@ export function ProfilesPage() {
         description: values.description,
       });
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadCompleteSelectedProfile(selectedProfile.id);
 
       setIsAddWorkExperienceModalOpen(false);
     } catch {
@@ -704,7 +756,7 @@ export function ProfilesPage() {
         description: values.description,
       });
 
-      await reloadSelectedProfileDetails(selectedWorkExperience.profile_id);
+      await reloadCompleteSelectedProfile(selectedWorkExperience.profile_id);
 
       setSelectedWorkExperience(null);
       setIsEditWorkExperienceModalOpen(false);
@@ -726,7 +778,7 @@ export function ProfilesPage() {
     try {
       await deleteWorkExperience(selectedWorkExperience.id);
 
-      await reloadSelectedProfileDetails(selectedWorkExperience.profile_id);
+      await reloadCompleteSelectedProfile(selectedWorkExperience.profile_id);
 
       setSelectedWorkExperience(null);
       setIsDeleteWorkExperienceDialogOpen(false);
@@ -754,7 +806,7 @@ export function ProfilesPage() {
         proficiency_level: values.proficiency_level,
       });
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadCompleteSelectedProfile(selectedProfile.id);
 
       setIsAddProfileLanguageModalOpen(false);
     } catch {
@@ -783,7 +835,7 @@ export function ProfilesPage() {
         },
       );
 
-      await reloadSelectedProfileDetails(selectedProfileLanguage.profile_id);
+      await reloadCompleteSelectedProfile(selectedProfileLanguage.profile_id);
 
       setSelectedProfileLanguage(null);
       setIsEditProfileLanguageModalOpen(false);
@@ -808,7 +860,7 @@ export function ProfilesPage() {
         selectedProfileLanguage.language_id,
       );
 
-      await reloadSelectedProfileDetails(selectedProfileLanguage.profile_id);
+      await reloadCompleteSelectedProfile(selectedProfileLanguage.profile_id);
 
       setSelectedProfileLanguage(null);
       setIsDeleteProfileLanguageDialogOpen(false);
@@ -847,7 +899,7 @@ export function ProfilesPage() {
             : null,
       });
 
-      await reloadSelectedProfileDetails(selectedProfile.id);
+      await reloadCompleteSelectedProfile(selectedProfile.id);
 
       setIsAddProfileCertificationModalOpen(false);
     } catch {
@@ -887,7 +939,7 @@ export function ProfilesPage() {
         },
       );
 
-      await reloadSelectedProfileDetails(
+      await reloadCompleteSelectedProfile(
         selectedProfileCertification.profile_id,
       );
 
@@ -914,7 +966,7 @@ export function ProfilesPage() {
         selectedProfileCertification.certification_id,
       );
 
-      await reloadSelectedProfileDetails(
+      await reloadCompleteSelectedProfile(
         selectedProfileCertification.profile_id,
       );
 
@@ -932,7 +984,7 @@ export function ProfilesPage() {
       return;
     }
 
-    await reloadSelectedProfileDetails(selectedProfile.id);
+    await reloadCompleteSelectedProfile(selectedProfile.id);
 
     setIsUploadCvModalOpen(false);
   }
@@ -954,7 +1006,7 @@ export function ProfilesPage() {
         values.isDefault,
       );
 
-      await reloadSelectedProfileDetails(cvTargetProfileId);
+      await reloadCompleteSelectedProfile(cvTargetProfileId);
 
       return cv;
     } catch {
@@ -977,7 +1029,7 @@ export function ProfilesPage() {
     try {
       await deleteCv(selectedCv.id);
 
-      await reloadSelectedProfileDetails(selectedCv.profile_id);
+      await reloadCompleteSelectedProfile(selectedCv.profile_id);
 
       setSelectedCv(null);
       setIsDeleteCvDialogOpen(false);
@@ -992,7 +1044,7 @@ export function ProfilesPage() {
     try {
       await setDefaultCv(cv.id);
 
-      await reloadSelectedProfileDetails(cv.profile_id);
+      await reloadCompleteSelectedProfile(cv.profile_id);
     } catch {
       setCvMutationError("Unable to set default CV.");
     }
@@ -1029,6 +1081,9 @@ export function ProfilesPage() {
             {selectedProfile ? (
               <ProfileDetail
                 profile={selectedProfile}
+                aiContextPreview={aiContextPreview}
+                loadingAIContextPreview={loadingAIContextPreview}
+                aiContextPreviewError={aiContextPreviewError}
                 applications={applications}
                 profileSkills={profileSkills}
                 skills={skills}

@@ -1,7 +1,8 @@
 import { Card } from "./ui/Card";
-import type { Cv, ProfileSoftSkill } from "../services/api";
+import type { AIContextPreview, Cv, ProfileSoftSkill } from "../services/api";
 import { getCvDownloadUrl } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { AIContextReadinessCard } from "./AIContextReadinessCard";
 
 type Profile = {
   id: number;
@@ -90,6 +91,9 @@ type Application = {
 
 type Props = {
   profile: Profile;
+  aiContextPreview: AIContextPreview | null;
+  loadingAIContextPreview?: boolean;
+  aiContextPreviewError?: string | null;
   applications: Application[];
   profileSkills: ProfileSkill[];
   skills: Skill[];
@@ -154,6 +158,9 @@ function formatFileSize(fileSizeBytes: number) {
 
 export function ProfileDetail({
   profile,
+  aiContextPreview,
+  loadingAIContextPreview = false,
+  aiContextPreviewError = null,
   applications,
   profileSkills,
   profileSoftSkills,
@@ -527,6 +534,32 @@ export function ProfileDetail({
             </div>
           )}
         </div>
+      </div>
+      <div className="mb-8">
+        {loadingAIContextPreview ? (
+          <Card>
+            <h3 className="mb-2 text-lg font-semibold text-white">
+              AI Context Readiness
+            </h3>
+
+            <p className="text-slate-400">Loading AI context preview...</p>
+          </Card>
+        ) : aiContextPreviewError ? (
+          <Card>
+            <h3 className="mb-2 text-lg font-semibold text-white">
+              AI Context Readiness
+            </h3>
+
+            <p className="text-red-400">{aiContextPreviewError}</p>
+
+            <p className="mt-2 text-sm text-slate-400">
+              The profile remains available even when AI context information
+              cannot be loaded.
+            </p>
+          </Card>
+        ) : (
+          <AIContextReadinessCard aiContextPreview={aiContextPreview} />
+        )}
       </div>
       <div className="mb-8 rounded-lg border border-slate-700 bg-slate-950 p-4">
         <div className="mb-4 flex items-center justify-between gap-3">

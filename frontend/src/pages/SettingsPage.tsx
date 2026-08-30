@@ -2,13 +2,16 @@ import { useEffect, useState, type KeyboardEvent } from "react";
 
 import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
-
+import { AIConsentDialog } from "../components/AIConsentDialog";
 import {
   AVAILABLE_CONNECTORS,
   getConnectorLabel,
 } from "../constants/connectors";
 
 import {
+  getAISettings,
+  updateAISettings,
+  type AISettings,
   getCountries,
   getJobDiscoverySettings,
   getSearchCriteriaSettings,
@@ -124,6 +127,14 @@ export function SettingsPage() {
   const [discoveryPreferences, setDiscoveryPreferences] =
     useState<DiscoveryPreferencesSettings | null>(null);
 
+  const [aiSettings, setAISettings] = useState<AISettings | null>(null);
+
+  const [isAIConsentDialogOpen, setIsAIConsentDialogOpen] = useState(false);
+
+  const [isSavingAISettings, setIsSavingAISettings] = useState(false);
+
+  const [aiSettingsError, setAISettingsError] = useState<string | null>(null);
+
   const [countries, setCountries] = useState<ReferenceDataItem[]>([]);
 
   const [workModes, setWorkModes] = useState<ReferenceDataItem[]>([]);
@@ -151,17 +162,20 @@ export function SettingsPage() {
       discoverySettings,
       criteriaSettings,
       discoveryPreferencesSettings,
+      aiSettingsData,
       countryOptions,
       workModeOptions,
     ] = await Promise.all([
       getJobDiscoverySettings(),
       getSearchCriteriaSettings(),
       getDiscoveryPreferencesSettings(),
+      getAISettings(),
       getCountries(),
       getWorkModes(),
     ]);
 
     setDiscoveryPreferences(discoveryPreferencesSettings);
+    setAISettings(aiSettingsData);
 
     setSettings(discoverySettings);
 
@@ -371,7 +385,68 @@ export function SettingsPage() {
     }
   }
 
-  if (!settings || !searchCriteria || !discoveryPreferences) {
+  function handleAIEnabledChange(enabled: boolean) {
+    setAISettingsError(null);
+    setMessage("");
+
+    if (enabled) {
+      setIsAIConsentDialogOpen(true);
+      return;
+    }
+
+    void disableAIFeatures();
+  }
+
+  async function enableAIFeatures() {
+    setIsSavingAISettings(true);
+    setAISettingsError(null);
+    setMessage("");
+
+    try {
+      const updatedSettings = await updateAISettings({
+        ai_features_enabled: true,
+        ai_consent_accepted: true,
+      });
+
+      setAISettings(updatedSettings);
+      setIsAIConsentDialogOpen(false);
+      setMessage("AI features enabled successfully.");
+    } catch (error) {
+      setAISettingsError(
+        error instanceof Error
+          ? error.message
+          : "Unable to enable AI features.",
+      );
+    } finally {
+      setIsSavingAISettings(false);
+    }
+  }
+
+  async function disableAIFeatures() {
+    setIsSavingAISettings(true);
+    setAISettingsError(null);
+    setMessage("");
+
+    try {
+      const updatedSettings = await updateAISettings({
+        ai_features_enabled: false,
+        ai_consent_accepted: false,
+      });
+
+      setAISettings(updatedSettings);
+      setMessage("AI features disabled successfully.");
+    } catch (error) {
+      setAISettingsError(
+        error instanceof Error
+          ? error.message
+          : "Unable to disable AI features.",
+      );
+    } finally {
+      setIsSavingAISettings(false);
+    }
+  }
+
+  if (!settings || !searchCriteria || !discoveryPreferences || !aiSettings) {
     return (
       <>
         <PageHeader
@@ -766,6 +841,60 @@ export function SettingsPage() {
         </Card>
 
         <Card>
+          <h2 className="text-xl font-semibold text-white">AI Features</h2>
+
+          <p className="mt-2 text-sm text-slate-400">
+            Control whether future AI capabilities may use validated structured
+            profile information.
+          </p>
+
+          <div className="mt-6 space-y-4">
+            <label className="flex items-center justify-between gap-4 rounded-lg border border-slate-700 bg-slate-950 p-4">
+              <div>
+                <p className="font-medium text-white">Enable AI Features</p>
+
+                <p className="mt-1 text-sm text-slate-400">
+                  Explicit consent is required before AI features can be
+                  enabled.
+                </p>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={aiSettings.ai_features_enabled}
+                disabled={isSavingAISettings}
+                onChange={(event) =>
+                  handleAIEnabledChange(event.target.checked)
+                }
+                className="h-5 w-5"
+              />
+            </label>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
+                <p className="text-sm text-slate-400">AI Features</p>
+
+                <p className="mt-2 font-semibold text-white">
+                  {aiSettings.ai_features_enabled ? "Enabled" : "Disabled"}
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
+                <p className="text-sm text-slate-400">AI Consent</p>
+
+                <p className="mt-2 font-semibold text-white">
+                  {aiSettings.ai_consent_accepted ? "Accepted" : "Not Accepted"}
+                </p>
+              </div>
+            </div>
+
+            {aiSettingsError && (
+              <p className="text-sm text-red-400">{aiSettingsError}</p>
+            )}
+          </div>
+        </Card>
+
+        <Card>
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-white">
               Application Workflow Strategy
@@ -845,6 +974,19 @@ export function SettingsPage() {
 
         {message && <p className="text-green-400">{message}</p>}
       </div>
+      <AIConsentDialog
+        isOpen={isAIConsentDialogOpen}
+        isSaving={isSavingAISettings}
+        onAccept={() => {
+          void enableAIFeatures();
+        }}
+        onCancel={() => {
+          if (!isSavingAISettings) {
+            setAISettingsError(null);
+            setIsAIConsentDialogOpen(false);
+          }
+        }}
+      />
     </>
   );
 }

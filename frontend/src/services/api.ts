@@ -894,6 +894,28 @@ export type DiscoveryPreferencesSettings = {
     discovery_default_sort: string;
 };
 
+export type AISettings = {
+    ai_features_enabled: boolean;
+    ai_consent_accepted: boolean;
+};
+
+export type AISettingsUpdate = {
+    ai_features_enabled: boolean;
+    ai_consent_accepted: boolean;
+};
+
+export type AIContextPreview = {
+    profile_id: number;
+    is_ai_ready: boolean;
+    missing_required_information: string[];
+    available_categories: string[];
+    missing_optional_categories: string[];
+    excluded_categories: string[];
+    ai_features_enabled: boolean;
+    ai_consent_accepted: boolean;
+    ai_call_allowed: boolean;
+};
+
 export type SavedSearch = {
     id: number;
     name: string;
@@ -935,6 +957,11 @@ export type Profile = {
     target_role_long_term: string;
     remote_preference: string;
     preferred_countries: string;
+    professional_summary: string | null;
+    career_motivations: string | null;
+    preferred_environment: string | null;
+    non_negotiables: string | null;
+    additional_context: string | null;
     is_active: boolean;
     created_at: string;
     updated_at: string;
@@ -1026,6 +1053,66 @@ export async function getDiscoveryPreferencesSettings(
     if (!response.ok) {
         throw new Error(
             "Unable to load discovery preferences."
+        );
+    }
+
+    return response.json();
+}
+
+export async function getAISettings(
+): Promise<AISettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/ai`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load AI settings."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateAISettings(
+    payload: AISettingsUpdate,
+): Promise<AISettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/ai`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            await getApiErrorMessage(
+                response,
+                "Unable to update AI settings.",
+            ),
+        );
+    }
+
+    return response.json();
+}
+
+export async function getAIContextPreview(
+    profileId: number,
+): Promise<AIContextPreview> {
+    const response = await fetch(
+        `${API_BASE_URL}/profiles/${profileId}/ai-context-preview`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            await getApiErrorMessage(
+                response,
+                "Unable to load AI context preview.",
+            ),
         );
     }
 
