@@ -147,7 +147,7 @@ Status: Backlog
 
 Maintain canonical aliases for common technologies.
 
-### DATA-004 - Experience Extraction Refinement
+## DATA-004 - Experience Extraction Refinement
 
 Status: Backlog
 
@@ -373,7 +373,7 @@ Applied
 → Offer
 → Accepted
 
-### SETTINGS-001 - Settings Categories
+## SETTINGS-001 - Settings Categories
 
 Status: Backlog
 
@@ -404,7 +404,7 @@ Out of Scope for MVP:
 - User-specific settings isolation
 - Advanced settings search
 
-### SETTINGS-002 - Tag Autocomplete And Suggestions
+## SETTINGS-002 - Tag Autocomplete And Suggestions
 
 Status: Backlog
 
@@ -432,7 +432,7 @@ Out of Scope for MVP:
 - Market-driven recommendations
 - Dynamic ranking based on opportunity history
 
-### MATCHING-002 - Configurable Matching Weights
+## MATCHING-002 - Configurable Matching Weights
 
 Status: Backlog
 
@@ -460,7 +460,7 @@ Reason deferred:
 Current default weights are sufficient for MVP.
 Additional configurability increases complexity without delivering core user value.
 
-### SETTINGS-003 - Reusable Catalog Tag Selector Component
+## SETTINGS-003 - Reusable Catalog Tag Selector Component
 
 Status: Backlog
 
@@ -497,7 +497,7 @@ Reason deferred:
 Current implementation is functional and stable.
 This is a code maintainability improvement rather than a user-facing MVP requirement.
 
-### APP-005 - Automatic Best Matching Profile Acceptance
+## APP-005 - Automatic Best Matching Profile Acceptance
 
 Status: Backlog
 
@@ -511,7 +511,7 @@ Reason deferred:
 
 The MVP keeps explicit user validation before application creation.
 
-### TECH-001 - Frontend Bundle Optimization
+## TECH-001 - Frontend Bundle Optimization
 
 Status: Backlog
 
@@ -528,7 +528,7 @@ Reason deferred:
 No functional impact on MVP.
 Build validation is successful.
 
-#### SETTINGS-004 - Prevent Duplicate Saved Search Names
+## SETTINGS-004 - Prevent Duplicate Saved Search Names
 
 Status: Backlog
 
@@ -562,7 +562,7 @@ Out of Scope:
 - Folder organization.
 - Saved Search tagging.
 
-#### SETTINGS-005 - Saved Search UX Refinements
+## SETTINGS-005 - Saved Search UX Refinements
 
 Status: Backlog
 
@@ -603,3 +603,75 @@ Out of Scope:
 - Shared searches.
 - Scheduled searches.
 - Notification alerts.
+
+## AUTH-001 – Multi Factor Authentication (MFA)
+
+Status: Backlog
+
+Support:
+
+- TOTP
+- Microsoft Authenticator
+- Google Authenticator
+
+Capabilities:
+
+- QR Code setup
+- MFA challenge
+- Recovery codes
+- Device trust
+
+Learning goals:
+
+- RFC 6238
+- TOTP
+- Authentication security
+- Step-up authentication
+
+## AUTH-002 – OAuth Providers
+
+Status: Backlog
+
+Support:
+
+- Microsoft
+- Google
+- GitHub
+
+Capabilities:
+
+- OAuth2
+- OpenID Connect
+- Authorization Code Flow
+- PKCE
+
+Learning goals:
+
+- Identity federation
+- OAuth2
+- OIDC
+- External providers
+
+## AUTH-003 – Enterprise SSO
+
+Status: Backlog
+
+Support:
+
+- Microsoft Entra ID
+- Keycloak
+- Generic OpenID Connect
+
+Capabilities:
+
+- Enterprise login
+- Claims mapping
+- Group mapping
+- Role mapping
+
+Learning goals:
+
+- Enterprise identity
+- SSO
+- Federation
+- IAM architecture
