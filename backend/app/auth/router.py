@@ -7,7 +7,36 @@ from jose import JWTError
 from jose import jwt
 from sqlalchemy.orm import Session
 
+import traceback
+
 from app.auth.models import User
+from app.auth.email_service import (
+    send_password_reset_email,
+)
+from app.auth.schemas import (
+    ForgotPasswordRequest,
+)
+from app.auth.schemas import (
+    MessageResponse,
+)
+from app.auth.schemas import (
+    ResetPasswordRequest,
+)
+
+from app.auth.token_service import (
+    create_password_reset_token,
+)
+from app.auth.token_service import (
+    get_valid_password_reset_token,
+)
+from app.auth.token_service import (
+    mark_password_reset_token_as_used,
+)
+from app.auth.password_reset_models import (
+    PasswordResetToken,
+)
+
+
 from app.auth.schemas import LoginRequest
 from app.auth.schemas import LoginResponse
 from app.auth.schemas import UserResponse
@@ -30,6 +59,12 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 PUBLIC_REGISTRATION_ENABLED = False
+
+PASSWORD_RECOVERY_MESSAGE = (
+    "If an account exists for this email, "
+    "password recovery instructions have "
+    "been sent."
+)
 
 
 @router.post(
@@ -110,6 +145,55 @@ def login(
         user=user,
     )
 
+@router.post(
+    "/forgot-password",
+    response_model=MessageResponse,
+)
+def forgot_password(
+    payload: ForgotPasswordRequest,
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_email(
+        db=db,
+        email=payload.email,
+    )
+
+    if user is None or not user.is_active:
+        return MessageResponse(
+            message=PASSWORD_RECOVERY_MESSAGE,
+        )
+
+    token_record, raw_token = (
+        create_password_reset_token(
+            db=db,
+            user=user,
+        )
+    )
+
+    try:
+        send_password_reset_email(
+            recipient_email=user.email,
+            reset_token=raw_token,
+        )
+ 
+    except Exception:
+        traceback.print_exc()
+
+        db.query(
+            PasswordResetToken
+        ).filter(
+            PasswordResetToken.id
+            == token_record.id
+        ).delete(
+            synchronize_session=False
+        )
+
+        db.commit()
+
+    return MessageResponse(
+        message=PASSWORD_RECOVERY_MESSAGE,
+    )
+
 
 def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -153,6 +237,86 @@ def get_current_user(
         )
 
     return user
+
+
+@router.post(
+    "/reset-password",
+    response_model=MessageResponse,
+)
+def reset_password(
+    payload: ResetPasswordRequest,
+    db: Session = Depends(get_db),
+):
+    if (
+        payload.new_password
+        != payload.confirm_password
+    ):
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password confirmation does "
+                "not match."
+            ),
+        )
+
+    token_record = (
+        get_valid_password_reset_token(
+            db=db,
+            raw_token=payload.token,
+        )
+    )
+
+    if token_record is None:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password reset token is "
+                "invalid or expired."
+            ),
+        )
+
+    user = (
+        db.query(User)
+        .filter(
+            User.id
+            == token_record.user_id
+        )
+        .first()
+    )
+
+    if user is None or not user.is_active:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password reset token is "
+                "invalid or expired."
+            ),
+        )
+
+    user.hashed_password = hash_password(
+        payload.new_password
+    )
+
+    mark_password_reset_token_as_used(
+        db=db,
+        token_record=token_record,
+    )
+
+    db.add(user)
+    db.commit()
+
+    return MessageResponse(
+        message=(
+            "Password has been reset "
+            "successfully."
+        ),
+    )
 
 
 @router.get(

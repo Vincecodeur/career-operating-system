@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import Field
 
 
 class LoginRequest(BaseModel):
@@ -24,3 +25,25 @@ class LoginResponse(BaseModel):
 
 class TokenPayload(BaseModel):
     sub: str
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class MessageResponse(BaseModel):
+    message: str
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str = Field(
+        min_length=1,
+    )
+
+    new_password: str = Field(
+        min_length=8,
+    )
+
+    confirm_password: str = Field(
+        min_length=8,
+    )

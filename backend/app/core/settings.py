@@ -132,5 +132,50 @@ class Settings:
         "DATABASE_URL_TEST",
         "",
     )
+    
+    SMTP_HOST: str = os.getenv(
+    "SMTP_HOST",
+    "",
+    )
+
+    SMTP_PORT: int = _get_int_env(
+        "SMTP_PORT",
+        "587",
+    )
+
+    SMTP_USERNAME: str = os.getenv(
+        "SMTP_USERNAME",
+        "",
+    )
+
+    SMTP_PASSWORD: str = os.getenv(
+        "SMTP_PASSWORD",
+        "",
+    )
+
+    SMTP_FROM_EMAIL: str = os.getenv(
+        "SMTP_FROM_EMAIL",
+        "",
+    )
+
+    SMTP_FROM_NAME: str = os.getenv(
+        "SMTP_FROM_NAME",
+        "Career Operating System",
+    )
+    
+    SMTP_USE_TLS: bool = _get_bool_env(
+    "SMTP_USE_TLS",
+    "true",
+    )
+
+    FRONTEND_BASE_URL: str = os.getenv(
+        "FRONTEND_BASE_URL",
+        "http://localhost:5173",
+    )
+
+    PASSWORD_RESET_TOKEN_EXPIRE_MINUTES: int = _get_int_env(
+        "PASSWORD_RESET_TOKEN_EXPIRE_MINUTES",
+        "60",
+    )
 
 settings = Settings()
