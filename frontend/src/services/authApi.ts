@@ -12,28 +12,44 @@ export type LoginResponse = {
   user: AuthUser;
 };
 
+export type MessageResponse = {
+  message: string;
+};
+
+async function getAuthApiErrorMessage(
+  response: Response,
+  fallbackMessage: string,
+): Promise<string> {
+  try {
+    const data = await response.json();
+
+    if (data && typeof data.detail === "string") {
+      return data.detail;
+    }
+
+    return fallbackMessage;
+  } catch {
+    return fallbackMessage;
+  }
+}
+
 export async function loginUser(
   email: string,
   password: string,
 ): Promise<LoginResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/auth/login`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
 
   if (!response.ok) {
-    throw new Error(
-      "Invalid email or password.",
-    );
+    throw new Error("Invalid email or password.");
   }
 
   return response.json();
@@ -42,27 +58,18 @@ export async function loginUser(
 export async function getCurrentUser(
   accessToken: string,
 ): Promise<AuthUser> {
-  const response = await fetch(
-    `${API_BASE_URL}/auth/me`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+  const response = await fetch(`${API_BASE_URL}/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-  );
+  });
 
   if (!response.ok) {
-    throw new Error(
-      "Unable to load current user.",
-    );
+    throw new Error("Unable to load current user.");
   }
 
   return response.json();
 }
-
-export type MessageResponse = {
-  message: string;
-};
 
 export async function requestPasswordReset(
   email: string,
@@ -82,7 +89,7 @@ export async function requestPasswordReset(
 
   if (!response.ok) {
     throw new Error(
-      "Unable to send password recovery email.",
+      "Unable to send password recovery instructions.",
     );
   }
 
@@ -110,11 +117,69 @@ export async function resetPassword(
   );
 
   if (!response.ok) {
-    const data = await response.json();
-
     throw new Error(
-      data.detail ??
-      "Unable to reset password.",
+      await getAuthApiErrorMessage(
+        response,
+        "Unable to reset password.",
+      ),
+    );
+  }
+
+  return response.json();
+}
+
+export async function requestEmailChange(
+  accessToken: string,
+  newEmail: string,
+): Promise<MessageResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/change-email`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        new_email: newEmail,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      await getAuthApiErrorMessage(
+        response,
+        "Unable to request email change.",
+      ),
+    );
+  }
+
+  return response.json();
+}
+
+export async function confirmEmailChange(
+  token: string,
+): Promise<MessageResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/change-email/confirm`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      await getAuthApiErrorMessage(
+        response,
+        "Unable to confirm email change.",
+      ),
     );
   }
 

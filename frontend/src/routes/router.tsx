@@ -6,6 +6,7 @@ import { DashboardPage } from "../pages/DashboardPage";
 import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
+import { ConfirmEmailChangePage } from "../pages/ConfirmEmailChangePage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ApplicationsPage } from "../pages/ApplicationsPage";
 import { OpportunitiesPage } from "../pages/OpportunitiesPage";
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPasswordPage />,
+  },
+  {
+    path: "/confirm-email-change",
+    element: <ConfirmEmailChangePage />,
   },
   {
     element: (

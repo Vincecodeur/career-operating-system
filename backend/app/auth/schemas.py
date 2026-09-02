@@ -47,3 +47,16 @@ class ResetPasswordRequest(BaseModel):
     confirm_password: str = Field(
         min_length=8,
     )
+    
+
+
+class ChangeEmailRequest(BaseModel):
+    new_email: str = Field(
+        min_length=3,
+    )
+
+
+class ConfirmEmailChangeRequest(BaseModel):
+    token: str = Field(
+        min_length=1,
+    )

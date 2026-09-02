@@ -36,6 +36,28 @@ from app.auth.password_reset_models import (
     PasswordResetToken,
 )
 
+from app.auth.email_change_models import (
+    EmailChangeRequest,
+)
+from app.auth.email_service import (
+    send_email_change_confirmation_email,
+)
+from app.auth.schemas import (
+    ChangeEmailRequest,
+)
+from app.auth.schemas import (
+    ConfirmEmailChangeRequest,
+)
+from app.auth.token_service import (
+    create_email_change_request,
+)
+from app.auth.token_service import (
+    get_valid_email_change_request,
+)
+from app.auth.token_service import (
+    mark_email_change_request_as_used,
+)
+
 
 from app.auth.schemas import LoginRequest
 from app.auth.schemas import LoginResponse
@@ -318,6 +340,155 @@ def reset_password(
         ),
     )
 
+@router.post(
+    "/change-email",
+    response_model=MessageResponse,
+)
+def change_email(
+    payload: ChangeEmailRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    existing_user = get_user_by_email(
+        db=db,
+        email=payload.new_email,
+    )
+
+    if existing_user is not None:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "This email address is already "
+                "in use."
+            ),
+        )
+
+    request_record, raw_token = (
+        create_email_change_request(
+            db=db,
+            user=current_user,
+            new_email=payload.new_email,
+        )
+    )
+
+    try:
+        send_email_change_confirmation_email(
+            recipient_email=current_user.email,
+            new_email=payload.new_email,
+            confirmation_token=raw_token,
+        )
+    except Exception:
+        traceback.print_exc()
+
+        db.query(
+            EmailChangeRequest
+        ).filter(
+            EmailChangeRequest.id
+            == request_record.id
+        ).delete(
+            synchronize_session=False
+        )
+
+        db.commit()
+
+        raise HTTPException(
+            status_code=(
+                status.HTTP_500_INTERNAL_SERVER_ERROR
+            ),
+            detail=(
+                "Unable to send email change "
+                "confirmation."
+            ),
+        )
+
+    return MessageResponse(
+        message=(
+            "A confirmation link has been sent "
+            "to your current email address."
+        ),
+    )
+
+
+@router.post(
+    "/change-email/confirm",
+    response_model=MessageResponse,
+)
+def confirm_email_change(
+    payload: ConfirmEmailChangeRequest,
+    db: Session = Depends(get_db),
+):
+    request_record = (
+        get_valid_email_change_request(
+            db=db,
+            raw_token=payload.token,
+        )
+    )
+
+    if request_record is None:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Email change link is invalid "
+                "or expired."
+            ),
+        )
+
+    existing_user = get_user_by_email(
+        db=db,
+        email=request_record.new_email,
+    )
+
+    if existing_user is not None:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "This email address is already "
+                "in use."
+            ),
+        )
+
+    user = (
+        db.query(User)
+        .filter(
+            User.id
+            == request_record.user_id
+        )
+        .first()
+    )
+
+    if user is None or not user.is_active:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Email change link is invalid "
+                "or expired."
+            ),
+        )
+
+    user.email = request_record.new_email
+
+    mark_email_change_request_as_used(
+        db=db,
+        request_record=request_record,
+    )
+
+    db.add(user)
+    db.commit()
+
+    return MessageResponse(
+        message=(
+            "Your email address has been "
+            "updated successfully."
+        ),
+    )
 
 @router.get(
     "/me",

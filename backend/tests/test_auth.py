@@ -532,3 +532,321 @@ def test_login_works_with_new_password():
 
     assert old_login_response.status_code == 401
     assert new_login_response.status_code == 200
+    
+from app.auth.email_change_models import (
+    EmailChangeRequest,
+)
+
+
+def get_auth_headers_for_user(
+    user: User,
+    password: str,
+) -> dict[str, str]:
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": user.email,
+            "password": password,
+        },
+    )
+
+    access_token = login_response.json()[
+        "access_token"
+    ]
+
+    return {
+        "Authorization": f"Bearer {access_token}",
+    }
+
+
+def test_change_email_requires_authentication():
+    response = client.post(
+        "/auth/change-email",
+        json={
+            "new_email": "new-address@example.com",
+        },
+    )
+
+    assert response.status_code == 401
+
+
+def test_change_email_rejects_existing_email(
+    monkeypatch,
+):
+    password = "Password123!"
+
+    existing_user = create_test_user(
+        "existing-user@example.com",
+        password,
+    )
+
+    requesting_user = create_test_user(
+        "requesting-user@example.com",
+        password,
+    )
+
+    headers = get_auth_headers_for_user(
+        requesting_user,
+        password,
+    )
+
+    def fake_send_email_change_confirmation_email(
+        recipient_email: str,
+        new_email: str,
+        confirmation_token: str,
+    ) -> None:
+        pass
+
+    monkeypatch.setattr(
+        "app.auth.router.send_email_change_confirmation_email",
+        fake_send_email_change_confirmation_email,
+    )
+
+    response = client.post(
+        "/auth/change-email",
+        json={
+            "new_email": existing_user.email,
+        },
+        headers=headers,
+    )
+
+    assert response.status_code == 400
+
+
+def test_change_email_creates_request_and_sends_confirmation(
+    monkeypatch,
+):
+    password = "Password123!"
+
+    user = create_test_user(
+        "current-email@example.com",
+        password,
+    )
+
+    headers = get_auth_headers_for_user(
+        user,
+        password,
+    )
+
+    sent_email: dict[str, str] = {}
+
+    def fake_send_email_change_confirmation_email(
+        recipient_email: str,
+        new_email: str,
+        confirmation_token: str,
+    ) -> None:
+        sent_email["recipient_email"] = (
+            recipient_email
+        )
+        sent_email["new_email"] = new_email
+        sent_email["confirmation_token"] = (
+            confirmation_token
+        )
+
+    monkeypatch.setattr(
+        "app.auth.router.send_email_change_confirmation_email",
+        fake_send_email_change_confirmation_email,
+    )
+
+    response = client.post(
+        "/auth/change-email",
+        json={
+            "new_email": "new-email@example.com",
+        },
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+
+    assert (
+        sent_email["recipient_email"]
+        == user.email
+    )
+    assert (
+        sent_email["new_email"]
+        == "new-email@example.com"
+    )
+    assert sent_email["confirmation_token"]
+
+    db = SessionLocal()
+
+    try:
+        request_record = (
+            db.query(EmailChangeRequest)
+            .filter(
+                EmailChangeRequest.user_id
+                == user.id
+            )
+            .first()
+        )
+
+        assert request_record is not None
+        assert (
+            request_record.new_email
+            == "new-email@example.com"
+        )
+        assert (
+            request_record.token_hash
+            == hash_password_reset_token(
+                sent_email["confirmation_token"]
+            )
+        )
+        assert request_record.used_at is None
+    finally:
+        db.close()
+
+
+def test_confirm_email_change_rejects_invalid_token():
+    response = client.post(
+        "/auth/change-email/confirm",
+        json={
+            "token": "invalid-token",
+        },
+    )
+
+    assert response.status_code == 400
+
+
+def test_confirm_email_change_success(
+    monkeypatch,
+):
+    password = "Password123!"
+
+    user = create_test_user(
+        "before-change@example.com",
+        password,
+    )
+
+    headers = get_auth_headers_for_user(
+        user,
+        password,
+    )
+
+    sent_email: dict[str, str] = {}
+
+    def fake_send_email_change_confirmation_email(
+        recipient_email: str,
+        new_email: str,
+        confirmation_token: str,
+    ) -> None:
+        sent_email["confirmation_token"] = (
+            confirmation_token
+        )
+
+    monkeypatch.setattr(
+        "app.auth.router.send_email_change_confirmation_email",
+        fake_send_email_change_confirmation_email,
+    )
+
+    client.post(
+        "/auth/change-email",
+        json={
+            "new_email": "after-change@example.com",
+        },
+        headers=headers,
+    )
+
+    confirm_response = client.post(
+        "/auth/change-email/confirm",
+        json={
+            "token": sent_email[
+                "confirmation_token"
+            ],
+        },
+    )
+
+    assert confirm_response.status_code == 200
+
+    db = SessionLocal()
+
+    try:
+        updated_user = (
+            db.query(User)
+            .filter(User.id == user.id)
+            .first()
+        )
+
+        assert (
+            updated_user.email
+            == "after-change@example.com"
+        )
+    finally:
+        db.close()
+
+    old_login_response = client.post(
+        "/auth/login",
+        json={
+            "email": "before-change@example.com",
+            "password": password,
+        },
+    )
+
+    new_login_response = client.post(
+        "/auth/login",
+        json={
+            "email": "after-change@example.com",
+            "password": password,
+        },
+    )
+
+    assert old_login_response.status_code == 401
+    assert new_login_response.status_code == 200
+
+
+def test_confirm_email_change_token_cannot_be_reused(
+    monkeypatch,
+):
+    password = "Password123!"
+
+    user = create_test_user(
+        "reuse-email-token@example.com",
+        password,
+    )
+
+    headers = get_auth_headers_for_user(
+        user,
+        password,
+    )
+
+    sent_email: dict[str, str] = {}
+
+    def fake_send_email_change_confirmation_email(
+        recipient_email: str,
+        new_email: str,
+        confirmation_token: str,
+    ) -> None:
+        sent_email["confirmation_token"] = (
+            confirmation_token
+        )
+
+    monkeypatch.setattr(
+        "app.auth.router.send_email_change_confirmation_email",
+        fake_send_email_change_confirmation_email,
+    )
+
+    client.post(
+        "/auth/change-email",
+        json={
+            "new_email": "reused-target@example.com",
+        },
+        headers=headers,
+    )
+
+    payload = {
+        "token": sent_email[
+            "confirmation_token"
+        ],
+    }
+
+    first_response = client.post(
+        "/auth/change-email/confirm",
+        json=payload,
+    )
+
+    second_response = client.post(
+        "/auth/change-email/confirm",
+        json=payload,
+    )
+
+    assert first_response.status_code == 200
+    assert second_response.status_code == 400

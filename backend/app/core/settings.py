@@ -177,5 +177,10 @@ class Settings:
         "PASSWORD_RESET_TOKEN_EXPIRE_MINUTES",
         "60",
     )
+    
+    EMAIL_CHANGE_TOKEN_EXPIRE_MINUTES: int = _get_int_env(
+    "EMAIL_CHANGE_TOKEN_EXPIRE_MINUTES",
+    "60",
+    )
 
 settings = Settings()

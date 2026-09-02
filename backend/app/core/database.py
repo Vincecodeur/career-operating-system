@@ -44,6 +44,10 @@ from app.auth.models import User
 from app.auth.password_reset_models import (
     PasswordResetToken,
 )
+from app.auth.email_change_models import (
+    EmailChangeRequest,
+)
+
 from app.cv.models import CV
 from app.reference_data.models import Country
 from app.reference_data.models import WorkMode
