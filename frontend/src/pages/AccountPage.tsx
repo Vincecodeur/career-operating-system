@@ -65,9 +65,9 @@ export function AccountPage() {
 
         <ul className="space-y-2 text-slate-400">
           <li>✅ Login</li>
+          <li>✅ Password Recovery</li>
           <li>⬜ Sign Up</li>
           <li>⬜ Remember Me</li>
-          <li>⬜ Password Recovery</li>
           <li>⬜ Email Recovery</li>
           <li>⬜ MFA</li>
           <li>⬜ SSO</li>

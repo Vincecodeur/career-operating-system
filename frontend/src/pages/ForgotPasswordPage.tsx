@@ -2,15 +2,31 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Card } from "../components/ui/Card";
 import { Link } from "react-router-dom";
+import { requestPasswordReset } from "../services/authApi";
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setSubmitted(true);
+    setError("");
+    setLoading(true);
+
+    try {
+      await requestPasswordReset(email);
+
+      setSubmitted(true);
+    } catch {
+      setError(
+        "Unable to send password recovery instructions. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -20,22 +36,9 @@ export function ForgotPasswordPage() {
           <h1 className="text-2xl font-bold text-white">Password Recovery</h1>
 
           <p className="mt-4 text-slate-400">
-            Password recovery will be implemented during the Authentication
-            Learning Features phase.
+            Enter your email address and we will send you a link to reset your
+            password.
           </p>
-
-          <div className="mt-6 rounded border border-slate-700 bg-slate-950 p-4">
-            <h2 className="font-semibold text-white">
-              Planned Authentication Features
-            </h2>
-
-            <ul className="mt-3 space-y-2 text-sm text-slate-400">
-              <li>• Remember Me</li>
-              <li>• Password Recovery</li>
-              <li>• Email Recovery</li>
-              <li>• Session Management</li>
-            </ul>
-          </div>
 
           <form onSubmit={handleSubmit} className="mt-6">
             <label
@@ -50,19 +53,28 @@ export function ForgotPasswordPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
+              disabled={loading}
               className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
             />
 
+            {error && (
+              <div className="mt-4 rounded border border-red-900 bg-red-950 p-3 text-sm text-red-300">
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
-              className="mt-4 w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-500">
-              Send Reset Link
+              disabled={loading}
+              className="mt-4 w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
+              {loading ? "Sending..." : "Send Reset Link"}
             </button>
           </form>
 
           {submitted && (
             <p className="mt-4 text-sm text-green-400">
-              Recovery workflow is not enabled yet.
+              If an account exists for this email, password recovery
+              instructions have been sent.
             </p>
           )}
 

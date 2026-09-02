@@ -59,3 +59,64 @@ export async function getCurrentUser(
 
   return response.json();
 }
+
+export type MessageResponse = {
+  message: string;
+};
+
+export async function requestPasswordReset(
+  email: string,
+): Promise<MessageResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/forgot-password`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Unable to send password recovery email.",
+    );
+  }
+
+  return response.json();
+}
+
+export async function resetPassword(
+  token: string,
+  newPassword: string,
+  confirmPassword: string,
+): Promise<MessageResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/reset-password`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    const data = await response.json();
+
+    throw new Error(
+      data.detail ??
+      "Unable to reset password.",
+    );
+  }
+
+  return response.json();
+}
