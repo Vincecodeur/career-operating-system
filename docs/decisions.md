@@ -5350,3 +5350,46 @@ All learning scope items are now implemented and validated:
 - Email Recovery (Completed)
 
 Phase 7.1.23.15 Authentication Learning Features is closed.
+
+## DEC-080 - Minimal Account UX Polish
+
+Date: 2026-09-03
+Status: Completed
+
+### Context
+
+Following the closure of DEC-079 (Authentication Learning Features), AccountPage.tsx contained two elements that had become obsolete or misleading:
+
+1. A "Authentication Roadmap" card listing Login, Password Recovery, Email Recovery, Sign Up, Remember Me as checkmarks, with MFA and SSO as pending items. This was a development progress tracker, not information relevant to an end user of the product.
+
+2. The line "Account Mode: Single User MVP", which became factually inaccurate once Sign Up allowed the creation of multiple User accounts (even though all accounts still share the same business data, per ARCH-001).
+
+### Decision
+
+- Remove the "Authentication Roadmap" card entirely from AccountPage.tsx.
+- Remove the "Account Mode: Single User MVP" line entirely, without replacement, since no accurate alternative statement was appropriate until ARCH-001 is addressed.
+- Add a "Member since" field to Account Information, displaying the user's account creation date.
+
+### Implementation
+
+Backend:
+
+- UserResponse schema extended with created_at: datetime (the User model already had this column; only the response schema was missing it).
+
+Frontend:
+
+- AuthUser type extended with created_at: string.
+- AccountPage.tsx updated to display the formatted creation date.
+
+### Validation
+
+- 326 backend tests passing, 0 regressions (created_at addition is non-breaking, read via from_attributes).
+- Manual validation confirmed: real account creation date displayed correctly, both obsolete elements no longer present.
+
+### Technical commit
+
+- aaac824 - feat(account): add member since date and remove obsolete roadmap display
+
+### Known remaining issue (not addressed here)
+
+A duplicated validation block was observed in backend/app/auth/router.py's register() endpoint (password confirmation check and password policy check each appear twice consecutively). This does not cause functional failures (326 tests still pass) but is dead/redundant code. It was not addressed in this phase, as it falls outside the scope of DEC-080. It should be cleaned up in a future maintenance pass.

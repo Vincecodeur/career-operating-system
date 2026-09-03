@@ -527,20 +527,27 @@ Combined end-to-end validation results:
 - old password rejected after reset
 - new credentials with Remember Me validated end-to-end
 
+Minimal Account UX Polish results:
+
+- UserResponse and AuthUser enriched with created_at
+- AccountPage.tsx: "Member since" field added
+- AccountPage.tsx: obsolete "Account Mode: Single User MVP" line removed
+- AccountPage.tsx: obsolete "Authentication Roadmap" card removed entirely
+- 326 backend tests passing, 0 regressions
+- Technical commit aaac824 pushed
+
 Current Phase:
 
-- Authentication Learning Features
-- Password Recovery completed
-- Email Recovery completed
-- Sign Up completed
-- Remember Me completed
-- Combined validation completed
-- Phase 7.1.23.15 CLOSED
+- Minimal Account UX Polish completed
+- Phase 7.1.23.16 CLOSED
 
 Remaining:
 
-- Minimal Account UX Polish
 - Settings Strategy Synchronization
 - Best Profile Recommendation Architecture Review
 - Final Regression And Documentation
 - MVP Closure Decision
+
+Known technical debt (not blocking):
+
+- Duplicated validation block in backend/app/auth/router.py register() endpoint (password confirmation + password policy checks appear twice). Non-breaking, to be cleaned up in a future pass.

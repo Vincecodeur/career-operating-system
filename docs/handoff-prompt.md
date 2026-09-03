@@ -1183,40 +1183,23 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-9cbc366 - feat(auth): implement remember me with variable token expiration
+aaac824 - feat(account): add member since date and remove obsolete roadmap display
 
 Latest backend validation:
 
 - 326 backend tests passed, 0 regressions
-- Combined end-to-end scenario validated (Sign Up + Remember Me + Change Email + Reset Password + final login)
 
 Current state:
 
 - Phase 7.1.23.15 Authentication Learning Features CLOSED
-- Password Recovery, Email Recovery, Sign Up and Remember Me all completed (backend + frontend + real validation)
-- Data isolation limitation documented as ARCH-001 (post-MVP)
+- Phase 7.1.23.16 Minimal Account UX Polish CLOSED
+- AccountPage.tsx cleaned up (obsolete roadmap and account mode references removed)
+- Member since date now displayed
+- Data isolation limitation still documented as ARCH-001 (post-MVP, not addressed)
+- Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)
 
 Next required step:
-Minimal Account UX Polish (phase number not yet assigned in roadmap.md)
-
-Latest backend validation:
-
-- Password Recovery: 9 tests added, real Mailtrap end-to-end validated
-- Email Recovery: 6 tests added, real Mailtrap end-to-end validated
-- complete backend suite: 319 tests passed, 0 regressions
-
-Current state:
-
-- Password Recovery completed (backend + frontend + real Mailtrap validation)
-- Email Recovery completed (backend + frontend + real Mailtrap validation)
-- Sign Up completed (backend + frontend + password policy + manual validation)
-- Remember Me completed (backend + frontend + manual JWT validation)
-- combined end-to-end scenario validated across all four features together
-- data isolation limitation identified and documented as ARCH-001 (post-MVP)
-- Phase 7.1.23.15 Authentication Learning Features CLOSED
-
-  Next required step:
-  Minimal Account UX Polish (phase number not yet assigned in roadmap.md)
+Settings Strategy Synchronization
 
 ## Méthode de reprise
 

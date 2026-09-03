@@ -1339,6 +1339,30 @@ Statut :
 
 Completed
 
+✅ 7.1.23.16 Minimal Account UX Polish
+
+Objectif :
+
+- nettoyer AccountPage.tsx des éléments devenus obsolètes après la clôture de 7.1.23.15
+- ajouter une information factuelle utile à l'utilisateur (date de création du compte)
+
+Modifications :
+
+- UserResponse (backend) enrichi avec created_at
+- AuthUser (frontend) enrichi avec created_at
+- AccountPage.tsx : ajout de l'affichage "Member since"
+- AccountPage.tsx : suppression de "Account Mode: Single User MVP" (devenu factuellement inexact après Sign Up, qui autorise la création de plusieurs comptes User sans isolation de données réelle — voir ARCH-001)
+- AccountPage.tsx : suppression complète de la Card "Authentication Roadmap" (artefact de suivi de développement, plus pertinent pour un utilisateur final une fois toutes les fonctionnalités listées terminées)
+
+Validation :
+
+- 326 tests backend passants, 0 régression
+- validation manuelle réalisée : affichage de la date réelle de création de compte, disparition confirmée des deux éléments obsolètes
+
+Commit :
+
+- aaac824 - feat(account): add member since date and remove obsolete roadmap display
+
 ### Phase 7.2
 
 AI Career Advisor

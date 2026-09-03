@@ -24,13 +24,13 @@ Current Milestone
 ---
 
 Current Phase
-7.1.23.15 Authentication Learning Features
+7.1.23.16 Minimal Account UX Polish
 
 Current Step
-Documentation Synchronization completed for 7.1.23.15
+Completed
 
 Next Planned Milestone
-7.1.23.15 Authentication Learning Features
+Settings Strategy Synchronization
 
 ---
 
@@ -1541,6 +1541,15 @@ Post-MVP Planning
 - Phase 7.1.23.15.6 Validation terminée
 - Phase 7.1.23.15.7 Documentation Synchronization terminée
 - Phase 7.1.23.15 Authentication Learning Features clôturée
+- UserResponse enrichi avec created_at
+- AuthUser (frontend) enrichi avec created_at
+- AccountPage.tsx : affichage "Member since" ajouté
+- AccountPage.tsx : "Account Mode: Single User MVP" supprimé (information devenue inexacte)
+- AccountPage.tsx : Card "Authentication Roadmap" supprimée (artefact de développement)
+- 326 tests backend passants
+- Commit technique aaac824 créé
+- Push GitHub réalisé
+- Phase 7.1.23.16 Minimal Account UX Polish terminée
 
 Blocked
 
@@ -1550,7 +1559,8 @@ Aucun
 
 Latest completed phase
 
-7.1.23.15 Authentication Learning Features
+3
+7.1.23.16 Minimal Account UX Polish
 
 Validation:
 
@@ -1625,7 +1635,7 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.15 Authentication Learning Features
+7.1.23.16 Minimal Account UX Polish
 Status:
 Completed
 Latest completed phases:
@@ -1661,10 +1671,11 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-Minimal Account UX Polish
+Settings Strategy Synchronization
+
 Last Commits :
 
+- aaac824 - feat(account): add member since date and remove obsolete roadmap display
+- 91f63cd - docs(auth): remove stale AI phase reference from handoff prompt
+- df6a14c - docs(auth): close authentication learning features phase with remember me and e2e validation
 - 9cbc366 - feat(auth): implement remember me with variable token expiration
-- 60c3af2 - docs(auth): synchronize sign up completion and document data isolation limitation
-- ae5869c - feat(auth): implement sign up with password policy validation
-- 4a6b239 - feat(auth): implement email recovery backend and frontend
