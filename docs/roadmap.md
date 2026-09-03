@@ -1363,6 +1363,58 @@ Commit :
 
 - aaac824 - feat(account): add member since date and remove obsolete roadmap display
 
+⏳ 7.1.24 Settings Strategy Synchronization
+
+Objectif :
+S'assurer que tous les paramètres utilisateur sont cohérents entre :
+
+- Frontend
+- Backend
+- Base PostgreSQL
+- Roadmap
+- Documentation
+
+Contexte historique :
+Cette phase avait été identifiée à la fin de la phase MVP Experience Review, mais n'a jamais été exécutée car le projet a dérivé vers Optional CV puis vers l'investigation et le durcissement du parser CV.
+
+Question centrale :
+Quels paramètres doivent être :
+
+- globaux au compte (User) ?
+- spécifiques à un profil (Profile) ?
+- spécifiques à une recherche (SavedSearch) ?
+
+Note importante :
+Cette question a pris une dimension nouvelle depuis la rédaction initiale, car Sign Up (7.1.23.15.5.3) autorise désormais la création de plusieurs comptes User, et ARCH-001 Multi-Tenant Data Isolation documente qu'aucune isolation multi-tenant n'existe. Tout paramètre "global au compte" est aujourd'hui en réalité partagé entre tous les comptes.
+
+Sous-phases :
+⬜ 7.1.24.1 Repository Audit
+⬜ 7.1.24.2 Product Design
+⬜ 7.1.24.3 Gap Analysis
+⬜ 7.1.24.4 Decision
+⬜ 7.1.24.5 Documentation Synchronization
+
+Livrable attendu :
+docs/settings-strategy.md
+
+Hors périmètre de cette phase :
+
+- SETTINGS-001 Settings Categories (reste en post-MVP backlog)
+- MATCHING-002 Configurable Matching Weights (reste hors MVP)
+- toute migration de données sans validation explicite préalable
+
+Ordre de la revue de clôture MVP (révisé) :
+7.1.24 Settings Strategy Synchronization
+↓
+7.1.25 Best Profile Recommendation Architecture Review
+↓
+7.1.26 Final Regression And Documentation
+↓
+7.1.27 MVP Closure Decision
+
+Statut :
+In Progress
+
 ### Phase 7.2
 
 AI Career Advisor
