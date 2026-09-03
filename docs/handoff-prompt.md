@@ -317,6 +317,13 @@ Implémenté :
 - GET /profiles/{profile_id}/ai-context-preview
 - AI Context frontend integration completed
 
+- ForgotPasswordPage connected to real API
+- ResetPasswordPage
+- ConfirmEmailChangePage
+- Change Email form in AccountPage
+- Password Recovery frontend flow
+- Email Recovery frontend flow
+
 Partiellement implémenté :
 
 Non implémenté :
@@ -565,6 +572,13 @@ Implémenté :
 - Account UX redesign
 - Authentication roadmap visualization
 
+- ForgotPasswordPage connected to real API
+- ResetPasswordPage
+- ConfirmEmailChangePage
+- Change Email form in AccountPage
+- Password Recovery frontend flow
+- Email Recovery frontend flow
+
 Documenté mais pas encore implémenté :
 
 - Auth Layout
@@ -628,6 +642,21 @@ Des tests existent pour :
 - AI Context Service
 - AI Context Router
 - AI Settings
+- forgot password unknown user
+- forgot password existing user
+- reset password invalid token
+- reset password expired token
+- reset password used token
+- reset password success
+- reset password mismatch
+- reset password token cannot be reused
+- login with new password after reset
+- change email requires authentication
+- change email rejects existing email
+- change email creates request and sends confirmation
+- confirm email change invalid token
+- confirm email change success
+- confirm email change token cannot be reused
 
 ## Phases terminées
 
@@ -1147,20 +1176,22 @@ Latest backend validation:
 - git diff --check validated
 
 Current phase:
-7.1.23.15 Authentication Learning Features
+7.1.23.15 Authentication Learning Features  
+Latest technical commit:
+4a6b239 - feat(auth): implement email recovery backend and frontend  
+Latest backend validation:
 
-Latest frontend commit:
-179f8e6 - feat(auth): improve login, account and recovery UX
-
-Current state:
-
-- backend completed
-- frontend completed
-- functional validation completed
-- documentation synchronization in progress
-
-Next required step:
-7.1.23.15 Authentication Learning Features
+- Password Recovery: 9 tests added, real Mailtrap end-to-end validated
+- Email Recovery: 6 tests added, real Mailtrap end-to-end validated
+- complete backend suite: 319 tests passed, 0 regressions  
+  Current state:
+- Password Recovery completed (backend + frontend + real Mailtrap validation)
+- Email Recovery completed (backend + frontend + real Mailtrap validation)
+- Sign Up not started
+- Remember Me not started
+- documentation synchronization in progress  
+  Next required step:
+  7.1.23.15.5.3 Sign Up
 
 ## Méthode de reprise
 

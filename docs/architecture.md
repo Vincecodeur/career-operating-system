@@ -732,21 +732,42 @@ Known limitation:
 Some tool/language combinations may still appear merged
 inside skill extraction results.
 
-### Frontend / Authentication
+#### Authentication
 
 Current authentication UX includes:
 
 - Login page
-- Forgot Password page
-- Account page
+- Forgot Password page (connected to real API)
+- Reset Password page (new, token read from URL)
+- Confirm Email Change page (new, explicit click confirmation)
+- Account page (with Change Email form)
 
 The authentication roadmap is visible inside Account Page.
+
+Password Recovery:
+
+- PasswordResetToken model persists a SHA-256 hash of the token, never the raw value
+- token expiration is configurable via PASSWORD_RESET_TOKEN_EXPIRE_MINUTES
+- a new request invalidates any previous unused token for the same user
+- the public forgot-password response is identical whether the account exists or not
+- real SMTP delivery validated through Mailtrap
+
+Email Recovery:
+
+- EmailChangeRequest model reuses the same token hashing strategy
+- the confirmation email is sent to the CURRENT email address, never to the requested new address
+- confirmation requires an explicit user action (button click), not an automatic action on page load
+- uniqueness of the new email is verified both at request time and at confirmation time
+
+SMTP configuration:
+
+- SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL, SMTP_FROM_NAME, SMTP_USE_TLS
+- stored as environment variables, never in PostgreSQL
+- validated against a real Mailtrap sandbox
 
 Future learning features:
 
 - Sign Up
 - Remember Me
-- Password Recovery
-- Email Recovery
 - MFA
 - SSO

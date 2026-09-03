@@ -1237,8 +1237,7 @@ Validation réalisée :
 Commit :
 179f8e6 - feat(auth): improve login, account and recovery UX
 
-⬜ 7.1.23.15 Authentication Learning Features
-
+⏳ 7.1.23.15 Authentication Learning Features  
 Objectif :
 
 - Sign Up
@@ -1248,19 +1247,50 @@ Objectif :
 - JWT lifecycle understanding
 - Authentication security patterns
 
-Sous-phases :
-⬜ 7.1.23.15.1 Repository Audit
-⬜ 7.1.23.15.2 Product Design
-⬜ 7.1.23.15.3 Backend Design
-⬜ 7.1.23.15.4 Frontend Design
-⬜ 7.1.23.15.5 Implementation
-⬜ 7.1.23.15.6 Validation
-⬜ 7.1.23.15.7 Documentation Synchronization
+  Sous-phases :
+  ✅ 7.1.23.15.1 Repository Audit
+  ✅ 7.1.23.15.2 Product Design
+  ✅ 7.1.23.15.3 Backend Design
+  ✅ 7.1.23.15.4 Frontend Design
+  ✅ 7.1.23.15.5.1 Password Recovery
+  ✅ 7.1.23.15.5.2 Email Recovery
+  ⬜ 7.1.23.15.5.3 Sign Up
+  ⬜ 7.1.23.15.5.4 Remember Me
+  ⬜ 7.1.23.15.6 Validation
+  ⬜ 7.1.23.15.7 Documentation Synchronization
 
-⬜ 7.1.23.16 Settings Strategy Synchronization
-⬜ 7.1.23.17 Best Profile Recommendation Architecture Review
-⬜ 7.1.23.18 Final Regression And Documentation
-⬜ 7.1.23.19 MVP Closure Decision
+  Validation Password Recovery :
+
+- PasswordResetToken model implémenté
+- token hashé SHA-256 en base
+- expiration configurable (PASSWORD_RESET_TOKEN_EXPIRE_MINUTES)
+- SMTP Mailtrap réel intégré
+- POST /auth/forgot-password implémenté
+- POST /auth/reset-password implémenté
+- ForgotPasswordPage connectée à l'API réelle
+- ResetPasswordPage créée
+- réponse publique générique anti-énumération
+- email réel reçu et lien fonctionnel validés dans Mailtrap
+- ancien mot de passe refusé après reset
+- nouveau mot de passe accepté après reset
+- 9 tests backend ajoutés  
+  Validation Email Recovery :
+- EmailChangeRequest model implémenté
+- réutilisation du token service et de l'infrastructure SMTP
+- POST /auth/change-email implémenté (authentifié)
+- POST /auth/change-email/confirm implémenté
+- email de confirmation envoyé à l'adresse ACTUELLE (pas la nouvelle)
+- ConfirmEmailChangePage créée avec confirmation par clic explicite
+- formulaire Change Email ajouté dans AccountPage
+- ancienne adresse refusée après confirmation
+- nouvelle adresse acceptée après confirmation
+- 6 tests backend ajoutés  
+  Commits :
+- da54568 - feat(auth): implement password recovery with Mailtrap SMTP
+- abeb09b - feat(auth): add password recovery frontend flow
+- 4a6b239 - feat(auth): implement email recovery backend and frontend  
+  Tests :
+- 319 tests backend passants (0 régression)
 
 Statut :
 

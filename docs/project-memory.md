@@ -478,16 +478,48 @@ Complex Multi-Column PDF results:
 - Authentication learning roadmap introduced
 - Technical commit 179f8e6 pushed
 
-Current Phase:
+Password Recovery results:
+
+- PasswordResetToken model implemented (token hashed with SHA-256, never stored in clear)
+- token_service.py implemented (generation, hashing, expiration, invalidation)
+- email_service.py implemented (real Mailtrap SMTP integration)
+- POST /auth/forgot-password implemented (generic public response, anti-enumeration)
+- POST /auth/reset-password implemented
+- ForgotPasswordPage connected to real API
+- ResetPasswordPage created (token read from URL query parameter)
+- Real Mailtrap validation completed (email received, link functional)
+- Old password rejected after reset validated
+- New password accepted after reset validated
+- 9 backend tests added
+- Technical commits da54568 (backend) and abeb09b (frontend) pushed
+
+  Email Recovery results:
+
+- EmailChangeRequest model implemented
+- Password Recovery token infrastructure reused
+- POST /auth/change-email implemented (authenticated, sends confirmation to CURRENT email)
+- POST /auth/change-email/confirm implemented
+- ConfirmEmailChangePage created (explicit click confirmation, not automatic)
+- Change Email form added to AccountPage
+- Real Mailtrap validation completed
+- Old email rejected after confirmation validated
+- New email accepted after confirmation validated
+- 6 backend tests added
+- Technical commit 4a6b239 (backend + frontend) pushed
+- 319 backend tests passing, 0 regressions
+
+  Current Phase:
 
 - Authentication Learning Features
+- Password Recovery completed
+- Email Recovery completed
+- Sign Up remaining
+- Remember Me remaining
+
+  Remaining:
+
 - Sign Up
 - Remember Me
-- Password Recovery
-- Email Recovery
-
-Remaining:
-
 - Minimal Account UX Polish
 - Settings Strategy Synchronization
 - Best Profile Recommendation Architecture Review

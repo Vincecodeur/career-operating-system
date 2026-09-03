@@ -5192,3 +5192,63 @@ Frontend authentication roadmap visibility was introduced during Login UX Polish
 
 Technical commit:
 179f8e6 - feat(auth): improve login, account and recovery UX
+
+
+#### Password Recovery Implementation Completed
+
+Date: 2026-09-02
+Status: Completed
+
+Implemented:
+- PasswordResetToken model (token stored as SHA-256 hash, never in clear text)
+- token_service.py (generation via secrets.token_urlsafe, hashing, expiration, single-use invalidation)
+- email_service.py (real SMTP integration via Mailtrap)
+- POST /auth/forgot-password (generic public response regardless of account existence, to prevent user enumeration)
+- POST /auth/reset-password
+- ForgotPasswordPage connected to real API
+- ResetPasswordPage (token read from URL query parameter)
+
+Validation:
+- 9 backend tests passed
+- Real Mailtrap SMTP validated (email received, correct subject and link)
+- Reset link consumed successfully through the API
+- Old password rejected after reset
+- New password accepted after reset
+
+Technical commits:
+- da54568 - feat(auth): implement password recovery with Mailtrap SMTP
+- abeb09b - feat(auth): add password recovery frontend flow
+
+#### Email Recovery Implementation Completed
+
+Date: 2026-09-02
+Status: Completed
+
+Implemented:
+- EmailChangeRequest model (token stored as SHA-256 hash, never in clear text)
+- Reuse of Password Recovery token generation and hashing functions
+- POST /auth/change-email (authenticated endpoint, requires valid JWT)
+- POST /auth/change-email/confirm (public endpoint, consumes single-use token)
+- ConfirmEmailChangePage (explicit user click required to confirm, no automatic submission on page load)
+- Change Email form added to AccountPage
+
+Security decision:
+The confirmation email is sent to the CURRENT email address of the account, not to the requested new address. This ensures the actual account owner approves the change.
+
+Validation:
+- 6 backend tests passed
+- Real Mailtrap SMTP validated
+- Confirmation email received on the current address
+- Old email rejected after confirmation
+- New email accepted after confirmation
+
+Technical commit:
+- 4a6b239 - feat(auth): implement email recovery backend and frontend
+
+#### Combined Validation
+
+Backend suite: 319 tests passing, 0 regressions.
+
+Remaining scope of DEC-079:
+- Sign Up
+- Remember Me

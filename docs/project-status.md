@@ -27,7 +27,7 @@ Current Phase
 7.1.23.15 Authentication Learning Features
 
 Current Step
-Product Design
+Implementation (Password Recovery and Email Recovery completed)
 
 Next Planned Milestone
 7.1.23.15 Authentication Learning Features
@@ -1479,6 +1479,41 @@ Post-MVP Planning
 - Commit technique 179f8e6 créé
 - Push GitHub réalisé
 
+- Phase 7.1.23.15.1 Repository Audit terminée
+- Phase 7.1.23.15.2 Product Design terminée
+- Phase 7.1.23.15.3 Backend Design terminée
+- Phase 7.1.23.15.4 Frontend Design terminée
+- PasswordResetToken model implémenté
+- token_service.py créé (génération, hash SHA-256, expiration, invalidation)
+- email_service.py créé (SMTP Mailtrap réel)
+- POST /auth/forgot-password implémenté
+- POST /auth/reset-password implémenté
+- 9 tests Password Recovery ajoutés
+- ForgotPasswordPage connectée à l'API réelle
+- ResetPasswordPage créée
+- Route /reset-password ajoutée
+- Validation Mailtrap réelle réalisée (email reçu, lien fonctionnel)
+- Ancien mot de passe refusé après reset validé
+- Nouveau mot de passe accepté après reset validé
+- Commit technique da54568 créé
+- Commit technique abeb09b créé
+- Push GitHub réalisé
+- Phase 7.1.23.15.5.1 Password Recovery terminée
+- EmailChangeRequest model implémenté
+- POST /auth/change-email implémenté (authentifié)
+- POST /auth/change-email/confirm implémenté
+- 6 tests Email Recovery ajoutés
+- ConfirmEmailChangePage créée
+- Formulaire Change Email ajouté dans AccountPage
+- Roadmap Authentication mise à jour (Password Recovery et Email Recovery en vert)
+- Validation Mailtrap réelle réalisée (email envoyé à l'ancienne adresse)
+- Ancienne adresse refusée après confirmation validée
+- Nouvelle adresse acceptée après confirmation validée
+- Commit technique 4a6b239 créé
+- Push GitHub réalisé
+- Phase 7.1.23.15.5.2 Email Recovery terminée
+- 319 tests backend passants
+
 Blocked
 
 Aucun
@@ -1565,13 +1600,14 @@ Current Phase Status
 7.1.23.15 Authentication Learning Features
 
 Status:
-Ready To Start
+
+In Progress (Password Recovery and Email Recovery completed, Sign Up and Remember Me remaining)
 
 Latest completed phases:
 
-- 7.1.23.12 AI Context Preview And Consent
-- 7.1.23.13 AI Readiness Validation
 - 7.1.23.14 Login UX Polish
+- 7.1.23.15.5.1 Password Recovery
+- 7.1.23.15.5.2 Email Recovery
 
 Latest validation:
 
@@ -1596,8 +1632,10 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-7.1.23.15 Authentication Learning Features
-
+7.1.23.15.5.3 Sign Up  
 Last Commits :
 
-- 651d262 - feat(ai): integrate AI context preview and consent frontend
+- 4a6b239 - feat(auth): implement email recovery backend and frontend
+- abeb09b - feat(auth): add password recovery frontend flow
+- da54568 - feat(auth): implement password recovery with Mailtrap SMTP
+- 179f8e6 - feat(auth): improve login, account and recovery UX
