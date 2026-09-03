@@ -4,6 +4,8 @@ from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.certifications.models import Certification
 from app.certifications.models import ProfileCertification
 from app.certifications.schemas import CertificationCreate
@@ -85,10 +87,12 @@ def get_certification(
 )
 def create_profile_certification(
     profile_certification: ProfileCertificationCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_certification.profile_id
+        Profile.id == profile_certification.profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -136,9 +140,15 @@ def create_profile_certification(
     response_model=list[ProfileCertificationResponse]
 )
 def list_profile_certifications(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return db.query(ProfileCertification).all()
+    return (
+        db.query(ProfileCertification)
+        .join(Profile)
+        .filter(Profile.user_id == current_user.id)
+        .all()
+    )
 
 
 @router.get(
@@ -147,10 +157,12 @@ def list_profile_certifications(
 )
 def list_certifications_for_profile(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -173,13 +185,18 @@ def update_profile_certification(
     certification_id: int,
     profile_certification_update: ProfileCertificationUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    profile_certification = db.query(
-        ProfileCertification
-    ).filter(
-        ProfileCertification.profile_id == profile_id,
-        ProfileCertification.certification_id == certification_id,
-    ).first()
+    profile_certification = (
+        db.query(ProfileCertification)
+        .join(Profile)
+        .filter(
+            ProfileCertification.profile_id == profile_id,
+            ProfileCertification.certification_id == certification_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if profile_certification is None:
         raise HTTPException(
@@ -209,13 +226,18 @@ def delete_profile_certification(
     profile_id: int,
     certification_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    profile_certification = db.query(
-        ProfileCertification
-    ).filter(
-        ProfileCertification.profile_id == profile_id,
-        ProfileCertification.certification_id == certification_id,
-    ).first()
+    profile_certification = (
+        db.query(ProfileCertification)
+        .join(Profile)
+        .filter(
+            ProfileCertification.profile_id == profile_id,
+            ProfileCertification.certification_id == certification_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if profile_certification is None:
         raise HTTPException(

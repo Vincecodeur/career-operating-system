@@ -3,6 +3,8 @@ from fastapi import Depends
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.experience.models import WorkExperience
 from app.experience.schemas import WorkExperienceCreate
@@ -22,10 +24,12 @@ router = APIRouter(
 )
 def create_work_experience(
     work_experience: WorkExperienceCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == work_experience.profile_id
+        Profile.id == work_experience.profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -67,11 +71,18 @@ def list_work_experiences(
 )
 def get_work_experience(
     work_experience_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    work_experience = db.query(WorkExperience).filter(
-        WorkExperience.id == work_experience_id
-    ).first()
+    work_experience = (
+        db.query(WorkExperience)
+        .join(Profile)
+        .filter(
+            WorkExperience.id == work_experience_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if work_experience is None:
         raise HTTPException(
@@ -88,10 +99,12 @@ def get_work_experience(
 )
 def list_work_experiences_for_profile(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -112,11 +125,18 @@ def list_work_experiences_for_profile(
 def update_work_experience(
     work_experience_id: int,
     work_experience_update: WorkExperienceUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    work_experience = db.query(WorkExperience).filter(
-        WorkExperience.id == work_experience_id
-    ).first()
+    work_experience = (
+        db.query(WorkExperience)
+        .join(Profile)
+        .filter(
+            WorkExperience.id == work_experience_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if work_experience is None:
         raise HTTPException(
@@ -153,11 +173,18 @@ def update_work_experience(
 )
 def delete_work_experience(
     work_experience_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    work_experience = db.query(WorkExperience).filter(
-        WorkExperience.id == work_experience_id
-    ).first()
+    work_experience = (
+        db.query(WorkExperience)
+        .join(Profile)
+        .filter(
+            WorkExperience.id == work_experience_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if work_experience is None:
         raise HTTPException(

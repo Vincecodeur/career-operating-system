@@ -35,6 +35,7 @@ def create_profile(authenticated_headers):
 def create_soft_skill(
     profile_id: int,
     name: str,
+    authenticated_headers,
 ):
     response = client.post(
         "/profile-soft-skills",
@@ -42,6 +43,7 @@ def create_soft_skill(
             "profile_id": profile_id,
             "name": name,
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -59,6 +61,7 @@ def test_create_profile_soft_skill(authenticated_headers):
             "profile_id": profile["id"],
             "name": soft_skill_name,
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -81,6 +84,7 @@ def test_create_profile_soft_skill_trims_name(authenticated_headers):
             "profile_id": profile["id"],
             "name": f"  {soft_skill_name}  ",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -99,18 +103,20 @@ def test_create_profile_soft_skill_requires_name(authenticated_headers):
             "profile_id": profile["id"],
             "name": "   ",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 400
 
 
-def test_create_profile_soft_skill_profile_not_found():
+def test_create_profile_soft_skill_profile_not_found(authenticated_headers):
     response = client.post(
         "/profile-soft-skills",
         json={
             "profile_id": 999999,
             "name": "Leadership",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -123,6 +129,7 @@ def test_duplicate_profile_soft_skill_for_same_profile(authenticated_headers):
     create_soft_skill(
         profile["id"],
         soft_skill_name,
+        authenticated_headers,
     )
 
     response = client.post(
@@ -131,6 +138,7 @@ def test_duplicate_profile_soft_skill_for_same_profile(authenticated_headers):
             "profile_id": profile["id"],
             "name": soft_skill_name,
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 409
@@ -148,6 +156,7 @@ def test_same_soft_skill_name_allowed_for_different_profiles(authenticated_heade
             "profile_id": first_profile["id"],
             "name": soft_skill_name,
         },
+        headers=authenticated_headers,
     )
 
     assert first_response.status_code == 200
@@ -158,6 +167,7 @@ def test_same_soft_skill_name_allowed_for_different_profiles(authenticated_heade
             "profile_id": second_profile["id"],
             "name": soft_skill_name,
         },
+        headers=authenticated_headers,
     )
 
     assert second_response.status_code == 200
@@ -169,11 +179,13 @@ def test_list_soft_skills_for_profile(authenticated_headers):
     first_soft_skill = create_soft_skill(
         profile["id"],
         f"Adaptability_{uuid4()}",
+        authenticated_headers,
     )
 
     second_soft_skill = create_soft_skill(
         profile["id"],
         f"Teamwork_{uuid4()}",
+        authenticated_headers,
     )
 
     response = client.get(
@@ -194,9 +206,10 @@ def test_list_soft_skills_for_profile(authenticated_headers):
     assert second_soft_skill["id"] in soft_skill_ids
 
 
-def test_list_soft_skills_profile_not_found():
+def test_list_soft_skills_profile_not_found(authenticated_headers):
     response = client.get(
-        "/profiles/999999/soft-skills"
+        "/profiles/999999/soft-skills",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -208,10 +221,12 @@ def test_delete_profile_soft_skill(authenticated_headers):
     soft_skill = create_soft_skill(
         profile["id"],
         f"Stakeholder Management_{uuid4()}",
+        authenticated_headers,
     )
 
     response = client.delete(
-        f"/profile-soft-skills/{soft_skill['id']}"
+        f"/profile-soft-skills/{soft_skill['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -237,9 +252,10 @@ def test_delete_profile_soft_skill(authenticated_headers):
     assert soft_skill["id"] not in remaining_ids
 
 
-def test_delete_profile_soft_skill_not_found():
+def test_delete_profile_soft_skill_not_found(authenticated_headers):
     response = client.delete(
-        "/profile-soft-skills/999999"
+        "/profile-soft-skills/999999",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404

@@ -50,6 +50,7 @@ def create_certification(name_prefix: str):
 def create_profile_certification(
     profile_id: int,
     certification_id: int,
+    authenticated_headers,
     obtained_date: str | None = "2024-01-01",
     expiration_date: str | None = "2026-01-01",
     credential_id: str | None = "TEST-CREDENTIAL",
@@ -63,6 +64,7 @@ def create_profile_certification(
             "expiration_date": expiration_date,
             "credential_id": credential_id,
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -83,6 +85,7 @@ def test_create_profile_certification(authenticated_headers):
             "expiration_date": "2026-01-01",
             "credential_id": "AZ-TEST-001",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -103,6 +106,7 @@ def test_duplicate_profile_certification(authenticated_headers):
     create_profile_certification(
         profile["id"],
         certification["id"],
+        authenticated_headers,
     )
 
     response = client.post(
@@ -114,14 +118,16 @@ def test_duplicate_profile_certification(authenticated_headers):
             "expiration_date": "2026-01-01",
             "credential_id": "AWS-TEST-001",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 409
 
 
-def test_list_profile_certifications():
+def test_list_profile_certifications(authenticated_headers):
     response = client.get(
-        "/profile-certifications"
+        "/profile-certifications",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -135,6 +141,7 @@ def test_list_certifications_for_profile(authenticated_headers):
     create_profile_certification(
         profile["id"],
         certification["id"],
+        authenticated_headers,
     )
 
     response = client.get(
@@ -159,6 +166,7 @@ def test_update_profile_certification(authenticated_headers):
     create_profile_certification(
         profile["id"],
         certification["id"],
+        authenticated_headers,
         "2023-01-01",
         "2025-01-01",
         "OLD-CREDENTIAL",
@@ -171,6 +179,7 @@ def test_update_profile_certification(authenticated_headers):
             "expiration_date": "2027-02-01",
             "credential_id": "NEW-CREDENTIAL",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -184,7 +193,7 @@ def test_update_profile_certification(authenticated_headers):
     assert data["credential_id"] == "NEW-CREDENTIAL"
 
 
-def test_update_profile_certification_not_found():
+def test_update_profile_certification_not_found(authenticated_headers):
     response = client.put(
         "/profile-certifications/99999/99999",
         json={
@@ -192,6 +201,7 @@ def test_update_profile_certification_not_found():
             "expiration_date": "2027-02-01",
             "credential_id": "MISSING-CREDENTIAL",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -204,10 +214,12 @@ def test_delete_profile_certification(authenticated_headers):
     create_profile_certification(
         profile["id"],
         certification["id"],
+        authenticated_headers,
     )
 
     response = client.delete(
-        f"/profile-certifications/{profile['id']}/{certification['id']}"
+        f"/profile-certifications/{profile['id']}/{certification['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -232,9 +244,10 @@ def test_delete_profile_certification(authenticated_headers):
     )
 
 
-def test_delete_profile_certification_not_found():
+def test_delete_profile_certification_not_found(authenticated_headers):
     response = client.delete(
-        "/profile-certifications/99999/99999"
+        "/profile-certifications/99999/99999",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404

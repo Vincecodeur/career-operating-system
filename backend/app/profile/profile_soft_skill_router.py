@@ -4,6 +4,8 @@ from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.profile.models import Profile
 from app.profile.profile_soft_skill_models import ProfileSoftSkill
@@ -23,9 +25,11 @@ router = APIRouter(
 def list_soft_skills_for_profile(
     profile_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -48,9 +52,11 @@ def list_soft_skills_for_profile(
 def create_profile_soft_skill(
     soft_skill: ProfileSoftSkillCreate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == soft_skill.profile_id
+        Profile.id == soft_skill.profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -94,10 +100,17 @@ def create_profile_soft_skill(
 def delete_profile_soft_skill(
     soft_skill_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    soft_skill = db.query(ProfileSoftSkill).filter(
-        ProfileSoftSkill.id == soft_skill_id
-    ).first()
+    soft_skill = (
+        db.query(ProfileSoftSkill)
+        .join(Profile)
+        .filter(
+            ProfileSoftSkill.id == soft_skill_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if soft_skill is None:
         raise HTTPException(

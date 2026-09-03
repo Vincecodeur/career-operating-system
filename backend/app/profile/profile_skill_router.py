@@ -4,6 +4,8 @@ from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.profile.models import Profile
 from app.profile.profile_skill_models import ProfileSkill
@@ -23,10 +25,12 @@ router = APIRouter(
 )
 def create_profile_skill(
     profile_skill: ProfileSkillCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_skill.profile_id
+        Profile.id == profile_skill.profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -73,9 +77,15 @@ def create_profile_skill(
     response_model=list[ProfileSkillResponse]
 )
 def list_profile_skills(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return db.query(ProfileSkill).all()
+    return (
+        db.query(ProfileSkill)
+        .join(Profile)
+        .filter(Profile.user_id == current_user.id)
+        .all()
+    )
 
 
 @router.get(
@@ -84,10 +94,12 @@ def list_profile_skills(
 )
 def list_skills_for_profile(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -109,12 +121,19 @@ def update_profile_skill(
     profile_id: int,
     skill_id: int,
     profile_skill_update: ProfileSkillUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    profile_skill = db.query(ProfileSkill).filter(
-        ProfileSkill.profile_id == profile_id,
-        ProfileSkill.skill_id == skill_id
-    ).first()
+    profile_skill = (
+        db.query(ProfileSkill)
+        .join(Profile)
+        .filter(
+            ProfileSkill.profile_id == profile_id,
+            ProfileSkill.skill_id == skill_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if profile_skill is None:
         raise HTTPException(
@@ -142,12 +161,19 @@ def update_profile_skill(
 def delete_profile_skill(
     profile_id: int,
     skill_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    profile_skill = db.query(ProfileSkill).filter(
-        ProfileSkill.profile_id == profile_id,
-        ProfileSkill.skill_id == skill_id
-    ).first()
+    profile_skill = (
+        db.query(ProfileSkill)
+        .join(Profile)
+        .filter(
+            ProfileSkill.profile_id == profile_id,
+            ProfileSkill.skill_id == skill_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if profile_skill is None:
         raise HTTPException(

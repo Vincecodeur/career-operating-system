@@ -106,7 +106,8 @@ def test_get_work_experience(authenticated_headers):
     work_experience_id = data["work_experience"]["id"]
 
     response = client.get(
-        f"/work-experiences/{work_experience_id}"
+        f"/work-experiences/{work_experience_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -154,6 +155,7 @@ def test_update_work_experience(authenticated_headers):
             "is_current_position": True,
             "description": "Updated backend ownership and platform responsibilities.",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -172,7 +174,7 @@ def test_update_work_experience(authenticated_headers):
     )
 
 
-def test_update_work_experience_not_found():
+def test_update_work_experience_not_found(authenticated_headers):
     response = client.put(
         "/work-experiences/999999",
         json={
@@ -183,6 +185,7 @@ def test_update_work_experience_not_found():
             "is_current_position": False,
             "description": "This update should fail.",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -194,7 +197,8 @@ def test_delete_work_experience(authenticated_headers):
     work_experience_id = data["work_experience"]["id"]
 
     response = client.delete(
-        f"/work-experiences/{work_experience_id}"
+        f"/work-experiences/{work_experience_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -204,15 +208,17 @@ def test_delete_work_experience(authenticated_headers):
     assert delete_response["message"] == "Work experience deleted."
 
     get_response = client.get(
-        f"/work-experiences/{work_experience_id}"
+        f"/work-experiences/{work_experience_id}",
+        headers=authenticated_headers,
     )
 
     assert get_response.status_code == 404
 
 
-def test_delete_work_experience_not_found():
+def test_delete_work_experience_not_found(authenticated_headers):
     response = client.delete(
-        "/work-experiences/999999"
+        "/work-experiences/999999",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404

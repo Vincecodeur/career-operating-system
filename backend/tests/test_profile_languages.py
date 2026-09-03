@@ -50,6 +50,7 @@ def create_language(name_prefix: str = "Language"):
 def create_profile_language(
     profile_id: int,
     language_id: int,
+    authenticated_headers,
     proficiency_level: str = "Fluent",
 ):
     response = client.post(
@@ -59,6 +60,7 @@ def create_profile_language(
             "language_id": language_id,
             "proficiency_level": proficiency_level,
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -77,6 +79,7 @@ def test_create_profile_language(authenticated_headers):
             "language_id": language["id"],
             "proficiency_level": "Native",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -95,6 +98,7 @@ def test_duplicate_profile_language(authenticated_headers):
     create_profile_language(
         profile["id"],
         language["id"],
+        authenticated_headers,
     )
 
     response = client.post(
@@ -104,6 +108,7 @@ def test_duplicate_profile_language(authenticated_headers):
             "language_id": language["id"],
             "proficiency_level": "Fluent",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 409
@@ -116,6 +121,7 @@ def test_list_languages_for_profile(authenticated_headers):
     create_profile_language(
         profile["id"],
         language["id"],
+        authenticated_headers,
     )
 
     response = client.get(
@@ -140,6 +146,7 @@ def test_update_profile_language(authenticated_headers):
     create_profile_language(
         profile["id"],
         language["id"],
+        authenticated_headers,
         "Beginner",
     )
 
@@ -148,6 +155,7 @@ def test_update_profile_language(authenticated_headers):
         json={
             "proficiency_level": "Advanced",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -166,10 +174,12 @@ def test_delete_profile_language(authenticated_headers):
     create_profile_language(
         profile["id"],
         language["id"],
+        authenticated_headers,
     )
 
     response = client.delete(
-        f"/profile-languages/{profile['id']}/{language['id']}"
+        f"/profile-languages/{profile['id']}/{language['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200

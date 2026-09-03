@@ -60,6 +60,7 @@ def create_test_profile_skill(authenticated_headers):
             "years_of_experience": 3,
             "self_assessment_level": "Intermediate",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -83,6 +84,7 @@ def test_create_profile_skill(authenticated_headers):
             "years_of_experience": 5,
             "self_assessment_level": "Advanced",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -128,6 +130,7 @@ def test_update_profile_skill(authenticated_headers):
             "years_of_experience": 8,
             "self_assessment_level": "Expert",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -147,7 +150,8 @@ def test_delete_profile_skill(authenticated_headers):
     skill_id = data["skill"]["id"]
 
     response = client.delete(
-        f"/profile-skills/{profile_id}/{skill_id}"
+        f"/profile-skills/{profile_id}/{skill_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200

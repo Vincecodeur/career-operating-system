@@ -4,6 +4,8 @@ from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.languages.models import Language
 from app.languages.models import ProfileLanguage
@@ -84,10 +86,12 @@ def get_language(
 )
 def create_profile_language(
     profile_language: ProfileLanguageCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_language.profile_id
+        Profile.id == profile_language.profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -133,9 +137,15 @@ def create_profile_language(
     response_model=list[ProfileLanguageResponse]
 )
 def list_profile_languages(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return db.query(ProfileLanguage).all()
+    return (
+        db.query(ProfileLanguage)
+        .join(Profile)
+        .filter(Profile.user_id == current_user.id)
+        .all()
+    )
 
 
 @router.get(
@@ -144,10 +154,12 @@ def list_profile_languages(
 )
 def list_languages_for_profile(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -170,11 +182,17 @@ def update_profile_language(
     language_id: int,
     profile_language_update: ProfileLanguageUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    profile_language = db.query(ProfileLanguage).filter(
-        ProfileLanguage.profile_id == profile_id,
-        ProfileLanguage.language_id == language_id,
-    ).first()
+    profile_language = (
+        db.query(ProfileLanguage)
+        .join(Profile)
+        .filter(
+            ProfileLanguage.profile_id == profile_id,
+            ProfileLanguage.language_id == language_id,
+            Profile.user_id == current_user.id,
+        )
+    ).first() 
 
     if profile_language is None:
         raise HTTPException(
@@ -199,11 +217,18 @@ def delete_profile_language(
     profile_id: int,
     language_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    profile_language = db.query(ProfileLanguage).filter(
-        ProfileLanguage.profile_id == profile_id,
-        ProfileLanguage.language_id == language_id,
-    ).first()
+    profile_language = (
+        db.query(ProfileLanguage)
+        .join(Profile)
+        .filter(
+            ProfileLanguage.profile_id == profile_id,
+            ProfileLanguage.language_id == language_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if profile_language is None:
         raise HTTPException(
