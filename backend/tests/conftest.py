@@ -1,7 +1,8 @@
 import os
 import sys
 from pathlib import Path
-
+import pytest
+from fastapi.testclient import TestClient
 from dotenv import load_dotenv
 
 
@@ -39,13 +40,15 @@ os.environ["DATABASE_URL"] = TEST_DATABASE_URL
 from app.core.database import Base
 from app.core.database import SessionLocal
 from app.core.database import engine
+
+from app.auth.models import User
+from app.auth.service import hash_password
 from app.jobs.models import JobOffer
 from app.main import app
 from app.profile.models import Profile
 from app.reference_data.seed_loader import (
     seed_reference_data,
 )
-
 
 def reset_test_database() -> None:
     Base.metadata.drop_all(
@@ -57,11 +60,26 @@ def reset_test_database() -> None:
     )
 
 
+TEST_USER_EMAIL = "test-primary-user@career-os.local"
+TEST_USER_PASSWORD = "TestPassword123!"
+
+
 def seed_required_test_data() -> None:
     db = SessionLocal()
 
     try:
         seed_reference_data(db)
+
+        test_user = User(
+            email=TEST_USER_EMAIL,
+            hashed_password=hash_password(
+                TEST_USER_PASSWORD
+            ),
+            is_active=True,
+        )
+
+        db.add(test_user)
+        db.flush()
 
         db.add_all(
             [
@@ -76,6 +94,7 @@ def seed_required_test_data() -> None:
                     remote_preference="Hybrid",
                     preferred_countries="France,UK",
                     is_active=True,
+                    user_id=test_user.id,
                 ),
                 Profile(
                     profile_name="Test Secondary Profile",
@@ -88,6 +107,7 @@ def seed_required_test_data() -> None:
                     remote_preference="Remote",
                     preferred_countries="France,UK",
                     is_active=True,
+                    user_id=test_user.id,
                 ),
             ]
         )
@@ -113,6 +133,29 @@ def seed_required_test_data() -> None:
     finally:
         db.close()
 
-
 reset_test_database()
 seed_required_test_data()
+
+
+
+
+
+@pytest.fixture
+def authenticated_headers() -> dict[str, str]:
+    client = TestClient(app)
+
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": TEST_USER_EMAIL,
+            "password": TEST_USER_PASSWORD,
+        },
+    )
+
+    access_token = login_response.json()[
+        "access_token"
+    ]
+
+    return {
+        "Authorization": f"Bearer {access_token}",
+    }

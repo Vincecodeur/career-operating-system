@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Boolean
 from sqlalchemy import DateTime
+from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
@@ -16,15 +17,22 @@ class Profile(Base):
     __tablename__ = "profiles"
 
     id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        index=True
+    Integer,
+    primary_key=True,
+    index=True
+    )
+
+    user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=True,
+        index=True,
     )
 
     profile_name: Mapped[str] = mapped_column(
         String(255),
         nullable=False
     )
+
 
     full_name: Mapped[str] = mapped_column(
         String(255),
