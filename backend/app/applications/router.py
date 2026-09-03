@@ -14,6 +14,8 @@ from app.applications.schemas import ApplicationResponse
 from app.applications.schemas import ApplicationStatusTransition
 from app.applications.schemas import ApplicationEventResponse
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 
 
@@ -51,9 +53,11 @@ VALID_TRANSITIONS = {
 def get_profile_or_404(
     db: Session,
     profile_id: int,
+    current_user: User,
 ) -> Profile:
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -93,11 +97,13 @@ def get_job_offer_or_404(
 )
 def create_application(
     application: ApplicationCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = get_profile_or_404(
         db=db,
         profile_id=application.profile_id,
+        current_user=current_user,
     )
 
     job_offer = get_job_offer_or_404(
@@ -131,9 +137,15 @@ def create_application(
     response_model=list[ApplicationResponse]
 )
 def list_applications(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return db.query(Application).all()
+    return (
+        db.query(Application)
+        .join(Profile)
+        .filter(Profile.user_id == current_user.id)
+        .all()
+    )
 
 
 @router.get(
@@ -142,11 +154,18 @@ def list_applications(
 )
 def get_application(
     application_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    application = db.query(Application).filter(
-        Application.id == application_id
-    ).first()
+    application = (
+        db.query(Application)
+        .join(Profile)
+        .filter(
+            Application.id == application_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if application is None:
         raise HTTPException(
@@ -164,11 +183,18 @@ def get_application(
 def update_application(
     application_id: int,
     application_update: ApplicationUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    application = db.query(Application).filter(
-        Application.id == application_id
-    ).first()
+    application = (
+        db.query(Application)
+        .join(Profile)
+        .filter(
+            Application.id == application_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if application is None:
         raise HTTPException(
@@ -179,6 +205,7 @@ def update_application(
     profile = get_profile_or_404(
         db=db,
         profile_id=application_update.profile_id,
+        current_user=current_user,
     )
 
     old_profile_id = application.profile_id
@@ -217,11 +244,18 @@ def update_application(
 def transition_application_status(
     application_id: int,
     transition: ApplicationStatusTransition,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    application = db.query(Application).filter(
-        Application.id == application_id
-    ).first()
+    application = (
+        db.query(Application)
+        .join(Profile)
+        .filter(
+            Application.id == application_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if application is None:
         raise HTTPException(
@@ -264,11 +298,18 @@ def transition_application_status(
 )
 def get_application_timeline(
     application_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    application = db.query(Application).filter(
-        Application.id == application_id
-    ).first()
+    application = (
+        db.query(Application)
+        .join(Profile)
+        .filter(
+            Application.id == application_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if application is None:
         raise HTTPException(

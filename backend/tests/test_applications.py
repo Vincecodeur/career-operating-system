@@ -44,9 +44,11 @@ def archive_application_test_profile(
 
     return response.json()
 
-def test_list_applications():
+
+def test_list_applications(authenticated_headers):
     response = client.get(
-        "/applications"
+        "/applications",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -57,22 +59,24 @@ def test_list_applications():
     )
 
 
-def test_get_application_not_found():
+def test_get_application_not_found(authenticated_headers):
     response = client.get(
-        "/applications/999999"
+        "/applications/999999",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_create_application():
+def test_create_application(authenticated_headers):
     response = client.post(
         "/applications",
         json={
             "profile_id": 1,
             "job_offer_id": 1,
             "status": "Applied"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -84,20 +88,22 @@ def test_create_application():
     assert data["status"] == "Applied"
 
 
-def test_get_application():
+def test_get_application(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
             "profile_id": 1,
             "job_offer_id": 1,
             "status": "Interview"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     application_id = create_response.json()["id"]
 
     response = client.get(
-        f"/applications/{application_id}"
+        f"/applications/{application_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -106,16 +112,17 @@ def test_get_application():
 
     assert data["id"] == application_id
     assert data["status"] == "Interview"
-    
 
-def test_update_application():
+
+def test_update_application(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
             "profile_id": 1,
             "job_offer_id": 1,
             "status": "Applied"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     application_id = create_response.json()["id"]
@@ -127,7 +134,8 @@ def test_update_application():
             "status": "Interview",
             "notes": "Entretien RH réalisé",
             "source_type": "REFERRAL",
-        }
+        },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -139,14 +147,15 @@ def test_update_application():
     assert data["source_type"] == "REFERRAL"
 
 
-def test_transition_application_status():
+def test_transition_application_status(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
             "profile_id": 1,
             "job_offer_id": 1,
             "status": "Applied"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     application_id = create_response.json()["id"]
@@ -155,7 +164,8 @@ def test_transition_application_status():
         f"/applications/{application_id}/status",
         json={
             "status": "Phone Screen"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -165,14 +175,15 @@ def test_transition_application_status():
     assert data["status"] == "Phone Screen"
 
 
-def test_invalid_status_transition():
+def test_invalid_status_transition(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
             "profile_id": 1,
             "job_offer_id": 1,
             "status": "Interview"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     application_id = create_response.json()["id"]
@@ -181,7 +192,8 @@ def test_invalid_status_transition():
         f"/applications/{application_id}/status",
         json={
             "status": "Applied"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 400
@@ -191,25 +203,27 @@ def test_invalid_status_transition():
     )
 
 
-def test_transition_application_not_found():
+def test_transition_application_not_found(authenticated_headers):
     response = client.post(
         "/applications/999999/status",
         json={
             "status": "Phone Screen"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_get_application_timeline():
+def test_get_application_timeline(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
             "profile_id": 1,
             "job_offer_id": 1,
             "status": "Interview"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     application_id = create_response.json()["id"]
@@ -218,13 +232,15 @@ def test_get_application_timeline():
         f"/applications/{application_id}/status",
         json={
             "status": "Offer"
-        }
+        },
+        headers=authenticated_headers,
     )
 
     assert transition_response.status_code == 200
 
     response = client.get(
-        f"/applications/{application_id}/timeline"
+        f"/applications/{application_id}/timeline",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -238,15 +254,16 @@ def test_get_application_timeline():
     assert data[0]["new_value"] == "Offer"
 
 
-def test_timeline_application_not_found():
+def test_timeline_application_not_found(authenticated_headers):
     response = client.get(
-        "/applications/999999/timeline"
+        "/applications/999999/timeline",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
-    
-    
-def test_create_application_rejects_unknown_profile():
+
+
+def test_create_application_rejects_unknown_profile(authenticated_headers):
     response = client.post(
         "/applications",
         json={
@@ -254,6 +271,7 @@ def test_create_application_rejects_unknown_profile():
             "job_offer_id": 1,
             "status": "Applied",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -262,7 +280,7 @@ def test_create_application_rejects_unknown_profile():
     )
 
 
-def test_create_application_rejects_unknown_job_offer():
+def test_create_application_rejects_unknown_job_offer(authenticated_headers):
     response = client.post(
         "/applications",
         json={
@@ -270,6 +288,7 @@ def test_create_application_rejects_unknown_job_offer():
             "job_offer_id": 999999,
             "status": "Applied",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -278,7 +297,7 @@ def test_create_application_rejects_unknown_job_offer():
     )
 
 
-def test_update_application_changes_profile():
+def test_update_application_changes_profile(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
@@ -286,6 +305,7 @@ def test_update_application_changes_profile():
             "job_offer_id": 1,
             "status": "Applied",
         },
+        headers=authenticated_headers,
     )
 
     assert create_response.status_code == 200
@@ -300,6 +320,7 @@ def test_update_application_changes_profile():
             "notes": None,
             "source_type": "OPPORTUNITY",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -312,7 +333,7 @@ def test_update_application_changes_profile():
     assert data["source_type"] == "OPPORTUNITY"
 
 
-def test_update_application_creates_profile_changed_event():
+def test_update_application_creates_profile_changed_event(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
@@ -320,6 +341,7 @@ def test_update_application_creates_profile_changed_event():
             "job_offer_id": 1,
             "status": "Applied",
         },
+        headers=authenticated_headers,
     )
 
     assert create_response.status_code == 200
@@ -334,12 +356,14 @@ def test_update_application_creates_profile_changed_event():
             "notes": None,
             "source_type": "OPPORTUNITY",
         },
+        headers=authenticated_headers,
     )
 
     assert update_response.status_code == 200
 
     timeline_response = client.get(
-        f"/applications/{application_id}/timeline"
+        f"/applications/{application_id}/timeline",
+        headers=authenticated_headers,
     )
 
     assert timeline_response.status_code == 200
@@ -357,7 +381,9 @@ def test_update_application_creates_profile_changed_event():
     assert profile_events[0]["new_value"] == "2"
 
 
-def test_update_application_does_not_create_profile_event_when_unchanged():
+def test_update_application_does_not_create_profile_event_when_unchanged(
+    authenticated_headers,
+):
     create_response = client.post(
         "/applications",
         json={
@@ -365,6 +391,7 @@ def test_update_application_does_not_create_profile_event_when_unchanged():
             "job_offer_id": 1,
             "status": "Applied",
         },
+        headers=authenticated_headers,
     )
 
     assert create_response.status_code == 200
@@ -379,12 +406,14 @@ def test_update_application_does_not_create_profile_event_when_unchanged():
             "notes": "No profile change.",
             "source_type": "MANUAL",
         },
+        headers=authenticated_headers,
     )
 
     assert update_response.status_code == 200
 
     timeline_response = client.get(
-        f"/applications/{application_id}/timeline"
+        f"/applications/{application_id}/timeline",
+        headers=authenticated_headers,
     )
 
     assert timeline_response.status_code == 200
@@ -398,7 +427,7 @@ def test_update_application_does_not_create_profile_event_when_unchanged():
     assert profile_events == []
 
 
-def test_update_application_rejects_unknown_profile():
+def test_update_application_rejects_unknown_profile(authenticated_headers):
     create_response = client.post(
         "/applications",
         json={
@@ -406,6 +435,7 @@ def test_update_application_rejects_unknown_profile():
             "job_offer_id": 1,
             "status": "Applied",
         },
+        headers=authenticated_headers,
     )
 
     assert create_response.status_code == 200
@@ -420,6 +450,7 @@ def test_update_application_rejects_unknown_profile():
             "notes": None,
             "source_type": "MANUAL",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -428,14 +459,14 @@ def test_update_application_rejects_unknown_profile():
     )
 
     get_response = client.get(
-        f"/applications/{application_id}"
+        f"/applications/{application_id}",
+        headers=authenticated_headers,
     )
 
     assert get_response.status_code == 200
     assert get_response.json()["profile_id"] == 1
-    
-    
-    
+
+
 def test_create_application_rejects_inactive_profile(authenticated_headers):
     profile = create_application_test_profile(authenticated_headers)
 
@@ -453,13 +484,15 @@ def test_create_application_rejects_inactive_profile(authenticated_headers):
             "notes": None,
             "source_type": "OPPORTUNITY",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 400
     assert response.json()["detail"] == (
         "The selected profile is not available."
     )
-    
+
+
 def test_update_application_rejects_inactive_profile(authenticated_headers):
     inactive_profile = create_application_test_profile(authenticated_headers)
 
@@ -477,6 +510,7 @@ def test_update_application_rejects_inactive_profile(authenticated_headers):
             "notes": None,
             "source_type": "OPPORTUNITY",
         },
+        headers=authenticated_headers,
     )
 
     assert create_response.status_code == 200
@@ -492,6 +526,7 @@ def test_update_application_rejects_inactive_profile(authenticated_headers):
             "notes": None,
             "source_type": "OPPORTUNITY",
         },
+        headers=authenticated_headers,
     )
 
     assert update_response.status_code == 400
@@ -500,14 +535,16 @@ def test_update_application_rejects_inactive_profile(authenticated_headers):
     )
 
     get_response = client.get(
-        f"/applications/{application_id}"
+        f"/applications/{application_id}",
+        headers=authenticated_headers,
     )
 
     assert get_response.status_code == 200
     assert get_response.json()["profile_id"] == original_profile_id
 
     timeline_response = client.get(
-        f"/applications/{application_id}/timeline"
+        f"/applications/{application_id}/timeline",
+        headers=authenticated_headers,
     )
 
     assert timeline_response.status_code == 200
