@@ -5290,6 +5290,63 @@ Decision: Option B retained. The MVP remains single-tenant in practice, even tho
 
 Multi-tenant data isolation is deferred to post-MVP. See ARCH-001 in the post-MVP backlog.
 
-Remaining scope of DEC-079:
+##### Remember Me Implementation Completed
 
-- Remember Me
+Date: 2026-09-03
+Status: Completed
+
+Implemented:
+
+- ACCESS_TOKEN_EXPIRE_MINUTES kept at 60 minutes (unchanged default behavior)
+- REMEMBER_ME_TOKEN_EXPIRE_MINUTES added (30 days)
+- create_access_token() extended with a remember_me parameter, defaulting to False for backward compatibility
+- LoginRequest schema extended with remember_me: bool = False
+- Login checkbox "Remember me for 30 days" added to LoginPage
+- authStore.login() and loginUser() updated to forward the remember_me flag
+
+Validation:
+
+- 2 backend tests added, verifying token expiration duration in both cases
+- 326 backend tests passing, 0 regressions
+- manual JWT decoding validated: ~60 minutes without Remember Me, ~30 days with Remember Me enabled
+
+Technical commit:
+
+- 9cbc366 - feat(auth): implement remember me with variable token expiration
+
+##### Combined End-To-End Validation (7.1.23.15.6)
+
+Date: 2026-09-03
+Status: Completed
+
+A single combined scenario was executed across all four Authentication Learning Features to validate they function correctly together, not only in isolation:
+
+Sign Up
+→ Login with Remember Me
+→ Change Email (confirmation via real Mailtrap email)
+→ Forgot Password on the new email address
+→ Reset Password (confirmation via real Mailtrap email)
+→ Final login with Remember Me on the new email and new password
+
+Validated:
+
+- new account creation succeeded
+- Remember Me produced a long-lived JWT (~30 days)
+- email change confirmation email was correctly sent to the CURRENT address
+- password reset confirmation email was correctly sent to the NEW address after the email change
+- the old email address was rejected after the change
+- the old password was rejected after the reset
+- the final login succeeded with the new credentials and Remember Me enabled
+
+This confirms that Password Recovery, Email Recovery, Sign Up and Remember Me operate correctly as a coherent system, not merely as independently tested features.
+
+##### DEC-079 Final Status
+
+All learning scope items are now implemented and validated:
+
+- Sign Up (Completed)
+- Remember Me (Completed)
+- Password Recovery (Completed)
+- Email Recovery (Completed)
+
+Phase 7.1.23.15 Authentication Learning Features is closed.

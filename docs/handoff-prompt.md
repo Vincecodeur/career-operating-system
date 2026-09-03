@@ -329,6 +329,10 @@ Implémenté :
 - password_policy.py
 - Password policy enforcement on Sign Up and Reset Password
 
+- REMEMBER_ME_TOKEN_EXPIRE_MINUTES
+- create_access_token() remember_me parameter
+- LoginRequest remember_me field
+
 Partiellement implémenté :
 
 Non implémenté :
@@ -586,6 +590,8 @@ Implémenté :
 - SignUpPage
 - Real-time password policy checklist
 - passwordPolicy.ts utility
+- Remember Me checkbox on LoginPage
+- authStore login() rememberMe parameter
 
 Documenté mais pas encore implémenté :
 
@@ -670,6 +676,8 @@ Des tests existent pour :
 - register existing email rejection
 - register success when enabled
 - reset password weak password rejection
+- login without remember me uses short expiration
+- login with remember me uses long expiration
 
 ## Phases terminées
 
@@ -1175,9 +1183,7 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-
 2cc84d3 - feat(ai): add AI context preview, readiness and consent backend
-
 Latest backend validation:
 
 - AI Context Router: 8 tests passed
@@ -1188,11 +1194,31 @@ Latest backend validation:
 - FastAPI application import validated
 - git diff --check validated
 
-Current phase:
-7.1.23.15 Authentication Learning Features  
-Latest technical commit:
-4a6b239 - feat(auth): implement email recovery backend and frontend  
-Latest backend validation:
+  Current phase:
+  7.1.23.15 Authentication Learning Features
+
+  Latest technical commit:
+  4a6b239 - feat(auth): implement email recovery backend and frontend
+  Latest backend validation:
+
+- Password Recovery: 9 tests added, real Mailtrap end-to-end validated
+- Email Recovery: 6 tests added, real Mailtrap end-to-end validated
+- complete backend suite: 319 tests passed, 0 regressions
+
+  Current state:
+
+- Password Recovery completed (backend + frontend + real Mailtrap validation)
+- Email Recovery completed (backend + frontend + real Mailtrap validation)
+- Sign Up completed (backend + frontend + password policy + manual validation)
+- Remember Me completed (backend + frontend + manual JWT validation)
+- combined end-to-end scenario validated across all four features together
+- data isolation limitation identified and documented as ARCH-001 (post-MVP)
+- Phase 7.1.23.15 Authentication Learning Features CLOSED
+
+  Next required step:
+  Minimal Account UX Polish (phase number not yet assigned in roadmap.md)
+
+  Latest backend validation:
 
 - Password Recovery: 9 tests added, real Mailtrap end-to-end validated
 - Email Recovery: 6 tests added, real Mailtrap end-to-end validated
@@ -1203,11 +1229,13 @@ Current state:
 - Password Recovery completed (backend + frontend + real Mailtrap validation)
 - Email Recovery completed (backend + frontend + real Mailtrap validation)
 - Sign Up completed (backend + frontend + password policy + manual validation)
-- Remember Me not started
+- Remember Me completed (backend + frontend + manual JWT validation)
+- combined end-to-end scenario validated across all four features together
 - data isolation limitation identified and documented as ARCH-001 (post-MVP)
-- documentation synchronization in progress
+- Phase 7.1.23.15 Authentication Learning Features CLOSED
+
   Next required step:
-  7.1.23.15.5.4 Remember Me
+  Minimal Account UX Polish (phase number not yet assigned in roadmap.md)
 
 ## Méthode de reprise
 

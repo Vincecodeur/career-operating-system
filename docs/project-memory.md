@@ -508,24 +508,24 @@ Password Recovery results:
 - Technical commit 4a6b239 (backend + frontend) pushed
 - 319 backend tests passing, 0 regressions
 
-Sign Up results:
+Remember Me results:
 
-- POST /auth/register reactivated via PUBLIC_REGISTRATION_ENABLED environment variable
-- RegisterRequest schema implemented
-- password_policy.py implemented (min 8 chars, uppercase, lowercase, digit, special character)
-- password policy enforced on both Sign Up and Reset Password
-- SignUpPage created with real-time password checklist
-- ResetPasswordPage updated with the same checklist
-- manual validation completed: account creation, login with new account
-- 5 backend tests added
-- 324 backend tests passing, 0 regressions
+- ACCESS_TOKEN_EXPIRE_MINUTES kept at 60 minutes (default unchanged)
+- REMEMBER_ME_TOKEN_EXPIRE_MINUTES added (30 days)
+- create_access_token() extended with remember_me parameter (backward compatible)
+- LoginRequest extended with remember_me field
+- Remember Me checkbox added to LoginPage
+- manual JWT decoding validated both durations
+- 2 backend tests added
+- 326 backend tests passing, 0 regressions
+- Technical commit 9cbc366 pushed
 
-Data isolation limitation identified:
+Combined end-to-end validation results:
 
-- new accounts created via Sign Up share the same Profile, Application, CV and other business data
-- no user_id/owner_id exists on business entities
-- decision: remain single-tenant for MVP (Option B)
-- documented as ARCH-001 in post-MVP backlog
+- Sign Up → Login with Remember Me → Change Email → Forgot Password → Reset Password → final login scenario executed successfully
+- old email rejected after change
+- old password rejected after reset
+- new credentials with Remember Me validated end-to-end
 
 Current Phase:
 
@@ -533,11 +533,12 @@ Current Phase:
 - Password Recovery completed
 - Email Recovery completed
 - Sign Up completed
-- Remember Me remaining
+- Remember Me completed
+- Combined validation completed
+- Phase 7.1.23.15 CLOSED
 
 Remaining:
 
-- Remember Me
 - Minimal Account UX Polish
 - Settings Strategy Synchronization
 - Best Profile Recommendation Architecture Review

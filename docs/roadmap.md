@@ -1255,9 +1255,9 @@ Objectif :
   ✅ 7.1.23.15.5.1 Password Recovery
   ✅ 7.1.23.15.5.2 Email Recovery
   ✅ 7.1.23.15.5.3 Sign Up
-  ⬜ 7.1.23.15.5.4 Remember Me
-  ⬜ 7.1.23.15.6 Validation
-  ⬜ 7.1.23.15.7 Documentation Synchronization
+  ✅ 7.1.23.15.5.4 Remember Me
+  ✅ 7.1.23.15.6 Validation
+  ✅ 7.1.23.15.7 Documentation Synchronization
 
   Validation Password Recovery :
 
@@ -1289,8 +1289,44 @@ Objectif :
 - da54568 - feat(auth): implement password recovery with Mailtrap SMTP
 - abeb09b - feat(auth): add password recovery frontend flow
 - 4a6b239 - feat(auth): implement email recovery backend and frontend  
-  Tests :
-- 319 tests backend passants (0 régression)
+  Validation Sign Up :
+- POST /auth/register réactivé via PUBLIC_REGISTRATION_ENABLED (variable d'environnement, false par défaut)
+- RegisterRequest schema créé (email, password, confirm_password)
+- password_policy.py créé (8 caractères min, majuscule, minuscule, chiffre, caractère spécial)
+- règle de mot de passe appliquée à Sign Up ET à Reset Password
+- checklist de mot de passe en temps réel implémentée côté frontend
+- SignUpPage créée, route /signup ajoutée
+- 5 tests backend ajoutés
+
+Validation Remember Me :
+
+- ACCESS_TOKEN_EXPIRE_MINUTES conservé à 60 minutes (comportement par défaut inchangé)
+- REMEMBER_ME_TOKEN_EXPIRE_MINUTES ajouté (30 jours)
+- create_access_token() accepte un paramètre remember_me (rétrocompatible)
+- LoginRequest enrichi avec remember_me: bool = False
+- checkbox "Remember me for 30 days" ajoutée sur LoginPage
+- décodage JWT manuel validé : ~60 minutes sans Remember Me, ~30 jours avec Remember Me
+- 2 tests backend ajoutés
+
+Validation End-to-End combinée (7.1.23.15.6) :
+
+- scénario complet exécuté : Sign Up → Login avec Remember Me → Change Email (confirmation Mailtrap réelle) → Forgot Password sur la nouvelle adresse → Reset Password (confirmation Mailtrap réelle) → Login final avec Remember Me
+- ancienne adresse email refusée après changement
+- ancien mot de passe refusé après reset
+- nouveau compte fonctionnel de bout en bout avec toutes les fonctionnalités combinées
+- aucune régression détectée sur l'enchaînement complet
+
+Commits :
+
+- da54568 - feat(auth): implement password recovery with Mailtrap SMTP
+- abeb09b - feat(auth): add password recovery frontend flow
+- 4a6b239 - feat(auth): implement email recovery backend and frontend
+- ae5869c - feat(auth): implement sign up with password policy validation
+- 9cbc366 - feat(auth): implement remember me with variable token expiration
+
+Tests :
+
+- 326 tests backend passants (0 régression)
 
   Décision architecture :
 
@@ -1301,7 +1337,7 @@ Objectif :
 
 Statut :
 
-In Progress
+Completed
 
 ### Phase 7.2
 

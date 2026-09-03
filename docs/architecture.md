@@ -775,8 +775,18 @@ Sign Up:
 - the same password policy is enforced on both Sign Up and Reset Password
 - real-time password checklist displayed in the frontend during password entry
 
+Remember Me:
+
+- access tokens default to a 60-minute expiration (ACCESS_TOKEN_EXPIRE_MINUTES)
+- an optional remember_me flag on login extends the token expiration to 30 days (REMEMBER_ME_TOKEN_EXPIRE_MINUTES)
+- token storage strategy in the frontend (localStorage) is unchanged; only the JWT expiration duration varies
+- backward compatible: remember_me defaults to false, preserving existing behavior for any caller that omits it
+
+Combined validation:
+
+- Sign Up, Password Recovery, Email Recovery and Remember Me were validated together in a single end-to-end scenario, not only in isolation
+
 Future learning features:
 
-- Remember Me
 - MFA
 - SSO

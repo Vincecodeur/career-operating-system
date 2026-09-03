@@ -27,7 +27,7 @@ Current Phase
 7.1.23.15 Authentication Learning Features
 
 Current Step
-Implementation (Password Recovery and Email Recovery completed)
+Documentation Synchronization completed for 7.1.23.15
 
 Next Planned Milestone
 7.1.23.15 Authentication Learning Features
@@ -1524,6 +1524,23 @@ Post-MVP Planning
 - Validation manuelle Sign Up réalisée
 - 324 tests backend passants
 - Phase 7.1.23.15.5.3 Sign Up terminée
+- ACCESS_TOKEN_EXPIRE_MINUTES conservé à 60 minutes
+- REMEMBER_ME_TOKEN_EXPIRE_MINUTES ajouté (30 jours)
+- create_access_token() enrichi avec paramètre remember_me
+- LoginRequest enrichi avec remember_me
+- Checkbox Remember Me ajoutée sur LoginPage
+- Validation JWT manuelle réalisée (60 min sans Remember Me, 30 jours avec)
+- 2 tests Remember Me ajoutés
+- 326 tests backend passants
+- Commit technique 9cbc366 créé
+- Push GitHub réalisé
+- Phase 7.1.23.15.5.4 Remember Me terminée
+- Scénario end-to-end combiné validé (Sign Up + Remember Me + Change Email + Reset Password + Login final)
+- Ancienne adresse email refusée après changement validée
+- Ancien mot de passe refusé après reset validée
+- Phase 7.1.23.15.6 Validation terminée
+- Phase 7.1.23.15.7 Documentation Synchronization terminée
+- Phase 7.1.23.15 Authentication Learning Features clôturée
 
 Blocked
 
@@ -1533,7 +1550,7 @@ Aucun
 
 Latest completed phase
 
-7.1.23.14 Login UX Polish
+7.1.23.15 Authentication Learning Features
 
 Validation:
 
@@ -1609,17 +1626,17 @@ Completed:
 
 Current Phase Status
 7.1.23.15 Authentication Learning Features
-
 Status:
-
-In Progress (Password Recovery, Email Recovery and Sign Up completed, Remember Me remaining)
-
+Completed
 Latest completed phases:
 
 - 7.1.23.14 Login UX Polish
 - 7.1.23.15.5.1 Password Recovery
 - 7.1.23.15.5.2 Email Recovery
 - 7.1.23.15.5.3 Sign Up
+- 7.1.23.15.5.4 Remember Me
+- 7.1.23.15.6 Validation
+- 7.1.23.15.7 Documentation Synchronization
 
 Latest validation:
 
@@ -1644,11 +1661,10 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-7.1.23.15.5.4 Remember Me
-
+Minimal Account UX Polish
 Last Commits :
 
+- 9cbc366 - feat(auth): implement remember me with variable token expiration
+- 60c3af2 - docs(auth): synchronize sign up completion and document data isolation limitation
 - ae5869c - feat(auth): implement sign up with password policy validation
 - 4a6b239 - feat(auth): implement email recovery backend and frontend
-- abeb09b - feat(auth): add password recovery frontend flow
-- da54568 - feat(auth): implement password recovery with Mailtrap SMTP
