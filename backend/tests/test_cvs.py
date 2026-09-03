@@ -37,6 +37,7 @@ def create_test_profile(authenticated_headers):
 
 def create_test_cv(
     profile_id: int,
+    authenticated_headers,
     file_name: str = "test-cv.pdf",
     content: bytes = b"Test CV content",
     language: str = "fr",
@@ -57,6 +58,7 @@ def create_test_cv(
             "version_label": version_label,
             "is_default": str(is_default).lower(),
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -81,6 +83,7 @@ def test_create_cv(authenticated_headers):
             "version_label": "France 2026",
             "is_default": "true",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -102,6 +105,7 @@ def test_profile_can_have_multiple_cvs(authenticated_headers):
 
     first_cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         file_name="cv-fr.pdf",
         language="fr",
         version_label="FR Version",
@@ -109,13 +113,15 @@ def test_profile_can_have_multiple_cvs(authenticated_headers):
 
     second_cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         file_name="cv-en.pdf",
         language="en",
         version_label="EN Version",
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/cvs"
+        f"/profiles/{profile['id']}/cvs",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -136,10 +142,12 @@ def test_list_profile_cvs(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/cvs"
+        f"/profiles/{profile['id']}/cvs",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -159,10 +167,12 @@ def test_get_cv(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/cvs/{cv['id']}"
+        f"/cvs/{cv['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -173,9 +183,10 @@ def test_get_cv(authenticated_headers):
     assert data["profile_id"] == profile["id"]
 
 
-def test_cv_not_found():
+def test_cv_not_found(authenticated_headers):
     response = client.get(
-        "/cvs/99999999"
+        "/cvs/99999999",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -186,6 +197,7 @@ def test_update_cv(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         language="fr",
         version_label="Initial Version",
     )
@@ -196,6 +208,7 @@ def test_update_cv(authenticated_headers):
             "language": "en",
             "version_label": "Updated Version",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -212,11 +225,13 @@ def test_set_default_cv(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         is_default=False,
     )
 
     response = client.post(
-        f"/cvs/{cv['id']}/set-default"
+        f"/cvs/{cv['id']}/set-default",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -232,24 +247,28 @@ def test_only_one_default_cv_per_profile(authenticated_headers):
 
     first_cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         file_name="first-cv.pdf",
         is_default=True,
     )
 
     second_cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         file_name="second-cv.pdf",
         is_default=False,
     )
 
     response = client.post(
-        f"/cvs/{second_cv['id']}/set-default"
+        f"/cvs/{second_cv['id']}/set-default",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
 
     list_response = client.get(
-        f"/profiles/{profile['id']}/cvs"
+        f"/profiles/{profile['id']}/cvs",
+        headers=authenticated_headers,
     )
 
     assert list_response.status_code == 200
@@ -277,10 +296,12 @@ def test_delete_cv(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     response = client.delete(
-        f"/cvs/{cv['id']}"
+        f"/cvs/{cv['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -290,7 +311,8 @@ def test_delete_cv(authenticated_headers):
     assert deleted_cv["id"] == cv["id"]
 
     get_response = client.get(
-        f"/cvs/{cv['id']}"
+        f"/cvs/{cv['id']}",
+        headers=authenticated_headers,
     )
 
     assert get_response.status_code == 404
@@ -301,17 +323,20 @@ def test_delete_default_cv(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
         is_default=True,
     )
 
     response = client.delete(
-        f"/cvs/{cv['id']}"
+        f"/cvs/{cv['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
 
     list_response = client.get(
-        f"/profiles/{profile['id']}/cvs"
+        f"/profiles/{profile['id']}/cvs",
+        headers=authenticated_headers,
     )
 
     assert list_response.status_code == 200
@@ -330,16 +355,19 @@ def test_profile_cannot_see_other_profile_cvs(authenticated_headers):
 
     first_profile_cv = create_test_cv(
         profile_id=first_profile["id"],
+        authenticated_headers=authenticated_headers,
         file_name="first-profile-cv.pdf",
     )
 
     second_profile_cv = create_test_cv(
         profile_id=second_profile["id"],
+        authenticated_headers=authenticated_headers,
         file_name="second-profile-cv.pdf",
     )
 
     response = client.get(
-        f"/profiles/{first_profile['id']}/cvs"
+        f"/profiles/{first_profile['id']}/cvs",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -360,6 +388,7 @@ def test_cv_created_with_pending_parsing_status(authenticated_headers):
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     assert cv["parsing_status"] == "PENDING"

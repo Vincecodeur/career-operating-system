@@ -9,6 +9,8 @@ from fastapi import UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.cv.models import CV
 from app.cv.parsing_schemas import ParsedCVResponse
@@ -23,6 +25,31 @@ from app.profile.models import Profile
 from app.profile_enrichment.models import (
     ProfileEnrichmentProposal,
 )
+
+
+
+def get_owned_cv_or_404(
+    db: Session,
+    cv_id: int,
+    current_user: User,
+) -> CV:
+    cv = (
+        db.query(CV)
+        .join(Profile)
+        .filter(
+            CV.id == cv_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
+
+    if cv is None:
+        raise HTTPException(
+            status_code=404,
+            detail="CV not found.",
+        )
+
+    return cv
 
 router = APIRouter(
     tags=["CVs"],
@@ -40,9 +67,11 @@ def create_cv(
     version_label: str | None = Form(None),
     is_default: bool = Form(False),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
         Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -101,9 +130,11 @@ def create_cv(
 def list_cvs_for_profile(
     profile_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
         Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -124,18 +155,14 @@ def list_cvs_for_profile(
 def get_cv(
     cv_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
+    return get_owned_cv_or_404(
+        db=db,
+        cv_id=cv_id,
+        current_user=current_user,
+    )
 
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
-
-    return cv
 
 
 @router.get(
@@ -144,16 +171,13 @@ def get_cv(
 def download_cv(
     cv_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
-
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
+    cv = get_owned_cv_or_404(
+        db=db,
+        cv_id=cv_id,
+        current_user=current_user,
+    )
 
     return FileResponse(
         path=cv.storage_path,
@@ -169,16 +193,13 @@ def update_cv(
     cv_id: int,
     cv_update: CVUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
-
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
+    cv = get_owned_cv_or_404(
+        db=db,
+        cv_id=cv_id,
+        current_user=current_user,
+    )
 
     cv.language = cv_update.language
     cv.version_label = cv_update.version_label
@@ -196,16 +217,13 @@ def update_cv(
 def set_default_cv(
     cv_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
-
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
+    cv = get_owned_cv_or_404(
+        db=db,
+        cv_id=cv_id,
+        current_user=current_user,
+    )
 
     clear_default_cv_for_profile(
         cv.profile_id,
@@ -227,16 +245,13 @@ def set_default_cv(
 def parse_cv(
     cv_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
-
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
+    cv = get_owned_cv_or_404(
+        db=db,
+        cv_id=cv_id,
+        current_user=current_user,
+    )
 
     cv.parsing_status = "PROCESSING"
     db.commit()
@@ -276,16 +291,13 @@ def parse_cv(
 def delete_cv(
     cv_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
-
-    if cv is None:
-        raise HTTPException(
-            status_code=404,
-            detail="CV not found.",
-        )
+    cv = get_owned_cv_or_404(
+        db=db,
+        cv_id=cv_id,
+        current_user=current_user,
+    )
 
     deleted_cv = cv
 

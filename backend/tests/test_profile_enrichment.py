@@ -40,6 +40,7 @@ def create_test_profile(authenticated_headers):
 
 def create_test_cv(
     profile_id: int,
+    authenticated_headers,
     file_name: str = "test-cv.pdf",
     content: bytes = b"Test CV content",
     language: str = "fr",
@@ -60,6 +61,7 @@ def create_test_cv(
             "version_label": version_label,
             "is_default": str(is_default).lower(),
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -231,6 +233,7 @@ def test_generate_cv_enrichment_proposals(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -280,6 +283,7 @@ def test_generate_cv_enrichment_proposals_does_not_update_profile(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -323,6 +327,7 @@ def test_generate_cv_enrichment_proposals_avoids_duplicate_pending_proposals(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -362,6 +367,7 @@ def test_list_profile_enrichment_proposals_after_generation(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -431,6 +437,7 @@ def test_reject_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -475,6 +482,7 @@ def test_cannot_reject_already_processed_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -520,6 +528,7 @@ def test_accept_profile_field_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     parsed_data = ParsedCVData(
@@ -571,6 +580,7 @@ def test_accept_skill_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -624,6 +634,7 @@ def test_accept_language_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     language = create_test_language()
@@ -677,6 +688,7 @@ def test_accept_certification_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     certification = create_test_certification()
@@ -730,6 +742,7 @@ def test_accept_experience_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     parsed_data = ParsedCVData(
@@ -789,6 +802,7 @@ def test_cannot_accept_already_processed_proposal(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -844,6 +858,7 @@ def test_generate_soft_skill_proposal_for_skill_not_in_catalog(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     language = create_test_language()
@@ -887,6 +902,7 @@ def test_accept_soft_skill_proposal_creates_profile_soft_skill(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     language = create_test_language()
@@ -949,6 +965,7 @@ def test_accept_hard_skill_proposal_creates_profile_skill(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -1010,6 +1027,7 @@ def test_generate_hard_skill_proposal_for_unknown_non_soft_skill(
     profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     language = create_test_language()
@@ -1056,6 +1074,7 @@ def test_accept_all_proposals(
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -1104,6 +1123,7 @@ def test_reject_all_proposals(
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     skill = create_test_skill()
@@ -1152,6 +1172,7 @@ def test_accept_unknown_hard_skill_creates_catalog_skill(
 
     cv = create_test_cv(
         profile_id=profile["id"],
+        authenticated_headers=authenticated_headers,
     )
 
     language = create_test_language()
