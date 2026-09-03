@@ -80,6 +80,12 @@ export function AccountPage() {
         <p className="mt-2 text-slate-300">
           <strong>Status:</strong> {user?.is_active ? "Active" : "Unknown"}
         </p>
+        <p className="mt-2 text-slate-300">
+          <strong>Member since:</strong>{" "}
+          {user?.created_at
+            ? new Date(user.created_at).toLocaleDateString()
+            : "Not loaded"}
+        </p>
       </Card>
 
       <Card>
@@ -90,8 +96,6 @@ export function AccountPage() {
         <p className="text-slate-300">
           Authentication Method: JWT Access Token
         </p>
-
-        <p className="mt-2 text-slate-300">Account Mode: Single User MVP</p>
 
         <div className="mt-6 border-t border-slate-700 pt-6">
           <h3 className="mb-2 text-sm font-semibold text-white">
@@ -139,22 +143,6 @@ export function AccountPage() {
             </button>
           </form>
         </div>
-      </Card>
-
-      <Card>
-        <h2 className="mb-4 text-lg font-semibold text-white">
-          Authentication Roadmap
-        </h2>
-
-        <ul className="space-y-2 text-slate-400">
-          <li>✅ Login</li>
-          <li>✅ Password Recovery</li>
-          <li>✅ Email Recovery</li>
-          <li>✅ Sign Up</li>
-          <li>✅ Remember Me</li>
-          <li>⬜ MFA</li>
-          <li>⬜ SSO</li>
-        </ul>
       </Card>
 
       <Card>

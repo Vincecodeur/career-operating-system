@@ -4,6 +4,7 @@ export type AuthUser = {
   id: number;
   email: string;
   is_active: boolean;
+  created_at: string;
 };
 
 export type LoginResponse = {
