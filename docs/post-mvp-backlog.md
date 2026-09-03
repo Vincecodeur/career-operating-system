@@ -675,3 +675,26 @@ Learning goals:
 - SSO
 - Federation
 - IAM architecture
+
+## P1 - Architecture
+
+### ARCH-001 - Multi-Tenant Data Isolation
+
+Status: Backlog
+
+Context:
+Sign Up allows creating multiple User accounts, but Profile, Application, CV, WorkExperience, ProfileSkill, ProfileSoftSkill, ProfileLanguage, ProfileCertification, ProfileEnrichmentProposal, SavedSearch and ApplicationSetting (including AI settings) currently have no user_id or owner_id foreign key. All accounts share the same business data.
+
+Required changes if implemented:
+
+- add user_id (ForeignKey to users.id) on all business entities listed above
+- filter every existing query by the authenticated user across all domain routers
+- data migration strategy for existing records (attribution to a default/primary user)
+- test suite updates across most domains (currently 324 backend tests)
+- frontend impact assessment (any UI relying on implicit single-user context)
+
+Reason deferred:
+This is a major architectural change touching nearly every domain of the application. Sign Up was introduced for authentication learning purposes (DEC-079), not to enable a real multi-user product. Implementing this now would introduce significant regression risk for limited MVP value, since the project remains a personal single-user tool (see project-memory.md, "Utilisateur principal").
+
+Trigger for revisiting:
+If Career Operating System is ever intended to support multiple real users (e.g., shared with other people, deployed as a service), this must be addressed before that transition.

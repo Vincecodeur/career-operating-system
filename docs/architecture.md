@@ -92,6 +92,9 @@ Sous-domaines :
 
 Le système supporte plusieurs profils candidats.
 
+Note d'architecture :
+Le système ne implémente actuellement aucune isolation multi-tenant. Tous les comptes utilisateurs (User) partagent l'intégralité des données Profile, Application, CV et autres entités métier. Cette limitation est documentée et assumée pour le MVP (voir ARCH-001 dans le backlog post-MVP).
+
 Additional Profile Context
 
 Purpose:
@@ -732,7 +735,7 @@ Known limitation:
 Some tool/language combinations may still appear merged
 inside skill extraction results.
 
-#### Authentication
+### Authentication
 
 Current authentication UX includes:
 
@@ -765,9 +768,15 @@ SMTP configuration:
 - stored as environment variables, never in PostgreSQL
 - validated against a real Mailtrap sandbox
 
+Sign Up:
+
+- registration endpoint gated by PUBLIC_REGISTRATION_ENABLED environment variable (disabled by default)
+- password policy enforced: minimum 8 characters, one uppercase, one lowercase, one digit, one special character
+- the same password policy is enforced on both Sign Up and Reset Password
+- real-time password checklist displayed in the frontend during password entry
+
 Future learning features:
 
-- Sign Up
 - Remember Me
 - MFA
 - SSO

@@ -1513,6 +1513,17 @@ Post-MVP Planning
 - Push GitHub réalisé
 - Phase 7.1.23.15.5.2 Email Recovery terminée
 - 319 tests backend passants
+- Sign Up backend réactivé (PUBLIC_REGISTRATION_ENABLED via variable d'environnement)
+- RegisterRequest schema créé
+- password_policy.py créé
+- Password Policy appliquée à Sign Up et Reset Password
+- Checklist de mot de passe en temps réel implémentée (frontend)
+- SignUpPage créée
+- Route /signup ajoutée
+- Lien Sign Up fonctionnel depuis Login
+- Validation manuelle Sign Up réalisée
+- 324 tests backend passants
+- Phase 7.1.23.15.5.3 Sign Up terminée
 
 Blocked
 
@@ -1601,13 +1612,14 @@ Current Phase Status
 
 Status:
 
-In Progress (Password Recovery and Email Recovery completed, Sign Up and Remember Me remaining)
+In Progress (Password Recovery, Email Recovery and Sign Up completed, Remember Me remaining)
 
 Latest completed phases:
 
 - 7.1.23.14 Login UX Polish
 - 7.1.23.15.5.1 Password Recovery
 - 7.1.23.15.5.2 Email Recovery
+- 7.1.23.15.5.3 Sign Up
 
 Latest validation:
 
@@ -1632,10 +1644,11 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-7.1.23.15.5.3 Sign Up  
+7.1.23.15.5.4 Remember Me
+
 Last Commits :
 
+- ae5869c - feat(auth): implement sign up with password policy validation
 - 4a6b239 - feat(auth): implement email recovery backend and frontend
 - abeb09b - feat(auth): add password recovery frontend flow
 - da54568 - feat(auth): implement password recovery with Mailtrap SMTP
-- 179f8e6 - feat(auth): improve login, account and recovery UX

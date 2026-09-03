@@ -508,17 +508,35 @@ Password Recovery results:
 - Technical commit 4a6b239 (backend + frontend) pushed
 - 319 backend tests passing, 0 regressions
 
-  Current Phase:
+Sign Up results:
+
+- POST /auth/register reactivated via PUBLIC_REGISTRATION_ENABLED environment variable
+- RegisterRequest schema implemented
+- password_policy.py implemented (min 8 chars, uppercase, lowercase, digit, special character)
+- password policy enforced on both Sign Up and Reset Password
+- SignUpPage created with real-time password checklist
+- ResetPasswordPage updated with the same checklist
+- manual validation completed: account creation, login with new account
+- 5 backend tests added
+- 324 backend tests passing, 0 regressions
+
+Data isolation limitation identified:
+
+- new accounts created via Sign Up share the same Profile, Application, CV and other business data
+- no user_id/owner_id exists on business entities
+- decision: remain single-tenant for MVP (Option B)
+- documented as ARCH-001 in post-MVP backlog
+
+Current Phase:
 
 - Authentication Learning Features
 - Password Recovery completed
 - Email Recovery completed
-- Sign Up remaining
+- Sign Up completed
 - Remember Me remaining
 
-  Remaining:
+Remaining:
 
-- Sign Up
 - Remember Me
 - Minimal Account UX Polish
 - Settings Strategy Synchronization

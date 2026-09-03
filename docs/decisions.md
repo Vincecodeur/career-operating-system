@@ -5193,13 +5193,13 @@ Frontend authentication roadmap visibility was introduced during Login UX Polish
 Technical commit:
 179f8e6 - feat(auth): improve login, account and recovery UX
 
-
 #### Password Recovery Implementation Completed
 
 Date: 2026-09-02
 Status: Completed
 
 Implemented:
+
 - PasswordResetToken model (token stored as SHA-256 hash, never in clear text)
 - token_service.py (generation via secrets.token_urlsafe, hashing, expiration, single-use invalidation)
 - email_service.py (real SMTP integration via Mailtrap)
@@ -5209,6 +5209,7 @@ Implemented:
 - ResetPasswordPage (token read from URL query parameter)
 
 Validation:
+
 - 9 backend tests passed
 - Real Mailtrap SMTP validated (email received, correct subject and link)
 - Reset link consumed successfully through the API
@@ -5216,6 +5217,7 @@ Validation:
 - New password accepted after reset
 
 Technical commits:
+
 - da54568 - feat(auth): implement password recovery with Mailtrap SMTP
 - abeb09b - feat(auth): add password recovery frontend flow
 
@@ -5225,6 +5227,7 @@ Date: 2026-09-02
 Status: Completed
 
 Implemented:
+
 - EmailChangeRequest model (token stored as SHA-256 hash, never in clear text)
 - Reuse of Password Recovery token generation and hashing functions
 - POST /auth/change-email (authenticated endpoint, requires valid JWT)
@@ -5236,6 +5239,7 @@ Security decision:
 The confirmation email is sent to the CURRENT email address of the account, not to the requested new address. This ensures the actual account owner approves the change.
 
 Validation:
+
 - 6 backend tests passed
 - Real Mailtrap SMTP validated
 - Confirmation email received on the current address
@@ -5243,6 +5247,7 @@ Validation:
 - New email accepted after confirmation
 
 Technical commit:
+
 - 4a6b239 - feat(auth): implement email recovery backend and frontend
 
 #### Combined Validation
@@ -5250,5 +5255,41 @@ Technical commit:
 Backend suite: 319 tests passing, 0 regressions.
 
 Remaining scope of DEC-079:
+
 - Sign Up
+- Remember Me
+
+#### Sign Up Implementation Completed
+
+Date: 2026-09-03
+Status: Completed
+
+Implemented:
+
+- POST /auth/register reactivated via PUBLIC_REGISTRATION_ENABLED environment variable (default: false)
+- RegisterRequest schema (email, password, confirm_password)
+- password_policy.py (minimum 8 characters, uppercase, lowercase, digit, special character)
+- password policy enforced on both Sign Up and Reset Password endpoints
+- SignUpPage created with real-time password policy checklist
+- ResetPasswordPage updated with the same checklist
+- Route /signup added
+- Sign Up link connected from LoginPage
+
+Validation:
+
+- 5 backend tests added (register weak password, register mismatch, register existing email, register success, reset password weak password)
+- 324 backend tests passing, 0 regressions
+- manual account creation validated
+- manual login with new account validated
+
+#### Data Isolation Decision
+
+During Sign Up validation, it was confirmed that newly created accounts share the same Profile, Application, CV and other business data as the existing account. No user_id or owner_id foreign key exists on these entities.
+
+Decision: Option B retained. The MVP remains single-tenant in practice, even though multiple User accounts can be created. This limitation is explicitly documented rather than silently ignored.
+
+Multi-tenant data isolation is deferred to post-MVP. See ARCH-001 in the post-MVP backlog.
+
+Remaining scope of DEC-079:
+
 - Remember Me

@@ -1254,7 +1254,7 @@ Objectif :
   ✅ 7.1.23.15.4 Frontend Design
   ✅ 7.1.23.15.5.1 Password Recovery
   ✅ 7.1.23.15.5.2 Email Recovery
-  ⬜ 7.1.23.15.5.3 Sign Up
+  ✅ 7.1.23.15.5.3 Sign Up
   ⬜ 7.1.23.15.5.4 Remember Me
   ⬜ 7.1.23.15.6 Validation
   ⬜ 7.1.23.15.7 Documentation Synchronization
@@ -1291,6 +1291,13 @@ Objectif :
 - 4a6b239 - feat(auth): implement email recovery backend and frontend  
   Tests :
 - 319 tests backend passants (0 régression)
+
+  Décision architecture :
+
+- l'isolation multi-tenant des données (Profile, Application, CV, etc.) n'est pas implémentée ;
+- tous les comptes créés via Sign Up partagent actuellement les mêmes données ;
+- décision actée : rester en mode single-tenant assumé pour le MVP ;
+- référence : ARCH-001 Multi-Tenant Data Isolation ajouté au backlog post-MVP.
 
 Statut :
 

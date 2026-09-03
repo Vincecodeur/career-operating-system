@@ -324,6 +324,11 @@ Implémenté :
 - Password Recovery frontend flow
 - Email Recovery frontend flow
 
+- Sign Up reactivation via PUBLIC_REGISTRATION_ENABLED
+- RegisterRequest schema
+- password_policy.py
+- Password policy enforcement on Sign Up and Reset Password
+
 Partiellement implémenté :
 
 Non implémenté :
@@ -578,6 +583,9 @@ Implémenté :
 - Change Email form in AccountPage
 - Password Recovery frontend flow
 - Email Recovery frontend flow
+- SignUpPage
+- Real-time password policy checklist
+- passwordPolicy.ts utility
 
 Documenté mais pas encore implémenté :
 
@@ -657,6 +665,11 @@ Des tests existent pour :
 - confirm email change invalid token
 - confirm email change success
 - confirm email change token cannot be reused
+- register weak password rejection
+- register password mismatch
+- register existing email rejection
+- register success when enabled
+- reset password weak password rejection
 
 ## Phases terminées
 
@@ -1183,15 +1196,18 @@ Latest backend validation:
 
 - Password Recovery: 9 tests added, real Mailtrap end-to-end validated
 - Email Recovery: 6 tests added, real Mailtrap end-to-end validated
-- complete backend suite: 319 tests passed, 0 regressions  
-  Current state:
+- complete backend suite: 319 tests passed, 0 regressions
+
+Current state:
+
 - Password Recovery completed (backend + frontend + real Mailtrap validation)
 - Email Recovery completed (backend + frontend + real Mailtrap validation)
-- Sign Up not started
+- Sign Up completed (backend + frontend + password policy + manual validation)
 - Remember Me not started
-- documentation synchronization in progress  
+- data isolation limitation identified and documented as ARCH-001 (post-MVP)
+- documentation synchronization in progress
   Next required step:
-  7.1.23.15.5.3 Sign Up
+  7.1.23.15.5.4 Remember Me
 
 ## Méthode de reprise
 
