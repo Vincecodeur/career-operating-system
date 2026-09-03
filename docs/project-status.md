@@ -1603,7 +1603,7 @@ Phase Status:
 
 Next Step:
 
-7.1.23.15 Authentication Learning Features
+7.1.24 User Data Ownership And Isolation
 
 ---
 
@@ -1638,6 +1638,12 @@ Current Phase Status
 7.1.23.16 Minimal Account UX Polish
 Status:
 Completed
+
+Next Phase:
+7.1.24 User Data Ownership And Isolation
+Status:
+In Progress (Design completed via DEC-081, implementation pending)
+
 Latest completed phases:
 
 - 7.1.23.14 Login UX Polish
@@ -1671,7 +1677,7 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-Settings Strategy Synchronization
+7.1.24 User Data Ownership And Isolation
 
 Last Commits :
 

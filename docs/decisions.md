@@ -5393,3 +5393,186 @@ Frontend:
 ### Known remaining issue (not addressed here)
 
 A duplicated validation block was observed in backend/app/auth/router.py's register() endpoint (password confirmation check and password policy check each appear twice consecutively). This does not cause functional failures (326 tests still pass) but is dead/redundant code. It was not addressed in this phase, as it falls outside the scope of DEC-080. It should be cleaned up in a future maintenance pass.
+
+### DEC-081 - User Data Ownership And Isolation
+
+Date: 2026-09-03
+Status: Accepted (Design) — Implementation Pending
+
+#### Context
+
+DEC-079 introduced Sign Up, allowing the creation of multiple User accounts.
+ARCH-001 (post-MVP backlog) documented that no multi-tenant data isolation
+exists: all accounts share the same Profile, Application, CV and Settings
+data.
+
+At the time, ARCH-001 was deferred with the justification that the project
+remained a personal single-user tool.
+
+This assumption has changed. The confirmed product model is:
+
+```
+One User (a person)
+→ owns one or more Profiles (career strategies / target roles)
+  → each Profile owns one or more CVs (e.g. French, English)
+  → each Profile owns its own Applications (submitted against a specific
+    JobOffer, for that specific Profile)
+```
+
+This model requires real data ownership per User, in preparation for the
+upcoming AI Career Advisor integration. AI context (AIContextPreviewResponse,
+AI Readiness) must reason about a specific person's data, not a shared pool
+across all accounts.
+
+This decision reopens and supersedes the deferral in ARCH-001.
+
+#### Decision
+
+##### Ownership Model
+
+```
+User (account)
+└── Profile (1..N)              → user_id added
+    ├── CV (1..N)                → inherits ownership via Profile
+    ├── ProfileSkill             → inherits ownership via Profile
+    ├── ProfileSoftSkill         → inherits ownership via Profile
+    ├── WorkExperience           → inherits ownership via Profile
+    ├── ProfileLanguage          → inherits ownership via Profile
+    ├── ProfileCertification     → inherits ownership via Profile
+    ├── ProfileEnrichmentProposal → inherits ownership via CV → Profile
+    └── Application (1..N)       → inherits ownership via Profile
+        └── ApplicationEvent     → inherits ownership via Application
+```
+
+##### JobOffer Remains Global
+
+JobOffer, JobSource and JobOfferSource remain a shared, deduplicated catalog
+across all User accounts. This is consistent with the existing pipeline
+(DEC-047, DEC-048, DEC-049) and avoids duplicating discovery data.
+
+Matching remains calculated per (Profile, JobOffer) pair, exactly as already
+implemented (DEC-071, DEC-072). No change to the matching engine itself.
+
+Score-based visibility (e.g. discovery_minimum_matching_score) becomes a
+per-User preference rather than a single global value.
+
+The AI layer does not calculate the matching score itself. The score
+remains produced by the deterministic backend matching engine, consistent
+with DEC-039 (Explainable Opportunity Scoring) and DEC-075 (AI Context
+Contract). The AI layer may enrich or explain a score already computed by
+the backend, but it does not replace or independently compute it.
+
+##### ApplicationSetting Becomes Per-User
+
+The current unique constraint on setting_key becomes
+unique(user_id, setting_key). All settings currently in ApplicationSetting
+(Job Discovery, Search Criteria, Discovery Preferences, AI Features/Consent)
+become personal preferences.
+
+##### Reference Catalogs Remain Global
+
+Skill, Language, Certification, Country, WorkMode, ContractType remain
+shared governed catalogs (DEC-051, DEC-055). They are not owned by any
+single User.
+
+#### Rationale
+
+- The AI Career Advisor (Phase 7.2) requires reasoning about one person's
+  data. A shared data pool across accounts is incompatible with meaningful
+  AI context.
+- The confirmed real-world model (one person, multiple career-target
+  Profiles, each with its own CVs and Applications) requires this
+  distinction to be enforced at the data layer, not assumed implicitly.
+- Deferring this further would mean building AI features on top of an
+  architecture that will need to be revisited anyway, increasing total
+  rework.
+
+#### Scope
+
+In scope:
+
+- user_id added to Profile (ForeignKey to users.id)
+- Cascading ownership through existing Profile relationships
+- user_id added to ApplicationSetting, unique constraint changed to
+  (user_id, setting_key)
+- All domain routers (profile, cv, applications, settings, ai) filtered by
+  the authenticated user
+- Migration strategy for existing demo data (see Data Migration below)
+- Test suite updated to simulate an authenticated user across all affected
+  domains
+
+Out of scope (unchanged):
+
+- JobOffer, JobSource, JobOfferSource remain global
+- Skill, Language, Certification, Country, WorkMode, ContractType remain
+  global governed catalogs
+- SETTINGS-001 (Settings Categories UI) — remains post-MVP
+- MATCHING-002 (Configurable Matching Weights) — remains post-MVP
+- MFA, OAuth Providers, Enterprise SSO — remain post-MVP
+  (AUTH-001 / AUTH-002 / AUTH-003)
+
+#### Data Migration Strategy
+
+The current demo dataset contains 4 near-identical Profiles created before
+Sign Up existed.
+
+Before implementation:
+
+- a non-destructive audit will be performed (relationships, CVs,
+  Applications attached to each of the 4 profiles), following the same
+  method used in 7.1.23.6 Existing Data Cleanup
+- a decision on which profile(s) to keep (for manual testing) and which to
+  remove will be made based on that audit, not before it
+- all retained data will be attributed to Vincent's primary account
+  (admin@career-os.local or the equivalent active account at execution
+  time)
+
+#### Consequences
+
+- Significant impact on the existing 326-test backend suite: most tests
+  currently create Profile/Application records without an authenticated
+  user context. They will need to simulate a user.
+- New isolation tests are required (Account A must never see Account B's
+  Profile, CV, Application or Settings data).
+- Frontend impact assessment required: no page should assume a global
+  implicit context once ownership is enforced.
+- This is a multi-step migration, not a single-commit change. It follows
+  the same Design → Code → Tests → Validation → Documentation cycle used
+  throughout the project.
+
+#### Sequencing
+
+This decision reorders the MVP closure review sequence:
+
+```
+7.1.24 User Data Ownership And Isolation   (this decision)
+↓
+7.1.25 Settings Strategy Synchronization   (depends on user_id existing)
+↓
+7.1.26 Best Profile Recommendation Architecture Review
+↓
+7.1.27 Final Regression And Documentation
+↓
+7.1.28 MVP Closure Decision
+```
+
+#### Relation To ARCH-001
+
+This decision supersedes the deferral in ARCH-001. ARCH-001 should be
+marked as "Superseded by DEC-081" in the post-MVP backlog rather than
+removed, to preserve historical traceability of the original reasoning.
+
+#### Related Decisions
+
+- DEC-035 - Structured Profile Source Of Truth
+- DEC-039 - Explainable Opportunity Scoring
+- DEC-043 - Authentication From MVP
+- DEC-047 - Connector Pattern
+- DEC-048 - Offer As Primary Discovery Entity
+- DEC-049 - Job Discovery Pipeline
+- DEC-067 - Settings Persistence Strategy
+- DEC-071 - Multi Profile Opportunity Context
+- DEC-072 - Application Profile Attribution
+- DEC-075 - AI Context Contract
+- DEC-079 - Authentication Learning Strategy
+- ARCH-001 - Multi-Tenant Data Isolation (superseded by this decision)

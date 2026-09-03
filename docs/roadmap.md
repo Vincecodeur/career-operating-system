@@ -1403,16 +1403,88 @@ Hors périmètre de cette phase :
 - MATCHING-002 Configurable Matching Weights (reste hors MVP)
 - toute migration de données sans validation explicite préalable
 
-Ordre de la revue de clôture MVP (révisé) :
-7.1.24 Settings Strategy Synchronization
-↓
-7.1.25 Best Profile Recommendation Architecture Review
-↓
-7.1.26 Final Regression And Documentation
-↓
-7.1.27 MVP Closure Decision
+⚠️ MISE À JOUR - Séquencement révisé suite à DEC-081
 
-Statut :
+Le séquencement ci-dessous, initialement défini pour 7.1.24, a été révisé
+suite à DEC-081 (User Data Ownership And Isolation). Une nouvelle phase
+préalable a été identifiée : l'isolation des données par utilisateur doit
+précéder la synchronisation des Settings, car cette dernière dépend de
+l'existence d'un user_id sur Profile et ApplicationSetting.
+
+⏳ 7.1.24 User Data Ownership And Isolation
+
+Objectif :
+Implémenter le modèle d'ownership confirmé :
+
+- 1 User (personne) possède 1..N Profiles (stratégies de carrière / métiers)
+- chaque Profile possède ses propres CVs (français, anglais, ...)
+- chaque Profile possède ses propres Applications
+
+Cette phase reprend et supersede ARCH-001 (Multi-Tenant Data Isolation),
+initialement reporté en post-MVP backlog. Voir DEC-081 pour le contexte
+complet et la justification.
+
+Décisions actées (DEC-081) :
+
+- user_id ajouté sur Profile (ForeignKey vers users.id)
+- ownership en cascade via les relations existantes (CV, WorkExperience,
+  ProfileSkill, ProfileSoftSkill, ProfileLanguage, ProfileCertification,
+  ProfileEnrichmentProposal, Application, ApplicationEvent)
+- JobOffer, JobSource, JobOfferSource restent globaux (catalogue mutualisé)
+- le scoring de matching reste calculé par (Profile, JobOffer), déterministe,
+  sans changement du moteur de matching
+- l'IA ne calcule pas elle-même le score ; elle peut l'expliquer/l'enrichir
+  (cohérent avec DEC-039, DEC-075)
+- ApplicationSetting devient per-user : contrainte unique(user_id, setting_key)
+- Skill, Language, Certification, Country, WorkMode, ContractType restent
+  des catalogues globaux (DEC-051, DEC-055)
+
+Stratégie de migration des données démo :
+
+- audit non destructif des 4 profils démo existants avant toute suppression
+- décision de conservation basée sur cet audit (probablement 1 profil
+  conservé pour tests, les autres supprimés)
+- rattachement des données conservées au compte principal
+
+Sous-phases :
+⬜ 7.1.24.1 Repository Audit (complément CV, Application)
+⬜ 7.1.24.2 Product Design (DEC-081 - terminé)
+⬜ 7.1.24.3 Backend Migration
+⬜ 7.1.24.4 Backend Tests (adaptation suite existante + tests d'isolation)
+⬜ 7.1.24.5 Frontend Impact Review
+⬜ 7.1.24.6 Validation End-To-End (2 comptes réels, étanchéité vérifiée)
+⬜ 7.1.24.7 Documentation Synchronization
+
+Hors périmètre :
+
+- SETTINGS-001 Settings Categories (reste post-MVP)
+- MATCHING-002 Configurable Matching Weights (reste hors MVP)
+- AUTH-001/002/003 MFA, OAuth, SSO (restent post-MVP)
+
+⬜ 7.1.25 Settings Strategy Synchronization
+
+Objectif :
+S'assurer que tous les paramètres utilisateur sont cohérents entre Frontend,
+Backend, PostgreSQL et documentation, désormais avec un vrai user_id
+disponible sur Profile et ApplicationSetting.
+
+Décisions actées (à mettre en oeuvre une fois 7.1.24 terminé) :
+
+- fusionner Profile.preferred_countries et
+  ApplicationSetting["search_preferred_countries"] (actuellement dupliqués
+  sans synchronisation)
+- créer une vraie table saved_searches (actuellement stockée en JSON blob
+  dans ApplicationSetting.setting_value, limité à 2000 caractères)
+- discovery_minimum_matching_score devient une préférence par utilisateur
+
+Livrable attendu :
+docs/settings-strategy.md
+
+⬜ 7.1.26 Best Profile Recommendation Architecture Review
+⬜ 7.1.27 Final Regression And Documentation
+⬜ 7.1.28 MVP Closure Decision
+
+Statut global (7.1.24 à 7.1.28) :
 In Progress
 
 ### Phase 7.2

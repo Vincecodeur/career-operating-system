@@ -543,10 +543,20 @@ Current Phase:
 
 Remaining:
 
-- Settings Strategy Synchronization
+- User Data Ownership And Isolation (DEC-081, supersedes ARCH-001)
+- Settings Strategy Synchronization (depends on above)
 - Best Profile Recommendation Architecture Review
 - Final Regression And Documentation
 - MVP Closure Decision
+
+DEC-081 design decisions (not yet implemented):
+
+- user_id added to Profile, cascading to CV/Application/etc.
+- ApplicationSetting becomes per-user (unique constraint changes)
+- JobOffer/JobSource/JobOfferSource remain global
+- matching score remains deterministic backend calculation, AI does not
+  compute it
+- demo data migration requires non-destructive audit before any deletion
 
 Known technical debt (not blocking):
 

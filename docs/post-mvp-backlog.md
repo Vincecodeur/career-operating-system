@@ -680,7 +680,12 @@ Learning goals:
 
 ### ARCH-001 - Multi-Tenant Data Isolation
 
-Status: Backlog
+Status: Superseded by DEC-081
+
+This item has been reopened and is no longer deferred to post-MVP. See
+DEC-081 (User Data Ownership And Isolation) and roadmap.md phase 7.1.24
+for the current implementation plan. This entry is preserved for historical
+traceability of the original reasoning that led to the initial deferral.
 
 Context:
 Sign Up allows creating multiple User accounts, but Profile, Application, CV, WorkExperience, ProfileSkill, ProfileSoftSkill, ProfileLanguage, ProfileCertification, ProfileEnrichmentProposal, SavedSearch and ApplicationSetting (including AI settings) currently have no user_id or owner_id foreign key. All accounts share the same business data.

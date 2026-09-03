@@ -1199,7 +1199,17 @@ Current state:
 - Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)
 
 Next required step:
-Settings Strategy Synchronization
+7.1.24 User Data Ownership And Isolation
+
+Design decision reference:
+DEC-081 - User Data Ownership And Isolation (supersedes ARCH-001)
+
+Key points before starting implementation:
+
+- audit CV and Application models (not yet done in this session)
+- non-destructive audit of the 4 existing demo profiles before any deletion
+- most of the 326 existing backend tests will need to simulate an
+  authenticated user
 
 ## Méthode de reprise
 
