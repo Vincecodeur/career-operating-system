@@ -11,7 +11,7 @@ create_tables()
 client = TestClient(app)
 
 
-def create_test_profile():
+def create_test_profile(authenticated_headers):
     profile_name = f"Profile_{uuid4()}"
 
     response = client.post(
@@ -27,6 +27,7 @@ def create_test_profile():
             "remote_preference": "Hybrid",
             "preferred_countries": "France",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -63,8 +64,8 @@ def create_test_cv(
     return response.json()
 
 
-def test_create_cv():
-    profile = create_test_profile()
+def test_create_cv(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     response = client.post(
         f"/profiles/{profile['id']}/cvs",
@@ -96,8 +97,8 @@ def test_create_cv():
     assert data["mime_type"] == "application/pdf"
 
 
-def test_profile_can_have_multiple_cvs():
-    profile = create_test_profile()
+def test_profile_can_have_multiple_cvs(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     first_cv = create_test_cv(
         profile_id=profile["id"],
@@ -130,8 +131,8 @@ def test_profile_can_have_multiple_cvs():
     assert second_cv["id"] in cv_ids
 
 
-def test_list_profile_cvs():
-    profile = create_test_profile()
+def test_list_profile_cvs(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -153,8 +154,8 @@ def test_list_profile_cvs():
     )
 
 
-def test_get_cv():
-    profile = create_test_profile()
+def test_get_cv(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -180,8 +181,8 @@ def test_cv_not_found():
     assert response.status_code == 404
 
 
-def test_update_cv():
-    profile = create_test_profile()
+def test_update_cv(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -206,8 +207,8 @@ def test_update_cv():
     assert updated_cv["version_label"] == "Updated Version"
 
 
-def test_set_default_cv():
-    profile = create_test_profile()
+def test_set_default_cv(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -226,8 +227,8 @@ def test_set_default_cv():
     assert data["is_default"] is True
 
 
-def test_only_one_default_cv_per_profile():
-    profile = create_test_profile()
+def test_only_one_default_cv_per_profile(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     first_cv = create_test_cv(
         profile_id=profile["id"],
@@ -271,8 +272,8 @@ def test_only_one_default_cv_per_profile():
     assert second_cv_after_update["is_default"] is True
 
 
-def test_delete_cv():
-    profile = create_test_profile()
+def test_delete_cv(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -295,8 +296,8 @@ def test_delete_cv():
     assert get_response.status_code == 404
 
 
-def test_delete_default_cv():
-    profile = create_test_profile()
+def test_delete_default_cv(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -323,9 +324,9 @@ def test_delete_default_cv():
     )
 
 
-def test_profile_cannot_see_other_profile_cvs():
-    first_profile = create_test_profile()
-    second_profile = create_test_profile()
+def test_profile_cannot_see_other_profile_cvs(authenticated_headers):
+    first_profile = create_test_profile(authenticated_headers)
+    second_profile = create_test_profile(authenticated_headers)
 
     first_profile_cv = create_test_cv(
         profile_id=first_profile["id"],
@@ -354,8 +355,8 @@ def test_profile_cannot_see_other_profile_cvs():
     assert second_profile_cv["id"] not in first_profile_cv_ids
 
 
-def test_cv_created_with_pending_parsing_status():
-    profile = create_test_profile()
+def test_cv_created_with_pending_parsing_status(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],

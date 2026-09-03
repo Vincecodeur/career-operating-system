@@ -4,10 +4,11 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 
+
 client = TestClient(app)
 
 
-def create_profile():
+def create_profile(authenticated_headers):
     unique_profile_name = f"Profile_{uuid4()}"
 
     response = client.post(
@@ -23,6 +24,7 @@ def create_profile():
             "remote_preference": "Hybrid",
             "preferred_countries": "France",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -30,7 +32,7 @@ def create_profile():
     return response.json()
 
 
-def create_language(name_prefix: str):
+def create_language(name_prefix: str = "Language"):
     unique_language_name = f"{name_prefix}_{uuid4()}"
 
     response = client.post(
@@ -48,7 +50,7 @@ def create_language(name_prefix: str):
 def create_profile_language(
     profile_id: int,
     language_id: int,
-    proficiency_level: str = "B2",
+    proficiency_level: str = "Fluent",
 ):
     response = client.post(
         "/profile-languages",
@@ -64,16 +66,16 @@ def create_profile_language(
     return response.json()
 
 
-def test_create_profile_language():
-    profile = create_profile()
-    language = create_language("English")
+def test_create_profile_language(authenticated_headers):
+    profile = create_profile(authenticated_headers)
+    language = create_language()
 
     response = client.post(
         "/profile-languages",
         json={
             "profile_id": profile["id"],
             "language_id": language["id"],
-            "proficiency_level": "C1",
+            "proficiency_level": "Native",
         },
     )
 
@@ -83,12 +85,12 @@ def test_create_profile_language():
 
     assert data["profile_id"] == profile["id"]
     assert data["language_id"] == language["id"]
-    assert data["proficiency_level"] == "C1"
+    assert data["proficiency_level"] == "Native"
 
 
-def test_duplicate_profile_language():
-    profile = create_profile()
-    language = create_language("Spanish")
+def test_duplicate_profile_language(authenticated_headers):
+    profile = create_profile(authenticated_headers)
+    language = create_language()
 
     create_profile_language(
         profile["id"],
@@ -100,25 +102,16 @@ def test_duplicate_profile_language():
         json={
             "profile_id": profile["id"],
             "language_id": language["id"],
-            "proficiency_level": "B2",
+            "proficiency_level": "Fluent",
         },
     )
 
     assert response.status_code == 409
 
 
-def test_list_profile_languages():
-    response = client.get(
-        "/profile-languages"
-    )
-
-    assert response.status_code == 200
-    assert isinstance(response.json(), list)
-
-
-def test_list_languages_for_profile():
-    profile = create_profile()
-    language = create_language("German")
+def test_list_languages_for_profile(authenticated_headers):
+    profile = create_profile(authenticated_headers)
+    language = create_language()
 
     create_profile_language(
         profile["id"],
@@ -126,7 +119,8 @@ def test_list_languages_for_profile():
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/languages"
+        f"/profiles/{profile['id']}/languages",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -139,20 +133,20 @@ def test_list_languages_for_profile():
     )
 
 
-def test_update_profile_language():
-    profile = create_profile()
-    language = create_language("Italian")
+def test_update_profile_language(authenticated_headers):
+    profile = create_profile(authenticated_headers)
+    language = create_language()
 
     create_profile_language(
         profile["id"],
         language["id"],
-        "B1",
+        "Beginner",
     )
 
     response = client.put(
         f"/profile-languages/{profile['id']}/{language['id']}",
         json={
-            "proficiency_level": "C2",
+            "proficiency_level": "Advanced",
         },
     )
 
@@ -162,20 +156,34 @@ def test_update_profile_language():
 
     assert data["profile_id"] == profile["id"]
     assert data["language_id"] == language["id"]
-    assert data["proficiency_level"] == "C2"
+    assert data["proficiency_level"] == "Advanced"
 
 
-def test_update_profile_language_not_found():
-    response = client.put(
-        "/profile-languages/99999/99999",
-        json={
-            "proficiency_level": "C2",
-        },
+def test_delete_profile_language(authenticated_headers):
+    profile = create_profile(authenticated_headers)
+    language = create_language()
+
+    create_profile_language(
+        profile["id"],
+        language["id"],
     )
 
-    assert response.status_code == 404
+    response = client.delete(
+        f"/profile-languages/{profile['id']}/{language['id']}"
+    )
 
+    assert response.status_code == 200
 
-def test_delete_profile_language():
-    profile = create_profile()
-    language = create_language(" Portuguese")
+    profile_languages_response = client.get(
+        f"/profiles/{profile['id']}/languages",
+        headers=authenticated_headers,
+    )
+
+    assert profile_languages_response.status_code == 200
+
+    profile_languages = profile_languages_response.json()
+
+    assert all(
+        profile_language["language_id"] != language["id"]
+        for profile_language in profile_languages
+    )

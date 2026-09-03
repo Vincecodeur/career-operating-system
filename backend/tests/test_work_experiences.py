@@ -7,7 +7,7 @@ from app.main import app
 client = TestClient(app)
 
 
-def create_test_profile():
+def create_test_profile(authenticated_headers):
     profile_name = f"Profile_{uuid4()}"
 
     response = client.post(
@@ -23,6 +23,7 @@ def create_test_profile():
             "remote_preference": "Hybrid",
             "preferred_countries": "France",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -30,8 +31,8 @@ def create_test_profile():
     return response.json()
 
 
-def create_test_work_experience():
-    profile = create_test_profile()
+def create_test_work_experience(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     response = client.post(
         "/work-experiences",
@@ -44,6 +45,7 @@ def create_test_work_experience():
             "is_current_position": False,
             "description": "Built backend APIs and integration services.",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -54,8 +56,8 @@ def create_test_work_experience():
     }
 
 
-def test_create_work_experience():
-    profile = create_test_profile()
+def test_create_work_experience(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     response = client.post(
         "/work-experiences",
@@ -68,6 +70,7 @@ def test_create_work_experience():
             "is_current_position": False,
             "description": "Created and maintained backend services.",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -97,8 +100,8 @@ def test_list_work_experiences():
     )
 
 
-def test_get_work_experience():
-    data = create_test_work_experience()
+def test_get_work_experience(authenticated_headers):
+    data = create_test_work_experience(authenticated_headers)
 
     work_experience_id = data["work_experience"]["id"]
 
@@ -115,14 +118,15 @@ def test_get_work_experience():
     assert work_experience["job_title"] == "Backend Developer"
 
 
-def test_list_work_experiences_for_profile():
-    data = create_test_work_experience()
+def test_list_work_experiences_for_profile(authenticated_headers):
+    data = create_test_work_experience(authenticated_headers)
 
     profile_id = data["profile"]["id"]
     work_experience_id = data["work_experience"]["id"]
 
     response = client.get(
-        f"/profiles/{profile_id}/work-experiences"
+        f"/profiles/{profile_id}/work-experiences",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -135,8 +139,8 @@ def test_list_work_experiences_for_profile():
     )
 
 
-def test_update_work_experience():
-    data = create_test_work_experience()
+def test_update_work_experience(authenticated_headers):
+    data = create_test_work_experience(authenticated_headers)
 
     work_experience_id = data["work_experience"]["id"]
 
@@ -184,8 +188,8 @@ def test_update_work_experience_not_found():
     assert response.status_code == 404
 
 
-def test_delete_work_experience():
-    data = create_test_work_experience()
+def test_delete_work_experience(authenticated_headers):
+    data = create_test_work_experience(authenticated_headers)
 
     work_experience_id = data["work_experience"]["id"]
 

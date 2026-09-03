@@ -18,10 +18,11 @@ PROFILE_PAYLOAD = {
 }
 
 
-def create_test_profile():
+def create_test_profile(authenticated_headers):
     response = client.post(
         "/profiles",
-        json=PROFILE_PAYLOAD
+        json=PROFILE_PAYLOAD,
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -29,10 +30,11 @@ def create_test_profile():
     return response.json()
 
 
-def test_create_profile():
+def test_create_profile(authenticated_headers):
     response = client.post(
         "/profiles",
-        json=PROFILE_PAYLOAD
+        json=PROFILE_PAYLOAD,
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -43,18 +45,37 @@ def test_create_profile():
     assert body["full_name"] == PROFILE_PAYLOAD["full_name"]
 
 
-def test_get_profiles():
-    response = client.get("/profiles")
+def test_create_profile_requires_authentication():
+    response = client.post(
+        "/profiles",
+        json=PROFILE_PAYLOAD,
+    )
+
+    assert response.status_code == 401
+
+
+def test_get_profiles(authenticated_headers):
+    response = client.get(
+        "/profiles",
+        headers=authenticated_headers,
+    )
 
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
-def test_get_profile():
-    profile = create_test_profile()
+def test_get_profiles_requires_authentication():
+    response = client.get("/profiles")
+
+    assert response.status_code == 401
+
+
+def test_get_profile(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     response = client.get(
-        f"/profiles/{profile['id']}"
+        f"/profiles/{profile['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -64,8 +85,8 @@ def test_get_profile():
     assert body["id"] == profile["id"]
 
 
-def test_update_profile():
-    profile = create_test_profile()
+def test_update_profile(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     update_payload = {
         "profile_name": "Updated Profile",
@@ -81,7 +102,8 @@ def test_update_profile():
 
     response = client.put(
         f"/profiles/{profile['id']}",
-        json=update_payload
+        json=update_payload,
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -92,11 +114,12 @@ def test_update_profile():
     assert body["full_name"] == "Updated Name"
 
 
-def test_delete_profile():
-    profile = create_test_profile()
+def test_delete_profile(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     response = client.delete(
-        f"/profiles/{profile['id']}"
+        f"/profiles/{profile['id']}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -106,17 +129,21 @@ def test_delete_profile():
     assert body["is_active"] is False
 
 
-def test_profile_not_found():
-    response = client.get("/profiles/99999999")
+def test_profile_not_found(authenticated_headers):
+    response = client.get(
+        "/profiles/99999999",
+        headers=authenticated_headers,
+    )
 
-    assert response.status_code in [404, 200]
+    assert response.status_code == 404
 
 
-def test_soft_delete_sets_is_active_false():
-    profile = create_test_profile()
+def test_soft_delete_sets_is_active_false(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     delete_response = client.delete(
-        f"/profiles/{profile['id']}"
+        f"/profiles/{profile['id']}",
+        headers=authenticated_headers,
     )
 
     assert delete_response.status_code == 200
@@ -124,9 +151,9 @@ def test_soft_delete_sets_is_active_false():
     body = delete_response.json()
 
     assert body["is_active"] is False
-    
-    
-def test_profile_additional_context_fields():
+
+
+def test_profile_additional_context_fields(authenticated_headers):
     profile_payload = {
         "profile_name": "Technical Partnerships",
         "full_name": "Vincent Gueret",
@@ -147,6 +174,7 @@ def test_profile_additional_context_fields():
     create_response = client.post(
         "/profiles",
         json=profile_payload,
+        headers=authenticated_headers,
     )
 
     assert create_response.status_code == 200
@@ -157,6 +185,7 @@ def test_profile_additional_context_fields():
 
     get_response = client.get(
         f"/profiles/{profile_id}",
+        headers=authenticated_headers,
     )
 
     assert get_response.status_code == 200
@@ -187,3 +216,59 @@ def test_profile_additional_context_fields():
         profile["additional_context"]
         == "Interested in platform strategy."
     )
+
+
+def test_profile_isolation_between_users(authenticated_headers):
+    from app.auth.models import User
+    from app.auth.service import hash_password
+    from app.core.database import SessionLocal
+
+    db = SessionLocal()
+
+    try:
+        other_user = User(
+            email="other-user-isolation-test@example.com",
+            hashed_password=hash_password("OtherPassword123!"),
+            is_active=True,
+        )
+
+        db.add(other_user)
+        db.commit()
+    finally:
+        db.close()
+
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": "other-user-isolation-test@example.com",
+            "password": "OtherPassword123!",
+        },
+    )
+
+    other_user_headers = {
+        "Authorization": (
+            f"Bearer {login_response.json()['access_token']}"
+        ),
+    }
+
+    profile = create_test_profile(authenticated_headers)
+
+    response = client.get(
+        f"/profiles/{profile['id']}",
+        headers=other_user_headers,
+    )
+
+    assert response.status_code == 404
+
+    list_response = client.get(
+        "/profiles",
+        headers=other_user_headers,
+    )
+
+    assert list_response.status_code == 200
+
+    other_user_profile_ids = [
+        item["id"] for item in list_response.json()
+    ]
+
+    assert profile["id"] not in other_user_profile_ids

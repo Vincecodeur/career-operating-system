@@ -3,6 +3,8 @@ from fastapi import Depends
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.profile.models import Profile
 from app.profile.schemas import ProfileCreate
@@ -22,9 +24,11 @@ router = APIRouter(
 )
 def create_profile(
     profile: ProfileCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     new_profile = Profile(
+    user_id=current_user.id,
     profile_name=profile.profile_name,
     full_name=profile.full_name,
     current_title=profile.current_title,
@@ -53,9 +57,12 @@ def create_profile(
     response_model=list[ProfileResponse]
 )
 def list_profiles(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return db.query(Profile).all()
+    return db.query(Profile).filter(
+        Profile.user_id == current_user.id
+    ).all()
 
 
 @router.get(
@@ -64,10 +71,12 @@ def list_profiles(
 )
 def get_profile(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -86,10 +95,12 @@ def get_profile(
 def update_profile(
     profile_id: int,
     profile_update: ProfileUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -138,10 +149,12 @@ def update_profile(
 )
 def delete_profile(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:

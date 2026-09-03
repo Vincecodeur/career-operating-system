@@ -18,10 +18,11 @@ APPLICATION_TEST_PROFILE_PAYLOAD = {
 }
 
 
-def create_application_test_profile():
+def create_application_test_profile(authenticated_headers):
     response = client.post(
         "/profiles",
         json=APPLICATION_TEST_PROFILE_PAYLOAD,
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -29,9 +30,13 @@ def create_application_test_profile():
     return response.json()
 
 
-def archive_application_test_profile(profile_id: int):
+def archive_application_test_profile(
+    profile_id: int,
+    authenticated_headers,
+):
     response = client.delete(
-        f"/profiles/{profile_id}"
+        f"/profiles/{profile_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -431,11 +436,12 @@ def test_update_application_rejects_unknown_profile():
     
     
     
-def test_create_application_rejects_inactive_profile():
-    profile = create_application_test_profile()
+def test_create_application_rejects_inactive_profile(authenticated_headers):
+    profile = create_application_test_profile(authenticated_headers)
 
     archived_profile = archive_application_test_profile(
-        profile["id"]
+        profile["id"],
+        authenticated_headers,
     )
 
     response = client.post(
@@ -454,11 +460,12 @@ def test_create_application_rejects_inactive_profile():
         "The selected profile is not available."
     )
     
-def test_update_application_rejects_inactive_profile():
-    inactive_profile = create_application_test_profile()
+def test_update_application_rejects_inactive_profile(authenticated_headers):
+    inactive_profile = create_application_test_profile(authenticated_headers)
 
     archived_profile = archive_application_test_profile(
-        inactive_profile["id"]
+        inactive_profile["id"],
+        authenticated_headers,
     )
 
     create_response = client.post(

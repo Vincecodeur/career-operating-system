@@ -7,7 +7,7 @@ from app.main import app
 client = TestClient(app)
 
 
-def create_profile():
+def create_profile(authenticated_headers):
     unique_profile_name = f"Profile_{uuid4()}"
 
     response = client.post(
@@ -23,6 +23,7 @@ def create_profile():
             "remote_preference": "Hybrid",
             "preferred_countries": "France",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -69,8 +70,8 @@ def create_profile_certification(
     return response.json()
 
 
-def test_create_profile_certification():
-    profile = create_profile()
+def test_create_profile_certification(authenticated_headers):
+    profile = create_profile(authenticated_headers)
     certification = create_certification("Azure")
 
     response = client.post(
@@ -95,8 +96,8 @@ def test_create_profile_certification():
     assert data["credential_id"] == "AZ-TEST-001"
 
 
-def test_duplicate_profile_certification():
-    profile = create_profile()
+def test_duplicate_profile_certification(authenticated_headers):
+    profile = create_profile(authenticated_headers)
     certification = create_certification("AWS")
 
     create_profile_certification(
@@ -127,8 +128,8 @@ def test_list_profile_certifications():
     assert isinstance(response.json(), list)
 
 
-def test_list_certifications_for_profile():
-    profile = create_profile()
+def test_list_certifications_for_profile(authenticated_headers):
+    profile = create_profile(authenticated_headers)
     certification = create_certification("GoogleCloud")
 
     create_profile_certification(
@@ -137,7 +138,8 @@ def test_list_certifications_for_profile():
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/certifications"
+        f"/profiles/{profile['id']}/certifications",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -150,8 +152,8 @@ def test_list_certifications_for_profile():
     )
 
 
-def test_update_profile_certification():
-    profile = create_profile()
+def test_update_profile_certification(authenticated_headers):
+    profile = create_profile(authenticated_headers)
     certification = create_certification("Kubernetes")
 
     create_profile_certification(
@@ -195,8 +197,8 @@ def test_update_profile_certification_not_found():
     assert response.status_code == 404
 
 
-def test_delete_profile_certification():
-    profile = create_profile()
+def test_delete_profile_certification(authenticated_headers):
+    profile = create_profile(authenticated_headers)
     certification = create_certification("Security")
 
     create_profile_certification(
@@ -216,7 +218,8 @@ def test_delete_profile_certification():
     )
 
     profile_certifications_response = client.get(
-        f"/profiles/{profile['id']}/certifications"
+        f"/profiles/{profile['id']}/certifications",
+        headers=authenticated_headers,
     )
 
     assert profile_certifications_response.status_code == 200

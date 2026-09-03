@@ -14,7 +14,7 @@ create_tables()
 client = TestClient(app)
 
 
-def create_test_profile():
+def create_test_profile(authenticated_headers):
     profile_name = f"Profile_{uuid4()}"
 
     response = client.post(
@@ -30,6 +30,7 @@ def create_test_profile():
             "remote_preference": "Hybrid",
             "preferred_countries": "France",
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -83,16 +84,20 @@ def create_test_skill(
 
     return response.json()
 
+
 def get_profile_soft_skills(
     profile_id: int,
+    authenticated_headers,
 ):
     response = client.get(
-        f"/profiles/{profile_id}/soft-skills"
+        f"/profiles/{profile_id}/soft-skills",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
 
     return response.json()
+
 
 def create_test_language(
     name: str | None = None,
@@ -208,8 +213,8 @@ def test_reject_proposal_not_found():
     assert response.status_code == 404
 
 
-def test_list_profile_enrichment_proposals_empty():
-    profile = create_test_profile()
+def test_list_profile_enrichment_proposals_empty(authenticated_headers):
+    profile = create_test_profile(authenticated_headers)
 
     response = client.get(
         f"/profiles/{profile['id']}/enrichment"
@@ -221,8 +226,9 @@ def test_list_profile_enrichment_proposals_empty():
 
 def test_generate_cv_enrichment_proposals(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -269,8 +275,9 @@ def test_generate_cv_enrichment_proposals(
 
 def test_generate_cv_enrichment_proposals_does_not_update_profile(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -297,7 +304,8 @@ def test_generate_cv_enrichment_proposals_does_not_update_profile(
     assert response.status_code == 200
 
     profile_response = client.get(
-        f"/profiles/{profile['id']}"
+        f"/profiles/{profile['id']}",
+        headers=authenticated_headers,
     )
 
     assert profile_response.status_code == 200
@@ -310,8 +318,9 @@ def test_generate_cv_enrichment_proposals_does_not_update_profile(
 
 def test_generate_cv_enrichment_proposals_avoids_duplicate_pending_proposals(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -348,8 +357,9 @@ def test_generate_cv_enrichment_proposals_avoids_duplicate_pending_proposals(
 
 def test_list_profile_enrichment_proposals_after_generation(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -390,7 +400,8 @@ def test_list_profile_enrichment_proposals_after_generation(
         proposal["profile_id"] == profile["id"]
         for proposal in proposals
     )
-    
+
+
 def get_first_pending_proposal(
     profile_id: int,
 ):
@@ -415,8 +426,9 @@ def get_first_pending_proposal(
 
 def test_reject_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -458,8 +470,9 @@ def test_reject_proposal(
 
 def test_cannot_reject_already_processed_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -502,8 +515,9 @@ def test_cannot_reject_already_processed_proposal(
 
 def test_accept_profile_field_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -552,8 +566,9 @@ def test_accept_profile_field_proposal(
 
 def test_accept_skill_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -586,10 +601,10 @@ def test_accept_skill_proposal(
     proposals = response.json()
 
     skill_proposal = next(
-    proposal
-    for proposal in proposals
-    if proposal["proposal_type"] == "HARD_SKILL"
-)
+        proposal
+        for proposal in proposals
+        if proposal["proposal_type"] == "HARD_SKILL"
+    )
 
     accept_response = client.post(
         f"/enrichment/{skill_proposal['id']}/accept"
@@ -604,8 +619,9 @@ def test_accept_skill_proposal(
 
 def test_accept_language_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -656,8 +672,9 @@ def test_accept_language_proposal(
 
 def test_accept_certification_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -708,8 +725,9 @@ def test_accept_certification_proposal(
 
 def test_accept_experience_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -766,8 +784,9 @@ def test_accept_experience_proposal(
 
 def test_cannot_accept_already_processed_proposal(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -816,12 +835,13 @@ def test_cannot_accept_already_processed_proposal(
     )
 
     assert second_response.status_code == 400
-    
-    
+
+
 def test_generate_soft_skill_proposal_for_skill_not_in_catalog(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -858,12 +878,13 @@ def test_generate_soft_skill_proposal_for_skill_not_in_catalog(
 
     assert len(soft_skill_proposals) == 1
     assert soft_skill_proposals[0]["proposed_value"] == soft_skill_name
-    
+
 
 def test_accept_soft_skill_proposal_creates_profile_soft_skill(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -910,6 +931,7 @@ def test_accept_soft_skill_proposal_creates_profile_soft_skill(
 
     soft_skills = get_profile_soft_skills(
         profile["id"],
+        authenticated_headers,
     )
 
     soft_skill_names = {
@@ -918,11 +940,13 @@ def test_accept_soft_skill_proposal_creates_profile_soft_skill(
     }
 
     assert soft_skill_name in soft_skill_names
-    
+
+
 def test_accept_hard_skill_proposal_creates_profile_skill(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -963,7 +987,8 @@ def test_accept_hard_skill_proposal_creates_profile_skill(
     assert accept_response.status_code == 200
 
     profile_skills_response = client.get(
-        f"/profiles/{profile['id']}/skills"
+        f"/profiles/{profile['id']}/skills",
+        headers=authenticated_headers,
     )
 
     assert profile_skills_response.status_code == 200
@@ -976,12 +1001,13 @@ def test_accept_hard_skill_proposal_creates_profile_skill(
     }
 
     assert skill["id"] in profile_skill_ids
-    
-    
+
+
 def test_generate_hard_skill_proposal_for_unknown_non_soft_skill(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
     cv = create_test_cv(
         profile_id=profile["id"],
     )
@@ -1020,12 +1046,13 @@ def test_generate_hard_skill_proposal_for_unknown_non_soft_skill(
     assert hard_skill_proposals[0]["proposed_value"] == unknown_hard_skill_name
     assert hard_skill_proposals[0]["reference_id"] is None
     assert hard_skill_proposals[0]["target_field"] == "profile_skill"
-    
-    
+
+
 def test_accept_all_proposals(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -1067,12 +1094,13 @@ def test_accept_all_proposals(
     result = response.json()
 
     assert result["processed"] > 0
-    
+
 
 def test_reject_all_proposals(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -1114,12 +1142,13 @@ def test_reject_all_proposals(
     result = response.json()
 
     assert result["processed"] > 0
-    
-    
+
+
 def test_accept_unknown_hard_skill_creates_catalog_skill(
     monkeypatch,
+    authenticated_headers,
 ):
-    profile = create_test_profile()
+    profile = create_test_profile(authenticated_headers)
 
     cv = create_test_cv(
         profile_id=profile["id"],
@@ -1180,7 +1209,8 @@ def test_accept_unknown_hard_skill_creates_catalog_skill(
     assert created_skill is not None
 
     profile_skills_response = client.get(
-        f"/profiles/{profile['id']}/skills"
+        f"/profiles/{profile['id']}/skills",
+        headers=authenticated_headers,
     )
 
     assert profile_skills_response.status_code == 200
