@@ -218,6 +218,7 @@ def login(
 
     access_token = create_access_token(
         subject=user.email,
+        remember_me=payload.remember_me,
     )
 
     return LoginResponse(

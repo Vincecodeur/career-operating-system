@@ -14,6 +14,7 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +23,7 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
+      await login(email, password, rememberMe);
 
       navigate("/dashboard", {
         replace: true,
@@ -88,9 +89,15 @@ export function LoginPage() {
               />
             </div>
 
-            <div className="text-sm text-slate-500">
-              Remember Me (Coming Soon)
-            </div>
+            <label className="flex items-center gap-2 text-sm text-slate-300">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(event) => setRememberMe(event.target.checked)}
+                className="h-4 w-4 rounded border-slate-700 bg-slate-800"
+              />
+              Remember me for 30 days
+            </label>
 
             {error && (
               <div className="rounded border border-red-900 bg-red-950 p-3 text-sm text-red-300">

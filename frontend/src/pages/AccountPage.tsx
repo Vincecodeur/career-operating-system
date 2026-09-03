@@ -151,7 +151,7 @@ export function AccountPage() {
           <li>✅ Password Recovery</li>
           <li>✅ Email Recovery</li>
           <li>✅ Sign Up</li>
-          <li>⬜ Remember Me</li>
+          <li>✅ Remember Me</li>
           <li>⬜ MFA</li>
           <li>⬜ SSO</li>
         </ul>

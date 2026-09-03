@@ -13,6 +13,7 @@ type AuthStore = {
   login: (
     email: string,
     password: string,
+    rememberMe?: boolean,
   ) => Promise<void>;
   logout: () => void;
   loadCurrentUser: () => Promise<void>;
@@ -36,10 +37,12 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   login: async (
     email: string,
     password: string,
+    rememberMe = false,
   ) => {
     const response = await loginUser(
       email,
       password,
+      rememberMe,
     );
 
     localStorage.setItem(

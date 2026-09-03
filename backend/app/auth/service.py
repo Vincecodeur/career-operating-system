@@ -11,6 +11,7 @@ from app.auth.models import User
 SECRET_KEY = "CHANGE_ME_BEFORE_PRODUCTION"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
+REMEMBER_ME_TOKEN_EXPIRE_MINUTES = 60 * 24 * 30
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -67,11 +68,18 @@ def authenticate_user(
 
 def create_access_token(
     subject: str,
+    remember_me: bool = False,
 ) -> str:
+    expire_minutes = (
+        REMEMBER_ME_TOKEN_EXPIRE_MINUTES
+        if remember_me
+        else ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+
     expire = (
         datetime.now(timezone.utc)
         + timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+            minutes=expire_minutes
         )
     )
 

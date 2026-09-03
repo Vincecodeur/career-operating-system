@@ -36,6 +36,7 @@ async function getAuthApiErrorMessage(
 export async function loginUser(
   email: string,
   password: string,
+  rememberMe = false,
 ): Promise<LoginResponse> {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
@@ -45,6 +46,7 @@ export async function loginUser(
     body: JSON.stringify({
       email,
       password,
+      remember_me: rememberMe,
     }),
   });
 
@@ -54,7 +56,6 @@ export async function loginUser(
 
   return response.json();
 }
-
 export async function getCurrentUser(
   accessToken: string,
 ): Promise<AuthUser> {

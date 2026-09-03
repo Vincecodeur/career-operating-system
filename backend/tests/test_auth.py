@@ -1029,3 +1029,112 @@ def test_reset_password_rejects_weak_password():
     assert "one uppercase letter" in (
         response.json()["detail"]
     )
+    
+    
+
+
+def test_login_without_remember_me_uses_short_expiration():
+    from app.auth.service import (
+        ACCESS_TOKEN_EXPIRE_MINUTES,
+    )
+    from jose import jwt as jose_jwt
+    from app.auth.service import SECRET_KEY
+    from app.auth.service import ALGORITHM
+
+    password = "Password123!"
+
+    user = create_test_user(
+        "no-remember-me@example.com",
+        password,
+    )
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": user.email,
+            "password": password,
+        },
+    )
+
+    assert response.status_code == 200
+
+    access_token = response.json()[
+        "access_token"
+    ]
+
+    decoded = jose_jwt.decode(
+        access_token,
+        SECRET_KEY,
+        algorithms=[ALGORITHM],
+    )
+
+    now = datetime.now(timezone.utc)
+
+    expires_at = datetime.fromtimestamp(
+        decoded["exp"],
+        tz=timezone.utc,
+    )
+
+    delta_minutes = (
+        expires_at - now
+    ).total_seconds() / 60
+
+    assert (
+        delta_minutes
+        <= ACCESS_TOKEN_EXPIRE_MINUTES + 1
+    )
+    assert delta_minutes > 0
+
+
+def test_login_with_remember_me_uses_long_expiration():
+    from app.auth.service import (
+        REMEMBER_ME_TOKEN_EXPIRE_MINUTES,
+    )
+    from jose import jwt as jose_jwt
+    from app.auth.service import SECRET_KEY
+    from app.auth.service import ALGORITHM
+
+    password = "Password123!"
+
+    user = create_test_user(
+        "with-remember-me@example.com",
+        password,
+    )
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": user.email,
+            "password": password,
+            "remember_me": True,
+        },
+    )
+
+    assert response.status_code == 200
+
+    access_token = response.json()[
+        "access_token"
+    ]
+
+    decoded = jose_jwt.decode(
+        access_token,
+        SECRET_KEY,
+        algorithms=[ALGORITHM],
+    )
+
+    now = datetime.now(timezone.utc)
+
+    expires_at = datetime.fromtimestamp(
+        decoded["exp"],
+        tz=timezone.utc,
+    )
+
+    delta_minutes = (
+        expires_at - now
+    ).total_seconds() / 60
+
+    assert (
+        delta_minutes
+        > REMEMBER_ME_TOKEN_EXPIRE_MINUTES
+        - 60
+    )
