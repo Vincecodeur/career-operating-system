@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-
+from app.auth.models import User
 from app.certifications.models import Certification
 from app.certifications.models import ProfileCertification
 from app.cv.models import CV
@@ -48,10 +48,17 @@ def normalize_value(
 def get_cv_or_404(
     cv_id: int,
     db: Session,
+    current_user: User,
 ) -> CV:
-    cv = db.query(CV).filter(
-        CV.id == cv_id,
-    ).first()
+    cv = (
+        db.query(CV)
+        .join(Profile)
+        .filter(
+            CV.id == cv_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if cv is None:
         raise HTTPException(
@@ -62,12 +69,15 @@ def get_cv_or_404(
     return cv
 
 
+
 def get_profile_or_404(
     profile_id: int,
     db: Session,
+    current_user: User,
 ) -> Profile:
     profile = db.query(Profile).filter(
         Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -82,10 +92,20 @@ def get_profile_or_404(
 def get_proposal_or_404(
     proposal_id: int,
     db: Session,
+    current_user: User,
 ) -> ProfileEnrichmentProposal:
-    proposal = db.query(ProfileEnrichmentProposal).filter(
-        ProfileEnrichmentProposal.id == proposal_id,
-    ).first()
+    proposal = (
+        db.query(ProfileEnrichmentProposal)
+        .join(
+            Profile,
+            ProfileEnrichmentProposal.profile_id == Profile.id,
+        )
+        .filter(
+            ProfileEnrichmentProposal.id == proposal_id,
+            Profile.user_id == current_user.id,
+        )
+        .first()
+    )
 
     if proposal is None:
         raise HTTPException(
@@ -576,15 +596,18 @@ def generate_experience_proposals(
 def generate_proposals_for_cv(
     cv_id: int,
     db: Session,
+    current_user: User,
 ) -> list[ProfileEnrichmentProposal]:
     cv = get_cv_or_404(
         cv_id,
         db,
+        current_user,
     )
 
     profile = get_profile_or_404(
         cv.profile_id,
         db,
+        current_user,
     )
 
     try:
@@ -657,10 +680,12 @@ def generate_proposals_for_cv(
 def list_proposals_for_profile(
     profile_id: int,
     db: Session,
+    current_user: User,
 ) -> list[ProfileEnrichmentProposal]:
     profile = get_profile_or_404(
         profile_id,
         db,
+        current_user
     )
 
     return db.query(ProfileEnrichmentProposal).filter(
@@ -675,10 +700,12 @@ def accept_profile_field_proposal(
     proposal: ProfileEnrichmentProposal,
     value_to_apply: str,
     db: Session,
+    current_user: User,
 ) -> None:
     profile = get_profile_or_404(
         proposal.profile_id,
         db,
+        current_user,
     )
 
     if proposal.target_field == "full_name":
@@ -895,10 +922,12 @@ def accept_proposal(
     proposed_value_override: str | None,
     reference_id: int | None,
     db: Session,
+    current_user: User,
 ) -> ProfileEnrichmentProposal:
     proposal = get_proposal_or_404(
         proposal_id,
         db,
+        current_user,
     )
 
     ensure_pending_proposal(
@@ -941,6 +970,7 @@ def accept_proposal(
             proposal,
             value_to_apply,
             db,
+            current_user,
         )
     elif proposal.proposal_type in [
         ProfileEnrichmentProposalType.SKILL.value,
@@ -991,10 +1021,12 @@ def accept_proposal(
 def reject_proposal(
     proposal_id: int,
     db: Session,
+    current_user: User,
 ) -> ProfileEnrichmentProposal:
     proposal = get_proposal_or_404(
         proposal_id,
         db,
+        current_user,
     )
 
     ensure_pending_proposal(
@@ -1014,7 +1046,14 @@ def accept_all_proposals(
     profile_id: int,
     cv_id: int,
     db: Session,
+    current_user: User,
 ) -> int:
+    get_profile_or_404(
+        profile_id,
+        db,
+        current_user,
+    )
+
     proposals = (
         db.query(ProfileEnrichmentProposal)
         .filter(
@@ -1034,6 +1073,7 @@ def accept_all_proposals(
             proposed_value_override=None,
             reference_id=None,
             db=db,
+            current_user=current_user,
         )
 
         processed += 1
@@ -1045,7 +1085,14 @@ def reject_all_proposals(
     profile_id: int,
     cv_id: int,
     db: Session,
+    current_user: User,
 ) -> int:
+    get_profile_or_404(
+        profile_id,
+        db,
+        current_user,
+    )
+
     proposals = (
         db.query(ProfileEnrichmentProposal)
         .filter(
@@ -1063,6 +1110,7 @@ def reject_all_proposals(
         reject_proposal(
             proposal_id=proposal.id,
             db=db,
+            current_user=current_user,
         )
 
         processed += 1

@@ -2,6 +2,8 @@ from fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.profile_enrichment.schemas import (
     AcceptProposalRequest,
@@ -29,10 +31,12 @@ router = APIRouter(
 def generate_cv_enrichment_proposals(
     cv_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     return generate_proposals_for_cv(
         cv_id,
         db,
+        current_user,
     )
 
 
@@ -43,10 +47,12 @@ def generate_cv_enrichment_proposals(
 def get_profile_enrichment_proposals(
     profile_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     return list_proposals_for_profile(
         profile_id,
         db,
+        current_user,
     )
 
 
@@ -58,6 +64,7 @@ def accept_profile_enrichment_proposal(
     proposal_id: int,
     payload: AcceptProposalRequest | None = None,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     proposed_value_override = (
         payload.proposed_value_override
@@ -76,6 +83,7 @@ def accept_profile_enrichment_proposal(
         proposed_value_override=proposed_value_override,
         reference_id=reference_id,
         db=db,
+        current_user=current_user,
     )
 
 
@@ -86,10 +94,12 @@ def accept_profile_enrichment_proposal(
 def reject_profile_enrichment_proposal(
     proposal_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     return reject_proposal(
         proposal_id,
         db,
+        current_user,
     )
     
 @router.post(
@@ -99,11 +109,13 @@ def reject_profile_enrichment_proposal(
 def accept_all_profile_enrichment_proposals(
     payload: BulkProposalRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     processed = accept_all_proposals(
         profile_id=payload.profile_id,
         cv_id=payload.cv_id,
         db=db,
+        current_user=current_user,
     )
 
     return {
@@ -117,11 +129,13 @@ def accept_all_profile_enrichment_proposals(
 def reject_all_profile_enrichment_proposals(
     payload: BulkProposalRequest,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     processed = reject_all_proposals(
         profile_id=payload.profile_id,
         cv_id=payload.cv_id,
         db=db,
+        current_user=current_user,
     )
 
     return {

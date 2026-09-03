@@ -183,33 +183,37 @@ def mock_parse_cv_file(
     )
 
 
-def test_generate_cv_enrichment_proposals_cv_not_found():
+def test_generate_cv_enrichment_proposals_cv_not_found(authenticated_headers):
     response = client.post(
-        "/cvs/99999999/enrichment/generate"
+        "/cvs/99999999/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_get_profile_enrichment_proposals_profile_not_found():
+def test_get_profile_enrichment_proposals_profile_not_found(authenticated_headers):
     response = client.get(
-        "/profiles/99999999/enrichment"
+        "/profiles/99999999/enrichment",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_accept_proposal_not_found():
+def test_accept_proposal_not_found(authenticated_headers):
     response = client.post(
-        "/enrichment/99999999/accept"
+        "/enrichment/99999999/accept",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_reject_proposal_not_found():
+def test_reject_proposal_not_found(authenticated_headers):
     response = client.post(
-        "/enrichment/99999999/reject"
+        "/enrichment/99999999/reject",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -219,7 +223,8 @@ def test_list_profile_enrichment_proposals_empty(authenticated_headers):
     profile = create_test_profile(authenticated_headers)
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -252,7 +257,8 @@ def test_generate_cv_enrichment_proposals(
     )
 
     response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -302,7 +308,8 @@ def test_generate_cv_enrichment_proposals_does_not_update_profile(
     )
 
     response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -346,14 +353,16 @@ def test_generate_cv_enrichment_proposals_avoids_duplicate_pending_proposals(
     )
 
     first_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert first_response.status_code == 200
     assert len(first_response.json()) > 0
 
     second_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert second_response.status_code == 200
@@ -386,13 +395,15 @@ def test_list_profile_enrichment_proposals_after_generation(
     )
 
     generate_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert generate_response.status_code == 200
 
     list_response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     assert list_response.status_code == 200
@@ -410,9 +421,11 @@ def test_list_profile_enrichment_proposals_after_generation(
 
 def get_first_pending_proposal(
     profile_id: int,
+    authenticated_headers,
 ):
     response = client.get(
-        f"/profiles/{profile_id}/enrichment"
+        f"/profiles/{profile_id}/enrichment",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -456,15 +469,18 @@ def test_reject_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     proposal = get_first_pending_proposal(
         profile["id"],
+        authenticated_headers,
     )
 
     response = client.post(
-        f"/enrichment/{proposal['id']}/reject"
+        f"/enrichment/{proposal['id']}/reject",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -501,21 +517,25 @@ def test_cannot_reject_already_processed_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     proposal = get_first_pending_proposal(
         profile["id"],
+        authenticated_headers,
     )
 
     first_response = client.post(
-        f"/enrichment/{proposal['id']}/reject"
+        f"/enrichment/{proposal['id']}/reject",
+        headers=authenticated_headers,
     )
 
     assert first_response.status_code == 200
 
     second_response = client.post(
-        f"/enrichment/{proposal['id']}/reject"
+        f"/enrichment/{proposal['id']}/reject",
+        headers=authenticated_headers,
     )
 
     assert second_response.status_code == 400
@@ -547,11 +567,13 @@ def test_accept_profile_field_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     proposals = response.json()
@@ -563,7 +585,8 @@ def test_accept_profile_field_proposal(
     )
 
     accept_response = client.post(
-        f"/enrichment/{profile_field_proposal['id']}/accept"
+        f"/enrichment/{profile_field_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -601,11 +624,13 @@ def test_accept_skill_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     proposals = response.json()
@@ -617,7 +642,8 @@ def test_accept_skill_proposal(
     )
 
     accept_response = client.post(
-        f"/enrichment/{skill_proposal['id']}/accept"
+        f"/enrichment/{skill_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -655,11 +681,13 @@ def test_accept_language_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     proposals = response.json()
@@ -671,7 +699,8 @@ def test_accept_language_proposal(
     )
 
     accept_response = client.post(
-        f"/enrichment/{language_proposal['id']}/accept"
+        f"/enrichment/{language_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -709,11 +738,13 @@ def test_accept_certification_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     proposals = response.json()
@@ -725,7 +756,8 @@ def test_accept_certification_proposal(
     )
 
     accept_response = client.post(
-        f"/enrichment/{certification_proposal['id']}/accept"
+        f"/enrichment/{certification_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -769,11 +801,13 @@ def test_accept_experience_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     proposals = response.json()
@@ -785,7 +819,8 @@ def test_accept_experience_proposal(
     )
 
     accept_response = client.post(
-        f"/enrichment/{experience_proposal['id']}/accept"
+        f"/enrichment/{experience_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -823,11 +858,13 @@ def test_cannot_accept_already_processed_proposal(
     )
 
     client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     response = client.get(
-        f"/profiles/{profile['id']}/enrichment"
+        f"/profiles/{profile['id']}/enrichment",
+        headers=authenticated_headers,
     )
 
     proposals = response.json()
@@ -839,13 +876,15 @@ def test_cannot_accept_already_processed_proposal(
     )
 
     first_response = client.post(
-        f"/enrichment/{proposal['id']}/accept"
+        f"/enrichment/{proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert first_response.status_code == 200
 
     second_response = client.post(
-        f"/enrichment/{proposal['id']}/accept"
+        f"/enrichment/{proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert second_response.status_code == 400
@@ -878,7 +917,8 @@ def test_generate_soft_skill_proposal_for_skill_not_in_catalog(
     )
 
     response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -922,7 +962,8 @@ def test_accept_soft_skill_proposal_creates_profile_soft_skill(
     )
 
     generate_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert generate_response.status_code == 200
@@ -936,7 +977,8 @@ def test_accept_soft_skill_proposal_creates_profile_soft_skill(
     )
 
     accept_response = client.post(
-        f"/enrichment/{soft_skill_proposal['id']}/accept"
+        f"/enrichment/{soft_skill_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -984,7 +1026,8 @@ def test_accept_hard_skill_proposal_creates_profile_skill(
     )
 
     generate_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert generate_response.status_code == 200
@@ -998,7 +1041,8 @@ def test_accept_hard_skill_proposal_creates_profile_skill(
     )
 
     accept_response = client.post(
-        f"/enrichment/{hard_skill_proposal['id']}/accept"
+        f"/enrichment/{hard_skill_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
@@ -1047,7 +1091,8 @@ def test_generate_hard_skill_proposal_for_unknown_non_soft_skill(
     )
 
     response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -1095,7 +1140,8 @@ def test_accept_all_proposals(
     )
 
     generate_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert generate_response.status_code == 200
@@ -1106,6 +1152,7 @@ def test_accept_all_proposals(
             "profile_id": profile["id"],
             "cv_id": cv["id"],
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -1144,7 +1191,8 @@ def test_reject_all_proposals(
     )
 
     generate_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert generate_response.status_code == 200
@@ -1155,6 +1203,7 @@ def test_reject_all_proposals(
             "profile_id": profile["id"],
             "cv_id": cv["id"],
         },
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -1193,7 +1242,8 @@ def test_accept_unknown_hard_skill_creates_catalog_skill(
     )
 
     generate_response = client.post(
-        f"/cvs/{cv['id']}/enrichment/generate"
+        f"/cvs/{cv['id']}/enrichment/generate",
+        headers=authenticated_headers,
     )
 
     assert generate_response.status_code == 200
@@ -1207,7 +1257,8 @@ def test_accept_unknown_hard_skill_creates_catalog_skill(
     )
 
     accept_response = client.post(
-        f"/enrichment/{hard_skill_proposal['id']}/accept"
+        f"/enrichment/{hard_skill_proposal['id']}/accept",
+        headers=authenticated_headers,
     )
 
     assert accept_response.status_code == 200
