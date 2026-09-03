@@ -1183,42 +1183,23 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-2cc84d3 - feat(ai): add AI context preview, readiness and consent backend
+9cbc366 - feat(auth): implement remember me with variable token expiration
+
 Latest backend validation:
 
-- AI Context Router: 8 tests passed
-- AI Context Service: 14 tests passed
-- AI Settings: 8 tests passed
-- AI suite: 59 tests passed
-- complete backend suite: 304 tests passed
-- FastAPI application import validated
-- git diff --check validated
+- 326 backend tests passed, 0 regressions
+- Combined end-to-end scenario validated (Sign Up + Remember Me + Change Email + Reset Password + final login)
 
-  Current phase:
-  7.1.23.15 Authentication Learning Features
+Current state:
 
-  Latest technical commit:
-  4a6b239 - feat(auth): implement email recovery backend and frontend
-  Latest backend validation:
-
-- Password Recovery: 9 tests added, real Mailtrap end-to-end validated
-- Email Recovery: 6 tests added, real Mailtrap end-to-end validated
-- complete backend suite: 319 tests passed, 0 regressions
-
-  Current state:
-
-- Password Recovery completed (backend + frontend + real Mailtrap validation)
-- Email Recovery completed (backend + frontend + real Mailtrap validation)
-- Sign Up completed (backend + frontend + password policy + manual validation)
-- Remember Me completed (backend + frontend + manual JWT validation)
-- combined end-to-end scenario validated across all four features together
-- data isolation limitation identified and documented as ARCH-001 (post-MVP)
 - Phase 7.1.23.15 Authentication Learning Features CLOSED
+- Password Recovery, Email Recovery, Sign Up and Remember Me all completed (backend + frontend + real validation)
+- Data isolation limitation documented as ARCH-001 (post-MVP)
 
-  Next required step:
-  Minimal Account UX Polish (phase number not yet assigned in roadmap.md)
+Next required step:
+Minimal Account UX Polish (phase number not yet assigned in roadmap.md)
 
-  Latest backend validation:
+Latest backend validation:
 
 - Password Recovery: 9 tests added, real Mailtrap end-to-end validated
 - Email Recovery: 6 tests added, real Mailtrap end-to-end validated
