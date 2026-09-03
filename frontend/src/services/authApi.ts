@@ -185,3 +185,41 @@ export async function confirmEmailChange(
 
   return response.json();
 }
+
+export type RegisterResponse = {
+  id: number;
+  email: string;
+  is_active: boolean;
+};
+
+export async function registerUser(
+  email: string,
+  password: string,
+  confirmPassword: string,
+): Promise<RegisterResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/register`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        confirm_password: confirmPassword,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      await getAuthApiErrorMessage(
+        response,
+        "Unable to create account.",
+      ),
+    );
+  }
+
+  return response.json();
+}

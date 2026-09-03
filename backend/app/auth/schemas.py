@@ -60,3 +60,18 @@ class ConfirmEmailChangeRequest(BaseModel):
     token: str = Field(
         min_length=1,
     )
+    
+
+
+class RegisterRequest(BaseModel):
+    email: str = Field(
+        min_length=3,
+    )
+
+    password: str = Field(
+        min_length=8,
+    )
+
+    confirm_password: str = Field(
+        min_length=8,
+    )

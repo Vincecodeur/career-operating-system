@@ -182,5 +182,11 @@ class Settings:
     "EMAIL_CHANGE_TOKEN_EXPIRE_MINUTES",
     "60",
     )
+    
+    
+    PUBLIC_REGISTRATION_ENABLED: bool = _get_bool_env(
+        "PUBLIC_REGISTRATION_ENABLED",
+        "false",
+    )
 
 settings = Settings()

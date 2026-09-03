@@ -7,6 +7,7 @@ import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ResetPasswordPage } from "../pages/ResetPasswordPage";
 import { ConfirmEmailChangePage } from "../pages/ConfirmEmailChangePage";
+import { SignUpPage } from "../pages/SignUpPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ApplicationsPage } from "../pages/ApplicationsPage";
 import { OpportunitiesPage } from "../pages/OpportunitiesPage";
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignUpPage />,
   },
   {
     path: "/forgot-password",

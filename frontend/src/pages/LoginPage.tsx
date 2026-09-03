@@ -114,7 +114,10 @@ export function LoginPage() {
             </Link>
 
             <p className="text-slate-500">
-              Don't have an account? Sign Up (Coming Soon)
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-blue-400 hover:text-blue-300">
+                Sign Up
+              </Link>
             </p>
           </div>
         </Card>

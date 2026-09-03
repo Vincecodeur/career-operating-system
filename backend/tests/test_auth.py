@@ -68,12 +68,20 @@ def create_test_user(
         db.close()
 
 
-def test_register_is_disabled():
+def test_register_is_disabled(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.auth.router.settings.PUBLIC_REGISTRATION_ENABLED",
+        False,
+    )
+
     response = client.post(
         "/auth/register",
         json={
             "email": "test@example.com",
             "password": "Password123!",
+            "confirm_password": "Password123!",
         },
     )
 
@@ -85,7 +93,6 @@ def test_register_is_disabled():
         data["detail"]
         == "Public registration is disabled."
     )
-
 
 def test_login_with_unknown_user():
     response = client.post(
@@ -850,3 +857,175 @@ def test_confirm_email_change_token_cannot_be_reused(
 
     assert first_response.status_code == 200
     assert second_response.status_code == 400
+    
+
+
+def test_register_rejects_password_mismatch(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.auth.router.settings.PUBLIC_REGISTRATION_ENABLED",
+        True,
+    )
+
+    response = client.post(
+        "/auth/register",
+        json={
+            "email": "mismatch-signup@example.com",
+            "password": "Password123!",
+            "confirm_password": (
+                "DifferentPassword123!"
+            ),
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert response.json()["detail"] == (
+        "Password confirmation does not "
+        "match."
+    )
+
+
+def test_register_rejects_existing_email(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.auth.router.settings.PUBLIC_REGISTRATION_ENABLED",
+        True,
+    )
+
+    existing_user = create_test_user(
+        "existing-signup@example.com"
+    )
+
+    response = client.post(
+        "/auth/register",
+        json={
+            "email": existing_user.email,
+            "password": "Password123!",
+            "confirm_password": (
+                "Password123!"
+            ),
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert response.json()["detail"] == (
+        "A user with this email already "
+        "exists."
+    )
+
+
+def test_register_success_when_enabled(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.auth.router.settings.PUBLIC_REGISTRATION_ENABLED",
+        True,
+    )
+
+    email = "new-signup@example.com"
+
+    db = SessionLocal()
+
+    try:
+        existing_user = (
+            db.query(User)
+            .filter(User.email == email)
+            .first()
+        )
+
+        if existing_user is not None:
+            db.delete(existing_user)
+            db.commit()
+    finally:
+        db.close()
+
+    response = client.post(
+        "/auth/register",
+        json={
+            "email": email,
+            "password": "Password123!",
+            "confirm_password": (
+                "Password123!"
+            ),
+        },
+    )
+
+    assert response.status_code == 201
+
+    body = response.json()
+
+    assert body["email"] == email
+    assert body["is_active"] is True
+
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": email,
+            "password": "Password123!",
+        },
+    )
+
+    assert login_response.status_code == 200
+    
+
+
+def test_register_rejects_weak_password(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.auth.router.settings.PUBLIC_REGISTRATION_ENABLED",
+        True,
+    )
+
+    response = client.post(
+        "/auth/register",
+        json={
+            "email": "weak-password@example.com",
+            "password": "weakpass",
+            "confirm_password": "weakpass",
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert "one uppercase letter" in (
+        response.json()["detail"]
+    )
+    
+
+
+def test_reset_password_rejects_weak_password():
+    user = create_test_user(
+        "weak-password-reset@example.com"
+    )
+
+    db = SessionLocal()
+
+    try:
+        _, raw_token = (
+            create_password_reset_token(
+                db=db,
+                user=user,
+            )
+        )
+    finally:
+        db.close()
+
+    response = client.post(
+        "/auth/reset-password",
+        json={
+            "token": raw_token,
+            "new_password": "weakpass",
+            "confirm_password": "weakpass",
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert "one uppercase letter" in (
+        response.json()["detail"]
+    )

@@ -48,6 +48,17 @@ from app.auth.schemas import (
 from app.auth.schemas import (
     ConfirmEmailChangeRequest,
 )
+
+from app.auth.schemas import (
+    RegisterRequest,
+)
+
+from app.auth.password_policy import (
+    get_password_policy_violations,
+)
+
+from app.core.settings import settings
+
 from app.auth.token_service import (
     create_email_change_request,
 )
@@ -80,7 +91,7 @@ oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/auth/login"
 )
 
-PUBLIC_REGISTRATION_ENABLED = False
+
 
 PASSWORD_RECOVERY_MESSAGE = (
     "If an account exists for this email, "
@@ -95,14 +106,62 @@ PASSWORD_RECOVERY_MESSAGE = (
     status_code=status.HTTP_201_CREATED,
 )
 def register(
-    payload: LoginRequest,
+    payload: RegisterRequest,
     db: Session = Depends(get_db),
 ):
-    if not PUBLIC_REGISTRATION_ENABLED:
+    if not settings.PUBLIC_REGISTRATION_ENABLED:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Public registration is disabled.",
         )
+
+    if payload.password != payload.confirm_password:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password confirmation does "
+                "not match."
+            ),
+        )
+
+    password_violations = (
+        get_password_policy_violations(
+            payload.password
+        )
+    )
+
+    if payload.password != payload.confirm_password:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password confirmation does "
+                "not match."
+            ),
+    )
+
+    password_violations = (
+        get_password_policy_violations(
+            payload.password
+        )
+    )
+
+    if password_violations:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password must contain "
+                + ", ".join(password_violations)
+                + "."
+            ),
+        )
+
+    
 
     existing_user = get_user_by_email(
         db=db,
@@ -280,6 +339,24 @@ def reset_password(
             detail=(
                 "Password confirmation does "
                 "not match."
+            ),
+        )
+
+    password_violations = (
+        get_password_policy_violations(
+            payload.new_password
+        )
+    )
+
+    if password_violations:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_400_BAD_REQUEST
+            ),
+            detail=(
+                "Password must contain "
+                + ", ".join(password_violations)
+                + "."
             ),
         )
 
