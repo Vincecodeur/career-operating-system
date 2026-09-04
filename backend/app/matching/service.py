@@ -677,8 +677,11 @@ def is_unknown(
 def calculate_profile_scores_for_job_offer(
     job_offer_id: int,
     db: Session,
+    user_id: int,
 ) -> list[ProfileOpportunityScore]:
-    profiles = db.query(Profile).all()
+    profiles = db.query(Profile).filter(
+        Profile.user_id == user_id
+    ).all()
 
     scores = []
 

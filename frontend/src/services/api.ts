@@ -1,4 +1,18 @@
+import { useAuthStore } from "../stores/authStore";
+
 const API_BASE_URL = "http://127.0.0.1:8000";
+
+function getAuthHeaders(): Record<string, string> {
+    const token = useAuthStore.getState().accessToken;
+
+    if (!token) {
+        return {};
+    }
+
+    return {
+        Authorization: `Bearer ${token}`,
+    };
+}
 
 async function getApiErrorMessage(
     response: Response,
@@ -186,7 +200,10 @@ export async function getCountries(): Promise<ReferenceDataItem[]> {
 
 export async function getProfiles() {
     const response = await fetch(
-        `${API_BASE_URL}/profiles`
+        `${API_BASE_URL}/profiles`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -202,7 +219,10 @@ export async function getProfile(
     profileId: number,
 ) {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}`
+        `${API_BASE_URL}/profiles/${profileId}`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -223,6 +243,7 @@ export async function createProfile(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -247,6 +268,7 @@ export async function updateProfile(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -268,6 +290,7 @@ export async function deleteProfile(
         `${API_BASE_URL}/profiles/${profileId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         }
     );
 
@@ -284,7 +307,10 @@ export async function getProfileSkills(
     profileId: number,
 ) {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/skills`
+        `${API_BASE_URL}/profiles/${profileId}/skills`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -305,6 +331,7 @@ export async function createProfileSkill(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -330,6 +357,7 @@ export async function updateProfileSkill(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -352,6 +380,7 @@ export async function deleteProfileSkill(
         `${API_BASE_URL}/profile-skills/${profileId}/${skillId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         }
     );
 
@@ -368,7 +397,10 @@ export async function getProfileSoftSkills(
     profileId: number,
 ): Promise<ProfileSoftSkill[]> {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/soft-skills`
+        `${API_BASE_URL}/profiles/${profileId}/soft-skills`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -389,6 +421,7 @@ export async function createProfileSoftSkill(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -410,6 +443,7 @@ export async function deleteProfileSoftSkill(
         `${API_BASE_URL}/profile-soft-skills/${softSkillId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         }
     );
 
@@ -441,7 +475,10 @@ export async function getProfileWorkExperiences(
     profileId: number,
 ) {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/work-experiences`
+        `${API_BASE_URL}/profiles/${profileId}/work-experiences`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -462,6 +499,7 @@ export async function createWorkExperience(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -486,6 +524,7 @@ export async function updateWorkExperience(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -507,6 +546,7 @@ export async function deleteWorkExperience(
         `${API_BASE_URL}/work-experiences/${workExperienceId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         },
     );
 
@@ -537,7 +577,10 @@ export async function getProfileLanguages(
     profileId: number,
 ) {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/languages`
+        `${API_BASE_URL}/profiles/${profileId}/languages`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -558,6 +601,7 @@ export async function createProfileLanguage(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -583,6 +627,7 @@ export async function updateProfileLanguage(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -605,6 +650,7 @@ export async function deleteProfileLanguage(
         `${API_BASE_URL}/profile-languages/${profileId}/${languageId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         }
     );
 
@@ -637,7 +683,10 @@ export async function getProfileCertifications(
     profileId: number,
 ) {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/certifications`
+        `${API_BASE_URL}/profiles/${profileId}/certifications`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -653,7 +702,10 @@ export async function getProfileCvs(
     profileId: number,
 ): Promise<Cv[]> {
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/cvs`
+        `${API_BASE_URL}/profiles/${profileId}/cvs`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -696,6 +748,7 @@ export async function uploadCv(
         `${API_BASE_URL}/profiles/${profileId}/cvs`,
         {
             method: "POST",
+            headers: getAuthHeaders(),
             body: formData,
         },
     );
@@ -719,6 +772,7 @@ export async function updateCv(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -740,6 +794,7 @@ export async function setDefaultCv(
         `${API_BASE_URL}/cvs/${cvId}/set-default`,
         {
             method: "POST",
+            headers: getAuthHeaders(),
         },
     );
 
@@ -759,6 +814,7 @@ export async function deleteCv(
         `${API_BASE_URL}/cvs/${cvId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         },
     );
 
@@ -774,6 +830,13 @@ export async function deleteCv(
 export function getCvDownloadUrl(
     cvId: number,
 ) {
+    // NOTE: This URL is used for direct browser navigation/download
+    // (e.g. an <a href> link). Browser navigation cannot attach an
+    // Authorization header. Since the /cvs/{id}/download endpoint is
+    // now ownership-protected (7.1.24.3.3), this download will fail
+    // with 401 until this is addressed via a fetch+blob approach or
+    // an alternative authenticated download mechanism.
+    // Tracked as a known gap from the 7.1.24.5 Frontend Impact Review.
     return `${API_BASE_URL}/cvs/${cvId}/download`;
 }
 
@@ -782,6 +845,9 @@ export async function getProfileEnrichmentProposals(
 ): Promise<ProfileEnrichmentProposal[]> {
     const response = await fetch(
         `${API_BASE_URL}/profiles/${profileId}/enrichment`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -800,6 +866,7 @@ export async function generateProfileEnrichment(
         `${API_BASE_URL}/cvs/${cvId}/enrichment/generate`,
         {
             method: "POST",
+            headers: getAuthHeaders(),
         },
     );
 
@@ -835,11 +902,16 @@ export async function acceptProfileEnrichment(
         `${API_BASE_URL}/enrichment/${proposalId}/accept`,
         {
             method: "POST",
+            headers: {
+                ...getAuthHeaders(),
+                ...(hasPayload
+                    ? {
+                          "Content-Type": "application/json",
+                      }
+                    : {}),
+            },
             ...(hasPayload
                 ? {
-                      headers: {
-                          "Content-Type": "application/json",
-                      },
                       body: JSON.stringify(payload),
                   }
                 : {}),
@@ -861,6 +933,7 @@ export async function rejectProfileEnrichment(
         `${API_BASE_URL}/enrichment/${proposalId}/reject`,
         {
             method: "POST",
+            headers: getAuthHeaders(),
         },
     );
 
@@ -1103,8 +1176,15 @@ export async function updateAISettings(
 export async function getAIContextPreview(
     profileId: number,
 ): Promise<AIContextPreview> {
+    // NOTE: The AI context router was not part of the 7.1.24.3
+    // ownership migration audit. The Authorization header is added
+    // here defensively, but backend ownership enforcement on this
+    // endpoint has not been confirmed as of the 7.1.24.5 review.
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/ai-context-preview`
+        `${API_BASE_URL}/profiles/${profileId}/ai-context-preview`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1217,8 +1297,15 @@ export async function getMatching(
     profileId: number,
     jobOfferId: number,
 ) {
+    // NOTE: The matching router was not part of the 7.1.24.3
+    // ownership migration audit. The Authorization header is added
+    // here defensively, but backend ownership enforcement on this
+    // endpoint has not been confirmed as of the 7.1.24.5 review.
     const response = await fetch(
-        `${API_BASE_URL}/matching/${profileId}/${jobOfferId}`
+        `${API_BASE_URL}/matching/${profileId}/${jobOfferId}`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1233,8 +1320,13 @@ export async function getMatching(
 export async function getProfileScoresForJobOffer(
     jobOfferId: number,
 ): Promise<ProfileOpportunityScore[]> {
+    // NOTE: See getMatching() above regarding matching router
+    // ownership status (not confirmed as of 7.1.24.5).
     const response = await fetch(
-        `${API_BASE_URL}/matching/job-offers/${jobOfferId}/profiles`
+        `${API_BASE_URL}/matching/job-offers/${jobOfferId}/profiles`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1250,8 +1342,13 @@ export async function getProfileScoresForJobOffer(
 export async function getRankedJobOffers(
     profileId: number,
 ) {
+    // NOTE: See getMatching() above regarding matching router
+    // ownership status (not confirmed as of 7.1.24.5).
     const response = await fetch(
-        `${API_BASE_URL}/profiles/${profileId}/ranked-job-offers`
+        `${API_BASE_URL}/profiles/${profileId}/ranked-job-offers`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1285,7 +1382,10 @@ export type ApplicationEvent = {
 
 export async function getApplications() {
     const response = await fetch(
-        `${API_BASE_URL}/applications`
+        `${API_BASE_URL}/applications`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1301,7 +1401,10 @@ export async function getApplicationTimeline(
     applicationId: number,
 ): Promise<ApplicationEvent[]> {
     const response = await fetch(
-        `${API_BASE_URL}/applications/${applicationId}/timeline`
+        `${API_BASE_URL}/applications/${applicationId}/timeline`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1341,6 +1444,7 @@ export async function createApplication(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1365,6 +1469,7 @@ export async function updateApplication(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1392,6 +1497,7 @@ export async function changeApplicationStatus(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1418,6 +1524,7 @@ export async function createProfileCertification(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -1443,6 +1550,7 @@ export async function updateProfileCertification(
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         }
@@ -1465,6 +1573,7 @@ export async function deleteProfileCertification(
         `${API_BASE_URL}/profile-certifications/${profileId}/${certificationId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         }
     );
 

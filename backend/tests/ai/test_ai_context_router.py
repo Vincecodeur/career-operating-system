@@ -196,13 +196,14 @@ def create_profile(
         db.close()
 
 
-def test_get_ai_context_preview_for_complete_profile():
+def test_get_ai_context_preview_for_complete_profile(authenticated_headers):
     profile_id = create_profile(
         complete=True
     )
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -217,13 +218,14 @@ def test_get_ai_context_preview_for_complete_profile():
     assert body["ai_call_allowed"] is False
 
 
-def test_complete_profile_returns_expected_categories():
+def test_complete_profile_returns_expected_categories(authenticated_headers):
     profile_id = create_profile(
         complete=True
     )
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -249,13 +251,14 @@ def test_complete_profile_returns_expected_categories():
     }
 
 
-def test_get_ai_context_preview_for_incomplete_profile():
+def test_get_ai_context_preview_for_incomplete_profile(authenticated_headers):
     profile_id = create_profile(
         complete=False
     )
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -304,9 +307,10 @@ def test_get_ai_context_preview_for_incomplete_profile():
     )
 
 
-def test_get_ai_context_preview_returns_404_for_unknown_profile():
+def test_get_ai_context_preview_returns_404_for_unknown_profile(authenticated_headers):
     response = client.get(
-        "/profiles/999999999/ai-context-preview"
+        "/profiles/999999999/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
@@ -316,7 +320,7 @@ def test_get_ai_context_preview_returns_404_for_unknown_profile():
     }
 
 
-def test_ready_profile_allows_ai_call_after_consent():
+def test_ready_profile_allows_ai_call_after_consent(authenticated_headers):
     profile_id = create_profile(
         complete=True
     )
@@ -332,7 +336,8 @@ def test_ready_profile_allows_ai_call_after_consent():
     assert settings_response.status_code == 200
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -345,7 +350,7 @@ def test_ready_profile_allows_ai_call_after_consent():
     assert body["ai_call_allowed"] is True
 
 
-def test_incomplete_profile_blocks_ai_call_after_consent():
+def test_incomplete_profile_blocks_ai_call_after_consent(authenticated_headers):
     profile_id = create_profile(
         complete=False
     )
@@ -361,7 +366,8 @@ def test_incomplete_profile_blocks_ai_call_after_consent():
     assert settings_response.status_code == 200
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -374,13 +380,14 @@ def test_incomplete_profile_blocks_ai_call_after_consent():
     assert body["ai_call_allowed"] is False
 
 
-def test_preview_returns_fixed_excluded_categories():
+def test_preview_returns_fixed_excluded_categories(authenticated_headers):
     profile_id = create_profile(
         complete=True
     )
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -395,13 +402,14 @@ def test_preview_returns_fixed_excluded_categories():
     ]
 
 
-def test_preview_response_contains_only_contract_fields():
+def test_preview_response_contains_only_contract_fields(authenticated_headers):
     profile_id = create_profile(
         complete=True
     )
 
     response = client.get(
-        f"/profiles/{profile_id}/ai-context-preview"
+        f"/profiles/{profile_id}/ai-context-preview",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200

@@ -3,6 +3,8 @@ from fastapi import Depends
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.jobs.models import JobOffer
 from app.matching.schemas import MatchingResult
@@ -25,10 +27,12 @@ router = APIRouter(
 def calculate_match(
     profile_id: int,
     job_offer_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -60,10 +64,12 @@ def calculate_match(
 )
 def get_ranked_job_offers(
     profile_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     profile = db.query(Profile).filter(
-        Profile.id == profile_id
+        Profile.id == profile_id,
+        Profile.user_id == current_user.id,
     ).first()
 
     if profile is None:
@@ -76,7 +82,7 @@ def get_ranked_job_offers(
         profile_id=profile_id,
         db=db
     )
-    
+
 @router.get(
     "/matching/job-offers/{job_offer_id}/profiles",
     response_model=list[ProfileOpportunityScore],
@@ -84,6 +90,7 @@ def get_ranked_job_offers(
 def get_profile_scores_for_job_offer(
     job_offer_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     job_offer = db.query(JobOffer).filter(
         JobOffer.id == job_offer_id
@@ -98,4 +105,5 @@ def get_profile_scores_for_job_offer(
     return calculate_profile_scores_for_job_offer(
         job_offer_id=job_offer_id,
         db=db,
+        user_id=current_user.id,
     )

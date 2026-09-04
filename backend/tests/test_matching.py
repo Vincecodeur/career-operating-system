@@ -5,25 +5,28 @@ from app.main import app
 client = TestClient(app)
 
 
-def test_matching_endpoint_not_found_for_unknown_profile():
+def test_matching_endpoint_not_found_for_unknown_profile(authenticated_headers):
     response = client.get(
-        "/matching/999999/1"
+        "/matching/999999/1",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_ranking_endpoint_not_found_for_unknown_profile():
+def test_ranking_endpoint_not_found_for_unknown_profile(authenticated_headers):
     response = client.get(
-        "/profiles/999999/ranked-job-offers"
+        "/profiles/999999/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
 
 
-def test_ranking_endpoint_returns_list():
+def test_ranking_endpoint_returns_list(authenticated_headers):
     response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -33,9 +36,10 @@ def test_ranking_endpoint_returns_list():
     assert isinstance(data, list)
 
 
-def test_ranking_items_have_required_fields():
+def test_ranking_items_have_required_fields(authenticated_headers):
     response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -58,9 +62,10 @@ def test_ranking_items_have_required_fields():
     assert "missing_skills" in item
 
 
-def test_matching_endpoint_returns_v2_fields():
+def test_matching_endpoint_returns_v2_fields(authenticated_headers):
     ranking_response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert ranking_response.status_code == 200
@@ -73,7 +78,8 @@ def test_matching_endpoint_returns_v2_fields():
     job_offer_id = ranked_job_offers[0]["job_offer_id"]
 
     response = client.get(
-        f"/matching/1/{job_offer_id}"
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -93,9 +99,10 @@ def test_matching_endpoint_returns_v2_fields():
     assert "weaknesses" in data
 
 
-def test_matching_v2_scores_are_numeric():
+def test_matching_v2_scores_are_numeric(authenticated_headers):
     ranking_response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert ranking_response.status_code == 200
@@ -108,7 +115,8 @@ def test_matching_v2_scores_are_numeric():
     job_offer_id = ranked_job_offers[0]["job_offer_id"]
 
     response = client.get(
-        f"/matching/1/{job_offer_id}"
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -137,9 +145,10 @@ def test_matching_v2_scores_are_numeric():
     )
 
 
-def test_matching_v2_scores_are_between_zero_and_one_hundred():
+def test_matching_v2_scores_are_between_zero_and_one_hundred(authenticated_headers):
     ranking_response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert ranking_response.status_code == 200
@@ -152,7 +161,8 @@ def test_matching_v2_scores_are_between_zero_and_one_hundred():
     job_offer_id = ranked_job_offers[0]["job_offer_id"]
 
     response = client.get(
-        f"/matching/1/{job_offer_id}"
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -172,9 +182,10 @@ def test_matching_v2_scores_are_between_zero_and_one_hundred():
         assert data[field] <= 100
 
 
-def test_matching_v2_strengths_and_weaknesses_are_lists():
+def test_matching_v2_strengths_and_weaknesses_are_lists(authenticated_headers):
     ranking_response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert ranking_response.status_code == 200
@@ -187,7 +198,8 @@ def test_matching_v2_strengths_and_weaknesses_are_lists():
     job_offer_id = ranked_job_offers[0]["job_offer_id"]
 
     response = client.get(
-        f"/matching/1/{job_offer_id}"
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -204,9 +216,10 @@ def test_matching_v2_strengths_and_weaknesses_are_lists():
     )
 
 
-def test_ranking_is_sorted_descending():
+def test_ranking_is_sorted_descending(authenticated_headers):
     response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -222,10 +235,11 @@ def test_ranking_is_sorted_descending():
         scores,
         reverse=True
     )
-    
-def test_matching_v2_explanations_are_present():
+
+def test_matching_v2_explanations_are_present(authenticated_headers):
     ranking_response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert ranking_response.status_code == 200
@@ -238,7 +252,8 @@ def test_matching_v2_explanations_are_present():
     job_offer_id = ranked_job_offers[0]["job_offer_id"]
 
     response = client.get(
-        f"/matching/1/{job_offer_id}"
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -265,10 +280,11 @@ def test_matching_v2_explanations_are_present():
         assert "criterion" in item
         assert "score" in item
         assert "message" in item
-        
-def test_opportunity_analysis_is_present():
+
+def test_opportunity_analysis_is_present(authenticated_headers):
     ranking_response = client.get(
-        "/profiles/1/ranked-job-offers"
+        "/profiles/1/ranked-job-offers",
+        headers=authenticated_headers,
     )
 
     assert ranking_response.status_code == 200
@@ -281,7 +297,8 @@ def test_opportunity_analysis_is_present():
     job_offer_id = ranked_job_offers[0]["job_offer_id"]
 
     response = client.get(
-        f"/matching/1/{job_offer_id}"
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -295,18 +312,20 @@ def test_opportunity_analysis_is_present():
     assert "verdict" in analysis
     assert "recommendation" in analysis
     assert "summary" in analysis
-    
-def test_profile_scores_endpoint_not_found_for_unknown_job_offer():
+
+def test_profile_scores_endpoint_not_found_for_unknown_job_offer(authenticated_headers):
     response = client.get(
-        "/matching/job-offers/999999/profiles"
+        "/matching/job-offers/999999/profiles",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 404
-    
-    
-def test_profile_scores_endpoint_returns_list():
+
+
+def test_profile_scores_endpoint_returns_list(authenticated_headers):
     response = client.get(
-        "/matching/job-offers/1/profiles"
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -314,10 +333,11 @@ def test_profile_scores_endpoint_returns_list():
     data = response.json()
 
     assert isinstance(data, list)
-    
-def test_profile_scores_items_have_required_fields():
+
+def test_profile_scores_items_have_required_fields(authenticated_headers):
     response = client.get(
-        "/matching/job-offers/1/profiles"
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -337,11 +357,12 @@ def test_profile_scores_items_have_required_fields():
     assert "work_mode_score" in item
     assert "location_score" in item
     assert "is_best_match" in item
-    
-    
-def test_profile_scores_only_one_best_match():
+
+
+def test_profile_scores_only_one_best_match(authenticated_headers):
     response = client.get(
-        "/matching/job-offers/1/profiles"
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
@@ -355,11 +376,12 @@ def test_profile_scores_only_one_best_match():
     )
 
     assert best_match_count <= 1
-    
-    
-def test_profile_scores_sorted_descending():
+
+
+def test_profile_scores_sorted_descending(authenticated_headers):
     response = client.get(
-        "/matching/job-offers/1/profiles"
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
     )
 
     assert response.status_code == 200
