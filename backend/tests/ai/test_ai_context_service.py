@@ -238,3 +238,408 @@ def add_certification(
     )
 
     db.commit()
+
+
+def add_work_experience(
+    db,
+    profile: Profile,
+) -> None:
+    db.add(
+        WorkExperience(
+            profile_id=profile.id,
+            company_name="Test Company",
+            job_title=(
+                "Technical Partnerships Manager"
+            ),
+            start_date=date(
+                2020,
+                1,
+                1,
+            ),
+            end_date=None,
+            is_current_position=True,
+            description=(
+                "Managed technical partnerships "
+                "and platform integrations."
+            ),
+        )
+    )
+
+    db.commit()
+
+
+def create_complete_profile(
+    db,
+    *,
+    include_soft_skill: bool = True,
+    include_certification: bool = True,
+) -> Profile:
+    profile = create_profile(
+        db
+    )
+
+    add_hard_skill(
+        db,
+        profile,
+    )
+
+    add_language(
+        db,
+        profile,
+    )
+
+    add_work_experience(
+        db,
+        profile,
+    )
+
+    if include_soft_skill:
+        add_soft_skill(
+            db,
+            profile,
+        )
+
+    if include_certification:
+        add_certification(
+            db,
+            profile,
+        )
+
+    return profile
+
+
+def test_complete_profile_is_ai_ready(
+    db,
+):
+    profile = create_complete_profile(
+        db
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.profile_id == profile.id
+    assert preview.is_ai_ready is True
+    assert (
+        preview.missing_required_information
+        == []
+    )
+    assert (
+        preview.ai_features_enabled
+        is False
+    )
+    assert (
+        preview.ai_consent_accepted
+        is False
+    )
+    assert (
+        preview.ai_call_allowed
+        is False
+    )
+
+
+def test_missing_current_title_is_not_ready(
+    db,
+):
+    profile = create_profile(
+        db,
+        current_title="",
+    )
+
+    add_hard_skill(
+        db,
+        profile,
+    )
+
+    add_language(
+        db,
+        profile,
+    )
+
+    add_work_experience(
+        db,
+        profile,
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.is_ai_ready is False
+
+    assert (
+        "Current title is missing"
+        in preview.missing_required_information
+    )
+
+
+def test_missing_hard_skill_is_not_ready(
+    db,
+):
+    profile = create_profile(
+        db
+    )
+
+    add_language(
+        db,
+        profile,
+    )
+
+    add_work_experience(
+        db,
+        profile,
+    )
+
+    service = AIContextService(
+    db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.is_ai_ready is False
+
+    assert (
+        "At least one hard skill is required"
+        in preview.missing_required_information
+    )
+
+
+@pytest.mark.parametrize(
+    (
+        "field_name",
+        "expected_message",
+    ),
+    [
+        (
+            "professional_summary",
+            "Professional summary is missing",
+        ),
+        (
+            "career_motivations",
+            "Career motivations are missing",
+        ),
+        (
+            "preferred_environment",
+            "Preferred environment is missing",
+        ),
+        (
+            "non_negotiables",
+            "Non-negotiables are missing",
+        ),
+        (
+            "additional_context",
+            "Additional context is missing",
+        ),
+    ],
+)
+def test_missing_additional_context_field_is_not_ready(
+    db,
+    field_name,
+    expected_message,
+):
+    profile = create_profile(
+        db,
+        **{
+            field_name: None,
+        },
+    )
+
+    add_hard_skill(
+        db,
+        profile,
+    )
+
+    add_language(
+        db,
+        profile,
+    )
+
+    add_work_experience(
+        db,
+        profile,
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.is_ai_ready is False
+
+    assert (
+        expected_message
+        in preview.missing_required_information
+    )
+
+
+def test_missing_optional_categories_do_not_block_readiness(
+    db,
+):
+    profile = create_complete_profile(
+        db,
+        include_soft_skill=False,
+        include_certification=False,
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.is_ai_ready is True
+
+    assert set(
+        preview.missing_optional_categories
+    ) == {
+        "SOFT_SKILLS",
+        "CERTIFICATIONS",
+    }
+
+
+def test_available_categories_reflect_profile_data(
+    db,
+):
+    profile = create_complete_profile(
+        db
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+
+    assert set(
+        preview.available_categories
+    ) == {
+        "PROFILE_INFORMATION",
+        "CAREER_GOALS",
+        "HARD_SKILLS",
+        "SOFT_SKILLS",
+        "LANGUAGES",
+        "CERTIFICATIONS",
+        "WORK_EXPERIENCES",
+        "ADDITIONAL_PROFILE_CONTEXT",
+    }
+
+    assert (
+        preview.missing_optional_categories
+        == []
+    )
+
+
+def test_excluded_categories_are_always_returned(
+    db,
+):
+    profile = create_profile(
+        db
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+
+    assert preview.excluded_categories == [
+        "RAW_CV",
+        "UNVALIDATED_ENRICHMENT",
+        "APPLICATION_HISTORY",
+        "TECHNICAL_SECRETS",
+    ]
+
+
+def test_ai_call_is_allowed_when_all_conditions_are_true(
+    db,
+):
+    profile = create_complete_profile(
+        db
+    )
+
+    settings_service = SettingsService(
+        db
+    )
+
+    settings_service.update_ai_settings(
+        {
+            "ai_features_enabled": True,
+            "ai_consent_accepted": True,
+        }
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.is_ai_ready is True
+    assert preview.ai_features_enabled is True
+    assert preview.ai_consent_accepted is True
+    assert preview.ai_call_allowed is True
+
+
+def test_ai_call_is_blocked_when_profile_is_not_ready(
+    db,
+):
+    profile = create_profile(
+        db
+    )
+
+    settings_service = SettingsService(
+        db
+    )
+
+    settings_service.update_ai_settings(
+        {
+            "ai_features_enabled": True,
+            "ai_consent_accepted": True,
+        }
+    )
+
+    service = AIContextService(
+        db
+    )
+
+    preview = service.get_ai_context_preview(
+        profile.id
+    )
+
+    assert preview is not None
+    assert preview.is_ai_ready is False
+    assert preview.ai_features_enabled is True
+    assert preview.ai_consent_accepted is True
+    assert preview.ai_call_allowed is False

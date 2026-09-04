@@ -97,6 +97,22 @@ def test_create_profile_skill(authenticated_headers):
     assert data["self_assessment_level"] == "Advanced"
 
 
+def test_list_profile_skills(authenticated_headers):
+    create_test_profile_skill(authenticated_headers)
+
+    response = client.get(
+        "/profile-skills",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    assert isinstance(
+        response.json(),
+        list,
+    )
+
+
 def test_list_skills_for_profile(authenticated_headers):
     data = create_test_profile_skill(authenticated_headers)
 
@@ -143,6 +159,19 @@ def test_update_profile_skill(authenticated_headers):
     assert updated["self_assessment_level"] == "Expert"
 
 
+def test_update_profile_skill_not_found(authenticated_headers):
+    response = client.put(
+        "/profile-skills/999999/999999",
+        json={
+            "years_of_experience": 1,
+            "self_assessment_level": "Beginner",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 404
+
+
 def test_delete_profile_skill(authenticated_headers):
     data = create_test_profile_skill(authenticated_headers)
 
@@ -169,3 +198,12 @@ def test_delete_profile_skill(authenticated_headers):
     }
 
     assert skill_id not in remaining_skill_ids
+
+
+def test_delete_profile_skill_not_found(authenticated_headers):
+    response = client.delete(
+        "/profile-skills/999999/999999",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 404

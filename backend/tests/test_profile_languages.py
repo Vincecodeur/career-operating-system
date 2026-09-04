@@ -114,6 +114,25 @@ def test_duplicate_profile_language(authenticated_headers):
     assert response.status_code == 409
 
 
+def test_list_profile_languages(authenticated_headers):
+    profile = create_profile(authenticated_headers)
+    language = create_language()
+
+    create_profile_language(
+        profile["id"],
+        language["id"],
+        authenticated_headers,
+    )
+
+    response = client.get(
+        "/profile-languages",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
 def test_list_languages_for_profile(authenticated_headers):
     profile = create_profile(authenticated_headers)
     language = create_language()
@@ -165,6 +184,18 @@ def test_update_profile_language(authenticated_headers):
     assert data["profile_id"] == profile["id"]
     assert data["language_id"] == language["id"]
     assert data["proficiency_level"] == "Advanced"
+
+
+def test_update_profile_language_not_found(authenticated_headers):
+    response = client.put(
+        "/profile-languages/99999/99999",
+        json={
+            "proficiency_level": "Advanced",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 404
 
 
 def test_delete_profile_language(authenticated_headers):
