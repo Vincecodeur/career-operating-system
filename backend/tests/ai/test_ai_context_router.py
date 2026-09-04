@@ -4,6 +4,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
+from app.auth.models import User
 from app.core.database import SessionLocal
 from app.experience.models import WorkExperience
 from app.languages.models import Language
@@ -61,6 +62,18 @@ def reset_ai_settings():
     )
 
 
+TEST_USER_EMAIL = "test-primary-user@career-os.local"
+
+
+def get_test_user_id(db) -> int:
+    test_user = (
+        db.query(User)
+        .filter(User.email == TEST_USER_EMAIL)
+        .first()
+    )
+
+    return test_user.id
+
 def create_profile(
     *,
     complete: bool,
@@ -69,6 +82,7 @@ def create_profile(
 
     try:
         profile = Profile(
+            user_id=get_test_user_id(db),
             profile_name=unique_value(
                 "AI Router Profile"
             ),

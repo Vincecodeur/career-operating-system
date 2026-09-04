@@ -24,7 +24,7 @@ class Profile(Base):
 
     user_id: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"),
-        nullable=True,
+        nullable=False,
         index=True,
     )
 
