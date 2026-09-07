@@ -389,8 +389,6 @@ export function ProfilesPage() {
       profileCertificationsData,
       certificationsData,
       cvsData,
-      workModesData,
-      countriesData,
       applicationsData,
     ] = await Promise.all([
       getProfileSkills(profileId),
@@ -402,8 +400,6 @@ export function ProfilesPage() {
       getProfileCertifications(profileId),
       getCertifications(),
       getProfileCvs(profileId),
-      getWorkModes(),
-      getCountries(),
       getApplications(),
     ]);
 
@@ -415,8 +411,6 @@ export function ProfilesPage() {
     setLanguages(languagesData);
     setProfileCertifications(profileCertificationsData);
     setCertifications(certificationsData);
-    setWorkModes(workModesData);
-    setCountries(countriesData);
     setCvs(cvsData);
     setApplications(
       Array.isArray(applicationsData)
@@ -431,6 +425,20 @@ export function ProfilesPage() {
       reloadAIContextPreview(profileId),
     ]);
   }
+
+  useEffect(() => {
+    async function loadReferenceData() {
+      const [workModesData, countriesData] = await Promise.all([
+        getWorkModes(),
+        getCountries(),
+      ]);
+
+      setWorkModes(workModesData);
+      setCountries(countriesData);
+    }
+
+    loadReferenceData();
+  }, []);
 
   useEffect(() => {
     async function loadProfiles() {
