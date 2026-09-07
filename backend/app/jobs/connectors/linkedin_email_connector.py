@@ -1,8 +1,11 @@
 import email
 import imaplib
 import logging
+import re
 from datetime import datetime
 from email.message import Message
+
+from bs4 import BeautifulSoup
 
 from app.jobs.connectors.connector_interface import ConnectorInterface
 from app.jobs.raw_offer_schema import RawOffer
@@ -11,27 +14,36 @@ from app.jobs.raw_offer_schema import RawOffer
 logger = logging.getLogger(__name__)
 
 
+JOB_VIEW_URL_PATTERN = re.compile(r"/jobs/view/(\d+)")
+
+
 class LinkedInEmailConnector(ConnectorInterface):
     """
     Connecteur LinkedIn pour le pipeline Job Discovery, basé sur la
-    lecture des emails de notification ("job alerts") reçus dans une
-    boîte mail IMAP dédiée, plutôt que sur un appel API ou du scraping
-    du site LinkedIn.
+    lecture des emails de notification ("job alerts" / offres
+    similaires) reçus dans une boîte mail IMAP dédiée, plutôt que sur
+    un appel API ou du scraping du site LinkedIn.
 
-    Contexte (voir docs/linkedin-email-connector-design.md et DEC-084
-    et suivantes) : LinkedIn ne propose aucune API publique permettant
-    de rechercher des offres pour un usage individuel, et le scraping
-    direct du site est explicitement interdit par ses conditions
-    d'utilisation, avec des précédents de poursuites réelles (LinkedIn
-    Corp. v. Nubela/Proxycurl, 2025). Lire des emails reçus dans sa
-    propre boîte mail ne constitue pas un accès aux serveurs LinkedIn.
+    Contexte (voir docs/linkedin-email-connector-design.md et
+    DEC-084 et suivantes) : LinkedIn ne propose aucune API publique
+    permettant de rechercher des offres pour un usage individuel, et
+    le scraping direct du site (y compris le simple suivi
+    automatisé des liens contenus dans ces emails, au-delà de 2-3
+    pages sans connexion) est explicitement interdit par ses
+    conditions d'utilisation et activement détecté. Lire des emails
+    reçus dans sa propre boîte mail ne constitue pas un accès aux
+    serveurs LinkedIn.
 
-    Cette implémentation gère la mécanique IMAP (connexion, recherche
-    des emails non lus, marquage comme lus). L'extraction du contenu
-    structuré depuis le HTML de chaque email est volontairement
-    isolée dans _extract_offers_from_email(), à compléter une fois
-    qu'un exemple réel d'email de notification LinkedIn est
-    disponible - le format HTML exact n'est pas encore connu.
+    Limite assumée : les emails de notification LinkedIn ne
+    contiennent ni description, ni type de contrat, ni salaire.
+    Seuls titre, entreprise, ville, mode de travail et URL sont
+    disponibles. raw_description est donc généré automatiquement à
+    partir de ces champs plutôt que d'être vide (RawOffer l'exige).
+    Ceci dégrade structurellement le score de matching de ces offres
+    par rapport aux offres provenant de sources avec description
+    complète (France Travail, Greenhouse) - point connu et accepté,
+    une solution de complément manuel de l'offre après import est
+    envisagée séparément.
     """
 
     SOURCE_NAME = "LinkedIn"
@@ -184,29 +196,199 @@ class LinkedInEmailConnector(ConnectorInterface):
     ) -> list[RawOffer]:
         """
         Extracts one or more job offers from a single LinkedIn
-        notification email.
+        notification email ("job alert" / "similar jobs" style).
 
-        NOT YET IMPLEMENTED: the exact HTML structure of LinkedIn job
-        alert emails is not yet known. This method must be completed
-        once a real sample email is available (see
-        docs/linkedin-email-connector-design.md). Until then, it
-        returns an empty list for every email, so the connector
-        remains safe to enable without producing incorrect data.
+        Each job appears as a "job card": a link to
+        linkedin.com/.../jobs/view/{id}/... wrapping the job title,
+        followed by a line formatted as "Company · City (WorkMode)".
 
-        Once implemented, this method must:
-        - retrieve the HTML body from the message
-        - parse out each job posting (title, company, city, region,
-          country, source_url pointing to the real LinkedIn job
-          listing, publication date if available)
-        - map each one to a RawOffer, with source_name="LinkedIn",
-          retrieved_at=datetime.utcnow()
+        Returns an empty list (never raises) if the HTML body is
+        missing or has an unexpected structure, so a malformed or
+        unrelated email never breaks the discovery pipeline.
         """
-        logger.info(
-            "LinkedInEmailConnector: email extraction not yet "
-            "implemented, skipping message."
+        try:
+            html_body = self._get_html_body(message)
+
+            if not html_body:
+                return []
+
+            soup = BeautifulSoup(html_body, "html.parser")
+
+            return self._parse_job_cards(soup)
+        except Exception:
+            logger.exception(
+                "LinkedInEmailConnector: unexpected error while "
+                "parsing email body, skipping this email."
+            )
+            return []
+
+    def _parse_job_cards(
+        self,
+        soup: BeautifulSoup,
+    ) -> list[RawOffer]:
+        offers_by_job_id: dict[str, RawOffer] = {}
+
+        job_links = soup.find_all(
+            "a",
+            href=JOB_VIEW_URL_PATTERN,
         )
 
-        return []
+        for link in job_links:
+            href = link.get("href", "")
+
+            match = JOB_VIEW_URL_PATTERN.search(href)
+
+            if match is None:
+                continue
+
+            job_id = match.group(1)
+
+            title = link.get_text(strip=True)
+
+            if not title:
+                # invisible wrapper links around the job card share
+                # the same href but carry no text at all
+                continue
+
+            if title.lower().endswith("logo"):
+                # the company logo link also wraps the job URL and
+                # carries visible text (e.g. "Acme Corp logo"), but
+                # is not the job title - never let it override an
+                # already-found real title for the same job id
+                continue
+
+            company, city, work_mode = (
+                self._extract_company_and_location(link)
+            )
+
+            if company is None and city is None:
+                # No "Company · City" line was found near this link.
+                # This happens for the header/trigger link some
+                # LinkedIn "similar jobs" emails include at the top
+                # (pointing to the job the user originally viewed),
+                # which carries visible text but is not itself a job
+                # card in the list. Real job cards always have this
+                # line, so its absence means this is not an offer.
+                continue
+
+            if job_id in offers_by_job_id:
+                # a second valid-looking link for a job id already
+                # recorded (should not normally happen once the logo
+                # link is excluded, but keep the first valid match
+                # rather than silently overwriting it)
+                continue
+
+            description = (
+                f"Offre découverte via alerte email LinkedIn. "
+                f"Titre : {title}. "
+                f"Entreprise : {company or 'inconnue'}. "
+                f"Lieu : {city or 'inconnu'}."
+            )
+
+            offers_by_job_id[job_id] = RawOffer(
+                source_name=self.SOURCE_NAME,
+                source_job_id=job_id,
+                source_url=href,
+                title=title,
+                company=company,
+                raw_description=description,
+                city=city,
+                region=None,
+                country=None,
+                work_mode_raw=work_mode,
+                retrieved_at=datetime.utcnow(),
+            )
+
+        return list(offers_by_job_id.values())
+
+    @staticmethod
+    def _extract_company_and_location(
+        link,
+    ) -> tuple[str | None, str | None, str | None]:
+        """
+        Looks for a line formatted as "Company · City (WorkMode)"
+        within the smallest enclosing table of the title link.
+        """
+        parent_table = link.find_parent("table")
+
+        if parent_table is None:
+            return None, None, None
+
+        text_lines = [
+            line.strip()
+            for line in parent_table.get_text("\n").split("\n")
+            if line.strip()
+        ]
+
+        for line in text_lines:
+            if "\u00b7" not in line:
+                continue
+
+            return LinkedInEmailConnector._parse_location_line(
+                line
+            )
+
+        return None, None, None
+
+    @staticmethod
+    def _parse_location_line(
+        line: str,
+    ) -> tuple[str | None, str | None, str | None]:
+        parts = line.split("\u00b7")
+
+        if len(parts) < 2:
+            return None, None, None
+
+        company = parts[0].strip() or None
+
+        location_part = "\u00b7".join(parts[1:]).strip()
+
+        work_mode = None
+
+        work_mode_match = re.search(
+            r"\(([^)]+)\)",
+            location_part,
+        )
+
+        if work_mode_match:
+            work_mode = work_mode_match.group(1).strip()
+            location_part = location_part[
+                : work_mode_match.start()
+            ].strip()
+
+        city = location_part or None
+
+        return company, city, work_mode
+
+    @staticmethod
+    def _get_html_body(message: Message) -> str | None:
+        if message.is_multipart():
+            for part in message.walk():
+                if part.get_content_type() == "text/html":
+                    return LinkedInEmailConnector._decode_part(
+                        part
+                    )
+
+            return None
+
+        if message.get_content_type() == "text/html":
+            return LinkedInEmailConnector._decode_part(message)
+
+        return None
+
+    @staticmethod
+    def _decode_part(part) -> str | None:
+        payload = part.get_payload(decode=True)
+
+        if payload is None:
+            return None
+
+        charset = part.get_content_charset() or "utf-8"
+
+        try:
+            return payload.decode(charset, errors="replace")
+        except (LookupError, UnicodeDecodeError):
+            return payload.decode("utf-8", errors="replace")
 
     @staticmethod
     def _safe_logout(
