@@ -939,6 +939,7 @@ Des tests existent pour :
 - Phase 7.1.24 User Data Ownership And Isolation
 - Phase 7.1.25 Settings Strategy Synchronization
 - Phase 7.1.26 Best Profile Recommendation Architecture Review
+- Phase 7.1.27 Final Regression And Documentation
 
 ## Derniers commits importants
 
@@ -1188,7 +1189,7 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-17e7483 - feat(matching): centralize best matching profile tie-breaking in backend, remove duplicated frontend logic  
+14b25ce - docs: remove duplicated line in project-status.md  
 Latest backend validation:
 
 - 352 backend tests passed, 0 regressions
@@ -1222,10 +1223,25 @@ Latest backend validation:
   (never persisted, per DEC-071)
 - frontend bestProfileScore computation removed, replaced by a direct
   read of is_best_match
-- 352 backend tests passing, 0 regressions
-- Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)  
+- Phase 7.1.27 Final Regression And Documentation CLOSED
+- full backend regression confirmed: 352 tests, 0 regressions
+- full frontend manual regression performed across Dashboard, Profiles,
+  Opportunities, Applications, Settings, Account
+- 2 blocking bugs discovered and fixed, both specific to a brand new
+  account's onboarding path (not caught by automated tests, which always
+  run against an already-populated account): empty Remote Preference and
+  Preferred Countries options on first profile creation, and enrichment
+  proposal reprocessing causing cascading 400 errors with a misleading
+  error message
+- DEC-032, DEC-039, DEC-071, DEC-081 cross-checked; DEC-039 revealed a
+  non-blocking UX limitation (UX-004), all others confirmed respected
+- duplicated validation block in auth/router.py register() cleaned up
+- previously-unresolved console error (reportAllChanges) formally
+  documented as TECH-002, root cause still unknown but confirmed
+  non-blocking
+- No remaining known technical debt is blocking MVP closure  
   Next required step:
-  7.1.27 Final Regression And Documentation
+  7.1.28 MVP Closure Decision
 
 ## Méthode de reprise
 

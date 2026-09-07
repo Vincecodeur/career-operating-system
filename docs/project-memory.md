@@ -638,9 +638,33 @@ Best Profile Recommendation Architecture Review results (7.1.26):
 - manual validation confirmed correct behavior across 3 real scenarios,
   including an edge case (Primary Profile excluded from Active
   Profiles) explicitly confirmed as intended by Vincent
-- Phase 7.1.26 CLOSED (DEC-083)
+  Phase 7.1.26 CLOSED
+
+Final Regression And Documentation results (7.1.27):
+
+- full backend regression confirmed: 352 tests passing, 0 regressions
+- full frontend manual regression performed across all main pages
+  (Dashboard, Profiles, Opportunities, Applications, Settings, Account)
+- 2 blocking bugs discovered and fixed, both specific to a brand new
+  account's onboarding path, undetected by automated tests since they
+  always run against an already-populated account:
+  - empty Remote Preference and Preferred Countries options when
+    creating the first profile of a new account (getWorkModes/
+    getCountries were only loaded when an existing profile was already
+    selected)
+  - enrichment proposal double-submission via "Back to Review" →
+    "Apply Changes", causing cascading 400 errors with a misleading
+    frontend error message unrelated to the real backend cause
+- cross-cutting consistency audit performed on DEC-032, DEC-039,
+  DEC-071, DEC-081: all confirmed respected except a non-blocking UX
+  limitation under DEC-039 (documented as UX-004)
+- known technical debt reviewed: duplicated validation block in
+  auth/router.py register() cleaned up; TECH-002 (unexplained recurring
+  console error) documented honestly as unresolved but non-blocking
+- 7 documentation files fully re-read and cross-checked; 1 real
+  duplicate found and fixed in project-status.md
+  Phase 7.1.27 CLOSED
 
 Remaining:
 
-- Final Regression And Documentation (7.1.27)
 - MVP Closure Decision (7.1.28)

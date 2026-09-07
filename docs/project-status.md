@@ -19,18 +19,18 @@ main
 ---
 
 Current Milestone
-7.1.26 Best Profile Recommendation Architecture Review
+7.1.27 Final Regression And Documentation
 
 ---
 
 Current Phase
-7.1.26.4 Documentation Synchronization
+7.1.27.6 Documentation Synchronization
 
 Current Step
 Completed
 
 Next Planned Milestone
-7.1.27 Final Regression And Documentation
+7.1.28 MVP Closure Decision
 
 ---
 
@@ -1578,10 +1578,8 @@ Post-MVP Planning
 - isolation manuelle validée entre deux comptes réels
 - bug de téléchargement CV découvert et corrigé (fetch+blob authentifié)
 - Phase 7.1.24.7 Documentation Synchronization terminée
-
 - Phase 7.1.25.1 Repository Audit terminée (ApplicationSetting sans
   user_id confirmé, aucun filtrage nulle part dans la chaîne)
-
 - Phase 7.1.25.2 Product Design terminée (docs/settings-strategy.md,
   DEC-082)
 - Phase 7.1.25.3 Implementation terminée
@@ -1611,7 +1609,16 @@ Post-MVP Planning
 - 352 tests backend passants, 0 régression
 - validation manuelle sur 3 scénarios réels, cas limite du Primary
   Profile non-actif confirmé comme comportement voulu
-- Phase 7.1.26.4 Documentation Synchronization terminée  
+- Phase 7.1.26.4 Documentation Synchronization terminée
+- Phase 7.1.27.1 Full Backend Regression terminée (352 tests confirmés)
+- Phase 7.1.27.2 Full Frontend Manual Regression terminée (2 bugs
+  d'onboarding découverts et corrigés)
+- Phase 7.1.27.3 Cross-Cutting Consistency Audit terminée (DEC-032,
+  DEC-039, DEC-071, DEC-081 vérifiées)
+- Phase 7.1.27.4 Known Technical Debt Review terminée (duplication
+  auth/router.py nettoyée, TECH-002 ajouté au backlog)
+- Phase 7.1.27.5 Documentation Final Consolidation terminée
+- Phase 7.1.27.6 Documentation Synchronization terminée  
   Blocked  
   Aucun
 
@@ -1619,7 +1626,7 @@ Post-MVP Planning
 
 Latest completed phase
 
-7.1.26 Best Profile Recommendation Architecture Review
+7.1.27 Final Regression And Documentation
 
 Validation:
 
@@ -1690,13 +1697,13 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.26 Best Profile Recommendation Architecture Review
+7.1.27 Final Regression And Documentation
 
 Status:
 Completed
 
 Next Phase:
-7.1.27 Final Regression And Documentation
+7.1.28 MVP Closure Decision
 
 Status:
 Not Started
@@ -1733,11 +1740,11 @@ Known remaining improvements:
 - Advanced Skill Normalization
 - Experience Extraction Refinement
 
-Next Step:  
-7.1.27 Final Regression And Documentation
+Next Step:
+7.1.28 MVP Closure Decision
 Last Commits :
 
-- 17e7483 - feat(matching): centralize best matching profile tie-breaking in backend, remove duplicated frontend logic
-- 484b88f - docs: synchronize documentation after 7.1.25 Settings Strategy Synchronization closure (DEC-082)
-- ecf7e8e - chore(settings): remove temporary migration scripts from 7.1.25.3
-- 4760448 - fix(settings): add missing Authorization header on settings and saved-searches API calls
+- 14b25ce - docs: remove duplicated line in project-status.md
+- 928d8c6 - chore(auth): remove duplicated password validation block in register()
+- cf01341 - docs(backlog): add UX-004 explainability gap found during DEC-039 audit
+- 771a52a - docs(backlog): add TECH-002 for recurring unexplained console error

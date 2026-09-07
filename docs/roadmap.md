@@ -1536,11 +1536,70 @@ Décision retenue (voir DEC-082) :
   Commit technique :
 - 17e7483 - feat(matching): centralize best matching profile
   tie-breaking in backend, remove duplicated frontend logic
-  ⬜ 7.1.27 Final Regression And Documentation
-  ⬜ 7.1.28 MVP Closure Decision
-
-Statut global (7.1.24 à 7.1.28) :
-In Progress
+  ✅ 7.1.27 Final Regression And Documentation  
+  Objectif :
+  Valider l'ensemble du système avant la décision de clôture du MVP, au-delà
+  des seules phases récentes (7.1.24 à 7.1.26) : régression backend complète,
+  régression frontend manuelle sur tout le parcours applicatif, audit de
+  cohérence croisée des décisions structurantes (DEC-032, DEC-039, DEC-071,
+  DEC-081), et revue de la dette technique connue.  
+  Sous-phases :
+  ✅ 7.1.27.1 Full Backend Regression
+  ✅ 7.1.27.2 Full Frontend Manual Regression
+  ✅ 7.1.27.3 Cross-Cutting Consistency Audit
+  ✅ 7.1.27.4 Known Technical Debt Review
+  ✅ 7.1.27.5 Documentation Final Consolidation
+  ✅ 7.1.27.6 Documentation Synchronization  
+  Résultats 7.1.27.1 :
+- 352 tests backend confirmés passants, 0 régression  
+  Résultats 7.1.27.2 :
+- 2 bugs bloquants découverts et corrigés, spécifiques au parcours d'un
+  nouveau compte (non détectés par les tests automatisés, qui s'exécutent
+  toujours avec un compte déjà peuplé) :
+  - Remote Preference et Preferred Countries vides à la création du
+    premier profil d'un compte neuf (getWorkModes/getCountries chargés
+    uniquement si un profil existant était déjà sélectionné)
+  - double-soumission des propositions d'enrichissement CV via
+    "Back to Review" → "Apply Changes", provoquant des 400 en cascade
+    avec un message d'erreur trompeur ("skills not present in catalog"
+    au lieu de la vraie cause : propositions déjà ACCEPTED)  
+    Résultats 7.1.27.3 :
+- DEC-071 (Opportunity Context non persisté) validée : aucune trace de
+  persistance dans user_settings ni matching/service.py après 7.1.25/7.1.26
+- DEC-081 (isolation par utilisateur) validée exhaustivement sur les 17
+  routers réels du projet (recherche par APIRouter(), pas par nom de
+  fichier) ; 4 routers non nommés "router.py" découverts
+  (profile_skill_router.py, profile_soft_skill_router.py,
+  job_offer_skill_router.py, job_source_router.py), tous confirmés corrects
+- DEC-032 (aucun calcul de score frontend) validée : aucune occurrence
+  résiduelle après la suppression de bestProfileScore en 7.1.26.3
+- DEC-039 (scores explicables) : limitation UX identifiée sur le tableau
+  de comparaison multi-profils (UX-004, ajoutée au backlog, non bloquante)  
+  Résultats 7.1.27.4 :
+- duplication de code mort nettoyée dans auth/router.py register()
+  (bloc de validation dupliqué, dette connue depuis 7.1.23.16)
+- TECH-001, SETTINGS-004, UX-004, DATA-001 confirmés non-bloquants pour
+  la clôture MVP
+- ARCH-001 confirmé résolu (superseded by DEC-081)
+- TECH-002 ajouté au backlog : erreur console récurrente
+  (reportAllChanges) non résolue mais non-bloquante, cause non identifiée,
+  aucune régression fonctionnelle jamais associée  
+  Résultats 7.1.27.5 :
+- 7 documents relus intégralement et croisés
+- 1 doublon réel trouvé et corrigé dans project-status.md
+- 2 observations mineures notées, non bloquantes  
+  Validation finale :
+- 352 tests backend passants, 0 régression, sur l'ensemble de la phase
+- 2 bugs bloquants d'onboarding découverts et corrigés
+- 1 nettoyage de dette technique effectué
+- 2 entrées ajoutées au backlog post-MVP (TECH-002, UX-004)  
+  Commits techniques :
+- 928d8c6 - chore(auth): remove duplicated password validation block
+  in register()
+- (2 corrections frontend ProfilesPage.tsx et UploadCvModal.tsx)  
+   ⬜ 7.1.28 MVP Closure Decision
+  Statut global (7.1.24 à 7.1.28) :
+  In Progress
 
 ### Phase 7.2
 
