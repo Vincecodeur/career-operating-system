@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+from app.core.encryption import encrypt_secret
 from app.settings.models import SavedSearch
 from app.settings.models import UserSettings
 
@@ -246,6 +247,76 @@ class SettingsService:
         )
 
         self.db.commit()
+
+
+    def get_linkedin_email_settings(
+        self,
+        user_id: int,
+    ) -> dict:
+        settings = self._get_or_create_user_settings(
+            user_id
+        )
+
+        return {
+            "imap_host": (
+                settings.linkedin_email_imap_host
+            ),
+            "imap_port": (
+                settings.linkedin_email_imap_port
+            ),
+            "email_address": (
+                settings.linkedin_email_address
+            ),
+            "folder": (
+                settings.linkedin_email_folder
+            ),
+            "app_password_encrypted": (
+                settings.linkedin_email_app_password_encrypted
+            ),
+            "is_configured": (
+                settings.linkedin_email_app_password_encrypted
+                is not None
+            ),
+        }
+
+    def update_linkedin_email_settings(
+        self,
+        user_id: int,
+        payload: dict,
+    ) -> None:
+        settings = self._get_or_create_user_settings(
+            user_id
+        )
+
+        encrypted_password = encrypt_secret(
+            payload["app_password"]
+        )
+
+        if encrypted_password is None:
+            raise ValueError(
+                "LinkedIn email password could not be encrypted. "
+                "Check that LINKEDIN_EMAIL_ENCRYPTION_KEY is "
+                "configured correctly."
+            )
+
+        settings.linkedin_email_imap_host = payload[
+            "imap_host"
+        ]
+        settings.linkedin_email_imap_port = payload[
+            "imap_port"
+        ]
+        settings.linkedin_email_address = payload[
+            "email_address"
+        ]
+        settings.linkedin_email_app_password_encrypted = (
+            encrypted_password
+        )
+        settings.linkedin_email_folder = payload[
+            "folder"
+        ]
+
+        self.db.commit()
+
 
     def get_saved_searches(
         self,

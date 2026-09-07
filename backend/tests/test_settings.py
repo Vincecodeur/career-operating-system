@@ -423,3 +423,155 @@ def test_job_discovery_settings_are_isolated_between_users(
     assert other_settings["discovery_enabled"] is False
     assert other_settings["discovery_interval_minutes"] == 1440
     assert other_settings["discovery_connectors"] == []
+
+def test_get_linkedin_email_settings_returns_not_configured_by_default(
+    authenticated_headers,
+):
+    response = client.get(
+        "/settings/linkedin-email",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "imap_host" in data
+    assert "imap_port" in data
+    assert "email_address" in data
+    assert "folder" in data
+    assert "is_configured" in data
+
+    # app_password must never be exposed, in any form, encrypted or not
+    assert "app_password" not in data
+    assert "app_password_encrypted" not in data
+
+
+def test_update_linkedin_email_settings(authenticated_headers):
+    response = client.put(
+        "/settings/linkedin-email",
+        json={
+            "imap_host": "imap.gmail.com",
+            "imap_port": 993,
+            "email_address": "jobs-alerts@example.com",
+            "app_password": "fake-app-password-not-real",
+            "folder": "INBOX",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["imap_host"] == "imap.gmail.com"
+    assert data["imap_port"] == 993
+    assert data["email_address"] == "jobs-alerts@example.com"
+    assert data["folder"] == "INBOX"
+    assert data["is_configured"] is True
+
+    # the password itself must never come back, in any form
+    assert "app_password" not in data
+    assert "app_password_encrypted" not in data
+
+
+def test_linkedin_email_settings_never_expose_password_after_update(
+    authenticated_headers,
+):
+    update_response = client.put(
+        "/settings/linkedin-email",
+        json={
+            "imap_host": "imap.gmail.com",
+            "imap_port": 993,
+            "email_address": "jobs-alerts@example.com",
+            "app_password": "fake-app-password-not-real",
+            "folder": "INBOX",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert update_response.status_code == 200
+
+    get_response = client.get(
+        "/settings/linkedin-email",
+        headers=authenticated_headers,
+    )
+
+    assert get_response.status_code == 200
+
+    data = get_response.json()
+
+    assert data["is_configured"] is True
+    assert "app_password" not in data
+    assert "app_password_encrypted" not in data
+
+    response_text = get_response.text
+    assert "fake-app-password-not-real" not in response_text
+
+
+def test_linkedin_email_settings_are_isolated_between_users(
+    authenticated_headers,
+):
+    from app.auth.models import User
+    from app.auth.service import hash_password
+    from app.core.database import SessionLocal
+    from uuid import uuid4
+
+    update_response = client.put(
+        "/settings/linkedin-email",
+        json={
+            "imap_host": "imap.gmail.com",
+            "imap_port": 993,
+            "email_address": "primary-user@example.com",
+            "app_password": "fake-app-password-not-real",
+            "folder": "INBOX",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert update_response.status_code == 200
+
+    email = f"isolation-linkedin-email-{uuid4()}@career-os.local"
+    password = "IsolationTestPassword123!"
+
+    db = SessionLocal()
+
+    try:
+        second_user = User(
+            email=email,
+            hashed_password=hash_password(password),
+            is_active=True,
+        )
+
+        db.add(second_user)
+        db.commit()
+    finally:
+        db.close()
+
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": email,
+            "password": password,
+        },
+    )
+
+    assert login_response.status_code == 200
+
+    second_access_token = login_response.json()["access_token"]
+
+    second_headers = {
+        "Authorization": f"Bearer {second_access_token}",
+    }
+
+    second_get_response = client.get(
+        "/settings/linkedin-email",
+        headers=second_headers,
+    )
+
+    assert second_get_response.status_code == 200
+
+    second_data = second_get_response.json()
+
+    assert second_data["is_configured"] is False
+    assert second_data["email_address"] is None

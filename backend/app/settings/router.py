@@ -20,6 +20,12 @@ from app.settings.schemas import (
 from app.settings.schemas import (
     JobDiscoverySettingsUpdate,
 )
+from app.settings.schemas import (
+    LinkedInEmailSettingsResponse,
+)
+from app.settings.schemas import (
+    LinkedInEmailSettingsUpdate,
+)
 from app.settings.schemas import SavedSearch
 from app.settings.schemas import SavedSearchCreate
 from app.settings.schemas import (
@@ -243,3 +249,61 @@ def delete_saved_search(
             status_code=404,
             detail="Saved search not found.",
         ) from exc
+
+
+@router.get(
+    "/settings/linkedin-email",
+    response_model=LinkedInEmailSettingsResponse,
+)
+def get_linkedin_email_settings(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    service = SettingsService(db)
+
+    result = service.get_linkedin_email_settings(
+        current_user.id
+    )
+
+    return LinkedInEmailSettingsResponse(
+        imap_host=result["imap_host"],
+        imap_port=result["imap_port"],
+        email_address=result["email_address"],
+        folder=result["folder"],
+        is_configured=result["is_configured"],
+    )
+
+
+@router.put(
+    "/settings/linkedin-email",
+    response_model=LinkedInEmailSettingsResponse,
+)
+def update_linkedin_email_settings(
+    payload: LinkedInEmailSettingsUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    service = SettingsService(db)
+
+    try:
+        service.update_linkedin_email_settings(
+            current_user.id,
+            payload.model_dump(),
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=500,
+            detail=str(error),
+        )
+
+    result = service.get_linkedin_email_settings(
+        current_user.id
+    )
+
+    return LinkedInEmailSettingsResponse(
+        imap_host=result["imap_host"],
+        imap_port=result["imap_port"],
+        email_address=result["email_address"],
+        folder=result["folder"],
+        is_configured=result["is_configured"],
+    )

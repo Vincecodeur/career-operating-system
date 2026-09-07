@@ -135,6 +135,57 @@ class AISettingsUpdate(
 
         return self
 
+class LinkedInEmailSettingsResponse(
+    BaseModel,
+):
+    """
+    Represents the persisted LinkedIn email connector configuration.
+
+    The app_password is never exposed here, neither in clear nor
+    encrypted. is_configured indicates whether a password is
+    currently stored, without revealing anything about its value.
+    """
+
+    imap_host: str | None
+
+    imap_port: int | None
+
+    email_address: str | None
+
+    folder: str
+
+    is_configured: bool
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
+class LinkedInEmailSettingsUpdate(
+    BaseModel,
+):
+    """
+    Represents an explicit LinkedIn email connector configuration
+    update.
+
+    app_password is received in clear over HTTPS and encrypted before
+    being persisted. It is never logged and never echoed back by the
+    API.
+    """
+
+    imap_host: str
+
+    imap_port: int
+
+    email_address: str
+
+    app_password: str
+
+    folder: str = "INBOX"
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
 
 class SavedSearch(
     BaseModel,
