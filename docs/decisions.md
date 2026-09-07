@@ -3524,6 +3524,10 @@ Le MVP Application Workflow inclut :
 
 Date: 2026-08-18
 Status: Accepted
+Superseded by: DEC-082 (Settings Strategy Per-User Migration,
+2026-09-07) - the application_settings table described below was
+replaced by user_settings and saved_searches. This entry is preserved
+for historical traceability.
 
 ### Context
 
@@ -5653,3 +5657,107 @@ Manual end-to-end validation was performed with two real accounts
 (maw282003@gmail.com and a second test account), confirming zero data
 leakage in both directions across all domains, including the Dashboard,
 Profiles list, and Applications list.
+
+## DEC-082 - Settings Strategy Per-User Migration
+
+Date: 2026-09-07
+Status: Implemented
+
+#### Context
+
+DEC-081 established user_id ownership on Profile and its cascading
+relationships. The 7.1.25.1 repository audit revealed that
+ApplicationSetting, the EAV-style table backing the entire Settings
+domain (Job Discovery, Search Criteria, Discovery Preferences, AI
+Features/Consent, Saved Searches), had no user_id column and no
+filtering anywhere in the call chain (SettingsService, settings router,
+AIContextService). This meant every account shared the exact same
+Settings values, including AI consent - directly contradicting DEC-078,
+which requires explicit per-person consent before AI features can be
+enabled.
+
+#### Decision
+
+Rather than adding a minimal user_id column to the existing EAV table
+(Option A), the EAV pattern itself is abandoned in favor of two typed
+tables (Option B), for long-term cleanliness over short-term speed:
+
+- user_settings: one row per user, with typed columns for every Job
+  Discovery, Search Criteria, Discovery Preferences and AI setting
+- saved_searches: a real one-to-many relation to users, replacing the
+  JSON blob previously stored inside ApplicationSetting.setting_value
+  (VARCHAR(2000), a known troncation risk per SETTINGS-004)
+
+ApplicationSetting is deleted once the new tables are populated and
+validated.
+
+#### Profile.preferred_countries Remains Distinct From search_preferred_countries
+
+These two fields are explicitly not merged. Profile.preferred_countries
+is a preference declared per candidate profile. search_preferred_countries
+is a search filter active at the account level, consumed by the Job
+Discovery pipeline. Because DEC-071 (Multi Profile Opportunity Context)
+allows several profiles to be active simultaneously with potentially
+different preferred_countries values, no consistent 1:1 mapping exists
+between a single account-level search filter and multiple profile-level
+preferences. Merging them would introduce ambiguity contrary to DEC-071.
+
+#### Implementation Order
+
+The schema was designed and migrated in a single pass, consistent with
+the Option B choice (no incremental EAV patching). Router-level
+implementation was sequenced with AI Settings first, since it was the
+only domain contradicting an already-accepted product decision (DEC-078).
+Job Discovery, Search Criteria, Discovery Preferences and Saved Searches
+followed.
+
+#### Data Migration Executed
+
+One real settings row existed in production (Job Discovery connectors:
+france_travail, greenhouse; Search Criteria: FR/BE/NL, Remote/Hybrid,
+included/excluded keywords; AI features enabled with consent accepted).
+It was migrated to maw282003@gmail.com with zero data loss. Zero saved
+searches existed, confirmed by a preliminary audit before any schema
+change, eliminating any JSON truncation risk during migration.
+
+#### Frontend Gap Discovered During Validation
+
+Manual end-to-end validation (navigating to the Settings page) revealed
+that 11 frontend functions in api.ts (all Job Discovery, Search Criteria,
+Discovery Preferences, AI Settings and Saved Searches calls) had never
+received the Authorization header. This was not a regression from this
+decision; these endpoints were still public at the time of the original
+7.1.24.5 frontend review, since ApplicationSetting had no user_id yet.
+Securing the backend in 7.1.25 without revisiting the frontend created a
+silent failure: the Settings page remained stuck on "Loading..." because
+a single 401 response broke the underlying Promise.all in loadSettings().
+This was not caught by the automated test suite, since backend tests
+call endpoints directly with an explicit authenticated_headers fixture,
+bypassing the frontend API client entirely. The gap was found only
+through manual browser validation and corrected across all 11 functions.
+
+#### Duplicate Test File Discovered
+
+A pre-existing tests/test_ai_settings.py file, not identified during the
+7.1.25.1 audit, exercised the same /settings/ai endpoints already
+covered by the newly created tests/test_settings.py, using the obsolete
+ApplicationSetting import. Four test cases unique to that file (consent
+revocation on disable, consent-without-features rejection, missing
+field rejection, strict response contract) were merged into
+test_settings.py before the duplicate file was removed, to avoid losing
+test coverage while eliminating the redundant file.
+
+#### Validation
+
+348 backend tests passing (up from 337 pre-DEC-082), including new
+cross-domain isolation tests for AI Settings, Job Discovery Settings and
+Saved Searches. Manual end-to-end validation confirmed correct
+persistence and isolation between two real accounts after the frontend
+fix was applied.
+
+#### Related Decisions
+
+- DEC-067 - Settings Persistence Strategy (superseded by this decision)
+- DEC-071 - Multi Profile Opportunity Context
+- DEC-078 - AI Context Preview And Consent
+- DEC-081 - User Data Ownership And Isolation

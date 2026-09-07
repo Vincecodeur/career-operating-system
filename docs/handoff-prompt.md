@@ -937,6 +937,7 @@ Des tests existent pour :
 - Phase 7.1.23.15 Authentication Learning Features
 - Phase 7.1.23.16 Minimal Account UX Polish
 - Phase 7.1.24 User Data Ownership And Isolation
+- Phase 7.1.25 Settings Strategy Synchronization
 
 ## Derniers commits importants
 
@@ -1186,10 +1187,10 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-b8e23eb - fix(cv): replace direct download link with authenticated fetch+blob download  
+ecf7e8e - chore(settings): remove temporary migration scripts from 7.1.25.3  
 Latest backend validation:
 
-- 337 backend tests passed, 0 regressions  
+- 348 backend tests passed, 0 regressions
   Current state:
 - Phase 7.1.23.15 Authentication Learning Features CLOSED
 - Phase 7.1.23.16 Minimal Account UX Polish CLOSED
@@ -1202,25 +1203,27 @@ Latest backend validation:
   the original DEC-081 audit, not identified in 7.1.24.1)
 - real data leak fixed in calculate_profile_scores_for_job_offer
   (previously returned all profiles across all accounts)
-- frontend api.ts updated with a centralized Authorization header helper
 - CV download flow fixed (fetch+blob instead of a direct browser link,
   which cannot carry an Authorization header)
 - 10 real demo profiles migrated to the primary account with zero data
   loss (69 Applications, 12 CVs preserved)
-- manual end-to-end validation completed with two real accounts, no data
-  leakage confirmed in either direction
-- Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)
-
-Next Step:  
-7.1.25 Settings Strategy Synchronization  
-Key points before starting:
-
-- Profile.preferred_countries and ApplicationSetting search_preferred_countries
-  are currently duplicated without synchronization
-- SavedSearch is currently stored as a JSON blob inside ApplicationSetting,
-  limited to 2000 characters
-- ApplicationSetting now has a real user_id available for the unique
-  constraint change (unique(user_id, setting_key))
+- Phase 7.1.25 Settings Strategy Synchronization CLOSED (DEC-082)
+- ApplicationSetting (EAV pattern) replaced by user_settings and
+  saved_searches (typed tables, per-user)
+- Profile.preferred_countries and search_preferred_countries kept
+  distinct by design, not merged (see DEC-082)
+- AI Settings migrated first, resolving a contradiction with DEC-078
+- 1 real settings row migrated with zero data loss, 0 saved searches
+  existed
+- frontend api.ts updated with a centralized Authorization header helper
+  across all newly-secured endpoints, including 11 Settings/Saved Searches
+  functions missed during a first pass, discovered only through manual
+  end-to-end validation
+- application_settings table dropped after full validation
+- 348 backend tests passing, 0 regressions
+- Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)  
+  Next required step:
+  7.1.26 Best Profile Recommendation Architecture Review
 
 ## Méthode de reprise
 

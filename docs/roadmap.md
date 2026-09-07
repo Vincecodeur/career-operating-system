@@ -1450,28 +1450,55 @@ Hors périmètre :
 - MATCHING-002 Configurable Matching Weights (reste hors MVP)
 - AUTH-001/002/003 MFA, OAuth, SSO (restent post-MVP)
 
-⬜ 7.1.25 Settings Strategy Synchronization
-
+✅ 7.1.25 Settings Strategy Synchronization  
 Objectif :
 S'assurer que tous les paramètres utilisateur sont cohérents entre Frontend,
 Backend, PostgreSQL et documentation, désormais avec un vrai user_id
-disponible sur Profile et ApplicationSetting.
+disponible sur Profile.  
+Décision retenue (voir DEC-082) :
 
-Décisions actées (à mettre en oeuvre une fois 7.1.24 terminé) :
-
-- fusionner Profile.preferred_countries et
-  ApplicationSetting["search_preferred_countries"] (actuellement dupliqués
-  sans synchronisation)
-- créer une vraie table saved_searches (actuellement stockée en JSON blob
-  dans ApplicationSetting.setting_value, limité à 2000 caractères)
-- discovery_minimum_matching_score devient une préférence par utilisateur
-
-Livrable attendu :
-docs/settings-strategy.md
-
-⬜ 7.1.26 Best Profile Recommendation Architecture Review
-⬜ 7.1.27 Final Regression And Documentation
-⬜ 7.1.28 MVP Closure Decision
+- Option B : abandon du pattern EAV (ApplicationSetting) au profit de deux
+  tables typées, user_settings et saved_searches
+- Profile.preferred_countries et search_preferred_countries restent
+  distincts (pas de fusion), car ils représentent deux concepts différents :
+  une préférence déclarée par profil candidat versus un filtre de recherche
+  actif à l'échelle du compte (cohérent avec DEC-071 Multi Profile
+  Opportunity Context)
+- saved_searches devient une vraie table relationnelle (1 ligne par
+  recherche sauvegardée), abandon du JSON blob limité à 2000 caractères
+- discovery_minimum_matching_score devient une colonne per-user sur
+  user_settings  
+  Sous-phases :
+  ✅ 7.1.25.1 Repository Audit
+  ✅ 7.1.25.2 Product Design (docs/settings-strategy.md)
+  ✅ 7.1.25.3 Implementation
+  ✅ 7.1.25.4 Documentation Synchronization  
+  Validation réalisée :
+- 348 tests backend passants, 0 régression (337 + 19 nouveaux tests
+  Settings/Saved Searches - 8 tests de l'ancien test_ai_settings.py fusionné)
+- AI Settings migré en priorité (seul point contredisant DEC-078,
+  consentement partagé entre comptes avant cette migration)
+- 1 ligne de settings réelle migrée vers maw282003@gmail.com sans perte
+  de données (connecteurs, pays, mots-clés, work modes, AI consent)
+- 0 saved search existante à migrer (confirmé par audit préalable)
+- ancienne table application_settings supprimée après validation complète
+- bug découvert et corrigé : 11 fonctions frontend (api.ts) n'envoyaient
+  pas le header Authorization vers les endpoints Settings nouvellement
+  sécurisés, causant un blocage silencieux de la page Settings (Promise.all
+  échouant sur le premier 401) ; découvert lors de la validation manuelle,
+  non lors des tests automatisés
+- isolation manuelle validée entre deux comptes réels sur Job Discovery
+  Settings et AI Settings
+- scripts de migration temporaires retirés du repository après usage  
+  Commits techniques :
+- 56229f2 - feat(settings): migrate application_settings to per-user
+  tables (user_settings, saved_searches), abandoning EAV pattern
+- 4760448 - fix(settings): add missing Authorization header on settings
+  and saved-searches API calls
+- ecf7e8e - chore(settings): remove temporary migration scripts  
+  ⬜ 7.1.26 Best Profile Recommendation Architecture Review
+  ⬜ 7.1.27 Final Regression And Documentation
+  ⬜ 7.1.28 MVP Closure Decision
 
 Statut global (7.1.24 à 7.1.28) :
 In Progress

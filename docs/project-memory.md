@@ -591,9 +591,35 @@ Known technical debt (not blocking):
   12 CVs preserved)
 - manual end-to-end validation performed with two real accounts,
   confirming no data leakage in either direction
-- Phase 7.1.24 CLOSED  
-  Remaining:
-- Settings Strategy Synchronization (7.1.25)
+  Phase 7.1.24 CLOSED
+
+Settings Strategy Synchronization results (7.1.25):
+
+- ApplicationSetting (EAV pattern) replaced by two typed tables:
+  user_settings (one row per user) and saved_searches (real 1-N relation)
+- Profile.preferred_countries and search_preferred_countries kept
+  distinct by design (not merged), consistent with DEC-071 allowing
+  several active profiles with potentially different preferences
+- AI Settings migrated first, resolving a direct contradiction with
+  DEC-078 (per-person consent was previously shared across all accounts)
+- one real settings row migrated to maw282003@gmail.com with zero data
+  loss (connectors, countries, keywords, work modes, AI consent)
+- zero saved searches existed, confirmed by audit before any schema
+  change
+- 348 backend tests passing, 0 regressions
+- application_settings table dropped after full validation
+- frontend gap discovered during manual validation (not caught by
+  automated tests): 11 functions in api.ts lacked the Authorization
+  header for newly-secured Settings endpoints, causing the Settings page
+  to hang indefinitely on "Loading..." - corrected across all 11 functions
+- pre-existing tests/test_ai_settings.py (using the obsolete
+  ApplicationSetting import) discovered and merged into the new
+  test_settings.py, preserving 4 unique test cases before removal
+- temporary migration scripts removed from the repository after use
+- Phase 7.1.25 CLOSED
+
+Remaining:
+
 - Best Profile Recommendation Architecture Review (7.1.26)
 - Final Regression And Documentation (7.1.27)
 - MVP Closure Decision (7.1.28)

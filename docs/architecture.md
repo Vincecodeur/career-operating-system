@@ -218,17 +218,28 @@ Connector selection uses a controlled multi-select UI.
 
 Implémenté :
 
-- ApplicationSetting
-- SettingsService
+- UserSettings (table dédiée, une ligne par utilisateur)
+- SavedSearch (table dédiée, relation 1-N vers users)
+- SettingsService (accès direct aux colonnes typées, per-user)
 - GET /settings/job-discovery
 - PUT /settings/job-discovery
 - GET /settings/search-criteria
 - PUT /settings/search-criteria
+- GET /settings/discovery-preferences
+- PUT /settings/discovery-preferences
 - GET /settings/ai
 - PUT /settings/ai
-
-AI Settings utilisent les clés suivantes dans ApplicationSetting :
-
+- GET /settings/saved-searches
+- POST /settings/saved-searches
+- DELETE /settings/saved-searches/{id}  
+  Note d'architecture (DEC-082) :
+  Le domaine Settings a abandonné le pattern EAV (ApplicationSetting) au
+  profit de deux tables typées. Tous les paramètres (Job Discovery, Search
+  Criteria, Discovery Preferences, AI Features/Consent) sont désormais
+  per-user, rattachés via user_id (NOT NULL, UNIQUE sur UserSettings).
+  Profile.preferred_countries reste volontairement distinct de
+  search_preferred_countries (voir DEC-082).  
+  AI Settings utilisent les colonnes suivantes sur UserSettings :
 - ai_features_enabled ;
 - ai_consent_accepted.
 

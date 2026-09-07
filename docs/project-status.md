@@ -19,18 +19,18 @@ main
 ---
 
 Current Milestone
-7.1.24 User Data Ownership And Isolation
+7.1.25 Settings Strategy Synchronization
 
 ---
 
 Current Phase
-7.1.24.7 Documentation Synchronization
+7.1.25.4 Documentation Synchronization
 
 Current Step
 Completed
 
 Next Planned Milestone
-7.1.25 Settings Strategy Synchronization
+7.1.26 Best Profile Recommendation Architecture Review
 
 ---
 
@@ -1578,6 +1578,24 @@ Post-MVP Planning
 - isolation manuelle validée entre deux comptes réels
 - bug de téléchargement CV découvert et corrigé (fetch+blob authentifié)
 - Phase 7.1.24.7 Documentation Synchronization terminée
+- Phase 7.1.24.7 Documentation Synchronization terminée
+- Phase 7.1.25.1 Repository Audit terminée (ApplicationSetting sans
+  user_id confirmé, aucun filtrage nulle part dans la chaîne)
+- Phase 7.1.25.2 Product Design terminée (docs/settings-strategy.md,
+  DEC-082)
+- Phase 7.1.25.3 Implementation terminée
+- UserSettings et SavedSearch créées, remplacement complet du pattern EAV
+- AI Settings migré en priorité (résout la contradiction avec DEC-078)
+- 1 ligne de settings réelle migrée sans perte de données
+- 0 saved search à migrer (confirmé par audit préalable)
+- application_settings supprimée après validation complète
+- 348 tests backend passants, 0 régression
+- bug frontend découvert et corrigé : 11 fonctions api.ts sans header
+  Authorization vers les endpoints Settings nouvellement sécurisés
+- fichier test_ai_settings.py obsolète fusionné dans test_settings.py
+  (4 cas de test uniques préservés) puis supprimé
+- scripts de migration temporaires retirés du repository
+- Phase 7.1.25.4 Documentation Synchronization terminée
 
 Blocked
 
@@ -1587,7 +1605,7 @@ Aucun
 
 Latest completed phase
 
-7.1.24 User Data Ownership And Isolation
+7.1.25 Settings Strategy Synchronization
 
 Validation:
 
@@ -1658,13 +1676,13 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.24 User Data Ownership And Isolation
+7.1.25 Settings Strategy Synchronization
 
 Status:
 Completed
 
 Next Phase:
-7.1.25 Settings Strategy Synchronization
+7.1.26 Best Profile Recommendation Architecture Review
 
 Status:
 Not Started
@@ -1702,10 +1720,10 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:  
-7.1.25 Settings Strategy Synchronization  
+7.1.26 Best Profile Recommendation Architecture Review
 Last Commits :
 
+- ecf7e8e - chore(settings): remove temporary migration scripts from 7.1.25.3
+- 4760448 - fix(settings): add missing Authorization header on settings and saved-searches API calls
+- 56229f2 - feat(settings): migrate application_settings to per-user tables (user_settings, saved_searches), abandoning EAV pattern
 - b8e23eb - fix(cv): replace direct download link with authenticated fetch+blob download
-- 7b22d2d - feat(ai,matching): secure ai-context and matching routers with ownership checks; add Authorization header to frontend API client
-- 411d77b - fix(tests): restore missing test cases in profile skills and languages test suites
-- 63ee13b - feat(profile): enforce NOT NULL constraint on user_id and migrate orphan test fixtures
