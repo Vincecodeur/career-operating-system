@@ -1060,8 +1060,11 @@ export type Profile = {
 
 export async function getJobDiscoverySettings(
 ): Promise<JobDiscoverySettings> {
-    const response = await fetch(
-        `${API_BASE_URL}/settings/job-discovery`
+        const response = await fetch(
+        `${API_BASE_URL}/settings/job-discovery`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1076,12 +1079,13 @@ export async function getJobDiscoverySettings(
 export async function updateJobDiscoverySettings(
     payload: JobDiscoverySettings,
 ): Promise<JobDiscoverySettings> {
-    const response = await fetch(
+        const response = await fetch(
         `${API_BASE_URL}/settings/job-discovery`,
         {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1098,8 +1102,11 @@ export async function updateJobDiscoverySettings(
 
 export async function getSearchCriteriaSettings(
 ): Promise<SearchCriteriaSettings> {
-    const response = await fetch(
-        `${API_BASE_URL}/settings/search-criteria`
+        const response = await fetch(
+        `${API_BASE_URL}/settings/search-criteria`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1114,12 +1121,13 @@ export async function getSearchCriteriaSettings(
 export async function updateSearchCriteriaSettings(
     payload: SearchCriteriaSettings,
 ): Promise<SearchCriteriaSettings> {
-    const response = await fetch(
+        const response = await fetch(
         `${API_BASE_URL}/settings/search-criteria`,
         {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1136,8 +1144,11 @@ export async function updateSearchCriteriaSettings(
 
 export async function getDiscoveryPreferencesSettings(
 ): Promise<DiscoveryPreferencesSettings> {
-    const response = await fetch(
-        `${API_BASE_URL}/settings/discovery-preferences`
+        const response = await fetch(
+        `${API_BASE_URL}/settings/discovery-preferences`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1151,8 +1162,11 @@ export async function getDiscoveryPreferencesSettings(
 
 export async function getAISettings(
 ): Promise<AISettings> {
-    const response = await fetch(
-        `${API_BASE_URL}/settings/ai`
+        const response = await fetch(
+        `${API_BASE_URL}/settings/ai`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1167,12 +1181,13 @@ export async function getAISettings(
 export async function updateAISettings(
     payload: AISettingsUpdate,
 ): Promise<AISettings> {
-    const response = await fetch(
+        const response = await fetch(
         `${API_BASE_URL}/settings/ai`,
         {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1219,12 +1234,13 @@ export async function getAIContextPreview(
 export async function updateDiscoveryPreferencesSettings(
     payload: DiscoveryPreferencesSettings,
 ): Promise<DiscoveryPreferencesSettings> {
-    const response = await fetch(
+        const response = await fetch(
         `${API_BASE_URL}/settings/discovery-preferences`,
         {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1242,7 +1258,10 @@ export async function updateDiscoveryPreferencesSettings(
 export async function getSavedSearches(
 ): Promise<SavedSearch[]> {
     const response = await fetch(
-        `${API_BASE_URL}/settings/saved-searches`
+        `${API_BASE_URL}/settings/saved-searches`,
+        {
+            headers: getAuthHeaders(),
+        },
     );
 
     if (!response.ok) {
@@ -1263,6 +1282,7 @@ export async function createSavedSearch(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                ...getAuthHeaders(),
             },
             body: JSON.stringify(payload),
         },
@@ -1284,6 +1304,7 @@ export async function deleteSavedSearch(
         `${API_BASE_URL}/settings/saved-searches/${savedSearchId}`,
         {
             method: "DELETE",
+            headers: getAuthHeaders(),
         },
     );
 
