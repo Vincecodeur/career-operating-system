@@ -9,6 +9,9 @@ from app.jobs.connectors.france_travail_connector import (
 from app.jobs.connectors.linkedin_connector import (
     LinkedInConnector,
 )
+from app.jobs.connectors.linkedin_email_connector import (
+    LinkedInEmailConnector,
+)
 from app.jobs.connectors.mock_source_connector import (
     MockSourceConnector,
 )
@@ -17,7 +20,7 @@ from app.jobs.connectors.mock_source_connector import (
 def test_registry_returns_all_connectors():
     connectors = ConnectorRegistry.get_connectors()
 
-    assert len(connectors) == 4
+    assert len(connectors) == 5
 
 
 def test_registry_contains_mock_connector():
@@ -47,6 +50,16 @@ def test_registry_contains_linkedin_connector():
     )
 
 
+def test_registry_contains_linkedin_email_connector():
+    connectors = ConnectorRegistry.get_connectors()
+
+    assert "linkedin_email" in connectors
+    assert (
+        connectors["linkedin_email"]
+        is LinkedInEmailConnector
+    )
+
+
 def test_get_connector_returns_mock_connector():
     connector_class = ConnectorRegistry.get_connector(
         "mock"
@@ -69,6 +82,14 @@ def test_get_connector_returns_linkedin_connector():
     )
 
     assert connector_class is LinkedInConnector
+
+
+def test_get_connector_returns_linkedin_email_connector():
+    connector_class = ConnectorRegistry.get_connector(
+        "linkedin_email"
+    )
+
+    assert connector_class is LinkedInEmailConnector
 
 
 def test_get_connector_raises_for_unknown_connector():

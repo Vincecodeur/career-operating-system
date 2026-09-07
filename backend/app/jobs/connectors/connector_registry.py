@@ -4,6 +4,9 @@ from app.jobs.connectors.france_travail_connector import (
 from app.jobs.connectors.linkedin_connector import (
     LinkedInConnector,
 )
+from app.jobs.connectors.linkedin_email_connector import (
+    LinkedInEmailConnector,
+)
 from app.jobs.connectors.mock_source_connector import (
     MockSourceConnector,
 )
@@ -27,6 +30,7 @@ class ConnectorRegistry:
             "mock": MockSourceConnector,
             "france_travail": FranceTravailConnector,
             "linkedin": LinkedInConnector,
+            "linkedin_email": LinkedInEmailConnector,
             "greenhouse": GreenhouseConnector,
         }
 
