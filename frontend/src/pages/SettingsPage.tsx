@@ -12,6 +12,9 @@ import {
   getAISettings,
   updateAISettings,
   type AISettings,
+  getLinkedInEmailSettings,
+  updateLinkedInEmailSettings,
+  type LinkedInEmailSettings,
   getCountries,
   getJobDiscoverySettings,
   getSearchCriteriaSettings,
@@ -129,6 +132,24 @@ export function SettingsPage() {
 
   const [aiSettings, setAISettings] = useState<AISettings | null>(null);
 
+  const [linkedInEmailSettings, setLinkedInEmailSettings] =
+    useState<LinkedInEmailSettings | null>(null);
+
+  const [linkedInEmailFormValues, setLinkedInEmailFormValues] = useState({
+    imap_host: "",
+    imap_port: 993,
+    email_address: "",
+    app_password: "",
+    folder: "INBOX",
+  });
+
+  const [isSavingLinkedInEmailSettings, setIsSavingLinkedInEmailSettings] =
+    useState(false);
+
+  const [linkedInEmailSettingsError, setLinkedInEmailSettingsError] = useState<
+    string | null
+  >(null);
+
   const [isAIConsentDialogOpen, setIsAIConsentDialogOpen] = useState(false);
 
   const [isSavingAISettings, setIsSavingAISettings] = useState(false);
@@ -163,6 +184,7 @@ export function SettingsPage() {
       criteriaSettings,
       discoveryPreferencesSettings,
       aiSettingsData,
+      linkedInEmailSettingsData,
       countryOptions,
       workModeOptions,
     ] = await Promise.all([
@@ -170,12 +192,22 @@ export function SettingsPage() {
       getSearchCriteriaSettings(),
       getDiscoveryPreferencesSettings(),
       getAISettings(),
+      getLinkedInEmailSettings(),
       getCountries(),
       getWorkModes(),
     ]);
 
     setDiscoveryPreferences(discoveryPreferencesSettings);
     setAISettings(aiSettingsData);
+    setLinkedInEmailSettings(linkedInEmailSettingsData);
+
+    setLinkedInEmailFormValues({
+      imap_host: linkedInEmailSettingsData.imap_host ?? "",
+      imap_port: linkedInEmailSettingsData.imap_port ?? 993,
+      email_address: linkedInEmailSettingsData.email_address ?? "",
+      app_password: "",
+      folder: linkedInEmailSettingsData.folder,
+    });
 
     setSettings(discoverySettings);
 
@@ -446,7 +478,45 @@ export function SettingsPage() {
     }
   }
 
-  if (!settings || !searchCriteria || !discoveryPreferences || !aiSettings) {
+  async function saveLinkedInEmailSettings() {
+    setIsSavingLinkedInEmailSettings(true);
+    setLinkedInEmailSettingsError(null);
+    setMessage("");
+
+    try {
+      const updated = await updateLinkedInEmailSettings(
+        linkedInEmailFormValues,
+      );
+
+      setLinkedInEmailSettings(updated);
+
+      setLinkedInEmailFormValues({
+        imap_host: updated.imap_host ?? "",
+        imap_port: updated.imap_port ?? 993,
+        email_address: updated.email_address ?? "",
+        app_password: "",
+        folder: updated.folder,
+      });
+
+      setMessage("LinkedIn email settings saved successfully.");
+    } catch (error) {
+      setLinkedInEmailSettingsError(
+        error instanceof Error
+          ? error.message
+          : "Unable to save LinkedIn email settings.",
+      );
+    } finally {
+      setIsSavingLinkedInEmailSettings(false);
+    }
+  }
+
+  if (
+    !settings ||
+    !searchCriteria ||
+    !discoveryPreferences ||
+    !aiSettings ||
+    !linkedInEmailSettings
+  ) {
     return (
       <>
         <PageHeader
@@ -891,6 +961,143 @@ export function SettingsPage() {
             {aiSettingsError && (
               <p className="text-sm text-red-400">{aiSettingsError}</p>
             )}
+          </div>
+        </Card>
+
+        <Card>
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-white">
+              LinkedIn Email Connector
+            </h2>
+
+            <p className="text-sm text-slate-400">
+              LinkedIn does not offer a public API for job search, and scraping
+              its website is against its terms of use. This connector reads
+              LinkedIn job alert emails from a dedicated mailbox via IMAP
+              instead.
+            </p>
+
+            <div className="rounded-lg border border-slate-700 bg-slate-950 p-4">
+              <p className="text-sm text-slate-400">Status</p>
+
+              <p className="mt-2 font-semibold text-white">
+                {linkedInEmailSettings.is_configured
+                  ? "Configured"
+                  : "Not configured"}
+              </p>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                IMAP Host
+              </label>
+
+              <input
+                type="text"
+                value={linkedInEmailFormValues.imap_host}
+                placeholder="imap.gmail.com"
+                onChange={(event) =>
+                  setLinkedInEmailFormValues({
+                    ...linkedInEmailFormValues,
+                    imap_host: event.target.value,
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                IMAP Port
+              </label>
+
+              <input
+                type="number"
+                value={linkedInEmailFormValues.imap_port}
+                onChange={(event) =>
+                  setLinkedInEmailFormValues({
+                    ...linkedInEmailFormValues,
+                    imap_port: Number(event.target.value),
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                value={linkedInEmailFormValues.email_address}
+                placeholder="jobs-alerts@example.com"
+                onChange={(event) =>
+                  setLinkedInEmailFormValues({
+                    ...linkedInEmailFormValues,
+                    email_address: event.target.value,
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                App Password
+              </label>
+
+              <input
+                type="password"
+                value={linkedInEmailFormValues.app_password}
+                placeholder={
+                  linkedInEmailSettings.is_configured
+                    ? "Configured. Leave empty to keep the current password."
+                    : "Enter an app password"
+                }
+                onChange={(event) =>
+                  setLinkedInEmailFormValues({
+                    ...linkedInEmailFormValues,
+                    app_password: event.target.value,
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">
+                IMAP Folder
+              </label>
+
+              <input
+                type="text"
+                value={linkedInEmailFormValues.folder}
+                onChange={(event) =>
+                  setLinkedInEmailFormValues({
+                    ...linkedInEmailFormValues,
+                    folder: event.target.value,
+                  })
+                }
+                className="w-full rounded border border-slate-700 bg-slate-800 p-2 text-white"
+              />
+            </div>
+
+            {linkedInEmailSettingsError && (
+              <p className="text-sm text-red-400">
+                {linkedInEmailSettingsError}
+              </p>
+            )}
+
+            <button
+              onClick={saveLinkedInEmailSettings}
+              disabled={isSavingLinkedInEmailSettings}
+              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-500">
+              {isSavingLinkedInEmailSettings
+                ? "Saving..."
+                : "Save LinkedIn Email Settings"}
+            </button>
           </div>
         </Card>
 

@@ -994,6 +994,22 @@ export type AISettingsUpdate = {
     ai_consent_accepted: boolean;
 };
 
+export type LinkedInEmailSettings = {
+    imap_host: string | null;
+    imap_port: number | null;
+    email_address: string | null;
+    folder: string;
+    is_configured: boolean;
+};
+
+export type LinkedInEmailSettingsUpdate = {
+    imap_host: string;
+    imap_port: number;
+    email_address: string;
+    app_password: string;
+    folder: string;
+};
+
 export type AIContextPreview = {
     profile_id: number;
     is_ai_ready: boolean;
@@ -1199,6 +1215,47 @@ export async function updateAISettings(
                 response,
                 "Unable to update AI settings.",
             ),
+        );
+    }
+
+    return response.json();
+}
+
+export async function getLinkedInEmailSettings(): Promise<LinkedInEmailSettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/linkedin-email`,
+        {
+            headers: getAuthHeaders(),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load LinkedIn email settings."
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateLinkedInEmailSettings(
+    payload: LinkedInEmailSettingsUpdate,
+): Promise<LinkedInEmailSettings> {
+    const response = await fetch(
+        `${API_BASE_URL}/settings/linkedin-email`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                ...getAuthHeaders(),
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to update LinkedIn email settings."
         );
     }
 

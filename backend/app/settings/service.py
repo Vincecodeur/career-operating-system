@@ -288,16 +288,27 @@ class SettingsService:
             user_id
         )
 
-        encrypted_password = encrypt_secret(
-            payload["app_password"]
-        )
+        submitted_password = payload["app_password"]
 
-        if encrypted_password is None:
-            raise ValueError(
-                "LinkedIn email password could not be encrypted. "
-                "Check that LINKEDIN_EMAIL_ENCRYPTION_KEY is "
-                "configured correctly."
+        if submitted_password:
+            encrypted_password = encrypt_secret(
+                submitted_password
             )
+
+            if encrypted_password is None:
+                raise ValueError(
+                    "LinkedIn email password could not be encrypted. "
+                    "Check that LINKEDIN_EMAIL_ENCRYPTION_KEY is "
+                    "configured correctly."
+                )
+
+            settings.linkedin_email_app_password_encrypted = (
+                encrypted_password
+            )
+        # An empty app_password means "keep the current password
+        # unchanged" (the frontend never pre-fills this field once a
+        # password is already configured, so an empty submission is
+        # never an intentional attempt to clear it).
 
         settings.linkedin_email_imap_host = payload[
             "imap_host"
@@ -308,9 +319,6 @@ class SettingsService:
         settings.linkedin_email_address = payload[
             "email_address"
         ]
-        settings.linkedin_email_app_password_encrypted = (
-            encrypted_password
-        )
         settings.linkedin_email_folder = payload[
             "folder"
         ]

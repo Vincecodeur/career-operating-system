@@ -575,3 +575,40 @@ def test_linkedin_email_settings_are_isolated_between_users(
 
     assert second_data["is_configured"] is False
     assert second_data["email_address"] is None
+
+def test_update_linkedin_email_settings_keeps_password_when_empty(
+    authenticated_headers,
+):
+    first_update = client.put(
+        "/settings/linkedin-email",
+        json={
+            "imap_host": "imap.gmail.com",
+            "imap_port": 993,
+            "email_address": "jobs-alerts@example.com",
+            "app_password": "original-password",
+            "folder": "INBOX",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert first_update.status_code == 200
+    assert first_update.json()["is_configured"] is True
+
+    second_update = client.put(
+        "/settings/linkedin-email",
+        json={
+            "imap_host": "imap.outlook.com",
+            "imap_port": 993,
+            "email_address": "jobs-alerts@example.com",
+            "app_password": "",
+            "folder": "INBOX",
+        },
+        headers=authenticated_headers,
+    )
+
+    assert second_update.status_code == 200
+
+    data = second_update.json()
+
+    assert data["imap_host"] == "imap.outlook.com"
+    assert data["is_configured"] is True

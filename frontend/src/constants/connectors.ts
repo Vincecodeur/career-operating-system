@@ -12,9 +12,9 @@ export const AVAILABLE_CONNECTORS: AvailableConnector[] = [
     code: "greenhouse",
     name: "Greenhouse",
   },
-  {
-    code: "linkedin",
-    name: "LinkedIn",
+    {
+    code: "linkedin_email",
+    name: "LinkedIn (Email Alerts)",
   },
 ];
 
