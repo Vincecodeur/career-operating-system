@@ -19,18 +19,18 @@ main
 ---
 
 Current Milestone
-7.1.25 Settings Strategy Synchronization
+7.1.26 Best Profile Recommendation Architecture Review
 
 ---
 
 Current Phase
-7.1.25.4 Documentation Synchronization
+7.1.26.4 Documentation Synchronization
 
 Current Step
 Completed
 
 Next Planned Milestone
-7.1.26 Best Profile Recommendation Architecture Review
+7.1.27 Final Regression And Documentation
 
 ---
 
@@ -1596,16 +1596,29 @@ Post-MVP Planning
   (4 cas de test uniques préservés) puis supprimé
 - scripts de migration temporaires retirés du repository
 - Phase 7.1.25.4 Documentation Synchronization terminée
-
-Blocked
-
-Aucun
+- Phase 7.1.26.1 Repository Audit terminée (règle de tie-breaking
+  DEC-072 confirmée absente du backend, existante uniquement côté
+  frontend)
+- Phase 7.1.26.2 Product Design terminée
+  (docs/best-profile-recommendation-architecture-review.md, DEC-083)
+- Phase 7.1.26.3 Implementation terminée
+- tie-breaking centralisé dans calculate_profile_scores_for_job_offer()
+- primary_profile_id et active_profile_ids ajoutés comme query params
+  transitoires (non persistés, cohérent avec DEC-071)
+- bestProfileScore supprimé côté frontend, remplacé par une lecture
+  directe de is_best_match
+- 352 tests backend passants, 0 régression
+- validation manuelle sur 3 scénarios réels, cas limite du Primary
+  Profile non-actif confirmé comme comportement voulu
+- Phase 7.1.26.4 Documentation Synchronization terminée  
+  Blocked  
+  Aucun
 
 ---
 
 Latest completed phase
 
-7.1.25 Settings Strategy Synchronization
+7.1.26 Best Profile Recommendation Architecture Review
 
 Validation:
 
@@ -1676,13 +1689,13 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.25 Settings Strategy Synchronization
+7.1.26 Best Profile Recommendation Architecture Review
 
 Status:
 Completed
 
 Next Phase:
-7.1.26 Best Profile Recommendation Architecture Review
+7.1.27 Final Regression And Documentation
 
 Status:
 Not Started
@@ -1720,10 +1733,10 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:  
-7.1.26 Best Profile Recommendation Architecture Review
+7.1.27 Final Regression And Documentation
 Last Commits :
 
+- 17e7483 - feat(matching): centralize best matching profile tie-breaking in backend, remove duplicated frontend logic
+- 484b88f - docs: synchronize documentation after 7.1.25 Settings Strategy Synchronization closure (DEC-082)
 - ecf7e8e - chore(settings): remove temporary migration scripts from 7.1.25.3
 - 4760448 - fix(settings): add missing Authorization header on settings and saved-searches API calls
-- 56229f2 - feat(settings): migrate application_settings to per-user tables (user_settings, saved_searches), abandoning EAV pattern
-- b8e23eb - fix(cv): replace direct download link with authenticated fetch+blob download

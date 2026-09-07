@@ -938,6 +938,7 @@ Des tests existent pour :
 - Phase 7.1.23.16 Minimal Account UX Polish
 - Phase 7.1.24 User Data Ownership And Isolation
 - Phase 7.1.25 Settings Strategy Synchronization
+- Phase 7.1.26 Best Profile Recommendation Architecture Review
 
 ## Derniers commits importants
 
@@ -1187,10 +1188,10 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-ecf7e8e - chore(settings): remove temporary migration scripts from 7.1.25.3  
+17e7483 - feat(matching): centralize best matching profile tie-breaking in backend, remove duplicated frontend logic  
 Latest backend validation:
 
-- 348 backend tests passed, 0 regressions
+- 352 backend tests passed, 0 regressions
   Current state:
 - Phase 7.1.23.15 Authentication Learning Features CLOSED
 - Phase 7.1.23.16 Minimal Account UX Polish CLOSED
@@ -1213,17 +1214,18 @@ Latest backend validation:
 - Profile.preferred_countries and search_preferred_countries kept
   distinct by design, not merged (see DEC-082)
 - AI Settings migrated first, resolving a contradiction with DEC-078
-- 1 real settings row migrated with zero data loss, 0 saved searches
-  existed
-- frontend api.ts updated with a centralized Authorization header helper
-  across all newly-secured endpoints, including 11 Settings/Saved Searches
-  functions missed during a first pass, discovered only through manual
-  end-to-end validation
 - application_settings table dropped after full validation
-- 348 backend tests passing, 0 regressions
+- Phase 7.1.26 Best Profile Recommendation Architecture Review CLOSED (DEC-083)
+- tie-breaking rule (score → Primary Profile → lowest profile_id)
+  moved from frontend to calculate_profile_scores_for_job_offer(),
+  via transient primary_profile_id and active_profile_ids query params
+  (never persisted, per DEC-071)
+- frontend bestProfileScore computation removed, replaced by a direct
+  read of is_best_match
+- 352 backend tests passing, 0 regressions
 - Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)  
   Next required step:
-  7.1.26 Best Profile Recommendation Architecture Review
+  7.1.27 Final Regression And Documentation
 
 ## Méthode de reprise
 

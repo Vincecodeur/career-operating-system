@@ -231,15 +231,18 @@ Implémenté :
 - PUT /settings/ai
 - GET /settings/saved-searches
 - POST /settings/saved-searches
-- DELETE /settings/saved-searches/{id}  
-  Note d'architecture (DEC-082) :
-  Le domaine Settings a abandonné le pattern EAV (ApplicationSetting) au
-  profit de deux tables typées. Tous les paramètres (Job Discovery, Search
-  Criteria, Discovery Preferences, AI Features/Consent) sont désormais
-  per-user, rattachés via user_id (NOT NULL, UNIQUE sur UserSettings).
-  Profile.preferred_countries reste volontairement distinct de
-  search_preferred_countries (voir DEC-082).  
-  AI Settings utilisent les colonnes suivantes sur UserSettings :
+- DELETE /settings/saved-searches/{id}
+
+Note d'architecture (DEC-082) :
+Le domaine Settings a abandonné le pattern EAV (ApplicationSetting) au
+profit de deux tables typées. Tous les paramètres (Job Discovery, Search
+Criteria, Discovery Preferences, AI Features/Consent) sont désormais
+per-user, rattachés via user_id (NOT NULL, UNIQUE sur UserSettings).
+Profile.preferred_countries reste volontairement distinct de
+search_preferred_countries (voir DEC-082).
+
+AI Settings utilisent les colonnes suivantes sur UserSettings :
+
 - ai_features_enabled ;
 - ai_consent_accepted.
 
@@ -300,6 +303,15 @@ For a given opportunity:
 - opportunity cards use the currently selected profile context.
 
 The comparison logic remains entirely in the backend.
+
+Note d'architecture (DEC-083) :
+Le calcul du Best Matching Profile (tie-breaking : score → Primary
+Profile → lowest profile_id) est entièrement centralisé côté backend
+dans calculate_profile_scores_for_job_offer(). primary_profile_id et
+active_profile_ids sont transmis en query params transitoires
+(GET /matching/job-offers/{id}/profiles), jamais persistés, cohérent
+avec DEC-071. Le frontend ne calcule plus aucune logique de classement,
+conformément à DEC-032.
 
 Version future :
 

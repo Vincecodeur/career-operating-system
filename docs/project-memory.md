@@ -616,10 +616,31 @@ Settings Strategy Synchronization results (7.1.25):
   ApplicationSetting import) discovered and merged into the new
   test_settings.py, preserving 4 unique test cases before removal
 - temporary migration scripts removed from the repository after use
-- Phase 7.1.25 CLOSED
+  Phase 7.1.25 CLOSED
+
+Best Profile Recommendation Architecture Review results (7.1.26):
+
+- audit confirmed DEC-072's tie-breaking rule (score → Primary Profile
+  → lowest profile_id) existed only in
+  frontend/src/pages/OpportunitiesPage.tsx, never in the backend -
+  contradicting DEC-032 and DEC-039
+- two distinct "best matching profile" concepts identified and
+  preserved: table-wide (all profiles) versus active-profile-only
+  (used for Application creation pre-selection, DEC-071)
+- tie-breaking centralized in
+  calculate_profile_scores_for_job_offer(), which now accepts
+  primary_profile_id and active_profile_ids as optional, transient
+  query parameters (never persisted, consistent with DEC-071)
+- frontend bestProfileScore computation removed, replaced by a direct
+  read of is_best_match from backend responses
+- 352 backend tests passing, 0 regressions, including 4 new
+  tie-breaking tests
+- manual validation confirmed correct behavior across 3 real scenarios,
+  including an edge case (Primary Profile excluded from Active
+  Profiles) explicitly confirmed as intended by Vincent
+- Phase 7.1.26 CLOSED (DEC-083)
 
 Remaining:
 
-- Best Profile Recommendation Architecture Review (7.1.26)
 - Final Regression And Documentation (7.1.27)
 - MVP Closure Decision (7.1.28)

@@ -1496,7 +1496,46 @@ Décision retenue (voir DEC-082) :
 - 4760448 - fix(settings): add missing Authorization header on settings
   and saved-searches API calls
 - ecf7e8e - chore(settings): remove temporary migration scripts  
-  ⬜ 7.1.26 Best Profile Recommendation Architecture Review
+  ✅ 7.1.26 Best Profile Recommendation Architecture Review  
+  Objectif :
+  Réviser l'architecture de recommandation du Best Matching Profile
+  documentée par DEC-072, dont l'audit a révélé qu'elle n'était implémentée
+  que côté frontend (contradiction avec DEC-032, DEC-039).  
+  Sous-phases :
+  ✅ 7.1.26.1 Repository Audit
+  ✅ 7.1.26.2 Product Design (docs/best-profile-recommendation-architecture-review.md)
+  ✅ 7.1.26.3 Implementation
+  ✅ 7.1.26.4 Documentation Synchronization  
+  Constat de l'audit :
+- la règle de tie-breaking DEC-072 (score → Primary Profile → lowest
+  profile_id) existait uniquement dans OpportunitiesPage.tsx
+  (bestProfileScore), jamais dans le backend
+- calculate_profile_scores_for_job_offer() calculait déjà un
+  is_best_match, mais avec une règle plus simple (score seul, sans
+  tie-break), et ce champ était silencieusement ignoré par le frontend
+- deux usages distincts coexistent et ont été préservés : le badge
+  affiché pour CHAQUE profil du tableau de comparaison (tous les profils
+  du compte) versus la recommandation limitée aux profils Actifs
+  (DEC-071) utilisée pour préremplir la création d'Application  
+  Décision retenue :
+- recentraliser le tie-breaking dans
+  calculate_profile_scores_for_job_offer(), qui accepte désormais
+  primary_profile_id et active_profile_ids en paramètres optionnels
+- ces paramètres restent transitoires (query params), jamais persistés,
+  cohérent avec DEC-071 (Opportunity Context non persisté au MVP)
+- suppression du calcul dupliqué côté frontend (bestProfileScore),
+  remplacé par une simple lecture de is_best_match retourné par le
+  backend  
+  Validation réalisée :
+- 352 tests backend passants (348 + 4 nouveaux tests de tie-breaking),
+  0 régression
+- validation manuelle sur 3 scénarios réels couvrant : un seul profil
+  actif, Primary Profile non inclus dans les profils actifs (cas limite
+  confirmé comme comportement voulu), Primary Profile actif à égalité
+  de score avec d'autres profils  
+  Commit technique :
+- 17e7483 - feat(matching): centralize best matching profile
+  tie-breaking in backend, remove duplicated frontend logic
   ⬜ 7.1.27 Final Regression And Documentation
   ⬜ 7.1.28 MVP Closure Decision
 

@@ -4686,9 +4686,10 @@ After creation:
 - the source remains unchanged;
 - the matching result is refreshed for the selected Profile.
 
-Every effective reassignment creates:
-
-PROFILE
+Every effective reassignment creates:  
+PROFILE_CHANGED  
+old_value = previous profile_id  
+new_value = new profile_id
 
 ## DEC-073 - Profile Creation With Optional CV
 
@@ -5761,3 +5762,84 @@ fix was applied.
 - DEC-071 - Multi Profile Opportunity Context
 - DEC-078 - AI Context Preview And Consent
 - DEC-081 - User Data Ownership And Isolation
+
+## DEC-083 - Best Matching Profile Backend Centralization
+
+Date: 2026-09-07
+Status: Implemented
+
+#### Context
+
+DEC-072 (Application Profile Attribution) documented a tie-breaking
+rule for the Best Matching Profile recommendation: highest matching
+score first, the Primary Profile preferred on a tie, then the lowest
+profile_id as a final tie-break. The 7.1.26.1 repository audit found
+this rule existed only inside
+frontend/src/pages/OpportunitiesPage.tsx (a local `bestProfileScore`
+computation), never in the backend. This directly contradicted DEC-032
+("Le frontend ne doit réaliser aucun calcul de matching [...] entièrement
+produits par l'API backend") and DEC-039 (Explainable Opportunity
+Scoring).
+
+Separately, the backend already computed an `is_best_match` field on
+`ProfileOpportunityScore` via `calculate_profile_scores_for_job_offer()`,
+but using a simpler rule (highest score only, no tie-break), and this
+field was silently ignored by the code path recommending a profile at
+Application creation time.
+
+#### Two Distinct Concepts Preserved
+
+The audit confirmed two different uses of "best matching profile"
+coexist in the frontend and must remain distinct:
+
+1. Table-wide best match: every profile owned by the user is scored and
+   displayed in the profile comparison table, each row's `is_best_match`
+   driving its own badge. This concerns ALL of the user's profiles.
+2. Active-profile-only recommendation: used exclusively to pre-select a
+   profile when opening the Create Application dialog, restricted to
+   profiles currently in the user's Active Profiles set (DEC-071).
+
+#### Decision
+
+The tie-breaking rule moves entirely to the backend.
+`calculate_profile_scores_for_job_offer()` gains two optional
+parameters: `primary_profile_id` and `active_profile_ids`. When
+`active_profile_ids` is provided, `is_best_match` is computed only
+among that subset (concept 2); when omitted, it is computed among all
+scores (concept 1, default behavior preserved for existing callers).
+
+Consistent with DEC-071 (Opportunity Context intentionally not
+persisted during the MVP), these parameters are passed as transient
+query parameters on every request, never stored. No new database
+column or table is introduced.
+
+The frontend's local `bestProfileScore` sort/tie-break computation is
+removed. `OpportunitiesPage.tsx` now derives its equivalent value by
+simply finding the score flagged `is_best_match` within the
+active-profile subset already returned by the backend.
+
+#### Edge Case Confirmed During Manual Validation
+
+If the Primary Profile is not included in the Active Profiles set, it
+has no effect on the tie-break, and the rule falls back to the lowest
+profile_id among tied active candidates. This was confirmed as the
+intended behavior by Vincent during manual end-to-end validation
+(2026-09-07), not a defect.
+
+#### Validation
+
+352 backend tests passing (up from 348), including 4 new tests
+covering: Primary Profile preference on tie, lowest profile_id
+fallback on full tie, restriction to Active Profiles, and default
+behavior preserved when no Active Profiles are given. Manual
+validation covered three real scenarios: a single active profile, a
+Primary Profile excluded from Active Profiles, and a Primary Profile
+tied with other active profiles.
+
+#### Related Decisions
+
+- DEC-032 - Matching Score Ownership (backend-only computation)
+- DEC-039 - Explainable Opportunity Scoring
+- DEC-071 - Multi Profile Opportunity Context
+- DEC-072 - Application Profile Attribution (tie-breaking rule
+  originally documented here, now correctly implemented)
