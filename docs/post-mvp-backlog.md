@@ -511,22 +511,48 @@ Reason deferred:
 
 The MVP keeps explicit user validation before application creation.
 
-## TECH-001 - Frontend Bundle Optimization
+### TECH-001 - Frontend Bundle Optimization
 
 Status: Backlog
-
 Current Vite build produces chunks larger than 500 KB.
-
 Potential improvements:
 
 - route splitting
 - dynamic imports
 - lazy loading
 - bundle optimization
+  Reason deferred:
+  No functional impact on MVP.
+  Build validation is successful.
 
-Reason deferred:
-No functional impact on MVP.
-Build validation is successful.
+### UX-004 - Explainability For Secondary Profile Scores In Comparison Table
+
+Status: Backlog
+Context:
+The multi-profile comparison table (OpportunitiesPage) displays 4
+sub-scores (Skills, Experience, Work Mode, Location) for every
+secondary profile, but provides no direct link to the corresponding
+strengths/weaknesses/explanations. This was identified during the
+DEC-039 (Explainable Opportunity Scoring) cross-cutting consistency
+audit performed in 7.1.27.3.
+Current behavior:
+
+- the user must change the Primary Profile to that profile in order to
+  see its full explainable matching result
+- table rows have no onClick and no visual affordance indicating they
+  are interactive
+  Expected behavior:
+- clicking a row in the comparison table could display that profile's
+  full explanation without changing the Primary Profile context
+  Nuance:
+  This is not considered a fully opaque score under DEC-039, since the
+  underlying explanation data exists and remains reachable through an
+  indirect action (changing the Primary Profile). It is a UX limitation,
+  not a missing backend capability.
+  Reason deferred:
+  No functional blocker for MVP closure. Backend already computes and
+  exposes the full explainable result via calculate_matching_result();
+  only the comparison table's UX lacks a shortcut to it.
 
 ## SETTINGS-004 - Prevent Duplicate Saved Search Names
 
