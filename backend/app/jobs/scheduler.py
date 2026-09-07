@@ -5,6 +5,7 @@ from typing import Callable
 
 from sqlalchemy.orm import Session
 
+from app.auth.models import User
 from app.core.database import SessionLocal
 from app.core.settings import settings
 from app.jobs.discovery_service import DiscoveryService
@@ -121,22 +122,51 @@ class DiscoveryScheduler:
 
     def run_once(self) -> dict:
         """
-        Exécute une synchronisation Job Discovery immédiatement.
+        ExÃ©cute une synchronisation Job Discovery immÃ©diatement.
 
-        Cette méthode est volontairement synchrone pour rester simple
+        Cette mÃ©thode est volontairement synchrone pour rester simple
         et facilement testable avec Pytest.
         """
         db = self.session_factory()
 
         try:
+            user_id = self._resolve_primary_user_id(db)
+
             discovery_service = DiscoveryService(db)
 
             return discovery_service.import_from_connector_names(
                 connector_names=self.connector_names,
                 source_type="API",
+                user_id=user_id,
             )
         finally:
             db.close()
+
+    @staticmethod
+    def _resolve_primary_user_id(
+        db: Session,
+    ) -> int | None:
+        if not settings.PRIMARY_USER_EMAIL:
+            logger.warning(
+                "PRIMARY_USER_EMAIL is not configured: connectors "
+                "requiring per-user credentials will be skipped."
+            )
+            return None
+
+        user = db.query(User).filter(
+            User.email == settings.PRIMARY_USER_EMAIL
+        ).first()
+
+        if user is None:
+            logger.warning(
+                "PRIMARY_USER_EMAIL (%s) does not match any user: "
+                "connectors requiring per-user credentials will be "
+                "skipped.",
+                settings.PRIMARY_USER_EMAIL,
+            )
+            return None
+
+        return user.id
 
     async def _run_loop(self) -> None:
         """

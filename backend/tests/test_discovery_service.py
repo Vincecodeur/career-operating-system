@@ -199,3 +199,131 @@ def test_discovery_service_reuses_existing_offers_on_second_import():
             suffix,
         )
         db.close()
+        
+        
+def get_primary_test_user_id(db) -> int:
+    from app.auth.models import User
+
+    user = db.query(User).filter(
+        User.email == "test-primary-user@career-os.local"
+    ).first()
+
+    return user.id
+
+
+def test_import_from_connector_names_skips_unconfigured_credential_connector():
+    """
+    A connector registered in CREDENTIAL_RESOLVERS but not configured
+    for the given user must be skipped silently, without raising and
+    without being counted as processed.
+    """
+    from app.jobs.discovery_service import DiscoveryService
+    from app.settings.models import UserSettings
+
+    db = SessionLocal()
+    suffix = str(uuid4())
+
+    try:
+        user_id = get_primary_test_user_id(db)
+
+        user_settings = db.query(UserSettings).filter(
+            UserSettings.user_id == user_id
+        ).first()
+
+        if user_settings is not None:
+            user_settings.linkedin_email_app_password_encrypted = None
+            db.commit()
+
+        service = DiscoveryService(db)
+
+        result = service.import_from_connector_names(
+            connector_names=["linkedin_email"],
+            source_type="API",
+            user_id=user_id,
+        )
+
+        assert result["connectors_processed"] == 0
+        assert result["connectors_skipped"] == 1
+        assert result["offers_fetched"] == 0
+        assert result["offers_imported"] == 0
+        assert result["results"] == []
+
+    finally:
+        db.rollback()
+        cleanup_test_data(db, suffix)
+        db.close()
+
+
+def test_import_from_connector_names_skips_credential_connector_without_user_id():
+    """
+    A connector requiring per-user credentials must be skipped when
+    no user_id is provided at all (e.g. PRIMARY_USER_EMAIL not
+    configured or matching no user), regardless of whether it is
+    actually configured for anyone.
+    """
+    from app.jobs.discovery_service import DiscoveryService
+
+    db = SessionLocal()
+    suffix = str(uuid4())
+
+    try:
+        service = DiscoveryService(db)
+
+        result = service.import_from_connector_names(
+            connector_names=["linkedin_email"],
+            source_type="API",
+            user_id=None,
+        )
+
+        assert result["connectors_processed"] == 0
+        assert result["connectors_skipped"] == 1
+        assert result["results"] == []
+
+    finally:
+        db.rollback()
+        cleanup_test_data(db, suffix)
+        db.close()
+
+
+def test_import_from_connector_names_does_not_affect_connectors_without_resolver():
+    """
+    Connectors with no entry in CREDENTIAL_RESOLVERS (e.g. the
+    existing test connector standing in for france_travail/mock)
+    must continue to be instantiated without arguments, unaffected
+    by the user_id parameter.
+    """
+    from app.jobs.discovery_service import DiscoveryService
+    from app.jobs.connectors.connector_registry import (
+        ConnectorRegistry,
+    )
+
+    db = SessionLocal()
+    suffix = str(uuid4())
+
+    original_get_connector = ConnectorRegistry.get_connector
+
+    def fake_get_connector(connector_name):
+        return lambda: TestConnector(suffix)
+
+    ConnectorRegistry.get_connector = staticmethod(
+        fake_get_connector
+    )
+
+    try:
+        service = DiscoveryService(db)
+
+        result = service.import_from_connector_names(
+            connector_names=["mock"],
+            source_type="API",
+            user_id=None,
+        )
+
+        assert result["connectors_processed"] == 1
+        assert result["connectors_skipped"] == 0
+        assert result["offers_imported"] == 2
+
+    finally:
+        ConnectorRegistry.get_connector = original_get_connector
+        db.rollback()
+        cleanup_test_data(db, suffix)
+        db.close()
