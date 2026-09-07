@@ -1,6 +1,6 @@
 import { Card } from "./ui/Card";
 import type { AIContextPreview, Cv, ProfileSoftSkill } from "../services/api";
-import { getCvDownloadUrl } from "../services/api";
+import { downloadCv } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { AIContextReadinessCard } from "./AIContextReadinessCard";
 
@@ -673,13 +673,12 @@ export function ProfileDetail({
                   </div>
 
                   <div className="flex gap-2">
-                    <a
-                      href={getCvDownloadUrl(cv.id)}
-                      target="_blank"
-                      rel="noreferrer"
+                    <button
+                      type="button"
+                      onClick={() => downloadCv(cv.id, cv.original_file_name)}
                       className="rounded-md border border-green-700 px-3 py-1 text-sm text-green-300 hover:bg-green-950">
                       Download
-                    </a>
+                    </button>
 
                     {!cv.is_default && (
                       <button

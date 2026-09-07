@@ -827,17 +827,34 @@ export async function deleteCv(
     return response.json();
 }
 
-export function getCvDownloadUrl(
+export async function downloadCv(
     cvId: number,
-) {
-    // NOTE: This URL is used for direct browser navigation/download
-    // (e.g. an <a href> link). Browser navigation cannot attach an
-    // Authorization header. Since the /cvs/{id}/download endpoint is
-    // now ownership-protected (7.1.24.3.3), this download will fail
-    // with 401 until this is addressed via a fetch+blob approach or
-    // an alternative authenticated download mechanism.
-    // Tracked as a known gap from the 7.1.24.5 Frontend Impact Review.
-    return `${API_BASE_URL}/cvs/${cvId}/download`;
+    fileName: string,
+): Promise<void> {
+    const response = await fetch(
+        `${API_BASE_URL}/cvs/${cvId}/download`,
+        {
+            headers: getAuthHeaders(),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to download CV.",
+        );
+    }
+
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(objectUrl);
 }
 
 export async function getProfileEnrichmentProposals(
