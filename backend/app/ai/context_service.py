@@ -63,8 +63,10 @@ class AIContextService:
     def __init__(
         self,
         db: Session,
+        user_id: int,
     ):
         self.db = db
+        self.user_id = user_id
         self.settings_service = SettingsService(
             db
         )
@@ -389,7 +391,9 @@ class AIContextService:
         )
 
         ai_settings = (
-            self.settings_service.get_ai_settings()
+            self.settings_service.get_ai_settings(
+                self.user_id
+            )
         )
 
         ai_features_enabled = ai_settings[

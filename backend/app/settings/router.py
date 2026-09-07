@@ -3,6 +3,8 @@ from fastapi import Depends
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
 from app.core.database import get_db
 from app.settings.schemas import AISettingsResponse
 from app.settings.schemas import AISettingsUpdate
@@ -40,10 +42,13 @@ router = APIRouter(
 )
 def get_job_discovery_settings(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
-    return service.get_job_discovery_settings()
+    return service.get_job_discovery_settings(
+        current_user.id
+    )
 
 
 @router.put(
@@ -53,14 +58,18 @@ def get_job_discovery_settings(
 def update_job_discovery_settings(
     payload: JobDiscoverySettingsUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     service.update_job_discovery_settings(
-        payload.model_dump()
+        current_user.id,
+        payload.model_dump(),
     )
 
-    return service.get_job_discovery_settings()
+    return service.get_job_discovery_settings(
+        current_user.id
+    )
 
 
 @router.get(
@@ -69,10 +78,13 @@ def update_job_discovery_settings(
 )
 def get_search_criteria_settings(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
-    return service.get_search_criteria_settings()
+    return service.get_search_criteria_settings(
+        current_user.id
+    )
 
 
 @router.put(
@@ -82,14 +94,18 @@ def get_search_criteria_settings(
 def update_search_criteria_settings(
     payload: SearchCriteriaSettingsUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     service.update_search_criteria_settings(
-        payload.model_dump()
+        current_user.id,
+        payload.model_dump(),
     )
 
-    return service.get_search_criteria_settings()
+    return service.get_search_criteria_settings(
+        current_user.id
+    )
 
 
 @router.get(
@@ -98,11 +114,14 @@ def update_search_criteria_settings(
 )
 def get_discovery_preferences_settings(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     return (
-        service.get_discovery_preferences_settings()
+        service.get_discovery_preferences_settings(
+            current_user.id
+        )
     )
 
 
@@ -113,15 +132,19 @@ def get_discovery_preferences_settings(
 def update_discovery_preferences_settings(
     payload: DiscoveryPreferencesSettingsUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     service.update_discovery_preferences_settings(
-        payload.model_dump()
+        current_user.id,
+        payload.model_dump(),
     )
 
     return (
-        service.get_discovery_preferences_settings()
+        service.get_discovery_preferences_settings(
+            current_user.id
+        )
     )
 
 
@@ -131,10 +154,13 @@ def update_discovery_preferences_settings(
 )
 def get_ai_settings(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
-    return service.get_ai_settings()
+    return service.get_ai_settings(
+        current_user.id
+    )
 
 
 @router.put(
@@ -144,12 +170,14 @@ def get_ai_settings(
 def update_ai_settings(
     payload: AISettingsUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     try:
         service.update_ai_settings(
-            payload.model_dump()
+            current_user.id,
+            payload.model_dump(),
         )
     except ValueError as exc:
         raise HTTPException(
@@ -157,7 +185,9 @@ def update_ai_settings(
             detail=str(exc),
         ) from exc
 
-    return service.get_ai_settings()
+    return service.get_ai_settings(
+        current_user.id
+    )
 
 
 @router.get(
@@ -166,10 +196,13 @@ def update_ai_settings(
 )
 def get_saved_searches(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
-    return service.get_saved_searches()
+    return service.get_saved_searches(
+        current_user.id
+    )
 
 
 @router.post(
@@ -179,11 +212,13 @@ def get_saved_searches(
 def create_saved_search(
     payload: SavedSearchCreate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     return service.create_saved_search(
-        payload.model_dump()
+        current_user.id,
+        payload.model_dump(),
     )
 
 
@@ -194,12 +229,14 @@ def create_saved_search(
 def delete_saved_search(
     saved_search_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = SettingsService(db)
 
     try:
         return service.delete_saved_search(
-            saved_search_id
+            current_user.id,
+            saved_search_id,
         )
     except ValueError as exc:
         raise HTTPException(

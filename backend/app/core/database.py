@@ -52,7 +52,8 @@ from app.cv.models import CV
 from app.reference_data.models import Country
 from app.reference_data.models import WorkMode
 from app.reference_data.models import ContractType
-from app.settings.models import ApplicationSetting
+from app.settings.models import UserSettings
+from app.settings.models import SavedSearch
 from app.profile.profile_soft_skill_models import ProfileSoftSkill
 
 

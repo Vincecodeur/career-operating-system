@@ -54,24 +54,28 @@ def db():
 def reset_ai_settings(
     db,
 ):
+    user_id = get_test_user_id(db)
+
     settings_service = SettingsService(
         db
     )
 
     settings_service.update_ai_settings(
+        user_id,
         {
             "ai_features_enabled": False,
             "ai_consent_accepted": False,
-        }
+        },
     )
 
     yield
 
     settings_service.update_ai_settings(
+        user_id,
         {
             "ai_features_enabled": False,
             "ai_consent_accepted": False,
-        }
+        },
     )
 
 
@@ -316,7 +320,8 @@ def test_complete_profile_is_ai_ready(
     )
 
     service = AIContextService(
-        db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -368,7 +373,8 @@ def test_missing_current_title_is_not_ready(
     )
 
     service = AIContextService(
-        db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -402,7 +408,8 @@ def test_missing_hard_skill_is_not_ready(
     )
 
     service = AIContextService(
-    db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -474,7 +481,8 @@ def test_missing_additional_context_field_is_not_ready(
     )
 
     service = AIContextService(
-        db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -500,7 +508,8 @@ def test_missing_optional_categories_do_not_block_readiness(
     )
 
     service = AIContextService(
-        db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -526,7 +535,8 @@ def test_available_categories_reflect_profile_data(
     )
 
     service = AIContextService(
-        db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -562,7 +572,8 @@ def test_excluded_categories_are_always_returned(
     )
 
     service = AIContextService(
-        db
+        db,
+        get_test_user_id(db),
     )
 
     preview = service.get_ai_context_preview(
@@ -586,19 +597,23 @@ def test_ai_call_is_allowed_when_all_conditions_are_true(
         db
     )
 
+    user_id = get_test_user_id(db)
+
     settings_service = SettingsService(
         db
     )
 
     settings_service.update_ai_settings(
+        user_id,
         {
             "ai_features_enabled": True,
             "ai_consent_accepted": True,
-        }
+        },
     )
 
     service = AIContextService(
-        db
+        db,
+        user_id,
     )
 
     preview = service.get_ai_context_preview(
@@ -619,19 +634,23 @@ def test_ai_call_is_blocked_when_profile_is_not_ready(
         db
     )
 
+    user_id = get_test_user_id(db)
+
     settings_service = SettingsService(
         db
     )
 
     settings_service.update_ai_settings(
+        user_id,
         {
             "ai_features_enabled": True,
             "ai_consent_accepted": True,
-        }
+        },
     )
 
     service = AIContextService(
-        db
+        db,
+        user_id,
     )
 
     preview = service.get_ai_context_preview(

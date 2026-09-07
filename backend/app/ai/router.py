@@ -41,7 +41,8 @@ def get_ai_context_preview(
         )
 
     service = AIContextService(
-        db
+        db,
+        current_user.id,
     )
 
     preview = service.get_ai_context_preview(

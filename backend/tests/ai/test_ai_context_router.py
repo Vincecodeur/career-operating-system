@@ -25,6 +25,19 @@ def unique_value(
     return f"{prefix}_{uuid4()}"
 
 
+TEST_USER_EMAIL = "test-primary-user@career-os.local"
+
+
+def get_test_user_id(db) -> int:
+    test_user = (
+        db.query(User)
+        .filter(User.email == TEST_USER_EMAIL)
+        .first()
+    )
+
+    return test_user.id
+
+
 def update_ai_settings(
     *,
     enabled: bool,
@@ -33,13 +46,16 @@ def update_ai_settings(
     db = SessionLocal()
 
     try:
+        user_id = get_test_user_id(db)
+
         settings_service = SettingsService(db)
 
         settings_service.update_ai_settings(
+            user_id,
             {
                 "ai_features_enabled": enabled,
                 "ai_consent_accepted": consent_accepted,
-            }
+            },
         )
     finally:
         db.close()
@@ -61,18 +77,6 @@ def reset_ai_settings():
         consent_accepted=False,
     )
 
-
-TEST_USER_EMAIL = "test-primary-user@career-os.local"
-
-
-def get_test_user_id(db) -> int:
-    test_user = (
-        db.query(User)
-        .filter(User.email == TEST_USER_EMAIL)
-        .first()
-    )
-
-    return test_user.id
 
 def create_profile(
     *,
@@ -331,6 +335,7 @@ def test_ready_profile_allows_ai_call_after_consent(authenticated_headers):
             "ai_features_enabled": True,
             "ai_consent_accepted": True,
         },
+        headers=authenticated_headers,
     )
 
     assert settings_response.status_code == 200
@@ -361,6 +366,7 @@ def test_incomplete_profile_blocks_ai_call_after_consent(authenticated_headers):
             "ai_features_enabled": True,
             "ai_consent_accepted": True,
         },
+        headers=authenticated_headers,
     )
 
     assert settings_response.status_code == 200
