@@ -525,6 +525,35 @@ Potential improvements:
   No functional impact on MVP.
   Build validation is successful.
 
+### TECH-002 - Recurring Console Error (reportAllChanges)
+
+Status: Backlog
+Context:
+A recurring browser console error was observed across multiple manual
+validation sessions (7.1.24.6, 7.1.27.2):
+Uncaught TypeError: Cannot read properties of undefined (reading
+'startTime') at et.reportAllChanges
+The error count increases across page navigations within the same
+session, suggesting a repeated trigger rather than a single occurrence.
+Investigation performed:
+A project-wide search for "reportAllChanges", "web-vitals" and
+"reportWebVitals" across frontend/src returned no results, indicating
+this does not originate from the project's own code or its declared
+dependencies.
+Current status:
+Root cause not identified. No functional regression, no broken feature,
+and no data integrity issue has ever been observed in association with
+this error across all manual regression sessions.
+Reason deferred:
+No functional blocker for MVP closure. Suspected to originate from a
+browser extension or an external dev tool rather than the application
+itself, but this has not been formally confirmed (e.g. by reproducing
+in a private/incognito window or a different browser).
+Trigger for revisiting:
+If this error is ever found to coincide with an actual functional
+defect, or if it can be reproduced in a clean browser profile with no
+extensions.
+
 ### UX-004 - Explainability For Secondary Profile Scores In Comparison Table
 
 Status: Backlog
