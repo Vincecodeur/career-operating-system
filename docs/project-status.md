@@ -1578,9 +1578,10 @@ Post-MVP Planning
 - isolation manuelle validée entre deux comptes réels
 - bug de téléchargement CV découvert et corrigé (fetch+blob authentifié)
 - Phase 7.1.24.7 Documentation Synchronization terminée
-- Phase 7.1.24.7 Documentation Synchronization terminée
+
 - Phase 7.1.25.1 Repository Audit terminée (ApplicationSetting sans
   user_id confirmé, aucun filtrage nulle part dans la chaîne)
+
 - Phase 7.1.25.2 Product Design terminée (docs/settings-strategy.md,
   DEC-082)
 - Phase 7.1.25.3 Implementation terminée
