@@ -685,10 +685,37 @@ Job Offer Lifecycle Management results (7.1.29):
 - 359 backend tests passing, 0 regressions (352 + 7 new tests)
 - DEC-084 documents the amendment to DEC-041's retention clause
 
-Remaining for 7.1.29:
+Manual Discovery Refresh results (7.1.29.6):
 
-- manual discovery refresh across all active connectors
-- first real cleanup run, summary validated with Vincent
+- executed via DiscoveryScheduler.run_once() with connector_names
+  explicitly restricted to ['france_travail', 'greenhouse'], matching
+  UserSettings.discovery_connectors for the real account (the
+  DISCOVERY_CONNECTORS environment variable incorrectly includes
+  'linkedin', never used for this refresh, consistent with LinkedIn
+  remaining out of scope)
+- real result: 51 offers fetched, 51 imported (France Travail 50/50,
+  Greenhouse 1/1)
+- France Travail returns a different batch on every call (0 duplicate
+  found across 183 France Travail offers in the database after the
+  refresh, verified on title/company_name/city); the attach_source()
+  fix could not be observed on a previously-known offer during this
+  specific refresh, but remains validated deterministically by the
+  dedicated unit test (7.1.29.4)
+
+Cleanup Execution & Validation results (7.1.29.7):
+
+- find_stale_job_offer_ids() run as a dry check before any deletion:
+  1 offer identified as eligible (discovery_age_window = 30_DAYS)
+- delete_stale_job_offers() executed for real, summary validated with
+  Vincent: {'evaluated': 202, 'deleted': 1, 'protected_by_application': 1}
+- deleted offer: id=2 "Technical Partnerships Manager" (orphan with no
+  JobOfferSource, no Application, manually created 2026-08-04 via the
+  legacy POST /job-offers endpoint)
+- protected offer: id=1 "Technical Partnerships Manager" (orphan with
+  no JobOfferSource but 63 real Applications attached; Application
+  protection confirmed working correctly despite Option B)
+
+Phase 7.1.29 Job Offer Lifecycle Management CLOSED
 
 Remaining overall:
 

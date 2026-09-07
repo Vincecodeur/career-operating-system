@@ -940,6 +940,7 @@ Des tests existent pour :
 - Phase 7.1.25 Settings Strategy Synchronization
 - Phase 7.1.26 Best Profile Recommendation Architecture Review
 - Phase 7.1.27 Final Regression And Documentation
+- Phase 7.1.29 Job Offer Lifecycle Management
 
 ## Derniers commits importants
 
@@ -1245,7 +1246,7 @@ Latest backend validation:
   unplanned phase, 7.1.29 Job Offer Lifecycle Management, opened before
   MVP closure following a question about real AI (Gemini) integration
   readiness
-- Phase 7.1.29 Job Offer Lifecycle Management IN PROGRESS
+- Phase 7.1.29 Job Offer Lifecycle Management CLOSED
 - attach_source() fixed to refresh last_seen_at/updated_at on existing
   JobOfferSource links (previously never updated, blocking staleness
   detection entirely)
@@ -1257,9 +1258,15 @@ Latest backend validation:
 - POST /job-offers/cleanup endpoint added, authenticated
 - 359 backend tests passing, 0 regressions
 - DEC-084 documents the amendment to DEC-041's offer retention clause
+- DEC-085 documents the AI provider selection (Google Gemini)
+- Manual Discovery Refresh executed: 51 offers fetched/imported
+  (France Travail 50/50, Greenhouse 1/1), restricted to
+  ['france_travail', 'greenhouse'] per the real account's
+  UserSettings.discovery_connectors
+- First real cleanup executed and validated with Vincent:
+  {'evaluated': 202, 'deleted': 1, 'protected_by_application': 1}
   Next required step:
-  7.1.29.6 Manual Discovery Refresh, then 7.1.29.7 Cleanup Execution &
-  Validation, then 7.1.28 MVP Closure Decision
+  7.1.28 MVP Closure Decision
 
 ## Méthode de reprise
 

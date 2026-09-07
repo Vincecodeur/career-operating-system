@@ -24,13 +24,13 @@ Current Milestone
 ---
 
 Current Phase
-7.1.29.5 Documentation Synchronization
+7.1.29.7 Cleanup Execution & Validation
 
 Current Step
 Completed
 
 Next Planned Milestone
-7.1.29.6 Manual Discovery Refresh
+7.1.28 MVP Closure Decision
 
 ---
 
@@ -1629,7 +1629,12 @@ Post-MVP Planning
   /job-offers/cleanup)
 - Phase 7.1.29.4 Backend Tests terminée (7 tests ajoutés, 359 tests
   backend passants, 0 régression)
-- Phase 7.1.29.5 Documentation Synchronization en cours
+- Phase 7.1.29.5 Documentation Synchronization terminée
+- Phase 7.1.29.6 Manual Discovery Refresh terminée (51 offres récupérées
+  et importées : France Travail 50/50, Greenhouse 1/1)
+- Phase 7.1.29.7 Cleanup Execution & Validation terminée (résultat validé
+  avec Vincent : evaluated=202, deleted=1, protected_by_application=1)
+- Phase 7.1.29 Job Offer Lifecycle Management CLOSED
   Blocked
   Aucun
 
@@ -1711,7 +1716,7 @@ Current Phase Status
 7.1.29 Job Offer Lifecycle Management
 
 Status:
-In Progress
+Completed
 
 Next Phase:
 7.1.28 MVP Closure Decision
@@ -1752,7 +1757,7 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-7.1.29.6 Manual Discovery Refresh
+7.1.28 MVP Closure Decision
 Last Commits :
 
 - 0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)

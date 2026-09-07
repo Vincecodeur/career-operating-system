@@ -1597,7 +1597,7 @@ Décision retenue (voir DEC-082) :
 - 928d8c6 - chore(auth): remove duplicated password validation block
   in register()
 - (2 corrections frontend ProfilesPage.tsx et UploadCvModal.tsx)  
-  ⏳ 7.1.29 Job Offer Lifecycle Management
+  ✅ 7.1.29 Job Offer Lifecycle Management
 
 Objectif :
 Nettoyer les offres obsolètes ou retirées de leur source avant de
@@ -1636,25 +1636,47 @@ DEC-084)
 
 ✅ 7.1.29.5 Documentation Synchronization
 
-⬜ 7.1.29.6 Manual Discovery Refresh
+✅ 7.1.29.6 Manual Discovery Refresh
 
-- relancer la découverte sur tous les connecteurs actifs pour rendre
-  last_seen_at significatif avant le premier vrai nettoyage
+- refresh manuel exécuté via DiscoveryScheduler.run_once(), avec
+  connector_names restreint explicitement à ['france_travail', 'greenhouse']
+  pour refléter UserSettings.discovery_connectors du compte réel (la
+  variable d'environnement DISCOVERY_CONNECTORS inclut à tort 'linkedin',
+  jamais utilisé pour ce refresh, cohérent avec le fait que LinkedIn reste
+  hors périmètre - voir job-sources.md)
+- résultat réel : 51 offres récupérées, 51 importées
+  (France Travail 50/50, Greenhouse 1/1)
+- constat : France Travail renvoie un lot différent à chaque appel
+  (0 doublon détecté sur title/company_name/city parmi 183 offres
+  France Travail en base après refresh) ; le correctif attach_source()
+  n'a donc pas pu être observé sur une offre déjà connue lors de ce
+  refresh précis, mais reste validé de façon déterministe par le test
+  unitaire dédié (7.1.29.4)
 
-⬜ 7.1.29.7 Cleanup Execution & Validation
+✅ 7.1.29.7 Cleanup Execution & Validation
 
-- lancer le service de nettoyage une première fois
-- valider le résumé (evaluated, deleted, protected_by_application) avec
-  Vincent
+- find_stale_job_offer_ids() exécuté à blanc avant toute suppression :
+  1 offre éligible identifiée (discovery_age_window = 30_DAYS)
+- delete_stale_job_offers() exécuté en conditions réelles, résultat
+  validé avec Vincent :
+  {'evaluated': 202, 'deleted': 1, 'protected_by_application': 1}
+- offre supprimée : id=2 "Technical Partnerships Manager" (orpheline
+  sans JobOfferSource, sans Application, créée manuellement le
+  2026-08-04 via l'ancien endpoint POST /job-offers)
+- offre protégée : id=1 "Technical Partnerships Manager" (orpheline
+  sans JobOfferSource mais 63 Applications réelles rattachées ;
+  protection par Application confirmée fonctionnelle malgré l'Option B)
 
 Commit technique :
 
 - 0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)
 
+✅ 7.1.29 Job Offer Lifecycle Management CLOSED
+
 ⬜ 7.1.28 MVP Closure Decision
 
 Statut global (7.1.24 à 7.1.29) :
-In Progress
+Completed
 
 ### Phase 7.2
 
