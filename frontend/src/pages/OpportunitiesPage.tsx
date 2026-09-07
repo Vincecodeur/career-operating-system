@@ -219,7 +219,11 @@ export function OpportunitiesPage() {
       setProfileScoresLoading(true);
 
       try {
-        const scores = await getProfileScoresForJobOffer(selectedOffer.id);
+        const scores = await getProfileScoresForJobOffer(
+          selectedOffer.id,
+          selectedProfileId,
+          activeProfileIds,
+        );
 
         setProfileScores(scores);
       } catch {
@@ -230,7 +234,7 @@ export function OpportunitiesPage() {
     }
 
     loadProfileScores();
-  }, [selectedOffer]);
+  }, [selectedOffer, selectedProfileId, activeProfileIds]);
 
   useEffect(() => {
     async function loadDiscoveryPreferences() {
@@ -513,30 +517,7 @@ export function OpportunitiesPage() {
   );
 
   const bestProfileScore =
-    [...activeProfileScores].sort((firstScore, secondScore) => {
-      const scoreDifference =
-        secondScore.matching_score - firstScore.matching_score;
-
-      if (scoreDifference !== 0) {
-        return scoreDifference;
-      }
-
-      if (
-        firstScore.profile_id === selectedProfileId &&
-        secondScore.profile_id !== selectedProfileId
-      ) {
-        return -1;
-      }
-
-      if (
-        secondScore.profile_id === selectedProfileId &&
-        firstScore.profile_id !== selectedProfileId
-      ) {
-        return 1;
-      }
-
-      return firstScore.profile_id - secondScore.profile_id;
-    })[0] ?? null;
+    activeProfileScores.find((score) => score.is_best_match) ?? null;
 
   function getDefaultApplicationProfileId() {
     if (

@@ -1357,11 +1357,33 @@ export async function getMatching(
 
 export async function getProfileScoresForJobOffer(
     jobOfferId: number,
+    primaryProfileId?: number | null,
+    activeProfileIds?: number[],
 ): Promise<ProfileOpportunityScore[]> {
-    // NOTE: See getMatching() above regarding matching router
-    // ownership status (not confirmed as of 7.1.24.5).
+    const queryParams = new URLSearchParams();
+
+    if (primaryProfileId !== undefined && primaryProfileId !== null) {
+        queryParams.set(
+            "primary_profile_id",
+            String(primaryProfileId),
+        );
+    }
+
+    if (activeProfileIds && activeProfileIds.length > 0) {
+        queryParams.set(
+            "active_profile_ids",
+            activeProfileIds.join(","),
+        );
+    }
+
+    const queryString = queryParams.toString();
+
+    const url = queryString
+        ? `${API_BASE_URL}/matching/job-offers/${jobOfferId}/profiles?${queryString}`
+        : `${API_BASE_URL}/matching/job-offers/${jobOfferId}/profiles`;
+
     const response = await fetch(
-        `${API_BASE_URL}/matching/job-offers/${jobOfferId}/profiles`,
+        url,
         {
             headers: getAuthHeaders(),
         },

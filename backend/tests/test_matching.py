@@ -397,3 +397,142 @@ def test_profile_scores_sorted_descending(authenticated_headers):
         scores,
         reverse=True,
     )
+
+
+def test_profile_scores_best_match_prefers_primary_profile_on_tie(authenticated_headers):
+    all_scores_response = client.get(
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
+    )
+
+    assert all_scores_response.status_code == 200
+
+    all_scores = all_scores_response.json()
+
+    tied_scores = [
+        score
+        for score in all_scores
+        if score["matching_score"] == all_scores[0]["matching_score"]
+    ]
+
+    if len(tied_scores) < 2:
+        return
+
+    primary_profile_id = tied_scores[-1]["profile_id"]
+
+    response = client.get(
+        f"/matching/job-offers/1/profiles?primary_profile_id={primary_profile_id}",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    best_match = next(
+        item for item in data if item["is_best_match"]
+    )
+
+    assert best_match["profile_id"] == primary_profile_id
+
+
+def test_profile_scores_best_match_uses_lowest_id_on_full_tie(authenticated_headers):
+    response = client.get(
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    tied_scores = [
+        score
+        for score in data
+        if score["matching_score"] == data[0]["matching_score"]
+    ]
+
+    if len(tied_scores) < 2:
+        return
+
+    expected_profile_id = min(
+        score["profile_id"] for score in tied_scores
+    )
+
+    best_match = next(
+        item for item in data if item["is_best_match"]
+    )
+
+    assert best_match["profile_id"] == expected_profile_id
+
+
+def test_profile_scores_best_match_restricted_to_active_profiles(authenticated_headers):
+    all_scores_response = client.get(
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
+    )
+
+    assert all_scores_response.status_code == 200
+
+    all_scores = all_scores_response.json()
+
+    if len(all_scores) < 2:
+        return
+
+    top_scoring_profile_id = all_scores[0]["profile_id"]
+
+    restricted_profile_ids = [
+        score["profile_id"]
+        for score in all_scores
+        if score["profile_id"] != top_scoring_profile_id
+    ]
+
+    active_profile_ids_param = ",".join(
+        str(profile_id) for profile_id in restricted_profile_ids
+    )
+
+    response = client.get(
+        f"/matching/job-offers/1/profiles?active_profile_ids={active_profile_ids_param}",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    best_match = next(
+        (item for item in data if item["is_best_match"]),
+        None,
+    )
+
+    assert best_match is not None
+    assert best_match["profile_id"] != top_scoring_profile_id
+    assert best_match["profile_id"] in restricted_profile_ids
+
+
+def test_profile_scores_best_match_falls_back_to_all_profiles_when_no_active_ids_given(authenticated_headers):
+    response = client.get(
+        "/matching/job-offers/1/profiles",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    best_match_count = sum(
+        1
+        for item in data
+        if item["is_best_match"]
+    )
+
+    assert best_match_count <= 1
+
+    if best_match_count == 1:
+        best_match = next(
+            item for item in data if item["is_best_match"]
+        )
+
+        assert best_match["matching_score"] == max(
+            item["matching_score"] for item in data
+        )

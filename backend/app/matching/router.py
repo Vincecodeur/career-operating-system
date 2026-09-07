@@ -89,6 +89,8 @@ def get_ranked_job_offers(
 )
 def get_profile_scores_for_job_offer(
     job_offer_id: int,
+    primary_profile_id: int | None = None,
+    active_profile_ids: str | None = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -102,8 +104,19 @@ def get_profile_scores_for_job_offer(
             detail="Job offer not found.",
         )
 
+    parsed_active_profile_ids: list[int] | None = None
+
+    if active_profile_ids:
+        parsed_active_profile_ids = [
+            int(item.strip())
+            for item in active_profile_ids.split(",")
+            if item.strip()
+        ]
+
     return calculate_profile_scores_for_job_offer(
         job_offer_id=job_offer_id,
         db=db,
         user_id=current_user.id,
+        primary_profile_id=primary_profile_id,
+        active_profile_ids=parsed_active_profile_ids,
     )

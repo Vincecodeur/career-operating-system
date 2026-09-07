@@ -673,11 +673,47 @@ def is_unknown(
         "none",
         "null",
     }
-    
+
+
+def select_best_matching_score(
+    candidate_scores: list[ProfileOpportunityScore],
+    primary_profile_id: int | None,
+) -> ProfileOpportunityScore | None:
+    """
+    Applies the DEC-072 tie-breaking rule to a pool of candidate
+    scores: highest matching_score first, then the Primary Profile
+    (if provided and present in the pool), then the lowest profile_id.
+    """
+    if not candidate_scores:
+        return None
+
+    def sort_key(
+        score: ProfileOpportunityScore,
+    ):
+        is_not_primary_profile = (
+            score.profile_id != primary_profile_id
+        )
+
+        return (
+            -score.matching_score,
+            is_not_primary_profile,
+            score.profile_id,
+        )
+
+    sorted_candidates = sorted(
+        candidate_scores,
+        key=sort_key,
+    )
+
+    return sorted_candidates[0]
+
+
 def calculate_profile_scores_for_job_offer(
     job_offer_id: int,
     db: Session,
     user_id: int,
+    primary_profile_id: int | None = None,
+    active_profile_ids: list[int] | None = None,
 ) -> list[ProfileOpportunityScore]:
     profiles = db.query(Profile).filter(
         Profile.user_id == user_id
@@ -710,7 +746,21 @@ def calculate_profile_scores_for_job_offer(
         reverse=True,
     )
 
-    if scores:
-        scores[0].is_best_match = True
+    if active_profile_ids:
+        candidate_scores = [
+            score
+            for score in scores
+            if score.profile_id in active_profile_ids
+        ]
+    else:
+        candidate_scores = scores
+
+    best_score = select_best_matching_score(
+        candidate_scores=candidate_scores,
+        primary_profile_id=primary_profile_id,
+    )
+
+    if best_score is not None:
+        best_score.is_best_match = True
 
     return scores
