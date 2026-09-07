@@ -185,8 +185,18 @@ class Settings:
     
     
     PUBLIC_REGISTRATION_ENABLED: bool = _get_bool_env(
-        "PUBLIC_REGISTRATION_ENABLED",
-        "false",
+    "PUBLIC_REGISTRATION_ENABLED",
+    "false",
+    )
+
+    LINKEDIN_EMAIL_ENCRYPTION_KEY: str = os.getenv(
+        "LINKEDIN_EMAIL_ENCRYPTION_KEY",
+        "",
+    )
+
+    PRIMARY_USER_EMAIL: str = os.getenv(
+        "PRIMARY_USER_EMAIL",
+        "",
     )
 
 settings = Settings()
