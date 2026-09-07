@@ -680,7 +680,7 @@ Learning goals:
 
 ### ARCH-001 - Multi-Tenant Data Isolation
 
-Status: Superseded by DEC-081
+Status: Superseded by DEC-081 (Implemented 2026-09-04)
 
 This item has been reopened and is no longer deferred to post-MVP. See
 DEC-081 (User Data Ownership And Isolation) and roadmap.md phase 7.1.24

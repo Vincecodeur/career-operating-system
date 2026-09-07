@@ -19,18 +19,18 @@ main
 ---
 
 Current Milestone
-7.1.23 MVP Experience Review
+7.1.24 User Data Ownership And Isolation
 
 ---
 
 Current Phase
-7.1.23.16 Minimal Account UX Polish
+7.1.24.7 Documentation Synchronization
 
 Current Step
 Completed
 
 Next Planned Milestone
-Settings Strategy Synchronization
+7.1.25 Settings Strategy Synchronization
 
 ---
 
@@ -1550,6 +1550,34 @@ Post-MVP Planning
 - Commit technique aaac824 créé
 - Push GitHub réalisé
 - Phase 7.1.23.16 Minimal Account UX Polish terminée
+- Phase 7.1.24.1 Repository Audit terminée (complément CV, Application)
+- Phase 7.1.24.2 Product Design terminée (DEC-081)
+- Phase 7.1.24.3.1 Foundation terminée (user_id nullable, fixture
+  authenticated_headers ajoutée à conftest.py)
+- Phase 7.1.24.3.2 Profile Router terminée (ownership enforced via
+  Profile.user_id)
+- Phase 7.1.24.3.3 CV Router terminée
+- Phase 7.1.24.3.4 Profile Enrichment Router terminée
+- Phase 7.1.24.3.5 Skills / Soft Skills / Languages / Certifications /
+  Work Experience Routers terminée
+- Phase 7.1.24.3.6 Applications Router terminée
+- Phase 7.1.24.3.7 Cleanup & Constraint Tightening terminée
+- contrainte NOT NULL appliquée sur profiles.user_id
+- 10 profils démo réels migrés vers maw282003@gmail.com (69 applications,
+  12 CVs préservés, 0 perte de données)
+- Phase 7.1.24.4 Backend Tests terminée
+- 337 tests backend passants, 0 régression
+- test_data_isolation.py créé (9 tests d'isolation croisée)
+- Phase 7.1.24.5 Frontend Impact Review terminée
+- getAuthHeaders() ajouté dans frontend/src/services/api.ts
+- gap découvert : app/ai/router.py et app/matching/router.py non
+  sécurisés, corrigés
+- fuite de données corrigée sur calculate_profile_scores_for_job_offer
+  (retournait tous les profils tous comptes confondus)
+- Phase 7.1.24.6 Validation End-To-End terminée
+- isolation manuelle validée entre deux comptes réels
+- bug de téléchargement CV découvert et corrigé (fetch+blob authentifié)
+- Phase 7.1.24.7 Documentation Synchronization terminée
 
 Blocked
 
@@ -1559,8 +1587,7 @@ Aucun
 
 Latest completed phase
 
-3
-7.1.23.16 Minimal Account UX Polish
+7.1.24 User Data Ownership And Isolation
 
 Validation:
 
@@ -1601,10 +1628,6 @@ Phase Status:
 ✅ 7.1.19.1.7 Frontend Validation
 ✅ 7.1.19.1.8 Documentation Synchronization
 
-Next Step:
-
-7.1.24 User Data Ownership And Isolation
-
 ---
 
 Last Decisions
@@ -1635,14 +1658,16 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.23.16 Minimal Account UX Polish
+7.1.24 User Data Ownership And Isolation
+
 Status:
 Completed
 
 Next Phase:
-7.1.24 User Data Ownership And Isolation
+7.1.25 Settings Strategy Synchronization
+
 Status:
-In Progress (Design completed via DEC-081, implementation pending)
+Not Started
 
 Latest completed phases:
 
@@ -1676,12 +1701,11 @@ Known remaining improvements:
 - Advanced Skill Normalization
 - Experience Extraction Refinement
 
-Next Step:
-7.1.24 User Data Ownership And Isolation
-
+Next Step:  
+7.1.25 Settings Strategy Synchronization  
 Last Commits :
 
-- aaac824 - feat(account): add member since date and remove obsolete roadmap display
-- 91f63cd - docs(auth): remove stale AI phase reference from handoff prompt
-- df6a14c - docs(auth): close authentication learning features phase with remember me and e2e validation
-- 9cbc366 - feat(auth): implement remember me with variable token expiration
+- b8e23eb - fix(cv): replace direct download link with authenticated fetch+blob download
+- 7b22d2d - feat(ai,matching): secure ai-context and matching routers with ownership checks; add Authorization header to frontend API client
+- 411d77b - fix(tests): restore missing test cases in profile skills and languages test suites
+- 63ee13b - feat(profile): enforce NOT NULL constraint on user_id and migrate orphan test fixtures

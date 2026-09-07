@@ -5397,7 +5397,8 @@ A duplicated validation block was observed in backend/app/auth/router.py's regis
 ### DEC-081 - User Data Ownership And Isolation
 
 Date: 2026-09-03
-Status: Accepted (Design) — Implementation Pending
+Status: Implemented
+Implementation completed: 2026-09-04
 
 #### Context
 
@@ -5576,3 +5577,79 @@ removed, to preserve historical traceability of the original reasoning.
 - DEC-075 - AI Context Contract
 - DEC-079 - Authentication Learning Strategy
 - ARCH-001 - Multi-Tenant Data Isolation (superseded by this decision)
+
+##### Implementation Summary
+
+###### Backend Migration Completed
+
+user_id (ForeignKey to users.id, NOT NULL) added to Profile.
+Ownership enforced via join through Profile on: CV, ProfileSkill,
+ProfileSoftSkill, WorkExperience, ProfileLanguage, ProfileCertification,
+ProfileEnrichmentProposal, Application, ApplicationEvent.
+JobOffer, JobSource, JobOfferSource confirmed to remain global as designed.
+Skill, Language, Certification, Country, WorkMode, ContractType confirmed
+to remain global catalogs as designed.
+
+All ownership checks use 404 Not Found (not 403 Forbidden) when a resource
+exists but belongs to another user, to avoid revealing resource existence
+across accounts.
+
+###### Repository Audit Gap Discovered During Implementation
+
+The initial repository audit (7.1.24.1) did not identify two routers that
+also required ownership enforcement:
+
+- app/ai/router.py (GET /profiles/{id}/ai-context-preview)
+- app/matching/router.py (GET /matching/{profile_id}/{job_offer_id},
+  GET /profiles/{id}/ranked-job-offers,
+  GET /matching/job-offers/{id}/profiles)
+
+A real data leak was found and fixed in
+calculate_profile_scores_for_job_offer(): the function queried
+db.query(Profile).all() without any user filter, returning matching
+scores for every profile across every account. This was corrected to
+filter by the authenticated user's id.
+
+This gap is noted as a lesson for future ownership audits: repository
+audits for cross-cutting concerns (like data ownership) must explicitly
+search across all router files, not rely on a domain-based checklist that
+may miss routers depending on Profile without living inside a "profile"
+or "cv" style folder name.
+
+###### Frontend Impact
+
+A getAuthHeaders() helper was added to frontend/src/services/api.ts,
+reading the access token from useAuthStore.getState(). The Authorization
+header was added to every endpoint call corresponding to a
+newly-protected backend route.
+
+Known technical debt introduced by this decision: getCvDownloadUrl()
+originally returned a raw URL used in a direct browser
+navigation link, which cannot carry an Authorization header. This was
+identified during End-To-End Validation (7.1.24.6) and fixed by replacing
+it with an asynchronous downloadCv() function using fetch + blob +
+a temporary object URL, triggered from a button onClick handler instead
+of a navigable link.
+
+###### Data Migration Executed
+
+An audit of the production database (not the test database) revealed
+10 real profiles without user_id (not 4, as originally estimated in the
+DEC-081 design phase): Technical Partnerships, Frontend, Cloud, Data,
+Vincent test App (x2), Lathan Test 2/3/4, test BENJI. All 10 were
+confirmed by Vincent as real test profiles built from real CVs (his own
+and Lathan's). All were attributed to Vincent's primary account
+(maw282003@gmail.com) with zero data loss: 69 Applications and 12 CVs
+were preserved across the migration.
+
+###### Validation
+
+337 backend tests passing (up from 324 pre-DEC-081), including 9 new
+cross-domain isolation tests in test_data_isolation.py covering Profile,
+CV, Skills, Soft Skills, Languages, Certifications, Work Experience,
+Applications and Profile Enrichment.
+
+Manual end-to-end validation was performed with two real accounts
+(maw282003@gmail.com and a second test account), confirming zero data
+leakage in both directions across all domains, including the Dashboard,
+Profiles list, and Applications list.

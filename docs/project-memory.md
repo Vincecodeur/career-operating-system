@@ -561,3 +561,39 @@ DEC-081 design decisions (not yet implemented):
 Known technical debt (not blocking):
 
 - Duplicated validation block in backend/app/auth/router.py register() endpoint (password confirmation + password policy checks appear twice). Non-breaking, to be cleaned up in a future pass.
+
+  User Data Ownership And Isolation results (7.1.24):
+
+- user_id (NOT NULL) added to Profile, cascading ownership enforced via
+  join through Profile on CV, ProfileSkill, ProfileSoftSkill,
+  WorkExperience, ProfileLanguage, ProfileCertification,
+  ProfileEnrichmentProposal, Application, ApplicationEvent
+- JobOffer, JobSource, JobOfferSource, and all reference catalogs
+  (Skill, Language, Certification, Country, WorkMode, ContractType)
+  confirmed to remain global
+- 337 backend tests passing, 0 regressions
+- 9 cross-domain isolation tests added
+  (test_data_isolation.py)
+- repository audit gap discovered mid-implementation: app/ai/router.py
+  and app/matching/router.py were not identified in the original DEC-081
+  audit and required separate ownership fixes
+- real data leak found and fixed in
+  calculate_profile_scores_for_job_offer(): previously returned matching
+  scores for all profiles across all accounts with no user filter
+- frontend api.ts updated with a centralized getAuthHeaders() helper
+- CV download flow rewritten from a direct link to an
+  authenticated fetch + blob download, discovered broken during manual
+  end-to-end validation
+- 10 real demo profiles found in the production database (not 4, as
+  originally estimated during DEC-081 design) — all confirmed by Vincent
+  as real test profiles built from real CVs (his own and Lathan's) — all
+  migrated to maw282003@gmail.com with zero data loss (69 Applications,
+  12 CVs preserved)
+- manual end-to-end validation performed with two real accounts,
+  confirming no data leakage in either direction
+- Phase 7.1.24 CLOSED  
+  Remaining:
+- Settings Strategy Synchronization (7.1.25)
+- Best Profile Recommendation Architecture Review (7.1.26)
+- Final Regression And Documentation (7.1.27)
+- MVP Closure Decision (7.1.28)

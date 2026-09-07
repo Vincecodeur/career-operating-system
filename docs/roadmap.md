@@ -1363,56 +1363,7 @@ Commit :
 
 - aaac824 - feat(account): add member since date and remove obsolete roadmap display
 
-⏳ 7.1.24 Settings Strategy Synchronization
-
-Objectif :
-S'assurer que tous les paramètres utilisateur sont cohérents entre :
-
-- Frontend
-- Backend
-- Base PostgreSQL
-- Roadmap
-- Documentation
-
-Contexte historique :
-Cette phase avait été identifiée à la fin de la phase MVP Experience Review, mais n'a jamais été exécutée car le projet a dérivé vers Optional CV puis vers l'investigation et le durcissement du parser CV.
-
-Question centrale :
-Quels paramètres doivent être :
-
-- globaux au compte (User) ?
-- spécifiques à un profil (Profile) ?
-- spécifiques à une recherche (SavedSearch) ?
-
-Note importante :
-Cette question a pris une dimension nouvelle depuis la rédaction initiale, car Sign Up (7.1.23.15.5.3) autorise désormais la création de plusieurs comptes User, et ARCH-001 Multi-Tenant Data Isolation documente qu'aucune isolation multi-tenant n'existe. Tout paramètre "global au compte" est aujourd'hui en réalité partagé entre tous les comptes.
-
-Sous-phases :
-⬜ 7.1.24.1 Repository Audit
-⬜ 7.1.24.2 Product Design
-⬜ 7.1.24.3 Gap Analysis
-⬜ 7.1.24.4 Decision
-⬜ 7.1.24.5 Documentation Synchronization
-
-Livrable attendu :
-docs/settings-strategy.md
-
-Hors périmètre de cette phase :
-
-- SETTINGS-001 Settings Categories (reste en post-MVP backlog)
-- MATCHING-002 Configurable Matching Weights (reste hors MVP)
-- toute migration de données sans validation explicite préalable
-
-⚠️ MISE À JOUR - Séquencement révisé suite à DEC-081
-
-Le séquencement ci-dessous, initialement défini pour 7.1.24, a été révisé
-suite à DEC-081 (User Data Ownership And Isolation). Une nouvelle phase
-préalable a été identifiée : l'isolation des données par utilisateur doit
-précéder la synchronisation des Settings, car cette dernière dépend de
-l'existence d'un user_id sur Profile et ApplicationSetting.
-
-⏳ 7.1.24 User Data Ownership And Isolation
-
+✅ 7.1.24 User Data Ownership And Isolation  
 Objectif :
 Implémenter le modèle d'ownership confirmé :
 
@@ -1447,13 +1398,51 @@ Stratégie de migration des données démo :
 - rattachement des données conservées au compte principal
 
 Sous-phases :
-⬜ 7.1.24.1 Repository Audit (complément CV, Application)
-⬜ 7.1.24.2 Product Design (DEC-081 - terminé)
-⬜ 7.1.24.3 Backend Migration
-⬜ 7.1.24.4 Backend Tests (adaptation suite existante + tests d'isolation)
-⬜ 7.1.24.5 Frontend Impact Review
-⬜ 7.1.24.6 Validation End-To-End (2 comptes réels, étanchéité vérifiée)
-⬜ 7.1.24.7 Documentation Synchronization
+✅ 7.1.24.1 Repository Audit (complément CV, Application)
+✅ 7.1.24.2 Product Design (DEC-081)
+✅ 7.1.24.3 Backend Migration
+✅ 7.1.24.3.1 Foundation (user_id nullable + fixture authenticated_headers)
+✅ 7.1.24.3.2 Profile Router
+✅ 7.1.24.3.3 CV Router
+✅ 7.1.24.3.4 Profile Enrichment Router
+✅ 7.1.24.3.5 Skills / Soft Skills / Languages / Certifications / Work Experience Routers
+✅ 7.1.24.3.6 Applications Router
+✅ 7.1.24.3.7 Cleanup & Constraint Tightening (user_id NOT NULL, migration
+des 10 profils démo réels vers le compte principal)
+✅ 7.1.24.4 Backend Tests (337 tests passants, 0 régression, 9 tests
+d'isolation croisée ajoutés couvrant Profile, CV, Skills, Soft Skills,
+Languages, Certifications, Work Experience, Applications, Enrichment)
+✅ 7.1.24.5 Frontend Impact Review (header Authorization ajouté sur tous
+les endpoints sécurisés dans api.ts ; gap découvert et corrigé sur
+ai/router.py et matching/router.py, non sécurisés lors de l'audit initial ;
+fuite de données corrigée sur get_profile_scores_for_job_offer qui
+retournait tous les profils tous comptes confondus)
+✅ 7.1.24.6 Validation End-To-End (isolation confirmée manuellement entre
+deux comptes réels ; bug de téléchargement CV découvert et corrigé -
+remplacement du lien direct par un fetch+blob authentifié)
+✅ 7.1.24.7 Documentation Synchronization  
+Validation réalisée :
+
+- 337 tests backend passants, 0 régression
+- 9 tests d'isolation croisée entre comptes
+- isolation manuelle validée entre maw282003@gmail.com et un second compte
+- 10 profils démo réels migrés sans perte de données (69 candidatures,
+  12 CVs préservés)
+- contrainte NOT NULL appliquée sur profiles.user_id
+- 2 routers additionnels découverts et sécurisés en cours de route
+  (ai/router.py, matching/router.py) — non identifiés dans l'audit initial
+  de DEC-081
+- téléchargement de CV corrigé (fetch+blob authentifié au lieu d'un lien
+  direct navigateur, qui ne peut pas porter de header Authorization)  
+  Commits techniques :
+- 63ee13b - feat(profile): enforce NOT NULL constraint on user_id and
+  migrate orphan test fixtures
+- 411d77b - fix(tests): restore missing test cases in profile skills and
+  languages test suites
+- 7b22d2d - feat(ai,matching): secure ai-context and matching routers with
+  ownership checks; add Authorization header to frontend API client
+- b8e23eb - fix(cv): replace direct download link with authenticated
+  fetch+blob download
 
 Hors périmètre :
 

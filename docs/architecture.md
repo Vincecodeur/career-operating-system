@@ -93,7 +93,15 @@ Sous-domaines :
 Le système supporte plusieurs profils candidats.
 
 Note d'architecture :
-Le système ne implémente actuellement aucune isolation multi-tenant. Tous les comptes utilisateurs (User) partagent l'intégralité des données Profile, Application, CV et autres entités métier. Cette limitation est documentée et assumée pour le MVP (voir ARCH-001 dans le backlog post-MVP).
+Le système implémente une isolation des données par utilisateur (DEC-081,
+phase 7.1.24, terminée le 2026-09-04). Chaque Profile est rattaché à un
+User via user_id (colonne NOT NULL). L'ownership de CV, ProfileSkill,
+ProfileSoftSkill, WorkExperience, ProfileLanguage, ProfileCertification,
+ProfileEnrichmentProposal, Application et ApplicationEvent est vérifié via
+jointure sur leur Profile parent. JobOffer, JobSource, JobOfferSource et
+les référentiels partagés (Skill, Language, Certification, Country,
+WorkMode, ContractType) restent des catalogues globaux mutualisés entre
+tous les comptes, par conception.
 
 Additional Profile Context
 

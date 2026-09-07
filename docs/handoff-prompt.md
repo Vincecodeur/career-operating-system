@@ -934,6 +934,9 @@ Des tests existent pour :
 - Phase 7.1.22.11 Application Creation Strategy
 - Phase 7.1.22.12 Multi Profile Validation
 - Phase 7.1.22.13 End-to-End Validation
+- Phase 7.1.23.15 Authentication Learning Features
+- Phase 7.1.23.16 Minimal Account UX Polish
+- Phase 7.1.24 User Data Ownership And Isolation
 
 ## Derniers commits importants
 
@@ -1183,33 +1186,41 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-aaac824 - feat(account): add member since date and remove obsolete roadmap display
-
+b8e23eb - fix(cv): replace direct download link with authenticated fetch+blob download  
 Latest backend validation:
 
-- 326 backend tests passed, 0 regressions
-
-Current state:
-
+- 337 backend tests passed, 0 regressions  
+  Current state:
 - Phase 7.1.23.15 Authentication Learning Features CLOSED
 - Phase 7.1.23.16 Minimal Account UX Polish CLOSED
-- AccountPage.tsx cleaned up (obsolete roadmap and account mode references removed)
-- Member since date now displayed
-- Data isolation limitation still documented as ARCH-001 (post-MVP, not addressed)
+- Phase 7.1.24 User Data Ownership And Isolation CLOSED
+- user_id (NOT NULL) enforced on Profile, cascading ownership via
+  Profile for CV, ProfileSkill, ProfileSoftSkill, WorkExperience,
+  ProfileLanguage, ProfileCertification, ProfileEnrichmentProposal,
+  Application, ApplicationEvent
+- ai/router.py and matching/router.py secured (discovered as a gap in
+  the original DEC-081 audit, not identified in 7.1.24.1)
+- real data leak fixed in calculate_profile_scores_for_job_offer
+  (previously returned all profiles across all accounts)
+- frontend api.ts updated with a centralized Authorization header helper
+- CV download flow fixed (fetch+blob instead of a direct browser link,
+  which cannot carry an Authorization header)
+- 10 real demo profiles migrated to the primary account with zero data
+  loss (69 Applications, 12 CVs preserved)
+- manual end-to-end validation completed with two real accounts, no data
+  leakage confirmed in either direction
 - Known minor technical debt: duplicated validation block in auth/router.py register() (non-breaking)
 
-Next required step:
-7.1.24 User Data Ownership And Isolation
+Next Step:  
+7.1.25 Settings Strategy Synchronization  
+Key points before starting:
 
-Design decision reference:
-DEC-081 - User Data Ownership And Isolation (supersedes ARCH-001)
-
-Key points before starting implementation:
-
-- audit CV and Application models (not yet done in this session)
-- non-destructive audit of the 4 existing demo profiles before any deletion
-- most of the 326 existing backend tests will need to simulate an
-  authenticated user
+- Profile.preferred_countries and ApplicationSetting search_preferred_countries
+  are currently duplicated without synchronization
+- SavedSearch is currently stored as a JSON blob inside ApplicationSetting,
+  limited to 2000 characters
+- ApplicationSetting now has a real user_id available for the unique
+  constraint change (unique(user_id, setting_key))
 
 ## Méthode de reprise
 
