@@ -384,9 +384,13 @@ export function UploadCvModal({
 
     const selectedProposalIdSet = new Set(selectedProposalIds);
 
+    const pendingProposals = enrichmentProposals.filter(
+      (proposal) => proposal.status === "PENDING",
+    );
+
     try {
       const results = await Promise.allSettled(
-        enrichmentProposals.map((proposal) => {
+        pendingProposals.map((proposal) => {
           if (selectedProposalIdSet.has(proposal.id)) {
             const override = proposal.conflict_detected
               ? getConflictOverride(proposal)
@@ -406,7 +410,7 @@ export function UploadCvModal({
       if (failed.length > 0) {
         setLocalError(
           `${failed.length} proposal(s) could not be applied. ` +
-            `Most likely because some skills are not present in the catalog.`,
+            `They may have already been processed in a previous step.`,
         );
       }
 
