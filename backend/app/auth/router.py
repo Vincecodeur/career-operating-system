@@ -132,23 +132,6 @@ def register(
         )
     )
 
-    if payload.password != payload.confirm_password:
-        raise HTTPException(
-            status_code=(
-                status.HTTP_400_BAD_REQUEST
-            ),
-            detail=(
-                "Password confirmation does "
-                "not match."
-            ),
-    )
-
-    password_violations = (
-        get_password_policy_violations(
-            payload.password
-        )
-    )
-
     if password_violations:
         raise HTTPException(
             status_code=(
