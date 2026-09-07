@@ -1,5 +1,8 @@
 from uuid import uuid4
 
+
+from datetime import datetime
+from datetime import timedelta
 from app.core.database import SessionLocal
 from app.jobs.job_offer_repository import JobOfferRepository
 from app.jobs.job_offer_source_models import JobOfferSource
@@ -183,6 +186,73 @@ def test_get_or_create_source_reuses_existing_source():
 
         db.query(JobSource).filter(
             JobSource.name == f"Mock Source {suffix}"
+        ).delete()
+
+        db.commit()
+        db.close()
+        
+        
+def test_attach_source_refreshes_last_seen_at_on_existing_link():
+    db = SessionLocal()
+    repository = JobOfferRepository(db)
+    suffix = str(uuid4())
+
+    try:
+        normalized_offer = build_normalized_offer(suffix)
+
+        job_offer = repository.create_job_offer(
+            normalized_offer=normalized_offer,
+            source_name=f"Mock Source {suffix}",
+            source_type="API",
+            source_job_id=f"mock-{suffix}",
+            source_url=f"https://example.com/jobs/{suffix}",
+        )
+
+        db.commit()
+        db.refresh(job_offer)
+
+        source_link = db.query(JobOfferSource).filter(
+            JobOfferSource.job_offer_id == job_offer.id
+        ).first()
+
+        assert source_link is not None
+
+        past_timestamp = datetime.utcnow() - timedelta(days=5)
+        source_link.last_seen_at = past_timestamp
+        source_link.updated_at = past_timestamp
+        db.commit()
+
+        job_source = db.query(JobSource).filter(
+            JobSource.name == f"Mock Source {suffix}"
+        ).first()
+
+        refreshed_link = repository.attach_source(
+            job_offer=job_offer,
+            job_source=job_source,
+            source_job_id=f"mock-{suffix}",
+            source_url=f"https://example.com/jobs/{suffix}",
+        )
+
+        db.commit()
+        db.refresh(refreshed_link)
+
+        assert refreshed_link.id == source_link.id
+        assert refreshed_link.last_seen_at > past_timestamp
+        assert refreshed_link.updated_at > past_timestamp
+
+    finally:
+        db.rollback()
+
+        db.query(JobOfferSource).filter(
+            JobOfferSource.source_job_id == f"mock-{suffix}"
+        ).delete()
+
+        db.query(JobSource).filter(
+            JobSource.name == f"Mock Source {suffix}"
+        ).delete()
+
+        db.query(JobOffer).filter(
+            JobOffer.title == f"Integration Architect {suffix}"
         ).delete()
 
         db.commit()

@@ -8,6 +8,12 @@ from app.jobs.models import JobOffer
 from app.jobs.schemas import JobOfferCreate
 from app.jobs.schemas import JobOfferResponse
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import User
+from app.jobs.job_offer_cleanup_service import delete_stale_job_offers
+from app.jobs.job_offer_cleanup_service import resolve_age_window_days
+from app.settings.service import SettingsService
+
 router = APIRouter(
     tags=["Job Offers"]
 )
@@ -66,3 +72,19 @@ def get_job_offer(
         )
 
     return job_offer
+
+@router.post("/job-offers/cleanup")
+def cleanup_stale_job_offers(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    settings_service = SettingsService(db)
+    discovery_preferences = settings_service.get_discovery_preferences_settings(
+        current_user.id
+    )
+
+    age_window_days = resolve_age_window_days(
+        discovery_preferences["discovery_age_window"]
+    )
+
+    return delete_stale_job_offers(db, age_window_days)

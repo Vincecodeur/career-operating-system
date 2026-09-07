@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.jobs.job_offer_source_models import JobOfferSource
@@ -188,6 +189,9 @@ class JobOfferRepository:
         ).first()
 
         if existing_link is not None:
+            existing_link.last_seen_at = datetime.utcnow()
+            existing_link.updated_at = datetime.utcnow()
+            self.db.flush()
             return existing_link
 
         job_offer_source = JobOfferSource(
