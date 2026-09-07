@@ -6,6 +6,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
@@ -110,6 +111,32 @@ class UserSettings(Base):
         Boolean,
         nullable=False,
         default=False,
+    )
+
+    linkedin_email_imap_host: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    linkedin_email_imap_port: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+    )
+
+    linkedin_email_address: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    linkedin_email_app_password_encrypted: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    linkedin_email_folder: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+        default="INBOX",
     )
 
     created_at: Mapped[datetime] = mapped_column(
