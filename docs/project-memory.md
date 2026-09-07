@@ -665,6 +665,31 @@ Final Regression And Documentation results (7.1.27):
   duplicate found and fixed in project-status.md
   Phase 7.1.27 CLOSED
 
-Remaining:
+Job Offer Lifecycle Management results (7.1.29):
 
-- MVP Closure Decision (7.1.28)
+- root cause found: attach_source() never refreshed last_seen_at on an
+  existing JobOfferSource link, making staleness detection impossible
+- design gap discovered: JobOfferSkill and JobOfferSource reference
+  job_offers.id without ondelete cascade (RESTRICT by default in
+  PostgreSQL), not covered by the original design document
+- job_offer_cleanup_service.py created: find_stale_job_offer_ids() and
+  delete_stale_job_offers(), deleting JobOfferSkill then JobOfferSource
+  then JobOffer explicitly
+- offers with no JobOfferSource at all are treated as immediately stale
+  (Option B, confirmed by Vincent 2026-09-07); 2 real orphan offers found
+  in production, created manually on 2026-08-04 via the legacy manual
+  POST /job-offers endpoint (Phase 3), never linked through
+  attach_source()
+- offers referenced by at least one Application are always protected
+- new POST /job-offers/cleanup endpoint, authenticated
+- 359 backend tests passing, 0 regressions (352 + 7 new tests)
+- DEC-084 documents the amendment to DEC-041's retention clause
+
+Remaining for 7.1.29:
+
+- manual discovery refresh across all active connectors
+- first real cleanup run, summary validated with Vincent
+
+Remaining overall:
+
+- MVP Closure Decision (7.1.28), now sequenced after 7.1.29

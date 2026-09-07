@@ -19,18 +19,18 @@ main
 ---
 
 Current Milestone
-7.1.27 Final Regression And Documentation
+7.1.29 Job Offer Lifecycle Management
 
 ---
 
 Current Phase
-7.1.27.6 Documentation Synchronization
+7.1.29.5 Documentation Synchronization
 
 Current Step
 Completed
 
 Next Planned Milestone
-7.1.28 MVP Closure Decision
+7.1.29.6 Manual Discovery Refresh
 
 ---
 
@@ -1618,8 +1618,19 @@ Post-MVP Planning
 - Phase 7.1.27.4 Known Technical Debt Review terminée (duplication
   auth/router.py nettoyée, TECH-002 ajouté au backlog)
 - Phase 7.1.27.5 Documentation Final Consolidation terminée
-- Phase 7.1.27.6 Documentation Synchronization terminée  
-  Blocked  
+- Phase 7.1.27.6 Documentation Synchronization terminée
+- Phase 7.1.28 MVP Closure Decision reportée après 7.1.29 (chantier IA
+  ouvert avant clôture formelle, même pattern que DEC-081)
+- Phase 7.1.29.1 Repository Audit terminée (bug attach_source()
+  confirmé, JobOfferSkill/JobOfferSource sans ondelete cascade découvert)
+- Phase 7.1.29.2 Product Design terminée (DEC-084)
+- Phase 7.1.29.3 Backend Implementation terminée (attach_source()
+  corrigé, job_offer_cleanup_service.py créé, endpoint POST
+  /job-offers/cleanup)
+- Phase 7.1.29.4 Backend Tests terminée (7 tests ajoutés, 359 tests
+  backend passants, 0 régression)
+- Phase 7.1.29.5 Documentation Synchronization en cours
+  Blocked
   Aucun
 
 ---
@@ -1697,10 +1708,10 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.27 Final Regression And Documentation
+7.1.29 Job Offer Lifecycle Management
 
 Status:
-Completed
+In Progress
 
 Next Phase:
 7.1.28 MVP Closure Decision
@@ -1741,10 +1752,8 @@ Known remaining improvements:
 - Experience Extraction Refinement
 
 Next Step:
-7.1.28 MVP Closure Decision
+7.1.29.6 Manual Discovery Refresh
 Last Commits :
 
+- 0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)
 - 14b25ce - docs: remove duplicated line in project-status.md
-- 928d8c6 - chore(auth): remove duplicated password validation block in register()
-- cf01341 - docs(backlog): add UX-004 explainability gap found during DEC-039 audit
-- 771a52a - docs(backlog): add TECH-002 for recurring unexplained console error

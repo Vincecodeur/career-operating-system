@@ -1597,9 +1597,64 @@ Décision retenue (voir DEC-082) :
 - 928d8c6 - chore(auth): remove duplicated password validation block
   in register()
 - (2 corrections frontend ProfilesPage.tsx et UploadCvModal.tsx)  
-   ⬜ 7.1.28 MVP Closure Decision
-  Statut global (7.1.24 à 7.1.28) :
-  In Progress
+  ⏳ 7.1.29 Job Offer Lifecycle Management
+
+Objectif :
+Nettoyer les offres obsolètes ou retirées de leur source avant de
+connecter un fournisseur IA réel (Gemini), afin de ne jamais dépenser
+de tokens sur des offres non actionnables. Chantier ouvert avant la
+clôture formelle du MVP, en amont de 7.1.28 (même pattern que DEC-081
+réordonnant 7.1.24 à 7.1.27 avant 7.1.28).
+
+Sous-phases :
+
+✅ 7.1.29.1 Repository Audit
+
+- bug confirmé : attach_source() ne rafraîchissait jamais last_seen_at
+  sur un lien JobOfferSource existant, rendant la détection
+  d'obsolescence impossible
+- écart de design découvert : JobOfferSkill et JobOfferSource
+  référencent job_offers.id sans ondelete cascade (RESTRICT PostgreSQL
+  par défaut), non prévu par le document de design initial
+
+✅ 7.1.29.2 Product Design (docs/job-offer-lifecycle-management.md,
+DEC-084)
+
+✅ 7.1.29.3 Backend Implementation
+
+- attach_source() corrigé (rafraîchit last_seen_at et updated_at)
+- job_offer_cleanup_service.py créé (find_stale_job_offer_ids,
+  delete_stale_job_offers)
+- suppression explicite JobOfferSkill → JobOfferSource → JobOffer
+- endpoint POST /job-offers/cleanup ajouté (authentifié)
+
+✅ 7.1.29.4 Backend Tests
+
+- 1 test ajouté à test_job_offer_repository.py
+- 6 tests ajoutés dans test_job_offer_cleanup_service.py
+- 359 tests backend passants, 0 régression
+
+✅ 7.1.29.5 Documentation Synchronization
+
+⬜ 7.1.29.6 Manual Discovery Refresh
+
+- relancer la découverte sur tous les connecteurs actifs pour rendre
+  last_seen_at significatif avant le premier vrai nettoyage
+
+⬜ 7.1.29.7 Cleanup Execution & Validation
+
+- lancer le service de nettoyage une première fois
+- valider le résumé (evaluated, deleted, protected_by_application) avec
+  Vincent
+
+Commit technique :
+
+- 0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)
+
+⬜ 7.1.28 MVP Closure Decision
+
+Statut global (7.1.24 à 7.1.29) :
+In Progress
 
 ### Phase 7.2
 

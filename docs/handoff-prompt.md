@@ -1189,10 +1189,11 @@ Le Kanban est explicitement reporté après le MVP.
 ### Phase suivante recommandée
 
 Latest technical commit:
-14b25ce - docs: remove duplicated line in project-status.md  
+0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)
+
 Latest backend validation:
 
-- 352 backend tests passed, 0 regressions
+- 359 backend tests passed, 0 regressions (352 + 7 new tests, phase 7.1.29)
   Current state:
 - Phase 7.1.23.15 Authentication Learning Features CLOSED
 - Phase 7.1.23.16 Minimal Account UX Polish CLOSED
@@ -1239,9 +1240,26 @@ Latest backend validation:
 - previously-unresolved console error (reportAllChanges) formally
   documented as TECH-002, root cause still unknown but confirmed
   non-blocking
-- No remaining known technical debt is blocking MVP closure  
+- No remaining known technical debt is blocking MVP closure
+- Phase 7.1.28 MVP Closure Decision reopened and sequenced after a new
+  unplanned phase, 7.1.29 Job Offer Lifecycle Management, opened before
+  MVP closure following a question about real AI (Gemini) integration
+  readiness
+- Phase 7.1.29 Job Offer Lifecycle Management IN PROGRESS
+- attach_source() fixed to refresh last_seen_at/updated_at on existing
+  JobOfferSource links (previously never updated, blocking staleness
+  detection entirely)
+- job_offer_cleanup_service.py added: find_stale_job_offer_ids(),
+  delete_stale_job_offers(), deleting JobOfferSkill -> JobOfferSource ->
+  JobOffer explicitly (neither FK has an ondelete cascade)
+- offers with zero JobOfferSource are treated as immediately stale
+  (Option B, DEC-084); protected if referenced by at least one Application
+- POST /job-offers/cleanup endpoint added, authenticated
+- 359 backend tests passing, 0 regressions
+- DEC-084 documents the amendment to DEC-041's offer retention clause
   Next required step:
-  7.1.28 MVP Closure Decision
+  7.1.29.6 Manual Discovery Refresh, then 7.1.29.7 Cleanup Execution &
+  Validation, then 7.1.28 MVP Closure Decision
 
 ## Méthode de reprise
 

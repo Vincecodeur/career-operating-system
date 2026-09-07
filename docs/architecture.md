@@ -20,30 +20,29 @@ Le système est conçu comme une plateforme personnelle d'intelligence carrière
 
 ## Architecture générale
 
-Frontend
-
+Frontend  
 React
 TypeScript
-Vite
-
-↓
-
-Backend API
-
+Vite  
+↓  
+Backend API  
 FastAPI
-Python
-
-↓
-
-Database
-
-PostgreSQL
-
-↓
-
-AI Layer
-
-OpenAI API
+Python  
+↓  
+Database  
+PostgreSQL  
+↓  
+AI Layer  
+Google Gemini API (SDK google-genai)  
+Note d'architecture (DEC-085) :
+Le fournisseur IA retenu est Google Gemini, choisi pour son tier
+gratuit exploitable sans carte bancaire depuis la France, suffisant
+pour l'usage cible (explication de résultats déjà calculés par le
+moteur de matching déterministe). Le SDK utilisé est exclusivement
+google-genai (l'ancien google-generativeai est déprécié). Sur le tier
+gratuit, les prompts/réponses peuvent être utilisés pour l'entraînement
+des modèles Google ; les premiers tests techniques doivent donc utiliser
+des données de profil fictives, jamais les données réelles de Vincent.
 
 ---
 

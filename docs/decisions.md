@@ -666,9 +666,12 @@ Gestion des offres expirées :
   - l'historique ;
   - les analyses marché ;
   - les statistiques ;
-  - les comparaisons futures.
+- les comparaisons futures.
 
-L'utilisateur peut filtrer l'affichage des offres archivées.
+L'utilisateur peut filtrer l'affichage des offres archivées. Superseded in part by: DEC-084 (Job Offer Retention Amendment, 2026-09-07)
+
+- la clause ci-dessus (archivage permanent, jamais supprimées) ne s'applique plus telle quelle.
+  Voir DEC-084 pour la règle de suppression physique désormais en vigueur.
 
 # DEC-042
 
@@ -5843,3 +5846,121 @@ tied with other active profiles.
 - DEC-071 - Multi Profile Opportunity Context
 - DEC-072 - Application Profile Attribution (tie-breaking rule
   originally documented here, now correctly implemented)
+
+## DEC-084 - Job Offer Retention Amendment
+
+Date: 2026-09-07
+Status: Accepted
+
+### Contexte
+
+DEC-041 stipulait que les offres expirées sont archivées et jamais
+supprimées. La phase 7.1.29 (Job Offer Lifecycle Management) a pour
+objectif de nettoyer les offres obsolètes avant de connecter un
+fournisseur IA réel (Gemini), afin de ne jamais dépenser de tokens sur
+des offres non actionnables.
+
+### Décision
+
+Pour le périmètre MVP actuel (utilisateur unique), les offres obsolètes
+(plus anciennes que la fenêtre d'âge configurable, ou détectées comme
+retirées de leur source) sont supprimées de façon permanente (hard
+delete), SAUF si au moins une Application les référence.
+
+Ceci remplace la clause de rétention de DEC-041 ("les offres expirées
+sont archivées, jamais supprimées"). Ce compromis sacrifie le futur jeu
+de données historique de Market Intelligence (Phase 8) au profit d'une
+table job_offers légère et d'une garantie que les tokens IA ne sont
+jamais gaspillés sur des offres non actionnables. Ce choix pourra être
+révisé si la Phase 8 nécessite des données historiques d'offres.
+
+### Écarts découverts pendant l'implémentation (non prévus par le design initial)
+
+1. JobOfferSkill et JobOfferSource référencent job_offers.id sans
+   ondelete cascade (RESTRICT par défaut PostgreSQL). Le service de
+   nettoyage supprime donc explicitement, dans cet ordre :
+   JobOfferSkill → JobOfferSource → JobOffer.
+2. Une offre sans aucune JobOfferSource (jamais confirmée par le vrai
+   pipeline de découverte) est traitée comme immédiatement obsolète
+   (Option B, décision confirmée par Vincent le 2026-09-07). Cause
+   racine identifiée : 2 offres réelles créées manuellement le
+   2026-08-04 via l'ancien endpoint POST /job-offers (Phase 3, import
+   manuel), jamais reliées à attach_source().
+
+### Related Decisions
+
+- DEC-041 - Standardized Job Evaluation Rules (clause de rétention
+  amendée par cette décision)
+- DEC-081 - User Data Ownership And Isolation (JobOffer reste un
+  catalogue global)
+
+### DEC-085 - AI Provider Selection: Gemini
+
+Date: 2026-09-07
+Status: Accepted
+
+#### Contexte
+
+Le MVP arrive en fin de clôture (7.1.28 MVP Closure Decision) et la
+question de la connexion à un fournisseur IA réel s'est posée avant
+cette clôture formelle, ouvrant le chantier non planifié 7.1.29 (voir
+DEC-084). Avant d'implémenter la connexion technique (GeminiProvider,
+Phase 7.2), le choix du fournisseur doit être documenté formellement,
+car il conditionne l'architecture (`architecture.md` mentionnait
+jusqu'ici OpenAI API sans qu'aucune décision ne l'ait jamais actée).
+
+#### Décision
+
+Le fournisseur IA retenu est **Google Gemini** (Google AI Studio), via
+le SDK `google-genai` exclusivement (l'ancien SDK `google-generativeai`
+est déprécié et ne doit jamais être utilisé).
+
+#### Critères de choix
+
+- Seul fournisseur parmi OpenAI, Anthropic et Google offrant un tier
+  gratuit réellement exploitable sans carte bancaire, disponible
+  depuis la France.
+- Qualité jugée suffisante pour l'usage cible : explication de
+  résultats déjà calculés par le moteur de matching déterministe
+  (cohérent avec DEC-039 et DEC-075 : l'IA explique, elle ne calcule
+  jamais le score elle-même).
+- Aucun raisonnement complexe ni comportement d'agent requis pour ce
+  cas d'usage.
+
+#### Point de vigilance retenu
+
+Sur le tier gratuit, les prompts et réponses envoyés à l'API peuvent
+être utilisés par Google pour l'entraînement de ses modèles, sans
+possibilité de désactiver ce comportement sans passer au tier payant.
+En conséquence : le premier test technique de l'intégration
+(GeminiProvider) doit être réalisé avec des données de profil
+fictives ou anonymisées, jamais avec les données professionnelles
+réelles de Vincent, tant que le projet reste sur le tier gratuit.
+
+#### Risque de facturation
+
+Confirmé absent : un dépassement de quota sur le tier gratuit produit
+une erreur 429 (requête refusée), jamais une facturation automatique
+sans démarche explicite de passage au tier payant.
+
+#### Conséquences
+
+- `architecture.md` doit remplacer la mention "AI Layer / OpenAI API"
+  par "AI Layer / Google Gemini API (SDK google-genai)".
+- Toute implémentation future de `GeminiProvider` doit respecter
+  l'interface `AIProvider` déjà existante (DEC-075, phase 7.1.8 AI
+  Domain Implementation), sans la modifier.
+- Cette décision ne concerne que le choix du fournisseur. La
+  conception technique de `GeminiProvider` (prompt, gestion des
+  quotas, cache des explications par paire profile_id/job_offer_id)
+  reste une étape distincte, à traiter après la clôture de la Phase
+  7.1.29 (voir séquence dans roadmap.md).
+
+#### Related Decisions
+
+- DEC-039 - Explainable Opportunity Scoring (le score reste calculé
+  par le backend déterministe, jamais par l'IA)
+- DEC-075 - AI Context Contract (contrat de contexte que
+  GeminiProvider devra respecter)
+- DEC-078 - AI Context Preview And Consent (le consentement explicite
+  reste requis avant tout appel réel au fournisseur choisi ici)
