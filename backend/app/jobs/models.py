@@ -67,7 +67,7 @@ class JobOffer(Base):
     )
 
     source_url: Mapped[str | None] = mapped_column(
-        String(1000),
+        Text,
         nullable=True
     )
 

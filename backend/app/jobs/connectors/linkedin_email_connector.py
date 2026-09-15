@@ -16,39 +16,44 @@ logger = logging.getLogger(__name__)
 
 JOB_VIEW_URL_PATTERN = re.compile(r"/jobs/view/(\d+)")
 
+MAX_PLAUSIBLE_TITLE_LENGTH = 200
+
 
 class LinkedInEmailConnector(ConnectorInterface):
     """
     Connecteur LinkedIn pour le pipeline Job Discovery, basé sur la
-    lecture des emails de notification ("job alerts" / offres
-    similaires) reçus dans une boîte mail IMAP dédiée, plutôt que sur
-    un appel API ou du scraping du site LinkedIn.
+    lecture des emails de notification LinkedIn reçus dans une boîte
+    mail IMAP dédiée, plutôt que sur un appel API ou du scraping du
+    site LinkedIn.
 
-    Contexte (voir docs/linkedin-email-connector-design.md et
-    DEC-084 et suivantes) : LinkedIn ne propose aucune API publique
-    permettant de rechercher des offres pour un usage individuel, et
-    le scraping direct du site (y compris le simple suivi
-    automatisé des liens contenus dans ces emails, au-delà de 2-3
-    pages sans connexion) est explicitement interdit par ses
-    conditions d'utilisation et activement détecté. Lire des emails
-    reçus dans sa propre boîte mail ne constitue pas un accès aux
-    serveurs LinkedIn.
+    Détection par contenu (TEXT), pas par expéditeur (FROM) :
+    un email transféré manuellement (par opposition à une vraie
+    redirection IMAP, qui préserve l'en-tête From d'origine) remplace
+    l'expéditeur d'origine par celui du compte qui transfère. Le
+    marqueur LinkedIn original reste cependant cité dans le corps du
+    message. Chercher via TEXT (en-têtes + corps) couvre donc les
+    deux cas : emails livrés par une vraie redirection (marqueur dans
+    From) et emails transférés manuellement (marqueur cité dans le
+    corps) - confirmé sur un cas réel le 2026-09-15.
 
-    Limite assumée : les emails de notification LinkedIn ne
-    contiennent ni description, ni type de contrat, ni salaire.
-    Seuls titre, entreprise, ville, mode de travail et URL sont
-    disponibles. raw_description est donc généré automatiquement à
-    partir de ces champs plutôt que d'être vide (RawOffer l'exige).
-    Ceci dégrade structurellement le score de matching de ces offres
-    par rapport aux offres provenant de sources avec description
-    complète (France Travail, Greenhouse) - point connu et accepté,
-    une solution de complément manuel de l'offre après import est
-    envisagée séparément.
+    Limite connue et non résolue à ce stade : seul le template email
+    "offres similaires" (expéditeur jobs-noreply@linkedin.com) a été
+    analysé et testé. Le template "alerte de recherche enregistrée"
+    (expéditeur jobalerts-noreply@linkedin.com) a une structure HTML
+    probablement différente, non encore reverse-engineered. Si des
+    emails de ce second type ne produisent aucune offre extraite,
+    ce n'est pas une erreur silencieuse dissimulée : c'est cette
+    limite connue qui s'exprime.
     """
 
     SOURCE_NAME = "LinkedIn"
 
     DEFAULT_SENDER_FILTER = "jobs-noreply@linkedin.com"
+
+    DEFAULT_CONTENT_MARKERS = [
+        "jobs-noreply@linkedin.com",
+        "jobalerts-noreply@linkedin.com",
+    ]
 
     def __init__(
         self,
@@ -58,6 +63,8 @@ class LinkedInEmailConnector(ConnectorInterface):
         app_password: str | None = None,
         folder: str = "INBOX",
         sender_filter: str | None = None,
+        content_markers: list[str] | None = None,
+        only_unread: bool = True,
         timeout: int = 10,
     ):
         self.imap_host = imap_host
@@ -65,10 +72,18 @@ class LinkedInEmailConnector(ConnectorInterface):
         self.email_address = email_address
         self.app_password = app_password
         self.folder = folder
-        self.sender_filter = (
-            sender_filter or self.DEFAULT_SENDER_FILTER
-        )
+        self.sender_filter = sender_filter
+        self.only_unread = only_unread
         self.timeout = timeout
+
+        if content_markers is not None:
+            self.content_markers = content_markers
+        elif sender_filter is not None:
+            self.content_markers = [sender_filter]
+        else:
+            self.content_markers = list(
+                self.DEFAULT_CONTENT_MARKERS
+            )
 
     def fetch_job_offers(self) -> list[RawOffer]:
         if not self._has_valid_credentials():
@@ -112,7 +127,7 @@ class LinkedInEmailConnector(ConnectorInterface):
                 )
                 return []
 
-            message_ids = self._search_unread_sender_emails(
+            message_ids = self._search_marker_emails(
                 connection
             )
 
@@ -143,21 +158,57 @@ class LinkedInEmailConnector(ConnectorInterface):
             and self.app_password
         )
 
-    def _search_unread_sender_emails(
+    def _search_marker_emails(
         self,
         connection: imaplib.IMAP4_SSL,
     ) -> list[bytes]:
+        if not self.content_markers:
+            return []
+
+        criteria = self._build_text_or_criteria(
+            self.content_markers
+        )
+
+        search_args = (
+            ["UNSEEN", *criteria]
+            if self.only_unread
+            else criteria
+        )
+
         status, data = connection.search(
             None,
-            "UNSEEN",
-            "FROM",
-            f'"{self.sender_filter}"',
+            *search_args,
         )
 
         if status != "OK" or not data or not data[0]:
             return []
 
         return data[0].split()
+
+    @staticmethod
+    def _build_text_or_criteria(
+        markers: list[str],
+    ) -> list[str]:
+        """
+        Builds IMAP SEARCH criteria matching any email whose headers
+        or body contain at least one of the given markers, using
+        nested OR TEXT clauses (e.g. for 2 markers: OR TEXT "a" TEXT
+        "b"; for 3: OR TEXT "a" OR TEXT "b" TEXT "c").
+        """
+        if len(markers) == 1:
+            return ["TEXT", f'"{markers[0]}"']
+
+        criteria: list[str] = []
+
+        for marker in markers[:-1]:
+            criteria.append("OR")
+            criteria.append("TEXT")
+            criteria.append(f'"{marker}"')
+
+        criteria.append("TEXT")
+        criteria.append(f'"{markers[-1]}"')
+
+        return criteria
 
     def _process_single_email(
         self,
@@ -194,18 +245,6 @@ class LinkedInEmailConnector(ConnectorInterface):
         self,
         message: Message,
     ) -> list[RawOffer]:
-        """
-        Extracts one or more job offers from a single LinkedIn
-        notification email ("job alert" / "similar jobs" style).
-
-        Each job appears as a "job card": a link to
-        linkedin.com/.../jobs/view/{id}/... wrapping the job title,
-        followed by a line formatted as "Company · City (WorkMode)".
-
-        Returns an empty list (never raises) if the HTML body is
-        missing or has an unexpected structure, so a malformed or
-        unrelated email never breaks the discovery pipeline.
-        """
         try:
             html_body = self._get_html_body(message)
 
@@ -243,7 +282,9 @@ class LinkedInEmailConnector(ConnectorInterface):
 
             job_id = match.group(1)
 
-            title = link.get_text(strip=True)
+            title = self._normalize_whitespace(
+                link.get_text(strip=True)
+            )
 
             if not title:
                 # invisible wrapper links around the job card share
@@ -253,8 +294,30 @@ class LinkedInEmailConnector(ConnectorInterface):
             if title.lower().endswith("logo"):
                 # the company logo link also wraps the job URL and
                 # carries visible text (e.g. "Acme Corp logo"), but
-                # is not the job title - never let it override an
-                # already-found real title for the same job id
+                # is not the job title
+                continue
+
+            if not self._looks_like_a_real_title(title):
+                # Confirmed real case (2026-09-15): LinkedIn's
+                # "saved search alert" email template (sender
+                # jobalerts-noreply@linkedin.com) wraps the entire
+                # card - title, company, city, status, button text
+                # all concatenated - inside a single <a> link, unlike
+                # the "similar jobs" grid template this parser was
+                # built for (each field isolated in its own cell).
+                # Rather than persist a corrupted, unusably long
+                # "title" (which even overflowed a database column
+                # limit in production), skip it. This degrades
+                # gracefully to 0 offers extracted for that email,
+                # consistent with the documented, still-unresolved
+                # limitation on this second template - not a new
+                # silent failure mode.
+                logger.info(
+                    "LinkedInEmailConnector: skipping a job link "
+                    "whose text does not look like a plausible job "
+                    "title (likely a different, not yet supported "
+                    "email template)."
+                )
                 continue
 
             company, city, work_mode = (
@@ -262,20 +325,9 @@ class LinkedInEmailConnector(ConnectorInterface):
             )
 
             if company is None and city is None:
-                # No "Company · City" line was found near this link.
-                # This happens for the header/trigger link some
-                # LinkedIn "similar jobs" emails include at the top
-                # (pointing to the job the user originally viewed),
-                # which carries visible text but is not itself a job
-                # card in the list. Real job cards always have this
-                # line, so its absence means this is not an offer.
                 continue
 
             if job_id in offers_by_job_id:
-                # a second valid-looking link for a job id already
-                # recorded (should not normally happen once the logo
-                # link is excluded, but keep the first valid match
-                # rather than silently overwriting it)
                 continue
 
             description = (
@@ -302,13 +354,44 @@ class LinkedInEmailConnector(ConnectorInterface):
         return list(offers_by_job_id.values())
 
     @staticmethod
+    def _looks_like_a_real_title(title: str) -> bool:
+        """
+        Plausibility check protecting against templates this parser
+        was not built for (see the "saved search alert" case,
+        2026-09-15): a real job title is reasonably short and never
+        contains the "·" separator used elsewhere to join
+        company/city, since that character only appears when a link
+        wraps an entire card rather than just its title.
+
+        Generic on purpose: this guards against any future unknown
+        template producing similarly concatenated text, not just the
+        one specific case already observed.
+        """
+        if len(title) > MAX_PLAUSIBLE_TITLE_LENGTH:
+            return False
+
+        if "\u00b7" in title:
+            return False
+
+        return True
+    
+    @staticmethod
+    def _normalize_whitespace(text: str) -> str:
+        """
+        Collapses any run of whitespace (including literal \\r\\n
+        line breaks that can appear inside a single text node when
+        the source HTML wraps a title across two physical lines) into
+        a single space. get_text(strip=True) only trims the ends of
+        the concatenated text, never internal whitespace - confirmed
+        real case (2026-09-15): titles like "Responsable\\r\\n SI de
+        Gestion" extracted from an actual LinkedIn email.
+        """
+        return re.sub(r"\s+", " ", text).strip()
+
+    @staticmethod
     def _extract_company_and_location(
         link,
     ) -> tuple[str | None, str | None, str | None]:
-        """
-        Looks for a line formatted as "Company · City (WorkMode)"
-        within the smallest enclosing table of the title link.
-        """
         parent_table = link.find_parent("table")
 
         if parent_table is None:
@@ -339,7 +422,10 @@ class LinkedInEmailConnector(ConnectorInterface):
         if len(parts) < 2:
             return None, None, None
 
-        company = parts[0].strip() or None
+        company = (
+            LinkedInEmailConnector._normalize_whitespace(parts[0])
+            or None
+        )
 
         location_part = "\u00b7".join(parts[1:]).strip()
 
@@ -356,7 +442,12 @@ class LinkedInEmailConnector(ConnectorInterface):
                 : work_mode_match.start()
             ].strip()
 
-        city = location_part or None
+        city = (
+            LinkedInEmailConnector._normalize_whitespace(
+                location_part
+            )
+            or None
+        )
 
         return company, city, work_mode
 
