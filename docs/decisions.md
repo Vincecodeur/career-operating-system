@@ -6148,3 +6148,149 @@ long du MVP.
 - DEC-084 - Job Offer Retention Amendment
 - DEC-085 - AI Provider Selection: Gemini (prochaine étape technique)
 - DEC-086 - LinkedIn Email Connector Replaces API/Scraping Approach
+
+### DEC-089 - AI Explanation Batch Wiring And GeminiProvider Design
+
+Date: 2026-09-15
+Status: Accepted
+
+#### Contexte
+
+La Phase 7.1.8 (AI Domain Implementation) a livré un domaine AI
+Explanation complet et testé en isolation (interfaces.py, services.py,
+schemas.py, prompt_builder.py, MockAIProvider, 124 tests), mais un
+audit réalisé pendant l'ouverture de la Phase 7.2 a révélé que ce
+domaine n'a jamais été câblé à un vrai flux applicatif :
+AIExplanationService n'est instancié nulle part dans le code de
+production, et le champ ai_explanation attendu par le frontend
+(OpportunitiesPage.tsx, AIExplanationCard) n'existe dans aucun schéma
+backend (matching/schemas.py). Le composant frontend tourne donc en
+mode fallback permanent depuis sa création, sans que cela ait été
+détecté jusqu'ici.
+
+Par ailleurs, le tier gratuit de l'API Gemini a subi une réduction
+réelle de 50 à 80% de ses quotas fin 2025 (confirmé par recherche web,
+septembre 2026) : environ 20 requêtes/jour pour un modèle Flash
+standard, contre un quota nettement préservé pour Flash-Lite (~15
+RPM, quota journalier non restreint de la même façon). Un déclenchement
+synchrone de l'explication IA à chaque consultation d'offre (comme le
+laissait supposer le câblage prévu initialement) aurait épuisé le
+quota gratuit après quelques clics de navigation normale.
+
+#### Décision
+
+##### Modèle retenu
+
+gemini-3.1-flash-lite (ou la version stable équivalente disponible au
+moment de l'implémentation), positionné par la documentation officielle
+Google pour l'extraction/classification/résumé à faible latence et fort
+volume - exactement le profil de notre cas d'usage (expliquer un score
+déjà calculé, sans raisonnement complexe ni comportement d'agent).
+Confirmé par benchmarks comparatifs (LLM Stats) comme égal ou supérieur
+à Gemini 2.5 Flash sur les indices de reasoning et coding pertinents,
+tout en préservant un quota gratuit journalier bien plus généreux.
+
+##### Déclenchement : run quotidien planifié, jamais synchrone
+
+L'explication IA n'est jamais générée à la demande au moment où
+l'utilisateur consulte une offre. Un job planifié quotidien
+(GeminiExplanationScheduler, suivant le même pattern architectural que
+DiscoveryScheduler - lifespan FastAPI, run_once() testable, intervalle
+configurable) traite un lot d'offres une fois par jour.
+
+##### Critères de sélection des offres candidates au run quotidien
+
+Une offre est candidate au traitement IA du jour si, et seulement si :
+
+1. Aucune explication IA n'existe déjà pour la paire (profile_id,
+   job_offer_id) concernée (une explication déjà générée n'est jamais
+   régénérée automatiquement) ;
+2. job_offer.quality_level == "COMPLETE" (une offre PARTIAL, notamment
+   issue du LinkedIn Email Connector avant complétion manuelle JOBS-001,
+   est explicitement exclue du traitement IA jusqu'à sa complétion -
+   cohérent avec is_calculable=False déjà introduit en 7.1.31) ;
+3. Le matching_score de la paire dépasse
+   UserSettings.discovery_minimum_matching_score (réutilisation du
+   paramètre existant depuis la Phase 7.1.19.7, pas de nouveau
+   paramètre introduit).
+
+Le score de matching lui-même reste calculé gratuitement par le moteur
+déterministe backend (calculate_matching_result()), jamais par l'IA -
+cohérent avec DEC-032, DEC-039, DEC-075, DEC-081, DEC-085. Filtrer sur
+un seuil de score avant tout appel IA réduit donc réellement le nombre
+de prompts envoyés, sans dépendre d'aucun calcul IA préalable.
+
+##### Profils traités : tous les profils actifs
+
+Pour chaque offre candidate, une explication distincte est générée
+pour chaque profil actuellement actif de l'utilisateur (DEC-071), pas
+uniquement le Primary Profile ni le seul Best Matching Profile. En
+pratique, le nombre de profils actifs simultanés reste faible
+(actuellement jusqu'à 3 profils réels chez Vincent), rendant ce choix
+compatible avec le quota Flash-Lite.
+
+##### Persistance : nouvelle table dédiée
+
+Une nouvelle table job_offer_ai_explanations est introduite, avec une
+ligne par paire (profile_id, job_offer_id) traitée avec succès :
+
+- id, profile_id (FK profiles.id), job_offer_id (FK job_offers.id)
+- summary, detailed_explanation, action_plan (JSON)
+- provider_name, model_name, prompt_version
+- generated_at, created_at, updated_at
+- contrainte UNIQUE(profile_id, job_offer_id)
+
+Le endpoint de matching existant (GET /matching/{profile_id}/{job_offer_id})
+lit cette table si une ligne existe pour la paire demandée, et retourne
+ai_explanation: null si aucune explication n'a encore été générée -
+jamais d'appel synchrone au fournisseur IA depuis ce endpoint.
+
+##### Invalidation
+
+Aucune invalidation automatique n'est introduite dans cette phase. Une
+explication déjà générée reste valide indéfiniment, y compris si le
+score de matching évolue ultérieurement (nouvelle Application, edit de
+profil, etc.). Une offre initialement PARTIAL et exclue du traitement
+devient candidate au run suivant dès qu'elle passe à COMPLETE (JOBS-001),
+sans nécessiter de traitement immédiat forcé.
+
+##### Contrôle de consentement
+
+Avant tout appel à GeminiProvider pour un profil donné, le run
+quotidien vérifie ai_call_allowed pour ce profil (via AIContextService,
+DEC-078). Un profil sans consentement explicite ou non AI Ready est
+silencieusement ignoré pour ce profil, sans bloquer le traitement des
+autres profils actifs ni des autres offres.
+
+##### Configuration
+
+Le schéma existant AIProviderConfiguration (provider_name, model_name,
+timeout_seconds, prompt_version), défini en Phase 7.1.8 mais jamais
+instancié jusqu'ici, est utilisé pour porter la configuration de
+GeminiProvider. GEMINI_API_KEY est ajouté à settings.py, aux côtés des
+autres secrets de connecteurs déjà présents (FRANCE_TRAVAIL_CLIENT_SECRET,
+LINKEDIN_EMAIL_ENCRYPTION_KEY).
+
+##### Gestion des erreurs
+
+Les exceptions déjà définies (AIProviderTimeout, AIProviderAuthenticationError,
+AIProviderUnavailableError, AIProviderInvalidResponseError) sont levées
+par GeminiProvider selon le type d'erreur SDK rencontré. Un run quotidien
+qui échoue pour une paire (profil, offre) donnée n'interrompt pas le
+traitement des paires suivantes ; l'échec est loggé, la paire reste
+candidate au run du lendemain.
+
+Conformément à DEC-085, tout test technique de GeminiProvider doit
+utiliser des données de profil fictives ou anonymisées, jamais les
+données professionnelles réelles de Vincent, tant que le projet reste
+sur le tier gratuit.
+
+#### Related Decisions
+
+- DEC-032 - Matching Score Ownership (le score reste backend, jamais IA)
+- DEC-039 - Explainable Opportunity Scoring
+- DEC-071 - Multi Profile Opportunity Context (profils actifs)
+- DEC-075 - AI Context Contract
+- DEC-078 - AI Context Preview And Consent (ai_call_allowed)
+- DEC-085 - AI Provider Selection: Gemini
+- DEC-086/087 - LinkedIn Email Connector (quality_level PARTIAL/COMPLETE)

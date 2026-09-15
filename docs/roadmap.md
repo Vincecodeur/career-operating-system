@@ -1922,25 +1922,71 @@ Sous-phases :
 
 #### Phase 7.2
 
-AI Career Advisor  
+AI Career Advisor
 Objectif :
-Fournir un accompagnement personnalisé dans les décisions de carrière.  
+Fournir un accompagnement personnalisé dans les décisions de carrière.
 Le système doit :
 
 - analyser les opportunités ;
 - analyser les compétences ;
 - analyser les écarts ;
-- proposer des trajectoires cohérentes.  
+- proposer des trajectoires cohérentes.
   Ouverture officielle : 2026-09-15 (DEC-088), suite à la clôture
-  formelle du MVP (Phase 7.1). Première étape requise : conception
-  technique de GeminiProvider (DEC-085), respectant l'interface
-  AIProvider existante sans la modifier.  
-  Sous-phases (à détailler avant tout développement) :
+  formelle du MVP (Phase 7.1).
+
+⏳ 7.2.0 AI Explanation Batch Wiring & GeminiProvider
+Objectif :
+Écart découvert à l'ouverture de la Phase 7.2 : le domaine AI
+Explanation (Phase 7.1.8) n'a jamais été câblé à un vrai flux
+applicatif - AIExplanationService n'est instancié nulle part dans le
+code de production, et ai_explanation (attendu par
+OpportunitiesPage.tsx / AIExplanationCard) n'existe dans aucun schéma
+backend. Ce chantier est donc un prérequis avant 7.2.1, pas une simple
+implémentation de GeminiProvider isolée.
+✅ 7.2.0.1 Repository Audit Final
+
+- confirmé : MockAIProvider jamais instancié hors sa propre définition
+- confirmé : AIExplanationService jamais instancié dans app/
+- confirmé : app/ai/router.py ne contient que AIContextService
+  (preview/readiness/consent), aucun appel à generate_explanation()
+- confirmé : ai_explanation absent de matching/schemas.py
+- confirmé : frontend attend ce champ (OpportunitiesPage.tsx lignes
+  72 et 1537), AIExplanationCard tourne en fallback permanent depuis
+  la Phase 7.1.8
+- confirmé : AIProviderConfiguration défini mais jamais instancié
+  (schéma orphelin, réutilisable)
+- confirmé : SettingsService.get_ai_settings() retourne
+  ai_features_enabled/ai_consent_accepted, exploitable pour le gating
+  ✅ 7.2.0.2 Product Design (DEC-089)
+- risque de quota identifié et évité : un déclenchement synchrone au
+  clic aurait épuisé le quota gratuit Flash-Lite en quelques clics -
+  retenu : run quotidien planifié (GeminiExplanationScheduler, même
+  pattern que DiscoveryScheduler)
+- critères de sélection des offres candidates : sans explication
+  existante + quality_level == "COMPLETE" + score ≥
+  discovery_minimum_matching_score (réutilisation de l'existant,
+  7.1.19.7)
+- profils traités : tous les profils actifs (DEC-071), pas uniquement
+  Primary ou Best Match
+- persistance : nouvelle table job_offer_ai_explanations
+  (profile_id, job_offer_id, UNIQUE)
+- gating : ai_call_allowed vérifié par profil avant tout appel
+- AIProviderConfiguration réutilisé pour la config Gemini
+  ⬜ 7.2.0.3 GeminiProvider Technical Design
+  ⬜ 7.2.0.4 Backend Implementation
+  ⬜ 7.2.0.5 Backend Tests
+  ⬜ 7.2.0.6 Validation avec données fictives (DEC-085)
+  ⬜ 7.2.0.7 Frontend Implementation
+  ⬜ 7.2.0.8 Frontend Validation
+  ⬜ 7.2.0.9 Documentation Synchronization
+
+Sous-phases suivantes (à détailler après clôture de 7.2.0) :
+
 - 7.2.1 Career Path Suggestions
 - 7.2.2 Opportunity Strategy
-- 7.2.3 Long-Term Career Planning  
+- 7.2.3 Long-Term Career Planning
   Statut :
-  Planned - sous-phases à définir avant implémentation
+  In Progress - 7.2.0 Product Design clos, Technical Design à suivre
 
 ### Phase 7.3
 
