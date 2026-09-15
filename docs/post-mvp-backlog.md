@@ -851,4 +851,38 @@ Open questions (not yet designed):
   Reason deferred: requires product design (status vs deletion,
   filter UX, confirmation dialog) before implementation; not blocking
   any MVP capability delivered so far.
-  Related
+  Related Decisions:
+- DEC-041 - Standardized Job Evaluation Rules (offer archival
+  concept originally introduced here, before being superseded in
+  part by DEC-084)
+- DEC-084 - Job Offer Retention Amendment (existing automatic
+  cleanup mechanism this feature would complement, not replace)
+
+#### TECH-004 - Circular Import Between app.core.database And app.auth.models
+
+Status: Backlog
+Context:
+Discovered on 2026-09-15 while manually validating DiscoveryScheduler
+outside of the FastAPI application context (python -c "from
+app.jobs.scheduler import DiscoveryScheduler ..."):
+ImportError: cannot import name 'User' from partially initialized
+module 'app.auth.models' (most likely due to a circular import)
+Root cause: app/core/database.py imports User from app.auth.models
+(likely for a relationship or type reference), while
+app/auth/models.py imports Base from app.core.database. Under normal
+operation (pytest via conftest.py, or the real FastAPI server via
+app.main), app.main is imported first, which happens to load modules
+in an order that avoids triggering the cycle. Importing
+app.jobs.scheduler (or any module transitively importing
+app.auth.models) directly, without app.main already loaded first,
+triggers the cycle.
+Workaround confirmed: importing app.main before the affected module
+sidesteps the issue completely, with no need to change any production
+code path (pytest and the real server are both unaffected).
+Reason deferred: no functional impact on the running application or
+the test suite; only affects ad-hoc scripts/REPL usage that import
+backend modules directly without going through app.main first.
+Trigger for revisiting: if this cycle starts causing real failures in
+the test suite or the running server, or if a maintenance pass on
+app/core/database.py and app/auth/models.py is scheduled for another
+reason.

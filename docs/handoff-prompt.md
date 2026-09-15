@@ -1282,8 +1282,61 @@ Latest backend validation:
 - 136 real LinkedIn offers backfilled into production, 0 exceptions
 - discovery_connectors not yet updated to activate linkedin_email for the real account
 
+Manual Offer Completion results (7.1.31, JOBS-001):
+
+- PATCH /job-offers/{id}/complete-description added, letting the
+  user paste a real LinkedIn description onto a PARTIAL offer
+- MatchingResult, RankedJobOffer, ProfileOpportunityScore enriched
+  with is_calculable: bool - no score ever computed for PARTIAL
+  offers, consistent with DEC-039
+- real bug found and fixed: NormalizationService stamped ALL
+  sources as PARTIAL regardless of description completeness;
+  France Travail/Greenhouse now correctly default to COMPLETE
+  (opt-in list); 199 pre-existing offers reclassified
+- 424 backend tests passing, 0 regressions
+- manually validated end-to-end on a real LinkedIn offer
+  Phase 7.1.31 CLOSED
+
+MVP Closure Decision results so far (7.1.28):
+
+- 7.1.28.1 Repository Audit: 3 undocumented documentation files
+  found and committed (158f33f)
+- 7.1.28.2 Discovery Connectors Activation: real architectural gap
+  found - DiscoveryScheduler read the global DISCOVERY_CONNECTORS
+  env var, never UserSettings.discovery_connectors (per-user,
+  editable in Settings) - editing Settings had zero real effect on
+  the automatic discovery cycle
+- fix (Option B, chosen for long-term correctness):
+  DiscoveryScheduler.\_resolve_connector_names() now resolves
+  dynamically per call, prioritizing an explicit constructor
+  override, then UserSettings, then the env var as a safety net
+- linkedin_email activated for the real account and validated
+  end-to-end via a real run_once() call, confirmed by the SQL query
+  against user_settings observed in the logs
+- 428 backend tests passing, 0 regressions
+- TECH-004 added to backlog: circular import between
+  app.core.database and app.auth.models, discovered outside the
+  FastAPI app context, workaround documented, non-blocking
+- Commit 61664b2
+  Remaining: 7.1.28.3 Lightweight Frontend Spot-Check onward
+
 Next required step:
 7.1.28 MVP Closure Decision
+
+Update (2026-09-15, post 7.1.30):
+
+- Phase 7.1.31 Manual Offer Completion (JOBS-001) CLOSED - 424 tests
+  passing, manual LinkedIn description completion validated
+  end-to-end (commit 091eafe)
+- Phase 7.1.28 MVP Closure Decision IN PROGRESS:
+  - 7.1.28.1 Repository Audit CLOSED
+  - 7.1.28.2 Discovery Connectors Activation CLOSED - real gap
+    found and fixed (DiscoveryScheduler now resolves connectors from
+    UserSettings instead of a frozen env var); linkedin_email
+    activated and validated for the real account; 428 tests passing
+    (commit 61664b2); TECH-004 added to backlog (unrelated circular
+    import, non-blocking)
+    Next required step: 7.1.28.3 Lightweight Frontend Spot-Check
 
 ## Méthode de reprise
 

@@ -19,12 +19,12 @@ main
 ---
 
 Current Milestone
-7.1.31 Manual Offer Completion (JOBS-001)
+7.1.28 MVP Closure Decision
 
 ---
 
 Current Phase
-7.1.31.8 Documentation Synchronization
+7.1.28.2 Discovery Connectors Activation
 
 Current Step
 Completed
@@ -1761,10 +1761,7 @@ Next Step:
 
 Last Commits :
 
-- cda715f - feat(core): add Fernet-based secret encryption module (7.1.30.1)
-- f30c72f - feat(settings): add linkedin*email*\* columns to UserSettings (7.1.30.2)
-- 7e2a555 - feat(settings): add LinkedIn email connector settings (7.1.30.3)
-- f6ba6fa - feat(jobs): implement LinkedIn email HTML extraction (7.1.30.5)
-- 38c7901 - feat(settings): add LinkedIn email connector frontend form (7.1.30.7)
 - 05c8659 - fix(jobs): resolve source_url overflow, reject malformed titles, normalize internal whitespace
 - 091eafe - feat(jobs): manual completion of PARTIAL offers, source-aware quality_level (JOBS-001, 7.1.31)
+- 158f33f - docs: close phase 7.1.31 Manual Offer Completion (JOBS-001), add JOBS-003
+- 61664b2 - feat(jobs): resolve discovery connectors from UserSettings instead of env var (7.1.28.2)

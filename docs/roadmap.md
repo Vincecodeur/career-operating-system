@@ -1829,6 +1829,38 @@ Sous-phases :
   Completed
 
 ⬜ 7.1.28 MVP Closure Decision
+
+✅ 7.1.28.1 Repository Audit
+
+- 424 tests backend confirmés passants (avant 7.1.28.2)
+- 3 fichiers de documentation non commitées trouvés et corrigés
+  (roadmap.md, post-mvp-backlog.md, project-status.md) - Commit 158f33f
+- historique Git confirmé cohérent avec la documentation
+  ✅ 7.1.28.2 Discovery Connectors Activation (linkedin_email)
+- écart architectural découvert : DiscoveryScheduler lisait la
+  variable d'environnement globale DISCOVERY_CONNECTORS au démarrage
+  du processus, jamais UserSettings.discovery_connectors (per-user,
+  éditable dans Settings, DEC-070/DEC-082) - éditer Settings n'avait
+  donc aucun effet réel sur le cycle de découverte automatique
+- correctif retenu (Option B, la plus sûre à long terme) :
+  DiscoveryScheduler.\_resolve_connector_names() résout désormais la
+  liste des connecteurs dynamiquement à chaque exécution, par ordre
+  de priorité : override explicite du constructeur (tests, appels
+  scriptés) > UserSettings.discovery_connectors de l'utilisateur
+  principal résolu > variable d'environnement DISCOVERY_CONNECTORS
+  (filet de sécurité uniquement)
+- linkedin_email ajouté aux connecteurs du compte réel via l'UI
+  Settings
+- validation réelle effectuée : un vrai appel run_once() a bien
+  résolu les 3 connecteurs (france_travail, greenhouse, linkedin_email)
+  depuis UserSettings, confirmé par la requête SQL SELECT ...
+  FROM user_settings observée dans les logs
+- 4 nouveaux tests, 428 tests backend passants, 0 régression
+- TECH-004 ajouté au backlog : import circulaire découvert
+  (app.core.database <-> app.auth.models), non lié à ce correctif,
+  contournement documenté
+- Commit 61664b2
+
 Statut global (7.1.24 à 7.1.31) :
 Completed
 
