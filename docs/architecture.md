@@ -299,13 +299,18 @@ Le système doit être capable :
 
 ### Matching
 
-Comparaison profil ↔ offre.
+Comparaison profil ↔ offre.  
+Version actuelle (Matching V2, Phase 6.0) :
 
-Version actuelle :
-
-- matching basé sur les compétences.
-
-Opportunity Profile Comparison
+- score pondéré sur 100 points, composé de quatre sous-scores :
+  - Skills (70%)
+  - Experience (15%)
+  - Work Mode (10%)
+  - Location (5%)
+- strengths et weaknesses déterministes
+- explications par critère (ScoreExplanation)
+- Opportunity Analysis (verdict, recommendation, summary)  
+  Opportunity Profile Comparison
 
 The Matching domain exposes a multi-profile opportunity comparison capability.
 
@@ -329,13 +334,11 @@ conformément à DEC-032.
 
 Version future :
 
-- compétences ;
-- langues ;
+- langues (CEFR) ;
 - séniorité ;
-- localisation ;
-- work mode ;
+- certifications ;
 - salaire ;
-- autres critères configurables.
+- pondérations configurables (voir MATCHING-002, post-MVP).
 
 ### Opportunity Ranking
 

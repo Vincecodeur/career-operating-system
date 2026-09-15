@@ -275,9 +275,13 @@ Quick navigation dashboard.
 
 ## MATCH-001 - Skill Match Score
 
-Status: Backlog
-
-Use skills in matching score.
+Status: Completed (Phase 6.0.2, Matching V2)
+Implemented as the skills_score sub-score, weighted at 70% of the
+overall matching score. This entry was found still marked as
+Backlog during the 7.1.28.4 MVP Scope Confirmation review, a
+documentation inconsistency discovered against architecture.md
+(which incorrectly still listed "skills" under a future version).
+Both documents corrected on the same pass (2026-09-15).
 
 ---
 
@@ -299,9 +303,10 @@ Use CEFR levels in matching.
 
 ## MATCH-004 - Experience Match
 
-Status: Backlog
-
-Use years of experience in matching.
+Status: Completed (Phase 6.0.2, Matching V2)
+Implemented as the experience_score sub-score, weighted at 15% of
+the overall matching score. Same documentation inconsistency and
+correction as MATCH-001 above (2026-09-15).
 
 ---
 

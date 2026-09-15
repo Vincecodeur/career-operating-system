@@ -1869,6 +1869,28 @@ Sous-phases :
   formulaire LinkedIn Email Connector Settings (7.1.30.7)
 - aucun écart, aucune régression visuelle ou erreur bloquante
   constatée, confirmé par Vincent
+  ✅ 7.1.28.4 MVP Scope Confirmation
+- périmètre MVP livré confirmé : Profile (multi-profils, CV
+  Intelligence, Reference Data Catalog, Profile Enrichment),
+  Job Discovery (multi-source, cycle de vie, complétion manuelle),
+  Matching V2 + Opportunity Analysis + Opportunity Ranking,
+  Applications (workflow complet), Settings (per-user), AI
+  Explanation/Context/Consent, Authentification complète
+- périmètre explicitement hors MVP confirmé : Phase 7.2 (AI Career
+  Advisor / GeminiProvider réel), Phase 7.3 (Dashboard Evolution),
+  Phase 8 (Market Intelligence), Phase 9 (Career Roadmap), MFA/OAuth/
+  SSO, Configurable Matching Weights, Settings Categories UI,
+  archivage manuel des offres (JOBS-003)
+- écart réel découvert pendant cette revue : architecture.md
+  décrivait encore le Matching comme "basé sur les compétences"
+  uniquement, avec skills/work mode/location listés en "version
+  future" alors que Matching V2 (Phase 6.0.2) les a déjà implémentés
+  en sous-scores pondérés depuis longtemps ; MATCH-001 (Skill Match
+  Score) et MATCH-004 (Experience Match) étaient donc incorrectement
+  encore marqués "Backlog" dans post-mvp-backlog.md
+- correctif appliqué : architecture.md mis à jour pour refléter les 4
+  sous-scores réels (Skills 70%, Experience 15%, Work Mode 10%,
+  Location 5%) ; MATCH-001 et MATCH-004 passés à "Completed"
   Statut global (7.1.24 à 7.1.31) :
   Completed
 
