@@ -1731,9 +1731,106 @@ Sous-phases :
 - discovery_connectors NON encore mis à jour pour activer linkedin_email sur le compte réel (reste à faire)
   Décision de séquencement (2026-09-15, JOBS-001) : JOBS-001 (complétion manuelle des offres LinkedIn Email) est explicitement priorisé avant la Phase 7.2 (AI Career Advisor / connexion Gemini), les offres LinkedIn étant jugées les plus cohérentes et les plus représentatives des cibles de carrière réelles de Vincent, donc les plus efficaces pour valider la pertinence du matching avant de connecter un vrai fournisseur IA.
   Statut : Completed
-  ⬜ 7.1.28 MVP Closure Decision
-  Statut global (7.1.24 à 7.1.30) :
+
+✅ 7.1.31 Manual Offer Completion (JOBS-001)
+Objectif :
+Permettre la complétion manuelle des offres PARTIAL (LinkedIn Email)
+par simple copier-coller de la description réelle depuis la page
+LinkedIn, afin d'obtenir un score de matching pertinent avant de
+connecter un vrai fournisseur IA (Phase 7.2).
+
+Sous-phases :
+✅ 7.1.31.1 Product Design
+
+- emplacement retenu : formulaire de complétion dans le détail de
+  l'Opportunité, visible uniquement si quality_level == "PARTIAL"
+- tag/badge "Partial" filtrable ajouté à la liste des Opportunities
+- contenu accepté : texte libre, couvrant toute la section LinkedIn
+  "À propos de l'offre d'emploi", sans extraction/segmentation
+  automatique
+- calcul de matching bloqué tant que l'offre reste PARTIAL, recalcul
+  automatique dès complétion (à la demande, grâce au calcul à la
+  volée déjà en place - aucune planification à construire)
+- endpoint dédié et étroit retenu (PATCH
+  /job-offers/{id}/complete-description), plutôt qu'une extension
+  d'un endpoint générique de mise à jour de JobOffer
+  ✅ 7.1.31.2 Repository Audit
+- confirmé : aucun endpoint de mise à jour de JobOffer n'existait
+  avant cette phase (seulement create/list/get/cleanup)
+- confirmé : quality_level est un simple String(20) libre, sans
+  enum Python, seule valeur existante "PARTIAL" avant cette phase
+- confirmé : le calcul de matching est effectué à la volée à chaque
+  appel API, jamais persisté - aucun mécanisme de planification à
+  construire pour le recalcul post-complétion
+- confirmé : JobOfferResponse n'exposait aucun champ ajouté au
+  modèle depuis la Phase 3 (ni quality_level, ni city, ni
+  work_mode...), écart de schéma préexistant corrigé a minima
+  (quality_level uniquement) dans le cadre de cette phase
+  ✅ 7.1.31.3 Backend Implementation
+- JobOfferResponse enrichi avec quality_level
+- JobOfferDescriptionUpdate schema créé
+- PATCH /job-offers/{id}/complete-description créé, authentifié
+- MatchingResult, RankedJobOffer, ProfileOpportunityScore enrichis
+  avec is_calculable: bool (défaut True)
+- calculate_matching_result() retourne un résultat neutre explicite
+  (build_incomplete_offer_result()) si quality_level == "PARTIAL",
+  sans jamais calculer de score trompeur
+  ✅ 7.1.31.4 Backend Tests
+- 10 tests ajoutés (test_job_offers.py, test_matching.py)
+- 424 tests backend passants, 0 régression
+  ✅ 7.1.31.5 Bug Découvert Et Corrigé : Quality Level Non Discriminant Par Source
+- bug réel signalé par Vincent : NormalizationService assignait
+  quality_level = "PARTIAL" à TOUTES les sources sans distinction,
+  y compris France Travail et Greenhouse qui fournissent pourtant
+  une vraie description complète dès l'API
+- second risque découvert en creusant : JobOfferRepository.
+  update_job_offer() écrasait quality_level ET la description sur
+  toute offre déjà COMPLETE (manuellement ou via une source fiable)
+  à chaque réimport détectant un doublon - une complétion manuelle
+  JOBS-001 aurait pu être silencieusement effacée au prochain cycle
+  de découverte
+- correctif : NormalizationService.SOURCES_WITH_COMPLETE_DESCRIPTIONS
+  (liste opt-in : "France Travail", "Greenhouse" uniquement - liste
+  d'inclusion, jamais d'exclusion, pour qu'un futur connecteur
+  n'hérite jamais silencieusement de COMPLETE par erreur)
+- correctif : update_job_offer() ne régresse plus jamais un
+  quality_level COMPLETE vers PARTIAL automatiquement
+- 199 offres pré-existantes reclassées via un script de migration
+  ponctuel (183 France Travail + 16 Greenhouse)
+- 4 nouveaux tests de non-régression ajoutés
+  ✅ 7.1.31.6 Frontend Implementation
+- filtre "Partial Only" / "Complete Only" ajouté à Opportunities
+- badge "Partial" ajouté sur les cartes d'offres
+- formulaire de complétion manuelle ajouté dans Opportunity Details
+  (textarea + bouton "Complete Description"), visible uniquement si
+  quality_level == "PARTIAL"
+- affichage du score (badge de carte, Best Matching Profile, tableau
+  de comparaison Profile Scores) rendu conditionnel à is_calculable :
+  "Not scored"/"—" au lieu d'un faux 0% pour les offres PARTIAL
+- cache de classement (matchingScoresByOfferId) rafraîchi après une
+  mise à jour d'offre, précédemment obsolète jusqu'au rechargement
+  complet de la page
+  ✅ 7.1.31.7 Validation Réelle
+- build frontend validé, 0 erreur TypeScript
+- validation manuelle bout en bout sur une vraie offre LinkedIn
+  (DECADE - Architecte Solutions E-commerce F/H) : collage de la
+  description réelle, badge "Partial" disparaît, score de matching
+  réel affiché (12.5%), Matching Analysis complet affiché
+- 3 écarts frontend découverts et corrigés lors de cette validation
+  (badge de carte, tableau Profile Scores, Best Matching Profile
+  affichaient tous un faux 0% avant filtrage sur is_calculable)
+  ✅ 7.1.31.8 Documentation Synchronization
+- post-mvp-backlog.md : JOBS-001 passé de "In Progress" à "Completed"
+- roadmap.md : présente section 7.1.31 ajoutée
+  Commit technique unique (backend + frontend + correctif quality_level) :
+- 091eafe - feat(jobs): manual completion of PARTIAL offers,
+  source-aware quality_level (JOBS-001)
+  Statut :
   Completed
+
+⬜ 7.1.28 MVP Closure Decision
+Statut global (7.1.24 à 7.1.31) :
+Completed
 
 ### Phase 7.2
 

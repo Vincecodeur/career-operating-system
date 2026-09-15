@@ -19,12 +19,12 @@ main
 ---
 
 Current Milestone
-7.1.30 LinkedIn Email Connector
+7.1.31 Manual Offer Completion (JOBS-001)
 
 ---
 
 Current Phase
-7.1.30 Documentation Synchronization
+7.1.31.8 Documentation Synchronization
 
 Current Step
 Completed
@@ -1713,7 +1713,7 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.30 LinkedIn Email Connector
+7.1.31 Manual Offer Completion (JOBS-001)
 
 Status:
 Completed
@@ -1758,11 +1758,13 @@ Known remaining improvements:
 
 Next Step:
 7.1.28 MVP Closure Decision
+
 Last Commits :
 
 - cda715f - feat(core): add Fernet-based secret encryption module (7.1.30.1)
-- f30c72f - feat(settings): add linkedin*email*\* columns to UserSettings (7.1.30.2) - 7e2a555
-- feat(settings): add LinkedIn email connector settings (7.1.30.3)
+- f30c72f - feat(settings): add linkedin*email*\* columns to UserSettings (7.1.30.2)
+- 7e2a555 - feat(settings): add LinkedIn email connector settings (7.1.30.3)
 - f6ba6fa - feat(jobs): implement LinkedIn email HTML extraction (7.1.30.5)
 - 38c7901 - feat(settings): add LinkedIn email connector frontend form (7.1.30.7)
 - 05c8659 - fix(jobs): resolve source_url overflow, reject malformed titles, normalize internal whitespace
+- 091eafe - feat(jobs): manual completion of PARTIAL offers, source-aware quality_level (JOBS-001, 7.1.31)

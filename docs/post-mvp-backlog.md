@@ -761,30 +761,47 @@ If Career Operating System is ever intended to support multiple real users (e.g.
 
 ### JOBS-001 - Manual Completion Of LinkedIn Email Offers
 
-Status: In Progress (prioritized before Gemini integration, 2026-09-15)
+Status: Completed (2026-09-15, Phase 7.1.31)
 LinkedIn Email Connector offers (DEC-086) never include a real
 description, contract type or extracted skills - only title,
 company, city, work mode and source URL are available from the
-notification email. This structurally caps their matching score and
-AI explanation quality (quality_level = PARTIAL) compared to offers
-from France Travail or Greenhouse.
-Proposed capability: allow the user to manually paste the real
-description (copied from the LinkedIn page after manually viewing
-the offer) onto an existing LinkedIn Email offer, to obtain a
-meaningful matching score for offers that look interesting.
-Sequencing decision (2026-09-15): this item is moved ahead of Phase
+notification email. This structurally capped their matching score
+and AI explanation quality (quality_level = PARTIAL) compared to
+offers from France Travail or Greenhouse.
+Sequencing decision (2026-09-15): this item was moved ahead of Phase
 7.2 (AI Career Advisor / Gemini integration). Rationale: LinkedIn
-Email offers are expected to be the most relevant and coherent
+Email offers are considered the most relevant and coherent
 opportunities for Vincent's actual career targets, making them the
 most effective real-world dataset to validate matching quality
-before connecting a real AI provider. Connecting Gemini against a
-majority of PARTIAL-quality offers (France Travail/Greenhouse volume
-without LinkedIn's relevance) would produce a weaker first
-validation of the AI explanation layer.
-Reason previously deferred (superseded by the above): requires UX
-design (which field, where in Opportunity Details) and a dedicated
-update endpoint; not blocking for the connector's initial usefulness
-as a discovery signal.
+before connecting a real AI provider.
+Implemented capability:
+
+- PATCH /job-offers/{id}/complete-description lets the user paste
+  the real "About the job" section copied from LinkedIn onto a
+  PARTIAL offer, setting quality_level to COMPLETE
+- MatchingResult, RankedJobOffer and ProfileOpportunityScore enriched
+  with is_calculable: bool - matching is never computed for PARTIAL
+  offers (neutral result returned instead), consistent with DEC-039
+  (no opaque score); frontend shows "Not scored"/"—" rather than a
+  misleading 0%
+- Partial Only / Complete Only filter and a Partial badge added to
+  Opportunities
+- fix discovered along the way: NormalizationService previously
+  stamped ALL sources as PARTIAL regardless of description
+  completeness; France Travail and Greenhouse now correctly default
+  to COMPLETE (opt-in list); 199 pre-existing offers reclassified via
+  a one-time migration
+- fix: JobOfferRepository.update_job_offer() no longer regresses an
+  already-COMPLETE offer back to PARTIAL on re-import, preventing a
+  manual completion from being silently overwritten on the next
+  discovery cycle
+- 10 new backend tests, 424 backend tests passing, 0 regressions
+- manually validated end-to-end on a real LinkedIn offer (DECADE -
+  Architecte Solutions E-commerce)
+  Commit: 091eafe - feat(jobs): manual completion of PARTIAL offers,
+  source-aware quality_level (JOBS-001)
+  Remaining follow-up: discovery_connectors not yet updated to activate
+  linkedin_email for the real account (separate from JOBS-001 itself).
 
 ### JOBS-002 - LinkedIn API Connector Kept As Dead Code
 
@@ -798,3 +815,40 @@ individual job search has ever existed.
 Trigger for revisiting: if a legitimate LinkedIn partner API access
 ever becomes available (e.g. through an official partnership), this
 connector could be reactivated instead of being rewritten.
+
+#### JOBS-003 - Manual Archiving Of Old Job Offers
+
+Status: Backlog
+Context:
+DEC-084 (Job Offer Retention Amendment, 7.1.29) introduced automatic
+hard deletion of stale offers via find_stale_job_offer_ids() /
+delete_stale_job_offers(), based on discovery_age_window and absence
+of JobOfferSource/Application protection. This automatic mechanism
+runs only via POST /job-offers/cleanup, triggered manually or by a
+future scheduled job - there is currently no way for the user to
+manually flag a specific offer as "no longer relevant" before it
+reaches the automatic age threshold.
+Proposed capability: allow the user to manually archive an
+individual offer directly from Opportunity Details (or from the
+Opportunities list), independent of discovery_age_window, for offers
+they've reviewed and decided are not worth pursuing but do not want
+to wait for automatic cleanup to remove.
+Open questions (not yet designed):
+
+- does "archive" mean a new status value (e.g. status = "ARCHIVED"
+  alongside the existing "ACTIVE"), or immediate hard deletion via
+  the existing delete_stale_job_offers() path?
+- if a new status is introduced, should archived offers be hidden by
+  default from Opportunities (consistent with the already-removed
+  "Archived Opportunities Visibility" feature, cut during 7.1.19.7
+  design review for lack of demonstrated MVP value), or shown behind
+  a dedicated filter (following the same pattern as the "Partial
+  Only" / "Complete Only" filter introduced in JOBS-001)?
+- interaction with existing Application protection: an offer
+  referenced by an Application must presumably remain protected from
+  manual archiving too, consistent with DEC-084's existing rule for
+  automatic cleanup.
+  Reason deferred: requires product design (status vs deletion,
+  filter UX, confirmation dialog) before implementation; not blocking
+  any MVP capability delivered so far.
+  Related
