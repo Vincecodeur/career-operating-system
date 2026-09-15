@@ -1324,11 +1324,12 @@ MVP Closure Decision results so far (7.1.28):
   declared complete 2026-09-15; Phase 7.2 (AI Career Advisor) officially
   opened; DEC-085 (Gemini) remains the confirmed provider choice, next
   step is GeminiProvider technical design, not implementation
+- 7.1.28.7 Documentation Synchronization CLOSED - 7 project
+  documents cross-checked for consistency at MVP closure
   MVP (Phase 7.1) CLOSED.
-  Next required step: 7.1.28.7 Documentation Synchronization, then
-  define 7.2 sub-phases before any AI implementation begins
-
-Next required step: 7.1.28.4 MVP Scope Confirmation
+  Next required step: define Phase 7.2 (AI Career Advisor) sub-phases
+  before any implementation begins (GeminiProvider technical design,
+  DEC-085)
 
 ## Méthode de reprise
 

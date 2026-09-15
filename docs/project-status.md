@@ -24,7 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-7.1.28.6 MVP Closure Statement (DEC-088)
+7.1.28.7 Documentation Synchronization
 
 Current Step
 Completed
@@ -1713,13 +1713,13 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.31 Manual Offer Completion (JOBS-001)
+7.1.28 MVP Closure Decision (DEC-088)
 
 Status:
 Completed
 
 Next Phase:
-7.1.28 MVP Closure Decision
+7.2 AI Career Advisor - sub-phases to be defined
 
 Status:
 Not Started

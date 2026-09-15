@@ -1909,6 +1909,12 @@ Sous-phases :
 - 428 tests backend passants, 0 régression
 - dette technique résiduelle confirmée non bloquante
 - Phase 7.2 officiellement ouverte
+  ✅ 7.1.28.7 Documentation Synchronization
+- 7 documents projet (roadmap.md, project-status.md, decisions.md,
+  architecture.md, handoff-prompt.md, project-memory.md,
+  post-mvp-backlog.md) confirmés cohérents entre eux à la clôture
+- DEC-088 correctement référencée dans roadmap.md, project-status.md,
+  handoff-prompt.md
   Statut global (7.1.24 à 7.1.31) :
   Completed
   Statut Phase 7.1 :
