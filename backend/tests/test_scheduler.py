@@ -242,3 +242,194 @@ def test_resolve_primary_user_id_returns_real_user_id(monkeypatch):
     finally:
         db.rollback()
         db.close()
+        
+
+class FakeSettingsServiceWithConnectors:
+    def __init__(self, db):
+        self.db = db
+
+    def get_job_discovery_settings(self, user_id):
+        return {
+            "discovery_enabled": True,
+            "discovery_interval_minutes": 1440,
+            "discovery_connectors": [
+                "france_travail",
+                "linkedin_email",
+            ],
+        }
+
+
+class FakeSettingsServiceWithoutConnectors:
+    def __init__(self, db):
+        self.db = db
+
+    def get_job_discovery_settings(self, user_id):
+        return {
+            "discovery_enabled": True,
+            "discovery_interval_minutes": 1440,
+            "discovery_connectors": [],
+        }
+
+
+def test_run_once_resolves_connectors_from_user_settings_when_no_override_given(
+    monkeypatch,
+):
+    FakeDiscoveryService.calls = []
+
+    fake_db = FakeDatabaseSession()
+
+    def fake_session_factory():
+        return fake_db
+
+    monkeypatch.setattr(
+        "app.jobs.scheduler.DiscoveryService",
+        FakeDiscoveryService,
+    )
+    monkeypatch.setattr(
+        "app.jobs.scheduler.SettingsService",
+        FakeSettingsServiceWithConnectors,
+    )
+    monkeypatch.setattr(
+        DiscoveryScheduler,
+        "_resolve_primary_user_id",
+        staticmethod(lambda db: 1),
+    )
+
+    scheduler = DiscoveryScheduler(
+        enabled=True,
+        interval_minutes=1440,
+        connector_names=None,
+        session_factory=fake_session_factory,
+    )
+
+    scheduler.run_once()
+
+    assert FakeDiscoveryService.calls[0]["connector_names"] == [
+        "france_travail",
+        "linkedin_email",
+    ]
+
+
+def test_run_once_falls_back_to_env_when_user_has_no_connectors_configured(
+    monkeypatch,
+):
+    FakeDiscoveryService.calls = []
+
+    fake_db = FakeDatabaseSession()
+
+    def fake_session_factory():
+        return fake_db
+
+    monkeypatch.setattr(
+        "app.jobs.scheduler.DiscoveryService",
+        FakeDiscoveryService,
+    )
+    monkeypatch.setattr(
+        "app.jobs.scheduler.SettingsService",
+        FakeSettingsServiceWithoutConnectors,
+    )
+    monkeypatch.setattr(
+        DiscoveryScheduler,
+        "_resolve_primary_user_id",
+        staticmethod(lambda db: 1),
+    )
+    monkeypatch.setattr(
+        "app.jobs.scheduler.settings.DISCOVERY_CONNECTORS",
+        ["france_travail"],
+    )
+
+    scheduler = DiscoveryScheduler(
+        enabled=True,
+        interval_minutes=1440,
+        connector_names=None,
+        session_factory=fake_session_factory,
+    )
+
+    scheduler.run_once()
+
+    assert FakeDiscoveryService.calls[0]["connector_names"] == [
+        "france_travail",
+    ]
+
+
+def test_run_once_falls_back_to_env_when_no_user_id_resolved(
+    monkeypatch,
+):
+    FakeDiscoveryService.calls = []
+
+    fake_db = FakeDatabaseSession()
+
+    def fake_session_factory():
+        return fake_db
+
+    monkeypatch.setattr(
+        "app.jobs.scheduler.DiscoveryService",
+        FakeDiscoveryService,
+    )
+    monkeypatch.setattr(
+        DiscoveryScheduler,
+        "_resolve_primary_user_id",
+        staticmethod(lambda db: None),
+    )
+    monkeypatch.setattr(
+        "app.jobs.scheduler.settings.DISCOVERY_CONNECTORS",
+        ["greenhouse"],
+    )
+
+    scheduler = DiscoveryScheduler(
+        enabled=True,
+        interval_minutes=1440,
+        connector_names=None,
+        session_factory=fake_session_factory,
+    )
+
+    scheduler.run_once()
+
+    assert FakeDiscoveryService.calls[0]["connector_names"] == [
+        "greenhouse",
+    ]
+
+
+def test_explicit_connector_names_override_bypasses_user_settings(
+    monkeypatch,
+):
+    FakeDiscoveryService.calls = []
+
+    fake_db = FakeDatabaseSession()
+
+    def fake_session_factory():
+        return fake_db
+
+    monkeypatch.setattr(
+        "app.jobs.scheduler.DiscoveryService",
+        FakeDiscoveryService,
+    )
+    monkeypatch.setattr(
+        DiscoveryScheduler,
+        "_resolve_primary_user_id",
+        staticmethod(lambda db: 1),
+    )
+
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError(
+            "SettingsService must not be instantiated when an "
+            "explicit connector_names override is given."
+        )
+
+    monkeypatch.setattr(
+        "app.jobs.scheduler.SettingsService",
+        fail_if_called,
+    )
+
+    scheduler = DiscoveryScheduler(
+        enabled=True,
+        interval_minutes=1440,
+        connector_names=["mock"],
+        session_factory=fake_session_factory,
+    )
+
+    scheduler.run_once()
+
+    assert FakeDiscoveryService.calls[0]["connector_names"] == [
+        "mock",
+    ]

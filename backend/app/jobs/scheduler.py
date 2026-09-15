@@ -9,6 +9,7 @@ from app.auth.models import User
 from app.core.database import SessionLocal
 from app.core.settings import settings
 from app.jobs.discovery_service import DiscoveryService
+from app.settings.service import SettingsService
 
 
 logger = logging.getLogger(__name__)
@@ -49,11 +50,16 @@ class DiscoveryScheduler:
             else interval_minutes
         )
 
-        self.connector_names = (
-            settings.DISCOVERY_CONNECTORS
-            if connector_names is None
-            else connector_names
-        )
+        # None is kept as a sentinel meaning "no explicit override was
+        # given at construction time". This allows run_once() to
+        # resolve the real connector list dynamically on every call,
+        # from UserSettings.discovery_connectors (per-user, editable
+        # in the Settings UI) rather than freezing it once at process
+        # startup from the DISCOVERY_CONNECTORS environment variable.
+        # An explicit override (used by all existing tests and by any
+        # future manual/scripted call) always takes priority and
+        # bypasses this resolution entirely.
+        self.connector_names = connector_names
 
         self.session_factory = session_factory
 
@@ -122,9 +128,9 @@ class DiscoveryScheduler:
 
     def run_once(self) -> dict:
         """
-        ExÃ©cute une synchronisation Job Discovery immÃ©diatement.
+        ExÃƒÂ©cute une synchronisation Job Discovery immÃƒÂ©diatement.
 
-        Cette mÃ©thode est volontairement synchrone pour rester simple
+        Cette mÃƒÂ©thode est volontairement synchrone pour rester simple
         et facilement testable avec Pytest.
         """
         db = self.session_factory()
@@ -132,15 +138,60 @@ class DiscoveryScheduler:
         try:
             user_id = self._resolve_primary_user_id(db)
 
+            connector_names = self._resolve_connector_names(
+                db,
+                user_id,
+            )
+
             discovery_service = DiscoveryService(db)
 
             return discovery_service.import_from_connector_names(
-                connector_names=self.connector_names,
+                connector_names=connector_names,
                 source_type="API",
                 user_id=user_id,
             )
         finally:
             db.close()
+
+    def _resolve_connector_names(
+        self,
+        db: Session,
+        user_id: int | None,
+    ) -> list[str]:
+        """
+        Resolves the connector list to use for this run, in priority
+        order:
+        1. an explicit override passed to the constructor (tests,
+           manual/scripted calls) - always wins, never touches the
+           database;
+        2. UserSettings.discovery_connectors for the resolved primary
+           user (per-user preference, editable in the Settings UI,
+           DEC-070/DEC-082) - used only if non-empty;
+        3. the DISCOVERY_CONNECTORS environment variable - safety net
+           only, covers the case where no primary user is configured
+           or that user has not saved any connector yet.
+        """
+        if self.connector_names is not None:
+            return self.connector_names
+
+        if user_id is not None:
+            settings_service = SettingsService(db)
+
+            job_discovery_settings = (
+                settings_service.get_job_discovery_settings(
+                    user_id
+                )
+            )
+
+            configured_connectors = job_discovery_settings[
+                "discovery_connectors"
+            ]
+
+            if configured_connectors:
+                return configured_connectors
+
+        return settings.DISCOVERY_CONNECTORS
+
 
     @staticmethod
     def _resolve_primary_user_id(
