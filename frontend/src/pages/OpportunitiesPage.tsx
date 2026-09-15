@@ -4,6 +4,7 @@ import { AIExplanationCard } from "../components/AIExplanationCard";
 import { Card } from "../components/ui/Card";
 import { PageHeader } from "../components/ui/PageHeader";
 import {
+  completeJobOfferDescription,
   createApplication,
   createSavedSearch,
   deleteSavedSearch,
@@ -31,6 +32,7 @@ type JobOffer = {
   source: string | null;
   source_url: string | null;
   description: string | null;
+  quality_level: string;
   created_at: string;
 };
 
@@ -68,11 +70,13 @@ type MatchingData = {
   opportunity_analysis: OpportunityAnalysis;
   explanations: ScoreExplanation[];
   ai_explanation?: AIExplanation | null;
+  is_calculable: boolean;
 };
 
 type RankedJobOffer = {
   job_offer_id: number;
   matching_score: number;
+  is_calculable: boolean;
 };
 
 type ApplicationSummary = {
@@ -126,7 +130,12 @@ export function OpportunitiesPage() {
 
   const [sourceFilter, setSourceFilter] = useState("ALL");
   const [locationFilter, setLocationFilter] = useState("ALL");
+  const [qualityFilter, setQualityFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("BEST_MATCH_FIRST");
+  const [completionDescription, setCompletionDescription] = useState("");
+  const [submittingCompletion, setSubmittingCompletion] = useState(false);
+  const [completionError, setCompletionError] = useState<string | null>(null);
+
   const [discoveryPreferences, setDiscoveryPreferences] =
     useState<DiscoveryPreferencesSettings | null>(null);
 
@@ -317,7 +326,11 @@ export function OpportunitiesPage() {
     }
 
     loadRankedScores();
-  }, [selectedProfileId]);
+    // "offers" is included so this refetches after a job offer is
+    // updated in place (e.g. JOBS-001 manual description
+    // completion), which previously left this score cache stale
+    // until a full page reload or profile switch.
+  }, [selectedProfileId, offers]);
 
   function isActiveProfile(profileId: number) {
     return activeProfileIds.includes(profileId);
@@ -388,6 +401,9 @@ export function OpportunitiesPage() {
     const matchesLocation =
       locationFilter === "ALL" ? true : offer.location === locationFilter;
 
+    const matchesQuality =
+      qualityFilter === "ALL" ? true : offer.quality_level === qualityFilter;
+
     const minimumScore =
       discoveryPreferences?.discovery_minimum_matching_score ?? 25;
 
@@ -421,6 +437,7 @@ export function OpportunitiesPage() {
       matchesApplicationStatus &&
       matchesSource &&
       matchesLocation &&
+      matchesQuality &&
       matchesMinimumScore &&
       matchesAgeWindow
     );
@@ -501,7 +518,8 @@ export function OpportunitiesPage() {
     searchTerm.trim() !== "" ||
     applicationFilter !== "ALL" ||
     sourceFilter !== "ALL" ||
-    locationFilter !== "ALL";
+    locationFilter !== "ALL" ||
+    qualityFilter !== "ALL";
 
   const relatedApplications =
     selectedOffer === null
@@ -606,6 +624,47 @@ export function OpportunitiesPage() {
       );
     } finally {
       setCreatingApplication(false);
+    }
+  }
+
+  async function handleCompleteDescription() {
+    if (!selectedOffer) {
+      return;
+    }
+
+    const cleanDescription = completionDescription.trim();
+
+    if (!cleanDescription) {
+      setCompletionError("A description is required.");
+      return;
+    }
+
+    setSubmittingCompletion(true);
+    setCompletionError(null);
+
+    try {
+      const updatedOffer = await completeJobOfferDescription(
+        selectedOffer.id,
+        cleanDescription,
+      );
+
+      setSelectedOffer(updatedOffer);
+
+      setOffers((currentOffers) =>
+        currentOffers.map((offer) =>
+          offer.id === updatedOffer.id ? updatedOffer : offer,
+        ),
+      );
+
+      setCompletionDescription("");
+    } catch (error) {
+      setCompletionError(
+        error instanceof Error
+          ? error.message
+          : "Unable to complete the offer description.",
+      );
+    } finally {
+      setSubmittingCompletion(false);
     }
   }
 
@@ -727,6 +786,7 @@ export function OpportunitiesPage() {
                   "BEST_MATCH_FIRST",
               );
               setLocationFilter("ALL");
+              setQualityFilter("ALL");
             }}
             className="rounded-md border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
             Reset
@@ -958,6 +1018,15 @@ export function OpportunitiesPage() {
             </option>
           ))}
         </select>
+
+        <select
+          value={qualityFilter}
+          onChange={(event) => setQualityFilter(event.target.value)}
+          className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white">
+          <option value="ALL">All Offers</option>
+          <option value="PARTIAL">Partial Only</option>
+          <option value="COMPLETE">Complete Only</option>
+        </select>
         <select
           value={sortBy}
           onChange={(event) => setSortBy(event.target.value)}
@@ -1076,12 +1145,19 @@ export function OpportunitiesPage() {
                         </span>
                       )}
 
-                      {matchingScoresByOfferId[offer.id] !== undefined && (
-                        <span className="rounded bg-blue-600 px-2 py-1 text-xs font-medium text-white">
-                          ⭐ Match{" "}
-                          {Math.round(matchingScoresByOfferId[offer.id])}%
+                      {offer.quality_level === "PARTIAL" && (
+                        <span className="rounded bg-orange-600 px-2 py-1 text-xs text-white">
+                          Partial
                         </span>
                       )}
+
+                      {matchingScoresByOfferId[offer.id] !== undefined &&
+                        offer.quality_level !== "PARTIAL" && (
+                          <span className="rounded bg-blue-600 px-2 py-1 text-xs font-medium text-white">
+                            ⭐ Match{" "}
+                            {Math.round(matchingScoresByOfferId[offer.id])}%
+                          </span>
+                        )}
                     </div>
 
                     <h3 className="font-medium text-white">{offer.title}</h3>
@@ -1258,9 +1334,15 @@ export function OpportunitiesPage() {
                               </p>
                             </div>
 
-                            <p className="text-2xl font-bold text-white">
-                              {Math.round(bestProfileScore.matching_score)}%
-                            </p>
+                            {bestProfileScore.is_calculable ? (
+                              <p className="text-2xl font-bold text-white">
+                                {Math.round(bestProfileScore.matching_score)}%
+                              </p>
+                            ) : (
+                              <p className="text-sm text-slate-400">
+                                Not scored
+                              </p>
+                            )}
                           </div>
                         </div>
                       )}
@@ -1313,32 +1395,47 @@ export function OpportunitiesPage() {
                                   </td>
 
                                   <td className="px-4 py-3 text-right">
-                                    <div className="flex flex-col items-end">
-                                      <span className="font-semibold text-white">
-                                        {Math.round(score.matching_score)}%
-                                      </span>
+                                    {score.is_calculable ? (
+                                      <div className="flex flex-col items-end">
+                                        <span className="font-semibold text-white">
+                                          {Math.round(score.matching_score)}%
+                                        </span>
 
+                                        <span className="text-xs text-slate-500">
+                                          -
+                                          {getGapFromBest(score.matching_score)}{" "}
+                                          pts
+                                        </span>
+                                      </div>
+                                    ) : (
                                       <span className="text-xs text-slate-500">
-                                        -{getGapFromBest(score.matching_score)}{" "}
-                                        pts
+                                        Not scored
                                       </span>
-                                    </div>
+                                    )}
                                   </td>
 
                                   <td className="px-4 py-3 text-right text-slate-300">
-                                    {Math.round(score.skills_score)}%
+                                    {score.is_calculable
+                                      ? `${Math.round(score.skills_score)}%`
+                                      : "—"}
                                   </td>
 
                                   <td className="px-4 py-3 text-right text-slate-300">
-                                    {Math.round(score.experience_score)}%
+                                    {score.is_calculable
+                                      ? `${Math.round(score.experience_score)}%`
+                                      : "—"}
                                   </td>
 
                                   <td className="px-4 py-3 text-right text-slate-300">
-                                    {Math.round(score.work_mode_score)}%
+                                    {score.is_calculable
+                                      ? `${Math.round(score.work_mode_score)}%`
+                                      : "—"}
                                   </td>
 
                                   <td className="px-4 py-3 text-right text-slate-300">
-                                    {Math.round(score.location_score)}%
+                                    {score.is_calculable
+                                      ? `${Math.round(score.location_score)}%`
+                                      : "—"}
                                   </td>
                                 </tr>
                               ))}
@@ -1363,20 +1460,71 @@ export function OpportunitiesPage() {
                     </span>
                   </div>
 
+                  {selectedOffer.quality_level === "PARTIAL" && (
+                    <div className="mb-6 rounded-lg border border-orange-500/40 bg-orange-500/10 p-4">
+                      <p className="mb-2 text-sm font-medium text-orange-300">
+                        This offer is incomplete
+                      </p>
+
+                      <p className="mb-3 text-sm text-slate-300">
+                        Paste the "About the job" section copied from the
+                        original LinkedIn offer page below to enable matching
+                        for this opportunity.
+                      </p>
+
+                      <textarea
+                        value={completionDescription}
+                        onChange={(event) => {
+                          setCompletionDescription(event.target.value);
+
+                          if (completionError) {
+                            setCompletionError(null);
+                          }
+                        }}
+                        placeholder="Paste the job description here..."
+                        rows={6}
+                        className="mb-3 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-blue-500"
+                      />
+
+                      {completionError && (
+                        <p className="mb-3 text-sm text-red-400">
+                          {completionError}
+                        </p>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={handleCompleteDescription}
+                        disabled={submittingCompletion}
+                        className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-60">
+                        {submittingCompletion
+                          ? "Saving..."
+                          : "Complete Description"}
+                      </button>
+                    </div>
+                  )}
+
                   {matching ? (
-                    <MatchingResult
-                      matchingScore={matching.matching_score}
-                      skillsScore={matching.skills_score}
-                      experienceScore={matching.experience_score}
-                      workModeScore={matching.work_mode_score}
-                      locationScore={matching.location_score}
-                      matchingSkills={matching.matching_skills}
-                      missingSkills={matching.missing_skills}
-                      strengths={matching.strengths}
-                      weaknesses={matching.weaknesses}
-                      explanations={matching.explanations}
-                      opportunityAnalysis={matching.opportunity_analysis}
-                    />
+                    matching.is_calculable ? (
+                      <MatchingResult
+                        matchingScore={matching.matching_score}
+                        skillsScore={matching.skills_score}
+                        experienceScore={matching.experience_score}
+                        workModeScore={matching.work_mode_score}
+                        locationScore={matching.location_score}
+                        matchingSkills={matching.matching_skills}
+                        missingSkills={matching.missing_skills}
+                        strengths={matching.strengths}
+                        weaknesses={matching.weaknesses}
+                        explanations={matching.explanations}
+                        opportunityAnalysis={matching.opportunity_analysis}
+                      />
+                    ) : (
+                      <p className="text-slate-400">
+                        Not scored yet. Complete the description above to enable
+                        matching.
+                      </p>
+                    )
                   ) : (
                     <p className="text-slate-400">
                       Matching information unavailable.

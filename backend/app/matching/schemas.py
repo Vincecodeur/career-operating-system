@@ -20,6 +20,8 @@ class MatchingResult(BaseModel):
     explanations: list[ScoreExplanation]
     opportunity_analysis: OpportunityAnalysis
 
+    is_calculable: bool = True
+
 
 class RankedJobOffer(BaseModel):
     job_offer_id: int
@@ -34,6 +36,8 @@ class RankedJobOffer(BaseModel):
 
     matching_skills: list[str]
     missing_skills: list[str]
+
+    is_calculable: bool = True
     
 class ScoreExplanation(BaseModel):
     criterion: str
@@ -59,3 +63,4 @@ class ProfileOpportunityScore(BaseModel):
     location_score: float
 
     is_best_match: bool
+    is_calculable: bool = True

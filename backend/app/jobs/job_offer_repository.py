@@ -117,9 +117,27 @@ class JobOfferRepository:
         job_offer.region = normalized_offer.region
         job_offer.country = normalized_offer.country
         job_offer.url_primary = normalized_offer.url_primary
-        job_offer.description = normalized_offer.description_raw
-        job_offer.description_raw = normalized_offer.description_raw
-        job_offer.description_normalized = normalized_offer.description_normalized
+
+        # quality_level ne régresse jamais automatiquement (JOBS-001,
+        # 2026-09-15) : si l'offre est déjà COMPLETE (source fiable,
+        # ou complétée manuellement) et qu'un réimport propose
+        # PARTIAL, la description existante et son quality_level sont
+        # préservés - sinon une complétion manuelle serait écrasée
+        # silencieusement au prochain cycle de découverte détectant
+        # la même offre (même title/company_name/city).
+        offer_would_regress = (
+            job_offer.quality_level == "COMPLETE"
+            and normalized_offer.quality_level == "PARTIAL"
+        )
+
+        if not offer_would_regress:
+            job_offer.description = normalized_offer.description_raw
+            job_offer.description_raw = normalized_offer.description_raw
+            job_offer.description_normalized = (
+                normalized_offer.description_normalized
+            )
+            job_offer.quality_level = normalized_offer.quality_level
+
         job_offer.language = normalized_offer.language
         job_offer.work_mode = normalized_offer.work_mode
         job_offer.contract_type = normalized_offer.contract_type
@@ -130,7 +148,6 @@ class JobOfferRepository:
         job_offer.salary_original_text = normalized_offer.salary_original_text
         job_offer.skills_extracted = normalized_offer.skills_extracted
         job_offer.skills_normalized = normalized_offer.skills_normalized
-        job_offer.quality_level = normalized_offer.quality_level
         job_offer.status = normalized_offer.status
 
         self.db.flush()

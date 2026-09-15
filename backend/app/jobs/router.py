@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.jobs.models import JobOffer
 from app.jobs.schemas import JobOfferCreate
+from app.jobs.schemas import JobOfferDescriptionUpdate
 from app.jobs.schemas import JobOfferResponse
 
 from app.auth.dependencies import get_current_user
@@ -88,3 +89,41 @@ def cleanup_stale_job_offers(
     )
 
     return delete_stale_job_offers(db, age_window_days)
+
+
+@router.patch(
+    "/job-offers/{job_offer_id}/complete-description",
+    response_model=JobOfferResponse,
+)
+def complete_job_offer_description(
+    job_offer_id: int,
+    payload: JobOfferDescriptionUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Allows manual completion of a PARTIAL-quality job offer's
+    description (e.g. LinkedIn Email offers, DEC-086/JOBS-001), by
+    pasting the real description copied from the offer's source
+    page. Sets quality_level to COMPLETE, unblocking matching score
+    calculation for this offer (see
+    calculate_matching_result() in app/matching/service.py).
+    """
+    job_offer = db.query(JobOffer).filter(
+        JobOffer.id == job_offer_id
+    ).first()
+
+    if job_offer is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Job offer not found.",
+        )
+
+    job_offer.description = payload.description
+    job_offer.description_raw = payload.description
+    job_offer.quality_level = "COMPLETE"
+
+    db.commit()
+    db.refresh(job_offer)
+
+    return job_offer

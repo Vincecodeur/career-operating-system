@@ -20,8 +20,13 @@ class JobOfferResponse(BaseModel):
     source: str | None = None
     source_url: str | None = None
     description: str
+    quality_level: str
     created_at: datetime
 
     model_config = {
         "from_attributes": True,
     }
+
+
+class JobOfferDescriptionUpdate(BaseModel):
+    description: str

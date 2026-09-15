@@ -113,3 +113,62 @@ def test_normalize_sets_default_status_and_quality():
 
     assert normalized_offer.status == "ACTIVE"
     assert normalized_offer.quality_level == "PARTIAL"
+    
+def test_normalize_sets_complete_quality_level_for_france_travail():
+    service = NormalizationService()
+
+    raw_offer = RawOffer(
+        source_name="France Travail",
+        title="Test Offer",
+        raw_description="A real, complete description.",
+        retrieved_at=datetime.utcnow(),
+    )
+
+    result = service.normalize(raw_offer)
+
+    assert result.quality_level == "COMPLETE"
+
+
+def test_normalize_sets_complete_quality_level_for_greenhouse():
+    service = NormalizationService()
+
+    raw_offer = RawOffer(
+        source_name="Greenhouse",
+        title="Test Offer",
+        raw_description="A real, complete description.",
+        retrieved_at=datetime.utcnow(),
+    )
+
+    result = service.normalize(raw_offer)
+
+    assert result.quality_level == "COMPLETE"
+
+
+def test_normalize_sets_partial_quality_level_for_linkedin():
+    service = NormalizationService()
+
+    raw_offer = RawOffer(
+        source_name="LinkedIn",
+        title="Test Offer",
+        raw_description="Offre découverte via alerte email LinkedIn.",
+        retrieved_at=datetime.utcnow(),
+    )
+
+    result = service.normalize(raw_offer)
+
+    assert result.quality_level == "PARTIAL"
+
+
+def test_normalize_sets_partial_quality_level_for_unknown_source():
+    service = NormalizationService()
+
+    raw_offer = RawOffer(
+        source_name="Some Future Connector",
+        title="Test Offer",
+        raw_description="Whatever this source provides.",
+        retrieved_at=datetime.utcnow(),
+    )
+
+    result = service.normalize(raw_offer)
+
+    assert result.quality_level == "PARTIAL"

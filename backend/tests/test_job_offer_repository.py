@@ -257,3 +257,104 @@ def test_attach_source_refreshes_last_seen_at_on_existing_link():
 
         db.commit()
         db.close()
+        
+
+def test_update_job_offer_does_not_regress_complete_to_partial():
+    db = SessionLocal()
+    repository = JobOfferRepository(db)
+    suffix = str(uuid4())
+
+    try:
+        original_normalized_offer = NormalizedJobOffer(
+            title=f"Regression Test Offer {suffix}",
+            company="Test Company",
+            description_raw="placeholder",
+            description_normalized="placeholder",
+            url_primary=f"https://example.com/regression-test/{suffix}",
+            language="UNKNOWN",
+            city="Paris",
+            region=None,
+            country="UNKNOWN",
+            work_mode="UNKNOWN",
+            contract_type="UNKNOWN",
+            seniority="UNKNOWN",
+            salary_min=None,
+            salary_max=None,
+            salary_currency=None,
+            salary_original_text=None,
+            skills_extracted=[],
+            skills_normalized=[],
+            quality_level="PARTIAL",
+            status="ACTIVE",
+        )
+
+        job_offer = repository.create_job_offer(
+            normalized_offer=original_normalized_offer,
+            source_name=f"LinkedIn Regression {suffix}",
+            source_type="API",
+            source_job_id=f"regression-test-{suffix}",
+            source_url=f"https://example.com/regression-test/{suffix}",
+        )
+
+        db.flush()
+
+        job_offer.quality_level = "COMPLETE"
+        job_offer.description = "A real, manually completed description."
+        job_offer.description_raw = (
+            "A real, manually completed description."
+        )
+        db.flush()
+
+        reimported_normalized_offer = NormalizedJobOffer(
+            title=f"Regression Test Offer {suffix}",
+            company="Test Company",
+            description_raw="Offre découverte via alerte email LinkedIn.",
+            description_normalized=(
+                "Offre découverte via alerte email LinkedIn."
+            ),
+            url_primary=f"https://example.com/regression-test/{suffix}",
+            language="UNKNOWN",
+            city="Paris",
+            region=None,
+            country="UNKNOWN",
+            work_mode="UNKNOWN",
+            contract_type="UNKNOWN",
+            seniority="UNKNOWN",
+            salary_min=None,
+            salary_max=None,
+            salary_currency=None,
+            salary_original_text=None,
+            skills_extracted=[],
+            skills_normalized=[],
+            quality_level="PARTIAL",
+            status="ACTIVE",
+        )
+
+        updated_offer = repository.update_job_offer(
+            job_offer=job_offer,
+            normalized_offer=reimported_normalized_offer,
+        )
+
+        assert updated_offer.quality_level == "COMPLETE"
+        assert (
+            updated_offer.description
+            == "A real, manually completed description."
+        )
+
+    finally:
+        db.rollback()
+
+        db.query(JobOfferSource).filter(
+            JobOfferSource.source_job_id == f"regression-test-{suffix}"
+        ).delete()
+
+        db.query(JobSource).filter(
+            JobSource.name == f"LinkedIn Regression {suffix}"
+        ).delete()
+
+        db.query(JobOffer).filter(
+            JobOffer.title == f"Regression Test Offer {suffix}"
+        ).delete()
+
+        db.commit()
+        db.close()

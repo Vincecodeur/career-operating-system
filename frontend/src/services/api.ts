@@ -1050,6 +1050,7 @@ export type ProfileOpportunityScore = {
   work_mode_score: number;
   location_score: number;
   is_best_match: boolean;
+  is_calculable: boolean;
 }; 
 
 export type Profile = {
@@ -1697,6 +1698,31 @@ export async function deleteProfileCertification(
     if (!response.ok) {
         throw new Error(
             "Unable to remove profile certification."
+        );
+    }
+
+    return response.json();
+}
+
+export async function completeJobOfferDescription(
+    jobOfferId: number,
+    description: string,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/job-offers/${jobOfferId}/complete-description`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                ...getAuthHeaders(),
+            },
+            body: JSON.stringify({ description }),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to complete job offer description.",
         );
     }
 

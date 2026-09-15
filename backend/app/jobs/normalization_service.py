@@ -10,7 +10,28 @@ class NormalizationService:
     DEFAULT_SENIORITY = "UNKNOWN"
     DEFAULT_QUALITY_LEVEL = "PARTIAL"
 
+    # Sources connues pour fournir une description réelle et
+    # complète dès la découverte (JOBS-001, 2026-09-15). Toute source
+    # absente de cette liste reste PARTIAL par défaut (opt-in vers
+    # COMPLETE, jamais opt-out) : un futur nouveau connecteur
+    # n'hérite donc jamais silencieusement de COMPLETE par erreur.
+    # "LinkedIn" reste volontairement absent : les emails d'alerte
+    # LinkedIn ne fournissent qu'un texte généré automatiquement
+    # (titre/entreprise/ville), jamais une vraie description
+    # (DEC-086).
+    SOURCES_WITH_COMPLETE_DESCRIPTIONS = {
+        "France Travail",
+        "Greenhouse",
+    }
+
     def normalize(self, raw_offer: RawOffer) -> NormalizedJobOffer:
+        quality_level = (
+            "COMPLETE"
+            if raw_offer.source_name
+            in self.SOURCES_WITH_COMPLETE_DESCRIPTIONS
+            else self.DEFAULT_QUALITY_LEVEL
+        )
+
         return NormalizedJobOffer(
             title=raw_offer.title.strip(),
             company=self._clean_optional_text(raw_offer.company),
@@ -30,7 +51,7 @@ class NormalizationService:
             salary_original_text=raw_offer.salary_raw,
             skills_extracted=[],
             skills_normalized=[],
-            quality_level=self.DEFAULT_QUALITY_LEVEL,
+            quality_level=quality_level,
             status="ACTIVE",
         )
 

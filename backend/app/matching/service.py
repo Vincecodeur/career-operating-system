@@ -31,6 +31,12 @@ def calculate_matching_result(
         JobOffer.id == job_offer_id
     ).first()
 
+    if job_offer is not None and job_offer.quality_level == "PARTIAL":
+        return build_incomplete_offer_result(
+            profile_id=profile_id,
+            job_offer_id=job_offer_id,
+        )
+
     profile_skill_ids = {
         item.skill_id
         for item in db.query(ProfileSkill).filter(
@@ -185,6 +191,7 @@ def rank_job_offers_for_profile(
                 location_score=matching_result.location_score,
                 matching_skills=matching_result.matching_skills,
                 missing_skills=matching_result.missing_skills,
+                is_calculable=matching_result.is_calculable,
             )
         )
 
@@ -579,6 +586,54 @@ def build_explanations(
             ),
         ),
     ]
+    
+def build_incomplete_offer_result(
+    profile_id: int,
+    job_offer_id: int,
+) -> MatchingResult:
+    """
+    Returned instead of a real calculation when the job offer's
+    quality_level is PARTIAL (JOBS-001, DEC-086): LinkedIn Email
+    offers have no real description until manually completed via
+    PATCH /job-offers/{id}/complete-description. Scores are set to
+    0.0 (a neutral placeholder, never meant to be displayed as a
+    real result) and is_calculable=False signals the frontend to
+    hide the score entirely rather than show a misleading 0%,
+    consistent with DEC-039 (no opaque score).
+    """
+    return MatchingResult(
+        profile_id=profile_id,
+        job_offer_id=job_offer_id,
+        matching_score=0.0,
+        skills_score=0.0,
+        experience_score=0.0,
+        work_mode_score=0.0,
+        location_score=0.0,
+        matching_skills=[],
+        missing_skills=[],
+        strengths=[],
+        weaknesses=[],
+        explanations=[
+            ScoreExplanation(
+                criterion="completeness",
+                score=0.0,
+                message=(
+                    "This offer is missing a description and cannot "
+                    "be scored yet. Complete it manually to enable "
+                    "matching."
+                ),
+            ),
+        ],
+        opportunity_analysis=OpportunityAnalysis(
+            verdict="incomplete",
+            recommendation="complete_description",
+            summary=(
+                "This offer is missing a description and cannot be "
+                "scored yet. Complete it manually to enable matching."
+            ),
+        ),
+        is_calculable=False,
+    )
 
 def build_opportunity_analysis(
     matching_score: float,
@@ -738,6 +793,7 @@ def calculate_profile_scores_for_job_offer(
                 work_mode_score=matching_result.work_mode_score,
                 location_score=matching_result.location_score,
                 is_best_match=False,
+                is_calculable=matching_result.is_calculable,
             )
         )
 

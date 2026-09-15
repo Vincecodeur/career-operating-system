@@ -536,3 +536,74 @@ def test_profile_scores_best_match_falls_back_to_all_profiles_when_no_active_ids
         assert best_match["matching_score"] == max(
             item["matching_score"] for item in data
         )
+
+def test_matching_result_is_not_calculable_for_partial_offer(
+    authenticated_headers,
+):
+    create_response = client.post(
+        "/job-offers",
+        json={
+            "title": "Partial Offer For Matching Test",
+            "company_name": "Test Company",
+            "location": "Paris",
+            "source": "LinkedIn",
+            "source_url": "https://example.com/partial-matching",
+            "description": "placeholder",
+        },
+    )
+
+    job_offer_id = create_response.json()["id"]
+
+    response = client.get(
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["is_calculable"] is False
+    assert data["matching_score"] == 0.0
+    assert data["matching_skills"] == []
+    assert data["missing_skills"] == []
+
+    criteria = {item["criterion"] for item in data["explanations"]}
+
+    assert "completeness" in criteria
+    assert data["opportunity_analysis"]["verdict"] == "incomplete"
+
+
+def test_matching_result_is_calculable_after_completion(
+    authenticated_headers,
+):
+    create_response = client.post(
+        "/job-offers",
+        json={
+            "title": "Offer Completed Before Matching Test",
+            "company_name": "Test Company",
+            "location": "Paris",
+            "source": "LinkedIn",
+            "source_url": "https://example.com/completed-matching",
+            "description": "placeholder",
+        },
+    )
+
+    job_offer_id = create_response.json()["id"]
+
+    client.patch(
+        f"/job-offers/{job_offer_id}/complete-description",
+        json={"description": "A real, complete job description."},
+        headers=authenticated_headers,
+    )
+
+    response = client.get(
+        f"/matching/1/{job_offer_id}",
+        headers=authenticated_headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["is_calculable"] is True
