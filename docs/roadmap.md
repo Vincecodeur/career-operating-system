@@ -1860,9 +1860,17 @@ Sous-phases :
   (app.core.database <-> app.auth.models), non lié à ce correctif,
   contournement documenté
 - Commit 61664b2
-
-Statut global (7.1.24 à 7.1.31) :
-Completed
+  ✅ 7.1.28.3 Lightweight Frontend Spot-Check
+- contrôle allégé réalisé sur les 6 pages principales (Dashboard,
+  Profiles, Opportunities, Applications, Settings, Account), en
+  particulier sur les changements récents non couverts par la
+  dernière régression complète (7.1.27.2) : filtre Partial/Complete,
+  badge Partial, formulaire de complétion manuelle (7.1.31.6),
+  formulaire LinkedIn Email Connector Settings (7.1.30.7)
+- aucun écart, aucune régression visuelle ou erreur bloquante
+  constatée, confirmé par Vincent
+  Statut global (7.1.24 à 7.1.31) :
+  Completed
 
 ### Phase 7.2
 

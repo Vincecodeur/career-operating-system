@@ -24,7 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-7.1.28.2 Discovery Connectors Activation
+7.1.28.3 Lightweight Frontend Spot-Check
 
 Current Step
 Completed
