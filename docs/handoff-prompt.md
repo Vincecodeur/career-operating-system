@@ -1310,6 +1310,17 @@ MVP Closure Decision results so far (7.1.28):
 - 7.1.28.3 Lightweight Frontend Spot-Check CLOSED - manual check
   across Dashboard, Profiles, Opportunities, Applications, Settings,
   Account; no regression found, confirmed by Vincent
+- 7.1.28.4 MVP Scope Confirmation CLOSED - MVP scope in/out documented;
+  real documentation inconsistency found and fixed: architecture.md
+  still described Matching as "skills-based only" with sub-scores
+  listed as "future version", when Matching V2 (6.0.2) already
+  implements them; MATCH-001/MATCH-004 corrected from Backlog to
+  Completed in post-mvp-backlog.md
+- 7.1.28.5 Known Technical Debt Final Review CLOSED - quick check on
+  all backlog technical entries (TECH-001/002/004, UX-004, DATA-001,
+  SETTINGS-004/005, JOBS-002/003), none blocking; 428 backend tests
+  reconfirmed passing, 0 regressions
+  Next required step: 7.1.28.6 MVP Closure Statement (DEC-088)
 
 Next required step: 7.1.28.4 MVP Scope Confirmation
 

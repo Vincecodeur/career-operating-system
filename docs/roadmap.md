@@ -1891,6 +1891,15 @@ Sous-phases :
 - correctif appliqué : architecture.md mis à jour pour refléter les 4
   sous-scores réels (Skills 70%, Experience 15%, Work Mode 10%,
   Location 5%) ; MATCH-001 et MATCH-004 passés à "Completed"
+  ✅ 7.1.28.5 Known Technical Debt Final Review
+- contrôle rapide (pas un audit complet, déjà réalisé en 7.1.27.4) de
+  toutes les entrées techniques du backlog : TECH-001, TECH-002,
+  TECH-004, UX-004, DATA-001, SETTINGS-004, SETTINGS-005, JOBS-002,
+  JOBS-003
+- aucune entrée devenue bloquante depuis sa dernière revue
+- 428 tests backend reconfirmés passants, 0 régression (dernière
+  modification de code : 7.1.28.2 ; 7.1.28.3/7.1.28.4 purement
+  documentaires)
   Statut global (7.1.24 à 7.1.31) :
   Completed
 
