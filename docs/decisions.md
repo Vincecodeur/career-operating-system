@@ -5964,3 +5964,93 @@ sans démarche explicite de passage au tier payant.
   GeminiProvider devra respecter)
 - DEC-078 - AI Context Preview And Consent (le consentement explicite
   reste requis avant tout appel réel au fournisseur choisi ici)
+
+## DEC-086 - LinkedIn Email Connector Replaces API/Scraping Approach
+
+Date: 2026-09-15
+Status: Accepted
+
+### Context
+
+DEC-050 positioned LinkedIn as the primary Job Discovery source, with
+an API First strategy documented in job-sources.md and an explicit
+fallback exception allowing limited scraping if no API was available.
+Phase 6.1.2 implemented LinkedInConnector against this assumption, but
+it was never actually connected to a working data source: no
+realistic LinkedIn API exists for individual job search (LinkedIn's
+official "Job Posting API" only serves approved ATS partners
+publishing job ads, not searching them), and direct scraping is
+explicitly prohibited by LinkedIn's User Agreement, with a real
+enforcement precedent (LinkedIn Corp. v. Nubela/Proxycurl, January
+2025, resulting in the Proxycurl service shutting down in July 2025).
+The existing LinkedInConnector (API) never fetched a single real
+offer since Phase 6.1.2.
+
+### Decision
+
+LinkedIn integration is redefined as a connector reading LinkedIn's
+own "job alert" notification emails from a dedicated IMAP mailbox,
+rather than calling an API or scraping the website. Reading emails
+received in one's own mailbox does not constitute accessing
+LinkedIn's servers, does not bypass any technical measure, and does
+not violate LinkedIn's Terms of Service, unlike scraping or
+unauthorized API access.
+
+Accepted limitation: LinkedIn job alert emails only provide title,
+company, city, work mode and a source URL - never a job description,
+contract type or extracted skills. RawOffer.raw_description is
+generated automatically from the available fields rather than left
+empty. This structurally degrades the matching score and AI
+explanation quality for LinkedIn Email offers compared to sources
+with full descriptions (France Travail, Greenhouse). A future manual
+completion capability is tracked in post-mvp-backlog.md (JOBS-001).
+
+The original LinkedInConnector (API-based) is kept in the codebase,
+unused, in case a legitimate partner API becomes available in the
+future. It is removed from discovery_connectors and from the
+frontend connector selector.
+
+Implementation: Phase 7.1.30.
+
+## DEC-087 - Generic Encrypted Secret Storage For Per-User Connector Credentials
+
+Date: 2026-09-15
+Status: Accepted
+
+### Context
+
+The LinkedIn Email Connector (DEC-086) requires storing an IMAP app
+password per user, entered through the Settings frontend rather than
+as a global environment variable (unlike existing connectors'
+credentials, e.g. FRANCE_TRAVAIL_CLIENT_SECRET,
+GREENHOUSE_BOARD_TOKEN). UserSettings had no encrypted column type;
+storing a secret in clear in PostgreSQL would be a real security risk
+given DEC-008 (the repository, and by extension any database dump,
+must remain safe to ever become public).
+
+### Decision
+
+A generic, reusable encryption module (app/core/encryption.py) is
+introduced, using Fernet symmetric encryption (cryptography package,
+already a transitive dependency via python-jose[cryptography]).
+encrypt_secret()/decrypt_secret() degrade gracefully to None if the
+encryption key (LINKEDIN_EMAIL_ENCRYPTION_KEY environment variable)
+is absent or invalid, never raising. The encryption key remains an
+environment variable, never persisted in PostgreSQL. The password is
+submitted once in clear over HTTPS by the frontend and is never
+returned by any API endpoint afterwards, in any form - only an
+is_configured boolean is exposed. Submitting an empty password on
+update preserves the existing encrypted value rather than
+overwriting it, since the frontend never pre-fills this field once a
+password is already configured.
+
+A resolver registry (app/jobs/connectors/credentials_resolver.py,
+CREDENTIAL_RESOLVERS) maps connector names to per-user credential
+resolution functions, keeping DiscoveryService fully generic with
+respect to which connectors require per-user secrets.
+
+This module is intentionally named and designed generically so any
+future per-user secret can reuse it without introducing a new
+encryption mechanism.
+
+Related: DEC-086.

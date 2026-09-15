@@ -332,6 +332,11 @@ Implémenté :
 - REMEMBER_ME_TOKEN_EXPIRE_MINUTES
 - create_access_token() remember_me parameter
 - LoginRequest remember_me field
+- Fernet-based generic secret encryption (encryption.py)
+- LinkedInEmailConnector (IMAP-based, DEC-086)
+- credentials_resolver.py (CREDENTIAL_RESOLVERS registry)
+- GET/PUT /settings/linkedin-email
+- PRIMARY_USER_EMAIL resolution in DiscoveryScheduler
 
 Partiellement implémenté :
 
@@ -592,6 +597,7 @@ Implémenté :
 - passwordPolicy.ts utility
 - Remember Me checkbox on LoginPage
 - authStore login() rememberMe parameter
+- LinkedIn Email Connector Settings form (imap_host/port, email, app password, folder)
 
 Documenté mais pas encore implémenté :
 
@@ -941,6 +947,7 @@ Des tests existent pour :
 - Phase 7.1.26 Best Profile Recommendation Architecture Review
 - Phase 7.1.27 Final Regression And Documentation
 - Phase 7.1.29 Job Offer Lifecycle Management
+- Phase 7.1.30 LinkedIn Email Connector
 
 ## Derniers commits importants
 
@@ -1265,8 +1272,18 @@ Latest backend validation:
   UserSettings.discovery_connectors
 - First real cleanup executed and validated with Vincent:
   {'evaluated': 202, 'deleted': 1, 'protected_by_application': 1}
-  Next required step:
-  7.1.28 MVP Closure Decision
+- Phase 7.1.30 LinkedIn Email Connector CLOSED (DEC-086, DEC-087)
+- LinkedInConnector (API) confirmed never populated since Phase 6.1.2; no viable LinkedIn API for individual job search exists, direct scraping prohibited by LinkedIn ToS
+- LinkedInEmailConnector reads LinkedIn job alert emails via IMAP, TEXT-based marker search covering both real redirection and manually forwarded emails
+- generic Fernet encryption module added for per-user secrets
+- job_offers.source_url changed VARCHAR(1000) -> TEXT (real overflow encountered in production)
+- title plausibility guard added, rejecting a second, unsupported LinkedIn email template rather than persisting corrupted data
+- 414 backend tests passing, 0 regressions
+- 136 real LinkedIn offers backfilled into production, 0 exceptions
+- discovery_connectors not yet updated to activate linkedin_email for the real account
+
+Next required step:
+7.1.28 MVP Closure Decision
 
 ## Méthode de reprise
 

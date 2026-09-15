@@ -758,3 +758,43 @@ This is a major architectural change touching nearly every domain of the applica
 
 Trigger for revisiting:
 If Career Operating System is ever intended to support multiple real users (e.g., shared with other people, deployed as a service), this must be addressed before that transition.
+
+### JOBS-001 - Manual Completion Of LinkedIn Email Offers
+
+Status: In Progress (prioritized before Gemini integration, 2026-09-15)
+LinkedIn Email Connector offers (DEC-086) never include a real
+description, contract type or extracted skills - only title,
+company, city, work mode and source URL are available from the
+notification email. This structurally caps their matching score and
+AI explanation quality (quality_level = PARTIAL) compared to offers
+from France Travail or Greenhouse.
+Proposed capability: allow the user to manually paste the real
+description (copied from the LinkedIn page after manually viewing
+the offer) onto an existing LinkedIn Email offer, to obtain a
+meaningful matching score for offers that look interesting.
+Sequencing decision (2026-09-15): this item is moved ahead of Phase
+7.2 (AI Career Advisor / Gemini integration). Rationale: LinkedIn
+Email offers are expected to be the most relevant and coherent
+opportunities for Vincent's actual career targets, making them the
+most effective real-world dataset to validate matching quality
+before connecting a real AI provider. Connecting Gemini against a
+majority of PARTIAL-quality offers (France Travail/Greenhouse volume
+without LinkedIn's relevance) would produce a weaker first
+validation of the AI explanation layer.
+Reason previously deferred (superseded by the above): requires UX
+design (which field, where in Opportunity Details) and a dedicated
+update endpoint; not blocking for the connector's initial usefulness
+as a discovery signal.
+
+### JOBS-002 - LinkedIn API Connector Kept As Dead Code
+
+Status: Backlog
+LinkedInConnector (backend/app/jobs/connectors/linkedin_connector.py,
+Phase 6.1.2) remains in the codebase, registered in ConnectorRegistry
+under "linkedin", but is no longer used in discovery_connectors or
+the frontend connector selector (DEC-086). It never fetched a single
+real offer since its creation, since no viable LinkedIn API for
+individual job search has ever existed.
+Trigger for revisiting: if a legitimate LinkedIn partner API access
+ever becomes available (e.g. through an official partnership), this
+connector could be reactivated instead of being rewritten.

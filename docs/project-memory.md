@@ -719,4 +719,48 @@ Phase 7.1.29 Job Offer Lifecycle Management CLOSED
 
 Remaining overall:
 
-- MVP Closure Decision (7.1.28), now sequenced after 7.1.29
+- MVP Closure Decision (7.1.28), now sequenced after 7.1.30
+
+LinkedIn Email Connector results (7.1.30):
+
+- LinkedInConnector (API, Phase 6.1.2) confirmed never populated with
+  real data since its creation; no viable LinkedIn API exists for
+  individual job search, and direct scraping is prohibited by
+  LinkedIn's Terms of Service (DEC-086)
+- new LinkedInEmailConnector reads LinkedIn job alert emails via IMAP
+  instead, using TEXT-based marker search (jobs-noreply@linkedin.com
+  OR jobalerts-noreply@linkedin.com) rather than FROM-based filtering,
+  after discovering that manually forwarded emails replace the
+  original sender header with the forwarding account's own address
+- app/core/encryption.py added (Fernet, DEC-087): generic encrypted
+  secret storage, reusable for future per-user secrets
+- 5 new UserSettings columns, migrated via a one-time script (no
+  Alembic in this project)
+- job_offers.source_url changed from VARCHAR(1000) to TEXT after a
+  real production failure: LinkedIn saved-search alert URLs routinely
+  exceed 1000 characters
+- a second LinkedIn email template ("saved search alert", sender
+  jobalerts-noreply@linkedin.com) was discovered to concatenate
+  title+company+city+status inside a single link, unlike the
+  "similar jobs" grid template the parser was built for; a title
+  plausibility guard was added to skip this unsupported template
+  safely (0 offers) instead of persisting corrupted data - remains a
+  known, documented limitation
+- title/company/city normalization added to collapse internal \r\n
+  line breaks found in real LinkedIn email HTML
+- Outlook.com confirmed to have fully deprecated Basic Authentication
+  for IMAP (September 2024); Gmail App Passwords remain functional
+  provided 2-Step Verification is active and "Skip password when
+  possible" is disabled - LinkedIn alerts redirected from Outlook.com
+  to Gmail via an IMAP "Redirect to" rule (preserves original sender)
+- real validation: 414 backend tests passing, 0 regressions
+- real backfill executed: 136 real LinkedIn offers imported into
+  production (2026-09-15), 0 exceptions; 117 had corrupted whitespace
+  from before the normalization fix, cleaned via a one-time script
+- discovery_connectors NOT YET updated to include linkedin_email for
+  the real account; connector registered and functional but not yet
+  activated in the live discovery pipeline
+- future need identified: manual completion of LinkedIn Email offers
+  to obtain a meaningful matching score - tracked in
+  post-mvp-backlog.md (JOBS-001)
+  Phase 7.1.30 LinkedIn Email Connector CLOSED

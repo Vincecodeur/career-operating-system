@@ -19,12 +19,12 @@ main
 ---
 
 Current Milestone
-7.1.29 Job Offer Lifecycle Management
+7.1.30 LinkedIn Email Connector
 
 ---
 
 Current Phase
-7.1.29.7 Cleanup Execution & Validation
+7.1.30 Documentation Synchronization
 
 Current Step
 Completed
@@ -1713,7 +1713,7 @@ Completed:
 - End-to-end validation completed
 
 Current Phase Status
-7.1.29 Job Offer Lifecycle Management
+7.1.30 LinkedIn Email Connector
 
 Status:
 Completed
@@ -1760,5 +1760,9 @@ Next Step:
 7.1.28 MVP Closure Decision
 Last Commits :
 
-- 0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)
-- 14b25ce - docs: remove duplicated line in project-status.md
+- cda715f - feat(core): add Fernet-based secret encryption module (7.1.30.1)
+- f30c72f - feat(settings): add linkedin*email*\* columns to UserSettings (7.1.30.2) - 7e2a555
+- feat(settings): add LinkedIn email connector settings (7.1.30.3)
+- f6ba6fa - feat(jobs): implement LinkedIn email HTML extraction (7.1.30.5)
+- 38c7901 - feat(settings): add LinkedIn email connector frontend form (7.1.30.7)
+- 05c8659 - fix(jobs): resolve source_url overflow, reject malformed titles, normalize internal whitespace

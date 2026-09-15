@@ -1672,11 +1672,68 @@ Commit technique :
 - 0af1252 - feat(jobs): implement job offer lifecycle cleanup (7.1.29)
 
 ✅ 7.1.29 Job Offer Lifecycle Management CLOSED
+✅ 7.1.30 LinkedIn Email Connector
+Objectif :
+Remplacer le connecteur LinkedIn API (jamais alimenté depuis la Phase 6.1.2, aucune API réaliste n'existant pour la recherche d'emploi côté particulier) par un connecteur lisant les emails d'alerte LinkedIn via IMAP, sans jamais accéder aux serveurs LinkedIn ni scraper le site (DEC-086).
+Sous-phases :
+✅ 7.1.30.1 Fernet Secret Encryption Module (DEC-087)
 
-⬜ 7.1.28 MVP Closure Decision
-
-Statut global (7.1.24 à 7.1.29) :
-Completed
+- backend/app/core/encryption.py créé - encrypt_secret()/decrypt_secret(), dégradation gracieuse vers None
+- 6 tests ajoutés
+- Commit cda715f
+  ✅ 7.1.30.2 UserSettings Schema Migration
+- 5 colonnes linkedin_email\_\* ajoutées à user_settings
+- migration via script ponctuel (pas d'Alembic dans ce projet)
+- Commit f30c72f
+  ✅ 7.1.30.3 Settings Backend (schémas + service + endpoints)
+- LinkedInEmailSettingsResponse/Update créés
+- GET/PUT /settings/linkedin-email créés, authentifiés
+- app_password jamais retourné par l'API, ni en clair ni chiffré
+- 4 tests ajoutés
+- Commit 7e2a555
+  ✅ 7.1.30.4 LinkedInEmailConnector (mécanique IMAP)
+- connexion, login, sélection de dossier, recherche, marquage comme lu
+- extraction HTML volontairement vide à ce stade (TODO documenté)
+- enregistré dans ConnectorRegistry sous "linkedin_email"
+- 12 tests ajoutés (10 mécanique + 2 registry)
+  ✅ 7.1.30.5 Extraction HTML réelle
+- parsing basé sur un email réel LinkedIn ("offres similaires")
+- déduplication multi-liens, filtrage du lien logo, filtrage du lien d'en-tête sans ligne "Entreprise · Ville" - 7 tests ajoutés
+- Commit f6ba6fa
+  ✅ 7.1.30.6 Résolveur de secrets + intégration DiscoveryService/Scheduler
+- backend/app/jobs/connectors/credentials_resolver.py créé (CREDENTIAL_RESOLVERS)
+- DiscoveryService.import_from_connector_names() accepte user_id, skip silencieux si non configuré
+- DiscoveryScheduler résout PRIMARY_USER_EMAIL à chaque exécution
+- 10 tests ajoutés
+  ✅ 7.1.30.7 Formulaire Frontend
+- LinkedIn Email Connector Settings form ajouté dans SettingsPage.tsx
+- correctif : mot de passe vide préserve la valeur chiffrée existante au lieu de l'écraser
+- 1 test ajouté
+- Commit 38c7901
+  ✅ 7.1.30.8 Validation Réelle Et Correctifs De Production
+- authentification Outlook/Hotmail confirmée impossible (Basic Auth totalement dépréciée par Microsoft depuis septembre 2024, même avec mot de passe d'application)
+- redirection réussie via Gmail (App Password + 2FA), après désactivation du réglage "Ignorer le mot de passe si possible"
+- détection par expéditeur (FROM) remplacée par détection par marqueur de contenu (TEXT), pour couvrir aussi bien une vraie redirection IMAP qu'un transfert manuel (qui remplace l'expéditeur d'origine)
+- bug de production découvert et corrigé : job_offers.source_url (VARCHAR(1000)) trop court pour les URLs réelles d'alertes de recherche LinkedIn ; colonne changée en TEXT - second template d'email LinkedIn découvert ("alerte de recherche enregistrée", jobalerts-noreply@linkedin.com), qui concatène titre+entreprise+ville+statut dans un seul lien ; garde-fou de plausibilité du titre ajouté, rejetant ce template de façon sûre (0 offre) plutôt que de persister des données corrompues
+- limitation connue et documentée, non résolue - normalisation des espaces internes ajoutée (retours à la ligne \r\n trouvés dans le HTML réel de LinkedIn)
+- 6 tests ajoutés
+- Commit 05c8659
+  ✅ 7.1.30.9 Backfill Réel Et Nettoyage
+- 136 offres LinkedIn réelles importées en production (2026-09-15), 0 exception
+- 117 offres avec espaces corrompus nettoyées via un script ponctuel (avant le correctif de normalisation)
+- scripts de diagnostic temporaires (check_imap_content.py, run_linkedin_backfill.py) supprimés après usage
+  ✅ 7.1.30.10 Documentation Synchronization
+- DEC-086, DEC-087 créées
+- architecture.md, job-sources.md, project-memory.md, project-status.md, handoff-prompt.md, post-mvp-backlog.md synchronisés
+- JOBS-001, JOBS-002 ajoutés au backlog post-MVP Validation finale :
+- 414 tests backend passants, 0 régression
+- 136 offres LinkedIn réelles en production
+- discovery_connectors NON encore mis à jour pour activer linkedin_email sur le compte réel (reste à faire)
+  Décision de séquencement (2026-09-15, JOBS-001) : JOBS-001 (complétion manuelle des offres LinkedIn Email) est explicitement priorisé avant la Phase 7.2 (AI Career Advisor / connexion Gemini), les offres LinkedIn étant jugées les plus cohérentes et les plus représentatives des cibles de carrière réelles de Vincent, donc les plus efficaces pour valider la pertinence du matching avant de connecter un vrai fournisseur IA.
+  Statut : Completed
+  ⬜ 7.1.28 MVP Closure Decision
+  Statut global (7.1.24 à 7.1.30) :
+  Completed
 
 ### Phase 7.2
 

@@ -211,7 +211,10 @@ Current supported connectors:
 
 - France Travail
 - Greenhouse
-- LinkedIn
+- LinkedIn Email Connector (IMAP-based, see DEC-086; not an API/scraping connector)
+
+Note d'architecture (DEC-086) : Le connecteur LinkedIn historique (API, jamais alimenté depuis la Phase 6.1.2) est conservé dans le code sans être utilisé.
+L'intégration LinkedIn active repose désormais sur la lecture d'emails d'alerte IMAP.
 
 Connector selection uses a controlled multi-select UI.
 
@@ -263,12 +266,24 @@ Les paramètres métier sont stockés en PostgreSQL.
 
 Les secrets restent stockés dans les variables d'environnement.
 
+LinkedIn Email Connector Settings (DEC-086, DEC-087) utilisent 5 colonnes dédiées sur UserSettings :
+
+- linkedin_email_imap_host
+- linkedin_email_imap_port
+- linkedin_email_address
+- linkedin_email_app_password_encrypted (chiffré via Fernet, jamais exposé par l'API)
+- linkedin_email_folder GET/PUT /settings/linkedin-email exposent uniquement imap_host, imap_port, email_address, folder et is_configured ; app_password n'est jamais retourné, ni en clair ni chiffré.
+
+Note d'architecture (DEC-087) : app/jobs/connectors/credentials_resolver.py centralise la résolution des identifiants chiffrés par connecteur (CREDENTIAL_RESOLVERS), gardant DiscoveryService générique vis-à-vis des connecteurs nécessitant des identifiants per-user. Les paramètres métier sont stockés en PostgreSQL. Les secrets restent stockés dans les variables d'environnement.
+
 Exemples :
 
 - FRANCE_TRAVAIL_CLIENT_ID
 - FRANCE_TRAVAIL_CLIENT_SECRET
-- LINKEDIN_CLIENT_SECRET
+- LINKEDIN_CLIENT_SECRET (connecteur API historique, inutilisé)
 - GREENHOUSE_BOARD_TOKEN
+- LINKEDIN_EMAIL_ENCRYPTION_KEY (clé Fernet, DEC-087)
+- PRIMARY_USER_EMAIL (résolution utilisateur pour DiscoveryScheduler)
 
 ### Opportunity Analysis
 

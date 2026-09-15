@@ -127,17 +127,7 @@ Le scraping n'est autorisé que lorsqu'aucune API réaliste et exploitable n'exi
 
 ---
 
-CAS PARTICULIER LINKEDIN
-
-Décision :
-
-API First
-
-Exception validée :
-
-Si aucune API réaliste et exploitable n'est disponible pour le MVP, un scraping limité pourra être utilisé.
-
-Cette exception est actuellement limitée à LinkedIn.
+CAS PARTICULIER LINKEDIN Décision (DEC-086, 2026-09-15) : ni API, ni scraping. Aucune API LinkedIn exploitable n'existe pour la recherche d'emploi côté particulier (la "Job Posting API" officielle sert uniquement aux partenaires ATS approuvés pour publier des offres, pas pour les rechercher). Le scraping direct du site est explicitement interdit par les conditions d'utilisation de LinkedIn, avec un précédent réel de poursuite (LinkedIn Corp. v. Nubela/Proxycurl, janvier 2025, fermeture du service en juillet 2025). Stratégie retenue : lecture des emails de notification LinkedIn ("alertes emploi") reçus dans une boîte mail IMAP dédiée. Lire ses propres emails ne constitue pas un accès aux serveurs LinkedIn. Limite acceptée : ces emails ne fournissent ni description, ni type de contrat, ni compétences extraites - seulement titre, entreprise, ville, mode de travail et URL source. Voir DEC-086.
 
 ---
 
