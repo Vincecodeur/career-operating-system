@@ -1828,7 +1828,7 @@ Sous-phases :
   Statut :
   Completed
 
-⬜ 7.1.28 MVP Closure Decision
+✅ 7.1.28 MVP Closure Decision
 
 ✅ 7.1.28.1 Repository Audit
 
@@ -1903,28 +1903,38 @@ Sous-phases :
   Statut global (7.1.24 à 7.1.31) :
   Completed
 
-### Phase 7.2
+✅ 7.1.28.6 MVP Closure Statement (DEC-088)
 
-AI Career Advisor
+- MVP déclaré complet le 2026-09-15
+- 428 tests backend passants, 0 régression
+- dette technique résiduelle confirmée non bloquante
+- Phase 7.2 officiellement ouverte
+  Statut global (7.1.24 à 7.1.31) :
+  Completed
+  Statut Phase 7.1 :
+  CLOSED
 
+#### Phase 7.2
+
+AI Career Advisor  
 Objectif :
-Fournir un accompagnement personnalisé dans les décisions de carrière.
-
+Fournir un accompagnement personnalisé dans les décisions de carrière.  
 Le système doit :
 
 - analyser les opportunités ;
 - analyser les compétences ;
 - analyser les écarts ;
-- proposer des trajectoires cohérentes.
-
-Sous-phases :
-
+- proposer des trajectoires cohérentes.  
+  Ouverture officielle : 2026-09-15 (DEC-088), suite à la clôture
+  formelle du MVP (Phase 7.1). Première étape requise : conception
+  technique de GeminiProvider (DEC-085), respectant l'interface
+  AIProvider existante sans la modifier.  
+  Sous-phases (à détailler avant tout développement) :
 - 7.2.1 Career Path Suggestions
 - 7.2.2 Opportunity Strategy
-- 7.2.3 Long-Term Career Planning
-
-Statut :
-Planned
+- 7.2.3 Long-Term Career Planning  
+  Statut :
+  Planned - sous-phases à définir avant implémentation
 
 ### Phase 7.3
 

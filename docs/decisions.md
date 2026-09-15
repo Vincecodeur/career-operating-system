@@ -6054,3 +6054,97 @@ future per-user secret can reuse it without introducing a new
 encryption mechanism.
 
 Related: DEC-086.
+
+### DEC-088 - MVP Closure Statement
+
+Date: 2026-09-15
+Status: Accepted
+
+#### Contexte
+
+La Phase 7.1 (MVP Experience Completion) a été ouverte pour finaliser
+les fonctionnalités cœur du Career Operating System avant toute
+fonctionnalité avancée d'assistance IA (7.1.1, objectif de phase).
+Cette phase a traversé, dans l'ordre réellement exécuté : Profile
+Management CRUD, CV Intelligence, Application Workflow, Opportunities
+Search & Decision Cockpit, Settings Management, Multi Profile
+Opportunity Context, MVP Experience Review (7.1.23, incluant
+Authentication Learning Features), User Data Ownership And Isolation
+(DEC-081), Settings Strategy Synchronization (DEC-082), Best Profile
+Recommendation Architecture Review (DEC-083), Final Regression And
+Documentation (7.1.27), Job Offer Lifecycle Management (7.1.29,
+DEC-084), LinkedIn Email Connector (7.1.30, DEC-086/DEC-087), Manual
+Offer Completion (7.1.31, JOBS-001), et enfin cette phase de clôture
+elle-même (7.1.28).
+
+Cette séquence a été réordonnée deux fois par rapport au plan initial
+(DEC-081 réordonnant 7.1.24-7.1.27 avant 7.1.28 ; puis 7.1.29-7.1.31
+ouverts avant 7.1.28 à la suite d'une question sur la préparation
+réelle à l'intégration IA). Chaque réordonnancement a été documenté
+explicitement au moment où il a eu lieu, jamais après coup.
+
+#### Décision
+
+Le MVP du Career Operating System est déclaré **complet** à la date
+du 2026-09-15.
+
+Le périmètre MVP livré et validé couvre : Profile (multi-profils, CV
+Intelligence avec parsing multi-moteur PDF/DOCX, Profile Enrichment,
+Reference Data Catalog gouverné), Job Discovery (pipeline multi-source
+France Travail/Greenhouse/LinkedIn Email, cycle de vie des offres,
+complétion manuelle des offres PARTIAL), Matching V2 (score pondéré
+explicable sur 4 critères) + Opportunity Analysis + Opportunity
+Ranking, Applications (workflow complet avec timeline et attribution
+de profil), Settings (per-user, typé), authentification complète
+(Sign Up, Password/Email Recovery, Remember Me), isolation des données
+par utilisateur, et couche AI Explanation/Context/Consent (sans
+fournisseur IA réel connecté).
+
+Le détail exhaustif de ce périmètre (in/out) a été confirmé lors de
+7.1.28.4 MVP Scope Confirmation.
+
+#### Dette technique résiduelle acceptée
+
+Les entrées suivantes du backlog restent ouvertes, confirmées non
+bloquantes lors de la revue finale (7.1.28.5) : TECH-001 (bundle
+frontend), TECH-002 (erreur console non expliquée), TECH-004 (import
+circulaire hors contexte FastAPI), UX-004 (explicabilité du tableau de
+comparaison multi-profils), DATA-001 (normalisation avancée des
+skills), SETTINGS-004/005 (Saved Searches), JOBS-002 (connecteur
+LinkedIn API mort), JOBS-003 (archivage manuel des offres).
+
+Aucune de ces entrées ne remet en cause la clôture du MVP.
+
+#### État de validation à la clôture
+
+428 tests backend passants, 0 régression. Contrôle frontend allégé
+réalisé sur les 6 pages principales (7.1.28.3), aucun écart trouvé.
+Une incohérence documentaire réelle (architecture.md décrivant
+Matching V2 comme non implémenté) a été découverte et corrigée
+pendant cette phase de clôture elle-même (7.1.28.4).
+
+#### Conséquences
+
+La Phase 7.2 (AI Career Advisor) est officiellement ouverte à partir
+de ce point. Conformément à DEC-085 (AI Provider Selection: Gemini),
+la première sous-phase de 7.2 doit porter sur la conception technique
+de GeminiProvider (prompt, gestion des quotas, cache des explications
+par paire profile_id/job_offer_id), respectant l'interface AIProvider
+déjà existante (DEC-075, Phase 7.1.8) sans la modifier.
+
+Conformément à `handoff-prompt.md` ("toujours privilégier une
+démonstration utilisateur rapide avant d'ajouter de nouvelles sources,
+de l'IA ou de nouvelles couches de complexité"), aucune fonctionnalité
+Phase 7.2 ne doit être développée avant que les sous-phases de 7.2
+soient explicitement définies et documentées, suivant le même cycle
+Design → Code → Tests → Validation → Documentation appliqué tout au
+long du MVP.
+
+#### Related Decisions
+
+- DEC-036 - Opportunity Discovery As Core MVP Capability
+- DEC-081 - User Data Ownership And Isolation (réordonnancement
+  initial de la séquence de clôture)
+- DEC-084 - Job Offer Retention Amendment
+- DEC-085 - AI Provider Selection: Gemini (prochaine étape technique)
+- DEC-086 - LinkedIn Email Connector Replaces API/Scraping Approach

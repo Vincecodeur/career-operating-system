@@ -19,18 +19,18 @@ main
 ---
 
 Current Milestone
-7.1.28 MVP Closure Decision
+7.2 AI Career Advisor (Phase 7.1 MVP CLOSED)
 
 ---
 
 Current Phase
-7.1.28.5 Known Technical Debt Final Review
+7.1.28.6 MVP Closure Statement (DEC-088)
 
 Current Step
 Completed
 
 Next Planned Milestone
-7.1.28 MVP Closure Decision
+7.2.1 Career Path Suggestions - sous-phases à définir
 
 ---
 
