@@ -801,4 +801,26 @@ MVP Closure Decision results so far (7.1.28):
   app.core.database and app.auth.models, discovered outside the
   FastAPI app context, workaround documented, non-blocking
 - Commit 61664b2
-  Remaining: 7.1.28.3 Lightweight Frontend Spot-Check onward
+- 7.1.28.3 Lightweight Frontend Spot-Check: manual check across
+  Dashboard, Profiles, Opportunities, Applications, Settings, Account;
+  no regression found, confirmed by Vincent
+- 7.1.28.4 MVP Scope Confirmation: MVP scope in/out documented; real
+  documentation inconsistency found and fixed - architecture.md still
+  described Matching as skills-only with sub-scores listed as "future
+  version", when Matching V2 (6.0.2) already implements them;
+  MATCH-001/MATCH-004 corrected from Backlog to Completed
+- 7.1.28.5 Known Technical Debt Final Review: quick check on all
+  backlog technical entries (TECH-001/002/004, UX-004, DATA-001,
+  SETTINGS-004/005, JOBS-002/003), none blocking; 428 tests reconfirmed
+  passing
+- 7.1.28.6 MVP Closure Statement (DEC-088): MVP formally declared
+  complete 2026-09-15; Phase 7.2 (AI Career Advisor) officially opened;
+  DEC-085 (Gemini) remains the confirmed provider choice, next step is
+  GeminiProvider technical design, not implementation
+- 7.1.28.7 Documentation Synchronization: 7 project documents
+  cross-checked for consistency at MVP closure
+  Phase 7.1.28 MVP Closure Decision CLOSED.
+  MVP (Phase 7.1) CLOSED.
+  Next required step: define Phase 7.2 (AI Career Advisor) sub-phases
+  before any implementation begins (GeminiProvider technical design,
+  DEC-085)
