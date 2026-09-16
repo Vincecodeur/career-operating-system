@@ -6294,3 +6294,95 @@ sur le tier gratuit.
 - DEC-078 - AI Context Preview And Consent (ai_call_allowed)
 - DEC-085 - AI Provider Selection: Gemini
 - DEC-086/087 - LinkedIn Email Connector (quality_level PARTIAL/COMPLETE)
+
+### DEC-090 - Enriched AI Explanation Context
+
+Date: 2026-09-16
+Status: Accepted
+
+#### Contexte
+
+Une validation réelle de GeminiProvider (7.2.0.6, exécutée sur 10
+offres LinkedIn réelles complétées via JOBS-001) a révélé que les
+explications IA générées restaient génériques et peu utiles (ex.
+systématiquement "Review the specific skill requirements..." sans
+jamais nommer une compétence), quel que soit le contenu réel de
+l'offre ou du profil.
+
+Cause identifiée : AIExplanationContext (Phase 7.1.8) ne transmet à
+l'IA que des phrases-modèles génériques (strengths/weaknesses,
+générées par seuils de score, jamais les noms réels de compétences),
+sans jamais inclure les noms des compétences correspondantes/
+manquantes (pourtant déjà calculées par
+calculate_matching_result() en interne, jamais transmises), ni aucun
+résumé de l'expérience professionnelle ou du contexte additionnel du
+profil.
+
+Un examen de DEC-078 (AI Context Preview And Consent) confirme que ce
+n'est pas une limitation imposée par cette décision : WORK_EXPERIENCES,
+HARD_SKILLS et ADDITIONAL_PROFILE_CONTEXT y sont déjà classées comme
+catégories disponibles (available_categories), pas exclues. Seules
+RAW_CV, UNVALIDATED_ENRICHMENT, APPLICATION_HISTORY et
+TECHNICAL_SECRETS restent interdites. Le契 minimalisme du contexte
+actuel résultait d'un choix d'implémentation de la Phase 7.1.8, non
+d'une exigence de DEC-078.
+
+#### Décision
+
+AIExplanationContext (app/ai/schemas.py) est enrichi avec les champs
+suivants, tous optionnels pour ne jamais casser un appelant existant :
+
+- matching_skills: list[str] - noms réels des compétences du
+  catalogue gouverné (DEC-051) correspondant au profil, déjà calculés
+  par calculate_matching_result(), jamais transmis jusqu'ici
+- missing_skills: list[str] - idem, compétences manquantes
+- relevant_experience_summary: str | None - résumé des expériences
+  professionnelles pertinentes (WorkExperience), toujours des données
+  explicitement validées par l'utilisateur (formulaire manuel ou
+  proposition d'enrichment acceptée), jamais du texte de CV brut
+  non validé
+- professional_summary: str | None - Profile.professional_summary
+- career_motivations: str | None - Profile.career_motivations
+
+Toutes ces données appartiennent déjà aux catégories
+available_categories de DEC-078 (HARD_SKILLS, WORK_EXPERIENCES,
+ADDITIONAL_PROFILE_CONTEXT) - aucune exclusion existante n'est
+modifiée ou assouplie.
+
+Un nouveau template de prompt score_explanation_v2 est ajouté dans
+prompt_templates.py, aux côtés de score_explanation_v1 (conservé
+inchangé, toujours utilisable). PromptBuilder et AIExplanationService
+ne nécessitent aucune modification structurelle : le système de
+versioning de prompt déjà existant depuis la Phase 7.1.8 est utilisé
+tel quel.
+
+app/ai/scheduler.py (AIExplanationScheduler) construit désormais le
+contexte enrichi à partir de matching_result.matching_skills/
+missing_skills (déjà disponibles) et d'une lecture directe du profil
+concerné, en utilisant prompt_version="score_explanation_v2".
+
+#### Hors scope de DEC-090
+
+L'extraction de compétences structurées depuis le texte des offres
+LinkedIn complétées manuellement (JOBS-001) reste un chantier distinct
+et un prérequis réel : sans JobOfferSkill sur ces offres,
+matching_skills/missing_skills resteront vides même avec ce contexte
+enrichi, et les scores resteront mécaniquement bas (12-22/100 observés
+sur les 10 offres testées). Ce chantier sera traité séparément.
+
+WorkExperience.description n'est jamais transmise en intégralité,
+seulement un résumé structuré (titre de poste + entreprise, éventuel
+extrait court) - le format exact du résumé reste à finaliser lors de
+l'implémentation (7.2.0.x), pas dans cette décision.
+
+#### Related Decisions
+
+- DEC-032 - Matching Score Ownership (le score reste calculé par le
+  backend déterministe, jamais par l'IA - inchangé par cette décision)
+- DEC-039 - Explainable Opportunity Scoring
+- DEC-075 - AI Context Contract
+- DEC-078 - AI Context Preview And Consent (confirmée non modifiée -
+  DEC-090 utilise des catégories déjà autorisées, n'assouplit aucune
+  exclusion existante)
+- DEC-085 - AI Provider Selection: Gemini
+- DEC-089 - AI Explanation Batch Wiring And GeminiProvider Design
