@@ -175,7 +175,13 @@ class AIExplanationScheduler:
 
             explanation_service = self._build_explanation_service()
 
+            max_per_run = settings.AI_EXPLANATION_MAX_PER_RUN
+            batch_limit_reached = False
+
             for profile in active_profiles:
+                if batch_limit_reached:
+                    break
+
                 context_preview = (
                     ai_context_service.get_ai_context_preview(
                         profile.id
@@ -190,6 +196,19 @@ class AIExplanationScheduler:
                     continue
 
                 for job_offer in complete_offers:
+                    if generated >= max_per_run:
+                        batch_limit_reached = True
+
+                        logger.info(
+                            "AI_EXPLANATION_MAX_PER_RUN (%s) reached, "
+                            "stopping this run early. Remaining "
+                            "candidates will be picked up by the "
+                            "next scheduled run.",
+                            max_per_run,
+                        )
+
+                        break
+
                     existing = db.query(
                         JobOfferAIExplanation
                     ).filter(

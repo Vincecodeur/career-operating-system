@@ -202,7 +202,27 @@ class Settings:
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL_NAME: str = os.getenv("GEMINI_MODEL_NAME", "gemini-3.1-flash-lite")
     GEMINI_TIMEOUT_SECONDS: int = _get_int_env("GEMINI_TIMEOUT_SECONDS", "30")
-    AI_EXPLANATION_SCHEDULER_ENABLED: bool = _get_bool_env("AI_EXPLANATION_SCHEDULER_ENABLED", "false")
-    AI_EXPLANATION_INTERVAL_MINUTES: int = _get_int_env("AI_EXPLANATION_INTERVAL_MINUTES", "1440")
+
+    AI_EXPLANATION_SCHEDULER_ENABLED: bool = _get_bool_env(
+        "AI_EXPLANATION_SCHEDULER_ENABLED",
+        "false",
+    )
+
+    AI_EXPLANATION_INTERVAL_MINUTES: int = _get_int_env(
+        "AI_EXPLANATION_INTERVAL_MINUTES",
+        "1440",
+    )
+
+    # Hard cap on the number of AI explanations generated per
+    # run_once() call, across all active profiles and candidate
+    # offers combined. Prevents a single run from exhausting the
+    # Gemini free tier quota in one pass (real incident hit
+    # 2026-09-15: ~28 calls in a single uncapped run against ~200
+    # candidate offers). Remaining candidates are simply picked up by
+    # the next scheduled run - no data is lost, just spread over time.
+    AI_EXPLANATION_MAX_PER_RUN: int = _get_int_env(
+        "AI_EXPLANATION_MAX_PER_RUN",
+        "10",
+    )
 
 settings = Settings()
