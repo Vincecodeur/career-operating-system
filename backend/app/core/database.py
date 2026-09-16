@@ -55,7 +55,7 @@ from app.reference_data.models import ContractType
 from app.settings.models import UserSettings
 from app.settings.models import SavedSearch
 from app.profile.profile_soft_skill_models import ProfileSoftSkill
-
+from app.ai.models import JobOfferAIExplanation
 
 def create_tables():
     Base.metadata.create_all(bind=engine)

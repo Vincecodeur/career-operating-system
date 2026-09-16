@@ -26,6 +26,7 @@ from app.jobs.job_source_router import (
     router as job_source_router,
 )
 from app.jobs.scheduler import DiscoveryScheduler
+from app.ai.scheduler import AIExplanationScheduler
 from app.languages.router import router as languages_router
 from app.reference_data.router import (
     router as reference_data_router,
@@ -43,9 +44,8 @@ from app.settings.router import (
     router as settings_router,
 )
 
-
-
 discovery_scheduler = DiscoveryScheduler()
+ai_explanation_scheduler = AIExplanationScheduler()
 
 
 @asynccontextmanager
@@ -62,11 +62,13 @@ async def lifespan(
         db.close()
 
     discovery_scheduler.start()
+    ai_explanation_scheduler.start()
 
     try:
         yield
     finally:
         await discovery_scheduler.stop()
+        await ai_explanation_scheduler.stop()
 
 
 app = FastAPI(

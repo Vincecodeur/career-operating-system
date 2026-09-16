@@ -198,5 +198,11 @@ class Settings:
         "PRIMARY_USER_EMAIL",
         "",
     )
+    
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL_NAME: str = os.getenv("GEMINI_MODEL_NAME", "gemini-3.1-flash-lite")
+    GEMINI_TIMEOUT_SECONDS: int = _get_int_env("GEMINI_TIMEOUT_SECONDS", "30")
+    AI_EXPLANATION_SCHEDULER_ENABLED: bool = _get_bool_env("AI_EXPLANATION_SCHEDULER_ENABLED", "false")
+    AI_EXPLANATION_INTERVAL_MINUTES: int = _get_int_env("AI_EXPLANATION_INTERVAL_MINUTES", "1440")
 
 settings = Settings()
