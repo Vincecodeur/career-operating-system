@@ -153,3 +153,55 @@ def test_create_ai_provider_configuration():
     )
 
     assert configuration.timeout_seconds == 10
+    
+    
+def test_ai_explanation_context_dec090_fields_default_to_empty():
+    context = AIExplanationContext(
+        job_title="Backend Engineer",
+        score=78,
+        strengths=[],
+        weaknesses=[],
+        recommendation="APPLY",
+        verdict="GOOD_MATCH",
+        summary="Deterministic summary.",
+    )
+
+    assert context.matching_skills == []
+    assert context.missing_skills == []
+    assert context.relevant_experience_summary is None
+    assert context.professional_summary is None
+    assert context.career_motivations is None
+
+
+def test_ai_explanation_context_accepts_dec090_enriched_fields():
+    context = AIExplanationContext(
+        job_title="Backend Engineer",
+        score=78,
+        strengths=[],
+        weaknesses=[],
+        recommendation="APPLY",
+        verdict="GOOD_MATCH",
+        summary="Deterministic summary.",
+        matching_skills=["Python", "FastAPI"],
+        missing_skills=["Kubernetes"],
+        relevant_experience_summary=(
+            "Backend Engineer at Example Corp; Software Developer "
+            "at Another Corp"
+        ),
+        professional_summary="A concise professional summary.",
+        career_motivations="Motivated by technical challenges.",
+    )
+
+    assert context.matching_skills == ["Python", "FastAPI"]
+    assert context.missing_skills == ["Kubernetes"]
+    assert (
+        context.relevant_experience_summary
+        == "Backend Engineer at Example Corp; Software Developer "
+        "at Another Corp"
+    )
+    assert context.professional_summary == (
+        "A concise professional summary."
+    )
+    assert context.career_motivations == (
+        "Motivated by technical challenges."
+    )
