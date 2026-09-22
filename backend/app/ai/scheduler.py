@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 from contextlib import suppress
 from typing import Callable
 
@@ -7,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.ai.context_service import AIContextService
 from app.ai.models import JobOfferAIExplanation
+from app.experience.models import WorkExperience
 from app.ai.providers.gemini_provider import GeminiProvider
 from app.ai.schemas import AIExplanationContext
 from app.ai.services import AIExplanationService
@@ -262,6 +264,13 @@ class AIExplanationScheduler:
                             job_offer.id,
                         )
                         failed += 1
+                    finally:
+                        # Defensive pacing between two consecutive
+                        # Gemini calls within the same run, regardless
+                        # of success or failure above.
+                        time.sleep(
+                            settings.AI_EXPLANATION_REQUEST_INTERVAL_SECONDS
+                        )
 
             return {
                 "generated": generated,
@@ -280,6 +289,17 @@ class AIExplanationScheduler:
         matching_result,
         explanation_service: AIExplanationService,
     ) -> bool:
+        profile = db.query(Profile).filter(
+            Profile.id == profile_id
+        ).first()
+
+        relevant_experience_summary = (
+            self._build_relevant_experience_summary(
+                db=db,
+                profile_id=profile_id,
+            )
+        )
+
         context = AIExplanationContext(
             job_title=job_offer.title,
             score=int(matching_result.matching_score),
@@ -290,6 +310,15 @@ class AIExplanationScheduler:
             ),
             verdict=matching_result.opportunity_analysis.verdict,
             summary=matching_result.opportunity_analysis.summary,
+            matching_skills=matching_result.matching_skills,
+            missing_skills=matching_result.missing_skills,
+            relevant_experience_summary=relevant_experience_summary,
+            professional_summary=(
+                profile.professional_summary if profile else None
+            ),
+            career_motivations=(
+                profile.career_motivations if profile else None
+            ),
         )
 
         explanation_result = explanation_service.generate_explanation(
@@ -337,7 +366,38 @@ class AIExplanationScheduler:
             provider=provider,
             provider_name=GeminiProvider.provider_name,
             model_name=settings.GEMINI_MODEL_NAME,
+            prompt_version="score_explanation_v2",
         )
+
+    @staticmethod
+    def _build_relevant_experience_summary(
+        db: Session,
+        profile_id: int,
+    ) -> str | None:
+        """
+        Builds a short structured summary of the profile's work
+        experiences (job title + company, most recent first), never
+        the full free-text description field. DEC-090: only
+        structured, already-validated summaries are sent to the AI,
+        consistent with DEC-078's WORK_EXPERIENCES available
+        category.
+        """
+        experiences = (
+            db.query(WorkExperience)
+            .filter(WorkExperience.profile_id == profile_id)
+            .order_by(WorkExperience.start_date.desc())
+            .all()
+        )
+
+        if not experiences:
+            return None
+
+        summary_parts = [
+            f"{experience.job_title} at {experience.company_name}"
+            for experience in experiences
+        ]
+
+        return "; ".join(summary_parts)
 
     @staticmethod
     def _resolve_minimum_score(

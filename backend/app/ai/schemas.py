@@ -88,6 +88,28 @@ class AIExplanationContext(BaseModel):
         min_length=1,
     )
 
+    # DEC-090 - Enriched AI Explanation Context. All optional, so
+    # existing callers building a minimal v1-style context never
+    # break. Each field maps to a category already listed as
+    # available_categories in DEC-078 (HARD_SKILLS, WORK_EXPERIENCES,
+    # ADDITIONAL_PROFILE_CONTEXT) - never RAW_CV, never unvalidated
+    # data.
+    matching_skills: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+    )
+
+    missing_skills: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+    )
+
+    relevant_experience_summary: str | None = None
+
+    professional_summary: str | None = None
+
+    career_motivations: str | None = None
+
     model_config = ConfigDict(
         extra="forbid",
     )

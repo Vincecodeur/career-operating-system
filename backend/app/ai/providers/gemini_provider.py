@@ -1,4 +1,6 @@
 import json
+import logging
+import time
 
 from google import genai
 from google.genai import errors as genai_errors
@@ -6,6 +8,18 @@ from google.genai import types as genai_types
 from pydantic import BaseModel
 from pydantic import Field
 from pydantic import ValidationError
+
+logger = logging.getLogger(__name__)
+
+# Extra retries applied on top of the SDK's own internal retry logic
+# (tenacity, up to 5 attempts with exponential backoff on 408/429/
+# 500/502/503/504), for transient errors that still fail after those
+# internal retries are exhausted. Real incident observed 2026-09-22:
+# a genuine 503 UNAVAILABLE ("high demand") from Gemini, unrelated to
+# our own request volume. Kept intentionally short (2 extra attempts)
+# since a sustained outage should simply defer the offer to the next
+# scheduled run (DEC-089), not block the whole run indefinitely.
+_TRANSIENT_RETRY_DELAYS_SECONDS = [10, 30]
 
 from app.ai.exceptions import AIProviderAuthenticationError
 from app.ai.exceptions import AIProviderConfigurationError
@@ -67,42 +81,66 @@ class GeminiProvider(AIProvider):
         self,
         request: AIProviderRequest,
     ) -> AIProviderResponse:
-        try:
-            response = self._client.models.generate_content(
-                model=self.model_name,
-                contents=request.prompt,
-                config=genai_types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    response_schema=_GeminiStructuredOutput,
-                ),
-            )
-        except genai_errors.ClientError as error:
-            if error.code in (401, 403):
-                raise AIProviderAuthenticationError(
+        last_transient_error: (
+            AIProviderUnavailableError | AIProviderTimeout | None
+        ) = None
+
+        attempts = len(_TRANSIENT_RETRY_DELAYS_SECONDS) + 1
+
+        for attempt_index in range(attempts):
+            try:
+                response = self._client.models.generate_content(
+                    model=self.model_name,
+                    contents=request.prompt,
+                    config=genai_types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        response_schema=_GeminiStructuredOutput,
+                    ),
+                )
+            except genai_errors.ClientError as error:
+                if error.code in (401, 403):
+                    raise AIProviderAuthenticationError(
+                        str(error)
+                    ) from error
+
+                # 429 RESOURCE_EXHAUSTED and other 4xx transient cases
+                last_transient_error = AIProviderUnavailableError(
                     str(error)
-                ) from error
+                )
+            except genai_errors.ServerError as error:
+                last_transient_error = AIProviderUnavailableError(
+                    str(error)
+                )
+            except TimeoutError as error:
+                last_transient_error = AIProviderTimeout(
+                    str(error)
+                )
+            else:
+                response_text = (response.text or "").strip()
 
-            # 429 RESOURCE_EXHAUSTED and other 4xx transient cases
-            raise AIProviderUnavailableError(
-                str(error)
-            ) from error
-        except genai_errors.ServerError as error:
-            raise AIProviderUnavailableError(
-                str(error)
-            ) from error
-        except TimeoutError as error:
-            raise AIProviderTimeout(
-                str(error)
-            ) from error
+                if not response_text:
+                    raise AIProviderInvalidResponseError(
+                        "Gemini returned an empty response."
+                    )
 
-        response_text = (response.text or "").strip()
+                return self._parse_response(response_text)
 
-        if not response_text:
-            raise AIProviderInvalidResponseError(
-                "Gemini returned an empty response."
-            )
+            if attempt_index < len(_TRANSIENT_RETRY_DELAYS_SECONDS):
+                delay = _TRANSIENT_RETRY_DELAYS_SECONDS[attempt_index]
 
-        return self._parse_response(response_text)
+                logger.warning(
+                    "Transient Gemini error (%s), retrying in %s "
+                    "second(s) (attempt %s/%s): %s",
+                    type(last_transient_error).__name__,
+                    delay,
+                    attempt_index + 2,
+                    attempts,
+                    last_transient_error,
+                )
+
+                time.sleep(delay)
+
+        raise last_transient_error
 
     @staticmethod
     def _parse_response(

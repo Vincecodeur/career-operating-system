@@ -225,4 +225,16 @@ class Settings:
         "10",
     )
 
+    # Minimum delay, in seconds, enforced between two consecutive
+    # Gemini calls within the same run_once() execution. Defensive
+    # pacing against rate limits (429), even though the real incident
+    # investigated on 2026-09-22 turned out to be a transient 503
+    # (Gemini service overload), not a 429 - this remains a sensible
+    # safeguard for future higher-volume runs (more active profiles,
+    # richer DEC-090 context consuming more tokens per call).
+    AI_EXPLANATION_REQUEST_INTERVAL_SECONDS: int = _get_int_env(
+        "AI_EXPLANATION_REQUEST_INTERVAL_SECONDS",
+        "4",
+    )
+
 settings = Settings()

@@ -53,6 +53,26 @@ class PromptBuilder:
             recommendation=context.recommendation,
             verdict=context.verdict,
             deterministic_summary=context.summary,
+            matching_skills=(
+                ", ".join(context.matching_skills)
+                if context.matching_skills
+                else "Not specified"
+            ),
+            missing_skills=(
+                ", ".join(context.missing_skills)
+                if context.missing_skills
+                else "Not specified"
+            ),
+            relevant_experience_summary=(
+                context.relevant_experience_summary
+                or "Not specified"
+            ),
+            professional_summary=(
+                context.professional_summary or "Not specified"
+            ),
+            career_motivations=(
+                context.career_motivations or "Not specified"
+            ),
         ).strip()
 
         PromptBuilder._validate_prompt(
