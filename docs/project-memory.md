@@ -824,3 +824,21 @@ MVP Closure Decision results so far (7.1.28):
   Next required step: define Phase 7.2 (AI Career Advisor) sub-phases
   before any implementation begins (GeminiProvider technical design,
   DEC-085)
+
+AI Explanation Batch Wiring results so far (7.2.0):
+
+- GeminiProvider, AIExplanationScheduler, JobOfferAIExplanation créés
+  et validés avec de vraies données (offre fictive, puis 10 offres
+  LinkedIn réelles, 9/10 réussies)
+- incident réel de production corrigé : limite de lot manquante
+  (AI_EXPLANATION_MAX_PER_RUN), pacing et retry ajoutés après une
+  vraie surcharge Gemini (503) rencontrée le 2026-09-22
+- DEC-090 (contexte enrichi) implémentée, qualité des explications
+  vérifiée comme réellement améliorée (noms d'entreprises/postes
+  cités, absent en v1)
+- 30 tests automatisés ajoutés, 449 tests backend passants
+- écart restant, honnêtement non résolu : le endpoint de matching ne
+  lit toujours pas job_offer_ai_explanations, ai_explanation absent
+  de la réponse API - AIExplanationCard reste en fallback
+  Prochaine étape réelle : 7.2.0.7 Frontend Implementation (câblage du
+  endpoint de matching vers la table job_offer_ai_explanations)

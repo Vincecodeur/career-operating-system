@@ -6323,7 +6323,7 @@ n'est pas une limitation imposée par cette décision : WORK_EXPERIENCES,
 HARD_SKILLS et ADDITIONAL_PROFILE_CONTEXT y sont déjà classées comme
 catégories disponibles (available_categories), pas exclues. Seules
 RAW_CV, UNVALIDATED_ENRICHMENT, APPLICATION_HISTORY et
-TECHNICAL_SECRETS restent interdites. Le契 minimalisme du contexte
+TECHNICAL_SECRETS restent interdites. Le minimalisme du contexte
 actuel résultait d'un choix d'implémentation de la Phase 7.1.8, non
 d'une exigence de DEC-078.
 

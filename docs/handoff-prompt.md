@@ -1327,9 +1327,23 @@ MVP Closure Decision results so far (7.1.28):
 - 7.1.28.7 Documentation Synchronization CLOSED - 7 project
   documents cross-checked for consistency at MVP closure
   MVP (Phase 7.1) CLOSED.
-  Next required step: define Phase 7.2 (AI Career Advisor) sub-phases
-  before any implementation begins (GeminiProvider technical design,
-  DEC-085)
+  Phase 7.2.0 AI Explanation Batch Wiring progress:
+- GeminiProvider, AIExplanationScheduler, JobOfferAIExplanation
+  implemented and validated with real data (fictional offer, then
+  9/10 real LinkedIn offers)
+- real production incident found and fixed: missing per-run batch
+  limit exhausted ~28 Gemini calls in one uncapped run; pacing and
+  retry-on-transient-error added after a real Gemini 503 overload
+  encountered 2026-09-22
+- DEC-090 (enriched context) implemented, quality improvement
+  confirmed with real data (explanations now name real
+  companies/roles, absent from v1)
+- 30 automated tests added (449 backend tests passing total)
+- real gap NOT yet resolved: the matching endpoint still does not
+  read job_offer_ai_explanations - ai_explanation remains absent
+  from the API response, AIExplanationCard still runs in fallback
+  Next required step: 7.2.0.7 Frontend Implementation (wire the
+  matching endpoint to read from job_offer_ai_explanations)
 
 ## Méthode de reprise
 

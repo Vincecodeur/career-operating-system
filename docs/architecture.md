@@ -424,7 +424,19 @@ Sous-domaines actuellement présents :
 - AI Explanation ;
 - AI Context Preview ;
 - AI Readiness ;
-- AI Consent.
+- AI Consent.  
+  Note d'architecture (DEC-089, DEC-090, 7.2.0) : GeminiProvider
+  implémente AIProvider (Google Gemini, SDK google-genai), utilisé par
+  un AIExplanationScheduler planifié quotidiennement (même pattern que
+  DiscoveryScheduler), jamais en appel synchrone. Les explications
+  générées sont persistées dans job_offer_ai_explanations
+  (profile_id, job_offer_id, UNIQUE), jamais recalculées
+  automatiquement. AIExplanationContext a été enrichi (DEC-090) avec
+  matching_skills, missing_skills, relevant_experience_summary,
+  professional_summary, career_motivations. Écart connu : l'endpoint
+  GET /matching/{profile_id}/{job_offer_id} ne lit pas encore cette
+  table ; ai_explanation reste absent de la réponse API tant que
+  7.2.0.7 n'est pas fait.
 
 AI Explanation reste responsable de l’explication des résultats déterministes existants.
 

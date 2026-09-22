@@ -24,7 +24,7 @@ Current Milestone
 ---
 
 Current Phase
-7.1.28.7 Documentation Synchronization
+7.2.0.7 Frontend Implementation en attente
 
 Current Step
 Completed
@@ -1761,7 +1761,7 @@ Next Step:
 
 Last Commits :
 
-- 05c8659 - fix(jobs): resolve source_url overflow, reject malformed titles, normalize internal whitespace
-- 091eafe - feat(jobs): manual completion of PARTIAL offers, source-aware quality_level (JOBS-001, 7.1.31)
-- 158f33f - docs: close phase 7.1.31 Manual Offer Completion (JOBS-001), add JOBS-003
-- 61664b2 - feat(jobs): resolve discovery connectors from UserSettings instead of env var (7.1.28.2)
+- 1afe5d6 - test(ai): add automated test coverage for GeminiProvider, AIExplanationScheduler and DEC-090 context
+- f6e0cd2 - feat(ai): enrich AI explanation context (DEC-090) and add resilience to GeminiProvider
+- 29944ac - fix(ai): add per-run batch limit to AIExplanationScheduler
+- f39436d - feat(ai): implement GeminiProvider and AI explanation batch scheduler (7.2.0.4, DEC-089, DEC-090)

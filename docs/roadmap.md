@@ -1972,21 +1972,66 @@ implémentation de GeminiProvider isolée.
   (profile_id, job_offer_id, UNIQUE)
 - gating : ai_call_allowed vérifié par profil avant tout appel
 - AIProviderConfiguration réutilisé pour la config Gemini
-  ⬜ 7.2.0.3 GeminiProvider Technical Design
-  ⬜ 7.2.0.4 Backend Implementation
-  ⬜ 7.2.0.5 Backend Tests
-  ⬜ 7.2.0.6 Validation avec données fictives (DEC-085)
+  ✅ 7.2.0.3 GeminiProvider Technical Design
+- validé avec un vrai appel Gemini (données fictives) : sortie
+  structurée JSON native (response_schema), mapping d'exceptions SDK
+  vers AIProviderTimeout/AuthenticationError/UnavailableError/
+  InvalidResponseError confirmé
+  ✅ 7.2.0.4 Backend Implementation
+- JobOfferAIExplanation (table dédiée), GeminiProvider,
+  AIExplanationScheduler créés et câblés au lifespan FastAPI
+- incident réel rencontré et corrigé : limite de lot manquante a
+  épuisé ~28 requêtes en un seul run non plafonné (2026-09-15) ;
+  AI_EXPLANATION_MAX_PER_RUN ajouté (défaut 10)
+- DEC-090 (contexte enrichi) implémentée : matching_skills,
+  missing_skills, relevant_experience_summary, professional_summary,
+  career_motivations ajoutés à AIExplanationContext ;
+  score_explanation_v2 devient le prompt par défaut du scheduler
+- résilience ajoutée : pacing entre appels
+  (AI_EXPLANATION_REQUEST_INTERVAL_SECONDS) et retry sur erreurs
+  transitoires (503/429/timeout, 2 tentatives supplémentaires) après
+  qu'une vraie surcharge Gemini (503) ait été rencontrée en
+  production le 2026-09-22
+- écart réel restant, non résolu : le endpoint de matching existant
+  (GET /matching/{profile_id}/{job_offer_id}) ne lit toujours pas la
+  table job_offer_ai_explanations et n'expose pas ai_explanation -
+  le scheduler écrit les explications mais rien ne les relit pour le
+  frontend ; AIExplanationCard reste en fallback jusqu'à ce que
+  7.2.0.7 corrige ce point
+  ✅ 7.2.0.5 Backend Tests
+- 30 tests ajoutés (2 DEC-090 sur AIExplanationContext, 11
+  GeminiProvider sans appel réseau réel, 8 AIExplanationScheduler),
+  449 tests backend passants, 0 régression
+- 3 défauts d'isolation de test découverts et corrigés en validant
+  contre la suite complète (des profils/offres laissés par d'autres
+  fichiers de tests faussaient les compteurs)
+  ✅ 7.2.0.6 Validation avec données fictives (DEC-085)
+- premier test technique réalisé avec un profil et une offre
+  entièrement fictifs, conformément à DEC-085
+- validation réelle complémentaire effectuée sur 10 offres LinkedIn
+  réelles complétées (JOBS-001) : 9/10 explications v2 générées avec
+  succès, qualité comparée avant/après DEC-090 (les explications v2
+  nomment désormais de vraies entreprises/postes, ex. "Cazoo Group
+  and Opel Bank", absent des explications v1)
+- limite structurelle confirmée : matching_skills/missing_skills
+  restent vides sur les offres LinkedIn (0 JobOfferSkill), donc
+  scores mécaniquement bas (12-22/100) - extraction de compétences
+  depuis le texte des offres LinkedIn reste un prérequis distinct,
+  non traité par DEC-090
   ⬜ 7.2.0.7 Frontend Implementation
+- reste à faire : lecture de job_offer_ai_explanations depuis
+  matching/router.py, exposition de ai_explanation dans
+  MatchingResult, AIExplanationCard connectée pour de vrai
   ⬜ 7.2.0.8 Frontend Validation
-  ⬜ 7.2.0.9 Documentation Synchronization
-
-Sous-phases suivantes (à détailler après clôture de 7.2.0) :
-
+  ⬜ 7.2.0.9 Documentation Synchronization  
+  Sous-phases suivantes (à détailler après clôture de 7.2.0) :
 - 7.2.1 Career Path Suggestions
 - 7.2.2 Opportunity Strategy
 - 7.2.3 Long-Term Career Planning
   Statut :
-  In Progress - 7.2.0 Product Design clos, Technical Design à suivre
+  In Progress - backend de génération/persistance solide et testé,
+  mais 7.2.0 non fonctionnellement bouclé (endpoint de matching ne
+  sert toujours pas ai_explanation au frontend)
 
 ### Phase 7.3
 
