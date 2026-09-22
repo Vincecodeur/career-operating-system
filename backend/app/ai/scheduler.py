@@ -392,12 +392,19 @@ class AIExplanationScheduler:
         if not experiences:
             return None
 
-        summary_parts = [
-            f"{experience.job_title} at {experience.company_name}"
-            for experience in experiences
+        # Numbered format (DEC-091): forces Gemini to anchor each
+        # reference to a specific numbered entry, rather than
+        # paraphrasing from a flowing sentence - reduces the risk of
+        # a real company name being deformed into a plausible but
+        # incorrect variant (real incident 2026-09-22: "Cazoo Group"
+        # returned as "Curve Group").
+        summary_lines = [
+            f"{index + 1}. {experience.job_title} at "
+            f"{experience.company_name}"
+            for index, experience in enumerate(experiences)
         ]
 
-        return "; ".join(summary_parts)
+        return "\n".join(summary_lines)
 
     @staticmethod
     def _resolve_minimum_score(

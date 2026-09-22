@@ -59,7 +59,11 @@ job_title: {job_title}
 score: {score}
 matching_skills: {matching_skills}
 missing_skills: {missing_skills}
-relevant_experience_summary: {relevant_experience_summary}
+relevant_experience (numbered list - you must only reference
+companies exactly as written here, copied character-for-character;
+never paraphrase, abbreviate, or guess a company name; if you are
+not fully certain of a name, omit it rather than guessing):
+{relevant_experience_summary}
 professional_summary: {professional_summary}
 career_motivations: {career_motivations}
 strengths: {strengths}

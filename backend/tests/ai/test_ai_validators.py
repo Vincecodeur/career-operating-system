@@ -126,3 +126,67 @@ def test_response_validator_can_raise_invalid_response_error():
         ResponseValidator.validate(
             response
         )
+        
+def test_validate_no_unlisted_companies_accepts_known_company():
+    response = AIProviderResponse(
+        summary="This is a valid AI generated summary.",
+        detailed_explanation=(
+            "The candidate worked at Cazoo Group as a senior manager, "
+            "which is relevant experience for this role."
+        ),
+        action_plan=[
+            "Highlight the Cazoo Group experience in the application.",
+        ],
+    )
+
+    # Should not raise.
+    ResponseValidator.validate_no_unlisted_companies(
+        response,
+        relevant_experience_summary=(
+            "1. Senior Manager at Cazoo Group\n"
+            "2. Technical Partnership Manager at Anchanto"
+        ),
+    )
+
+
+def test_validate_no_unlisted_companies_rejects_deformed_name():
+    # Reproduces the real 2026-09-22 production incident: Gemini
+    # returned "Curve Group" when the actual, provided company name
+    # was "Cazoo Group".
+    response = AIProviderResponse(
+        summary="This is a valid AI generated summary.",
+        detailed_explanation=(
+            "The candidate worked at Curve Group as a senior manager, "
+            "which is relevant experience for this role."
+        ),
+        action_plan=[],
+    )
+
+    with pytest.raises(
+        AIProviderInvalidResponseError,
+    ):
+        ResponseValidator.validate_no_unlisted_companies(
+            response,
+            relevant_experience_summary=(
+                "1. Senior Manager at Cazoo Group\n"
+                "2. Technical Partnership Manager at Anchanto"
+            ),
+        )
+
+
+def test_validate_no_unlisted_companies_skips_when_summary_is_none():
+    response = AIProviderResponse(
+        summary="This is a valid AI generated summary.",
+        detailed_explanation=(
+            "The candidate worked at Some Unlisted Group, which is "
+            "not mentioned anywhere in the provided context."
+        ),
+        action_plan=[],
+    )
+
+    # Should not raise: no relevant_experience_summary was provided,
+    # so there is nothing to validate against.
+    ResponseValidator.validate_no_unlisted_companies(
+        response,
+        relevant_experience_summary=None,
+    )

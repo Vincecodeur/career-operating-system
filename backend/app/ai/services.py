@@ -63,6 +63,12 @@ class AIExplanationService:
                 provider_response
             )
 
+            ResponseValidator.validate_no_unlisted_companies(
+                provider_response,
+                context.relevant_experience_summary,
+            )
+
+
             explanation = AIExplanation(
                 summary=provider_response.summary,
                 detailed_explanation=provider_response.detailed_explanation,
