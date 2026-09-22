@@ -1,4 +1,10 @@
 from fastapi.testclient import TestClient
+from datetime import datetime
+from datetime import timezone
+from sqlalchemy import text
+
+from app.ai.models import JobOfferAIExplanation
+from app.core.database import SessionLocal
 
 from app.main import app
 
@@ -607,3 +613,129 @@ def test_matching_result_is_calculable_after_completion(
     data = response.json()
 
     assert data["is_calculable"] is True
+    
+def test_matching_result_ai_explanation_is_none_by_default(
+    authenticated_headers,
+):
+    create_response = client.post(
+        "/job-offers",
+        json={
+            "title": "Offer Without AI Explanation Test",
+            "company_name": "Test Company",
+            "location": "Paris",
+            "source": "LinkedIn",
+            "source_url": "https://example.com/no-ai-explanation",
+            "description": "placeholder",
+        },
+    )
+
+    job_offer_id = create_response.json()["id"]
+
+    client.patch(
+        f"/job-offers/{job_offer_id}/complete-description",
+        json={"description": "A real, complete job description."},
+        headers=authenticated_headers,
+    )
+
+    try:
+        response = client.get(
+            f"/matching/1/{job_offer_id}",
+            headers=authenticated_headers,
+        )
+
+        assert response.status_code == 200
+
+        data = response.json()
+
+        assert "ai_explanation" in data
+        assert data["ai_explanation"] is None
+    finally:
+        db = SessionLocal()
+        db.query(JobOfferAIExplanation).filter(
+            JobOfferAIExplanation.job_offer_id == job_offer_id
+        ).delete()
+        db.execute(
+            text("DELETE FROM job_offers WHERE id = :id"),
+            {"id": job_offer_id},
+        )
+        db.commit()
+        db.close()
+
+
+def test_matching_result_includes_ai_explanation_when_available(
+    authenticated_headers,
+):
+    create_response = client.post(
+        "/job-offers",
+        json={
+            "title": "Offer With AI Explanation Test",
+            "company_name": "Test Company",
+            "location": "Paris",
+            "source": "LinkedIn",
+            "source_url": "https://example.com/with-ai-explanation",
+            "description": "placeholder",
+        },
+    )
+
+    job_offer_id = create_response.json()["id"]
+
+    client.patch(
+        f"/job-offers/{job_offer_id}/complete-description",
+        json={"description": "A real, complete job description."},
+        headers=authenticated_headers,
+    )
+
+    db = SessionLocal()
+
+    explanation = JobOfferAIExplanation(
+        profile_id=1,
+        job_offer_id=job_offer_id,
+        summary="Test summary for AI explanation coverage.",
+        detailed_explanation=(
+            "Test detailed explanation long enough to satisfy any "
+            "downstream validation rules that may apply."
+        ),
+        action_plan=["Review the test action plan."],
+        provider_name="gemini",
+        model_name="gemini-3.1-flash-lite",
+        prompt_version="score_explanation_v2",
+        generated_at=datetime.now(timezone.utc),
+    )
+    db.add(explanation)
+    db.commit()
+    db.close()
+
+    try:
+        response = client.get(
+            f"/matching/1/{job_offer_id}",
+            headers=authenticated_headers,
+        )
+
+        assert response.status_code == 200
+
+        data = response.json()
+
+        assert data["ai_explanation"] is not None
+        assert (
+            data["ai_explanation"]["summary"]
+            == "Test summary for AI explanation coverage."
+        )
+        assert data["ai_explanation"]["provider_name"] == "gemini"
+        assert (
+            data["ai_explanation"]["prompt_version"]
+            == "score_explanation_v2"
+        )
+        assert data["ai_explanation"]["action_plan"] == [
+            "Review the test action plan."
+        ]
+    finally:
+        db = SessionLocal()
+        db.query(JobOfferAIExplanation).filter(
+            JobOfferAIExplanation.job_offer_id == job_offer_id
+        ).delete()
+        db.execute(
+            text("DELETE FROM job_offers WHERE id = :id"),
+            {"id": job_offer_id},
+        )
+        db.commit()
+        db.close()

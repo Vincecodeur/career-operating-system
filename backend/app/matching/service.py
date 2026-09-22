@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
 
+from app.ai.models import JobOfferAIExplanation
 from app.jobs.job_offer_skill_models import JobOfferSkill
 from app.jobs.models import JobOffer
+from app.matching.schemas import AIExplanationSummary
 from app.matching.schemas import MatchingResult
 from app.matching.schemas import RankedJobOffer
 from app.matching.schemas import ScoreExplanation
@@ -148,6 +150,30 @@ def calculate_matching_result(
         matching_score=matching_score,
     )
 
+    # 7.2.0.7 - lecture seule : aucune génération à la volée. Si le
+    # run quotidien (AIExplanationScheduler, DEC-089) n'a pas encore
+    # traité cette paire, ai_explanation reste None - jamais d'appel
+    # synchrone au fournisseur IA depuis ce endpoint.
+    ai_explanation_record = db.query(JobOfferAIExplanation).filter(
+        JobOfferAIExplanation.profile_id == profile_id,
+        JobOfferAIExplanation.job_offer_id == job_offer_id,
+    ).first()
+
+    ai_explanation = None
+
+    if ai_explanation_record is not None:
+        ai_explanation = AIExplanationSummary(
+            summary=ai_explanation_record.summary,
+            detailed_explanation=(
+                ai_explanation_record.detailed_explanation
+            ),
+            action_plan=ai_explanation_record.action_plan,
+            provider_name=ai_explanation_record.provider_name,
+            model_name=ai_explanation_record.model_name,
+            prompt_version=ai_explanation_record.prompt_version,
+            generated_at=ai_explanation_record.generated_at,
+        )
+
     return MatchingResult(
         profile_id=profile_id,
         job_offer_id=job_offer_id,
@@ -162,6 +188,7 @@ def calculate_matching_result(
         weaknesses=weaknesses,
         explanations=explanations,
         opportunity_analysis=opportunity_analysis,
+        ai_explanation=ai_explanation,
     )
 
 
