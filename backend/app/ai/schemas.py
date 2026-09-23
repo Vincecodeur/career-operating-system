@@ -110,6 +110,36 @@ class AIExplanationContext(BaseModel):
 
     career_motivations: str | None = None
 
+    # DEC-092 - Full Profile Context In French. All optional, all
+    # already-validated structured data (never raw CV text), all
+    # already covered by DEC-078's available_categories
+    # (CAREER_GOALS, ADDITIONAL_PROFILE_CONTEXT, SOFT_SKILLS,
+    # LANGUAGES, CERTIFICATIONS).
+    target_role_short_term: str | None = None
+
+    target_role_long_term: str | None = None
+
+    preferred_environment: str | None = None
+
+    non_negotiables: str | None = None
+
+    additional_context: str | None = None
+
+    soft_skills: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+    )
+
+    languages: list[str] = Field(
+        default_factory=list,
+        max_length=20,
+    )
+
+    certifications: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+    )
+
     model_config = ConfigDict(
         extra="forbid",
     )

@@ -13,7 +13,13 @@ from app.auth.dependencies import get_current_user
 from app.auth.models import User
 from app.jobs.job_offer_cleanup_service import delete_stale_job_offers
 from app.jobs.job_offer_cleanup_service import resolve_age_window_days
+from app.jobs.job_offer_metadata_extraction_service import (
+    JobOfferMetadataExtractionService,
+)
 from app.settings.service import SettingsService
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     tags=["Job Offers"]
@@ -126,4 +132,30 @@ def complete_job_offer_description(
     db.commit()
     db.refresh(job_offer)
 
-    return job_offer
+    # DEC-093 - extraction de métadonnées (compétences/séniorité/
+    # mode de travail) via Gemini, synchrone mais non bloquante :
+    # tout échec (ex. surcharge Gemini 503) n'empêche jamais la
+    # sauvegarde de la description elle-même, déjà commitée
+    # ci-dessus.
+    metadata_extraction_status = "success"
+
+    try:
+        JobOfferMetadataExtractionService.extract_and_persist(
+            db=db,
+            job_offer_id=job_offer.id,
+        )
+        db.refresh(job_offer)
+    except Exception:
+        logger.exception(
+            "Job offer metadata extraction failed for "
+            "job_offer_id=%s.",
+            job_offer.id,
+        )
+        metadata_extraction_status = "failed"
+
+    response = JobOfferResponse.model_validate(job_offer)
+    response.metadata_extraction_status = (
+        metadata_extraction_status
+    )
+
+    return response

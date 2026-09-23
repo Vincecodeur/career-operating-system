@@ -9,6 +9,15 @@ from pydantic import BaseModel
 from pydantic import Field
 from pydantic import ValidationError
 
+from app.ai.exceptions import AIProviderAuthenticationError
+from app.ai.exceptions import AIProviderConfigurationError
+from app.ai.exceptions import AIProviderInvalidResponseError
+from app.ai.exceptions import AIProviderTimeout
+from app.ai.exceptions import AIProviderUnavailableError
+from app.ai.interfaces import AIProvider
+from app.ai.schemas import AIProviderRequest
+from app.ai.schemas import AIProviderResponse
+
 logger = logging.getLogger(__name__)
 
 # Extra retries applied on top of the SDK's own internal retry logic
@@ -21,14 +30,19 @@ logger = logging.getLogger(__name__)
 # scheduled run (DEC-089), not block the whole run indefinitely.
 _TRANSIENT_RETRY_DELAYS_SECONDS = [10, 30]
 
-from app.ai.exceptions import AIProviderAuthenticationError
-from app.ai.exceptions import AIProviderConfigurationError
-from app.ai.exceptions import AIProviderInvalidResponseError
-from app.ai.exceptions import AIProviderTimeout
-from app.ai.exceptions import AIProviderUnavailableError
-from app.ai.interfaces import AIProvider
-from app.ai.schemas import AIProviderRequest
-from app.ai.schemas import AIProviderResponse
+
+class _GeminiJobOfferMetadataOutput(BaseModel):
+    """
+    Schema declared to Gemini's native structured output feature for
+    job offer metadata extraction (DEC-093). Kept separate from
+    _GeminiStructuredOutput (used for AI explanations) since the
+    response shape is entirely different.
+    """
+
+    matched_skills: list[str] = Field(default_factory=list)
+    unmatched_skill_mentions: list[str] = Field(default_factory=list)
+    seniority: str = "UNKNOWN"
+    work_mode: str = "UNKNOWN"
 
 
 class _GeminiStructuredOutput(BaseModel):
@@ -189,3 +203,100 @@ class GeminiProvider(AIProvider):
                 f"Gemini response does not match the expected "
                 f"contract: {error}"
             ) from error
+
+    def extract_job_offer_metadata(
+        self,
+        prompt: str,
+    ):
+        """
+        DEC-093 - dedicated extraction path, entirely separate from
+        generate_explanation(): different prompt, different
+        structured output schema, but same underlying Gemini client
+        and the same transient-error retry behaviour (503/429/
+        timeout).
+        """
+        from app.jobs.job_offer_metadata_extraction_schemas import (
+            ExtractedJobOfferMetadata,
+        )
+
+        last_transient_error = None
+
+        attempts = len(_TRANSIENT_RETRY_DELAYS_SECONDS) + 1
+
+        for attempt_index in range(attempts):
+            try:
+                response = self._client.models.generate_content(
+                    model=self.model_name,
+                    contents=prompt,
+                    config=genai_types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        response_schema=(
+                            _GeminiJobOfferMetadataOutput
+                        ),
+                    ),
+                )
+            except genai_errors.ClientError as error:
+                if error.code in (401, 403):
+                    raise AIProviderAuthenticationError(
+                        str(error)
+                    ) from error
+
+                last_transient_error = AIProviderUnavailableError(
+                    str(error)
+                )
+            except genai_errors.ServerError as error:
+                last_transient_error = AIProviderUnavailableError(
+                    str(error)
+                )
+            except TimeoutError as error:
+                last_transient_error = AIProviderTimeout(
+                    str(error)
+                )
+            else:
+                response_text = (response.text or "").strip()
+
+                if response_text.startswith("```"):
+                    response_text = response_text.strip("`")
+                    response_text = response_text.removeprefix(
+                        "json"
+                    ).strip()
+
+                if not response_text:
+                    raise AIProviderInvalidResponseError(
+                        "Gemini returned an empty response."
+                    )
+
+                try:
+                    raw_payload = json.loads(response_text)
+                except json.JSONDecodeError as error:
+                    raise AIProviderInvalidResponseError(
+                        f"Gemini response is not valid JSON: {error}"
+                    ) from error
+
+                try:
+                    return ExtractedJobOfferMetadata(**raw_payload)
+                except ValidationError as error:
+                    raise AIProviderInvalidResponseError(
+                        f"Gemini response does not match the "
+                        f"expected contract: {error}"
+                    ) from error
+
+            if attempt_index < len(_TRANSIENT_RETRY_DELAYS_SECONDS):
+                delay = _TRANSIENT_RETRY_DELAYS_SECONDS[
+                    attempt_index
+                ]
+
+                logger.warning(
+                    "Transient Gemini error during metadata "
+                    "extraction (%s), retrying in %s second(s) "
+                    "(attempt %s/%s): %s",
+                    type(last_transient_error).__name__,
+                    delay,
+                    attempt_index + 2,
+                    attempts,
+                    last_transient_error,
+                )
+
+                time.sleep(delay)
+
+        raise last_transient_error

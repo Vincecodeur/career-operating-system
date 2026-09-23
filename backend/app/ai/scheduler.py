@@ -8,7 +8,12 @@ from sqlalchemy.orm import Session
 
 from app.ai.context_service import AIContextService
 from app.ai.models import JobOfferAIExplanation
+from app.certifications.models import Certification
+from app.certifications.models import ProfileCertification
 from app.experience.models import WorkExperience
+from app.languages.models import Language
+from app.languages.models import ProfileLanguage
+from app.profile.profile_soft_skill_models import ProfileSoftSkill
 from app.ai.providers.gemini_provider import GeminiProvider
 from app.ai.schemas import AIExplanationContext
 from app.ai.services import AIExplanationService
@@ -300,6 +305,21 @@ class AIExplanationScheduler:
             )
         )
 
+        soft_skills = self._build_soft_skills(
+            db=db,
+            profile_id=profile_id,
+        )
+
+        languages = self._build_languages(
+            db=db,
+            profile_id=profile_id,
+        )
+
+        certifications = self._build_certifications(
+            db=db,
+            profile_id=profile_id,
+        )
+
         context = AIExplanationContext(
             job_title=job_offer.title,
             score=int(matching_result.matching_score),
@@ -319,6 +339,24 @@ class AIExplanationScheduler:
             career_motivations=(
                 profile.career_motivations if profile else None
             ),
+            target_role_short_term=(
+                profile.target_role_short_term if profile else None
+            ),
+            target_role_long_term=(
+                profile.target_role_long_term if profile else None
+            ),
+            preferred_environment=(
+                profile.preferred_environment if profile else None
+            ),
+            non_negotiables=(
+                profile.non_negotiables if profile else None
+            ),
+            additional_context=(
+                profile.additional_context if profile else None
+            ),
+            soft_skills=soft_skills,
+            languages=languages,
+            certifications=certifications,
         )
 
         explanation_result = explanation_service.generate_explanation(
@@ -366,7 +404,7 @@ class AIExplanationScheduler:
             provider=provider,
             provider_name=GeminiProvider.provider_name,
             model_name=settings.GEMINI_MODEL_NAME,
-            prompt_version="score_explanation_v2",
+            prompt_version="score_explanation_v3",
         )
 
     @staticmethod
@@ -405,6 +443,57 @@ class AIExplanationScheduler:
         ]
 
         return "\n".join(summary_lines)
+
+    @staticmethod
+    def _build_soft_skills(
+        db: Session,
+        profile_id: int,
+    ) -> list:
+        soft_skills = (
+            db.query(ProfileSoftSkill)
+            .filter(ProfileSoftSkill.profile_id == profile_id)
+            .all()
+        )
+
+        return [item.name for item in soft_skills]
+
+    @staticmethod
+    def _build_languages(
+        db: Session,
+        profile_id: int,
+    ) -> list:
+        rows = (
+            db.query(ProfileLanguage, Language)
+            .join(
+                Language,
+                ProfileLanguage.language_id == Language.id,
+            )
+            .filter(ProfileLanguage.profile_id == profile_id)
+            .all()
+        )
+
+        return [
+            f"{language.name} ({profile_language.proficiency_level})"
+            for profile_language, language in rows
+        ]
+
+    @staticmethod
+    def _build_certifications(
+        db: Session,
+        profile_id: int,
+    ) -> list:
+        rows = (
+            db.query(ProfileCertification, Certification)
+            .join(
+                Certification,
+                ProfileCertification.certification_id
+                == Certification.id,
+            )
+            .filter(ProfileCertification.profile_id == profile_id)
+            .all()
+        )
+
+        return [certification.name for _, certification in rows]
 
     @staticmethod
     def _resolve_minimum_score(
